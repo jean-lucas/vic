@@ -7,8 +7,8 @@
 % ---------- Font Packages -------------- %
 
 % VIC title package
-\usepackage{cabin}
-\usepackage[T1]{fontenc}
+%\usepackage{cabin}
+%\usepackage[T1]{fontenc}
 
 % default font package
 \usepackage{times}
@@ -151,45 +151,46 @@
 
 % Problem Statement
 \section{Problem Statement}
-The project seeks to solve the intersection navigation problem of autonomous vehicles. Currently, autonomous vehicles are unable to navigate intersections when two or more vehicles arrive at the same intersection at the same time. Once the vehicles arrive at the intersection there is no decision mechanism to decide which vehicle or vehicles will proceed first and which vehicles proceed next in real time. In addition, there is no mechanism to deal with a dynamically changing intersection over extended periods of time.
+\indent\indent Autonomous vehicles are unable to navigate intersections when two or more vehicles simultaneously arrive at a 4 way stop intersection. This is due to the lack of a decision making mechanism for deciding the order in which vehicles should proceed.  Furthermore there is no mechanism to deal with a dynamically changing intersection over extended periods of time. VIC (Vehicle Intersection Control) seeks to solve the aforementioned issues as they apply to autonomous vehicles. 
 
 % Product Purpose
 \section{Product Purpose}
-The purpose of this  project is to provide a solution that will allow autonomous cars to identify intersections and form a consensus of which vehicle or vehicles proceed first among the vehicles currently at the  intersection. In addition, this product will be able to deal with a dynamically changing scenario over extended periods of time without running into deadlock situations. The project will also provide a solution that will allow cars to safely navigate through the intersection after a consensual decision has been made. This project will also use current solutions to allow the autonomous vehicle to follow lanes and detect obstacles in the driving path. 
+\indent\indent VIC will allow autonomous vehicles to identify intersections and form a unanimous consensus of the order in which vehicles should proceed through an intersection. In addition, VIC will be able to dynamically handle changing scenarios at an intersection without running into deadlock or stalemate situations. To ensure safety, VIC will only allow cars to safely navigate through the intersection only after a unanimous consensus has been made.
 
 % Wassyng suggested that we set a few goals that, when met, the project 
 % would be considered a success 
 \section{Project Goals that Constitute Success }
-The project will be considered a success if the following goals are met:
+The minimum requirements for success of this project are as following:
 \begin{enumerate}
 	\setlength\itemsep{-0.3em}
-	\item The autonomous vehicle must be able in identify an intersection 
-	\item A general consensus algorithm that decides which vehicle or vehicles proceed first and use fair decision making
-	\item The system indicates the order that vehicles will proceed through the intersection
+	\item The autonomous vehicle can identify lanes
+	\item The autonomous vehicle can identify an intersection
+	\item The system indicates the order in which vehicles can proceed through the intersection
 \end{enumerate}
 
 % Project Goals
 % This is the intended project goals that the group wants to meet
 \section{Project Goals}
-The intended goals for this project: 
+The goals that constitute success are as follows: 
 \begin{enumerate}
 	\setlength\itemsep{-0.3em}
-	\item The autonomous vehicle must be able to follow lanes and avoid obstacles
-	\item The autonomous vehicle must be able to identify intersections 
-	\item A general consensus algorithm that decides which vehicle or vehicles proceed first and use fair decision making
-	\item The traffic flow of the intersection must be optimized
-	\item The autonomous vehicle must be able to navigate through an intersection
-	\item The system must follow the current laws of the road 
+	\item The autonomous vehicle can stay within its corresponding lanes
+	\item The traffic flow of the intersection is optimized
+	\item The autonomous vehicle can navigate through an intersection according to the order determined by VIC
+	\item The system follows the laws of the road 
+	\item The system ensures that each vehicle is not waiting for an extended period of time 
 \end{enumerate}
 
 % Extended Project Goals
 \section{Extended Project Goals}
-Extended project goals:
+The goals that will exceed the definition of success are as follows: 
 \begin{enumerate}
 	\setlength\itemsep{-0.3em}
-	\item The system should be modular to be allow integration into multiple system
-	\item The system should be capable to handling multiple intersection types
-	\item The system should be capable of filtering out invalid signals to the system
+	\item The system is modular to allow integration into multiple autonomous vehicles
+	\item The system is capable of handling multiple intersection types
+	\item The system is capable of navigating an intersection with autonomous vehicles that have different intersection control algorithms
+% Wasyng said we only need to worry about how the vehicle will work on the track, do we need to worry about this? 
+%	\item The system is capable of filtering out invalid signals to the system
 \end{enumerate}
 
 
