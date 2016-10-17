@@ -7,8 +7,8 @@
 % ---------- Font Packages -------------- %
 
 % VIC title package
-\usepackage{cabin}
-\usepackage[T1]{fontenc}
+%\usepackage{cabin}
+%\usepackage[T1]{fontenc}
 
 % default font package
 \usepackage{times}
@@ -17,8 +17,6 @@
 % Title Packages
 \usepackage{titlesec}
 \usepackage{titletoc}
-
-
 
 % Image Package
 \usepackage{graphicx}
@@ -126,11 +124,11 @@
 % Revision History
 
 \section{Revisions}
-\begin{longtable}{| p{.24\textwidth } | p{.24\textwidth } | p{.24\textwidth } | p{.24\textwidth } |}
+\begin{longtable}{| p{.23\textwidth } | p{.23\textwidth } | p{.23\textwidth } | p{.23\textwidth } |}
 
 \hline 
 \centering \textbf{Date} & 
-\multicolumn{1}{|c }{\textbf {Revision Number}} &
+\multicolumn{1}{c}{\textbf {Revision Number}} &
 \multicolumn{1}{|c}{\textbf {Authors}} & 
 \multicolumn{1}{|c|}{\textbf {Comments}} \\ \hline
 
@@ -149,27 +147,55 @@
 \caption{Table of Revisions} 
 \end{longtable}
 
+
+
 \pagebreak
 
 % Problem Statement
 \section{Problem Statement}
-Insert text here. 
+\indent\indent Autonomous vehicles are unable to navigate intersections when two or more vehicles simultaneously arrive at a 4 way stop intersection. This is due to the lack of a decision making mechanism for deciding the order in which vehicles should proceed.  Furthermore there is no mechanism to deal with a dynamically changing intersection over extended periods of time. VIC (Vehicle Intersection Control) seeks to solve the aforementioned issues as they apply to autonomous vehicles. 
 
 % Product Purpose
 \section{Product Purpose}
-Insert text here. 
+\indent\indent VIC will allow autonomous vehicles to identify intersections and form a unanimous consensus of the order in which vehicles should proceed through an intersection. In addition, VIC will be able to dynamically handle changing scenarios at an intersection without running into deadlock or stalemate situations. To ensure safety, VIC will allow cars to navigate through the intersection only after a unanimous consensus has been made.
+
+% Wassyng suggested that we set a few goals that, when met, the project 
+% would be considered a success 
+\section{Project Goals that Constitute Success }
+The minimum requirements for success of this project are as follows:
+\begin{enumerate}
+	\setlength\itemsep{-0.3em}
+	\item The autonomous vehicle can identify lanes
+	\item The autonomous vehicle can identify an intersection
+	\item The system indicates the order in which vehicles can proceed through the intersection
+\end{enumerate}
 
 % Project Goals
+% This is the intended project goals that the group wants to meet
 \section{Project Goals}
-Insert text here. 
+The goals that constitute success are as follows: 
+\begin{enumerate}
+	\setlength\itemsep{-0.3em}
+	\item The autonomous vehicle can stay within its corresponding lanes
+	\item The traffic flow of the intersection is optimized
+	\item The autonomous vehicle can navigate through an intersection according to the order determined by VIC
+	\item The system follows the laws of the road 
+	\item The system ensures that each vehicle is not waiting for an extended period of time 
+\end{enumerate}
 
 % Extended Project Goals
 \section{Extended Project Goals}
-Insert text here. 
+The goals that will exceed the definition of success are as follows: 
+\begin{enumerate}
+	\setlength\itemsep{-0.3em}
+	\item The system is modular to allow integration into multiple autonomous vehicles
+	\item The system is capable of handling multiple intersection types
+	\item The system is capable of navigating an intersection with autonomous vehicles that have different intersection control algorithms
+% Wasyng said we only need to worry about how the vehicle will work on the track, do we need to worry about this? 
+%	\item The system is capable of filtering out invalid signals to the system
+\end{enumerate}
 
 
 
 
 \end{document}
-%------------------------ Document End   -------------------%
-
