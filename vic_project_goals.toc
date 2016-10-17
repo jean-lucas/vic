@@ -1,0 +1,11 @@
+\ttl@change@i {\@ne }{section}{8pt}{}{\contentsmargin {2pt} \thecontentslabel {\enspace } }{\contentsmargin {0pt}\Large }{\titlerule *[.9pc]{ . }\contentspage }\relax 
+\ttl@change@v {section}{}{}{ }\relax 
+\ttl@change@i {\@ne }{subsection}{25pt}{}{\contentsmargin {0pt} \thecontentslabel \enspace \enspace }{\contentsmargin {4pt}\large }{\titlerule *[.9pc]{. }\contentspage }\relax 
+\ttl@change@v {subsection}{}{}{}\relax 
+\contentsline {section}{\numberline {1}Revisions}{3}{section.1}
+\contentsline {section}{\numberline {2}Problem Statement}{4}{section.2}
+\contentsline {section}{\numberline {3}Product Purpose}{4}{section.3}
+\contentsline {section}{\numberline {4}Project Goals that Constitute Success }{4}{section.4}
+\contentsline {section}{\numberline {5}Project Goals}{4}{section.5}
+\contentsline {section}{\numberline {6}Extended Project Goals}{4}{section.6}
+\contentsfinish 

@@ -1,0 +1,9 @@
+\ttl@change@i {\@ne }{section}{8pt}{}{\contentsmargin {2pt} \thecontentslabel {\enspace } }{\contentsmargin {0pt}\Large }{\titlerule *[.9pc]{ . }\contentspage }\relax 
+\ttl@change@v {section}{}{}{ }\relax 
+\ttl@change@i {\@ne }{subsection}{25pt}{}{\contentsmargin {0pt} \thecontentslabel \enspace \enspace }{\contentsmargin {4pt}\large }{\titlerule *[.9pc]{. }\contentspage }\relax 
+\ttl@change@v {subsection}{}{}{}\relax 
+\contentsline {section}{\numberline {1}Revisions}{3}{section.1}
+\contentsline {section}{\numberline {2}Development Process}{4}{section.2}
+\contentsline {section}{\numberline {3}Implementation}{4}{section.3}
+\contentsline {section}{\numberline {4}\dots \dots Anything Else People Think Of. }{4}{section.4}
+\contentsfinish 
