@@ -40,272 +40,272 @@
 \usepackage{color}   %May be necessary if you want to color links
 \usepackage{hyperref}
 \hypersetup{
-    colorlinks=true, %set true if you want colored links
-        linktoc=all,     %set to all if you want both sections and subsections linked
-	    linkcolor=black,  %choose some color if you want links to stand out
-	    }
-	    % ------------- Creates a click-able Table of Contents  End--------------- %
+colorlinks=true, %set true if you want colored links
+linktoc=all,     %set to all if you want both sections and subsections linked
+linkcolor=black,  %choose some color if you want links to stand out
+}
+% ------------- Creates a click-able Table of Contents  End--------------- %
 
-	    % ---------- FONT PACKAGES END ------------ %
+% ---------- FONT PACKAGES END ------------ %
 
 
 
 
-	    % -------- SECTION AND SUBSECTION FORMATING START -------- % 
-	    \titleformat{\section} % Section
-	      {\normalfont \fontsize{14}{14}\bfseries}{\thesection}{0.5em % section indentation
-	      }{}
+% -------- SECTION AND SUBSECTION FORMATING START -------- % 
+\titleformat{\section} % Section
+{\normalfont \fontsize{14}{14}\bfseries}{\thesection}{0.5em % section indentation
+}{}
 
-	      \titleformat{\subsection} % Subsection
-	        {\normalfont \fontsize{12}{12} \bfseries}{\thesubsection }{0.5em}{}
-		  
-		    \titleformat{\subsubsection} % Subsubsection
-		      {\normalfont \fontsize{12}{12} \bfseries}{\thesubsubsection }{0.5em}{}
-		        
-			% -------- SECTION AND SUBSECTION FORMATING END -------- % 
+\titleformat{\subsection} % Subsection
+{\normalfont \fontsize{12}{12} \bfseries}{\thesubsection }{0.5em}{}
 
+\titleformat{\subsubsection} % Subsubsection
+{\normalfont \fontsize{12}{12} \bfseries}{\thesubsubsection }{0.5em}{}
 
-
-			% -----  IMAGE PATH START -----%
-			% Relative Image Path
-			 \graphicspath {figures/}
-			  % -----  IMAGE PATH END -----%
-
-
-			  % -------------- DOCUMENT START ---------------%
-			  \begin{document}
-
-			  %------------------------------TOC FORMAT START --------------------------------%
+% -------- SECTION AND SUBSECTION FORMATING END -------- % 
 
-			  \titlecontents{section}
-			  [8pt]                                               % left margin
-			  {}%
-			  {\contentsmargin{2pt}                               % numbered entry format
-			       \thecontentslabel {\enspace }  %
-			           }
-				   {\contentsmargin{0pt}\Large}                        % unnumbered entry format
-				   {\titlerule*[.9pc]{ . }\contentspage} % filler-page format (e.g dots)
-				   [ ] % below code (e.g vertical space)
 
-				   \titlecontents{subsection}
-				   [25pt]                                               % left margin
-				   {}%
-				   {\contentsmargin{0pt}                               % numbered entry format
-				       \thecontentslabel\enspace\enspace%
-				           }
-					   {\contentsmargin{4pt}\large}                        % unnumbered entry format
-					   {\titlerule*[.9pc]{. }\contentspage} % filler-page format (e.g dots)
-					   [] % below code (e.g vertical space)
 
+% -----  IMAGE PATH START -----%
+% Relative Image Path
+\graphicspath {figures/}
+% -----  IMAGE PATH END -----%
 
-					   %------------------------------TOC FORMAT END --------------------------------%
 
+% -------------- DOCUMENT START ---------------%
+\begin{document}
 
-					   % --------- TITLE PAGE START ------- %
-					   \begin {center} 
-					   	
-							\thispagestyle{empty}
-								\vspace*{4.5cm}
+%------------------------------TOC FORMAT START --------------------------------%
 
+\titlecontents{section}
+[8pt]                                               % left margin
+{}%
+{\contentsmargin{2pt}                               % numbered entry format
+\thecontentslabel {\enspace }  %
+}
+{\contentsmargin{0pt}\Large}                        % unnumbered entry format
+{\titlerule*[.9pc]{ . }\contentspage} % filler-page format (e.g dots)
+[ ] % below code (e.g vertical space)
 
-									
-										% Logo Insertion
-											\begin {figure}[h!]
-													\centering
-															\includegraphics [scale = .5, trim={.4cm 0 .8cm 0},clip] {figures/vic_logo.png}
-																\end {figure}
+\titlecontents{subsection}
+[25pt]                                               % left margin
+{}%
+{\contentsmargin{0pt}                               % numbered entry format
+\thecontentslabel\enspace\enspace%
+}
+{\contentsmargin{4pt}\large}                        % unnumbered entry format
+{\titlerule*[.9pc]{. }\contentspage} % filler-page format (e.g dots)
+[] % below code (e.g vertical space)
 
-																	{\fontfamily{\cabinfamily}\selectfont
-																		\Huge{Vehicle Intersection Control} }
-																			
-																				\vspace{1 cm}
-																					{\LARGE{\textsc{McMaster University}}\\}  \vspace {1cm}
-																						{\Large Development Process and Implementation\\ \vspace {0.5 cm} SE 4G06}  \vspace {1cm}
 
-																								{\large \textsc{Group 6} \\} \vspace{1cm}
+%------------------------------TOC FORMAT END --------------------------------%
 
-																									{
-																											Alex Jackson \\
-																													Jean Lucas Ferreira \\
-																															Justin Kapinski\\
-																																	Matthew Hobers\\
-																																			Radhika Sharma\\
-																																					Zachary Bazen}
 
-																																						
+% --------- TITLE PAGE START ------- %
+\begin {center} 
 
-																																								
-																																									\end{center}
-																																										
-																																										% --------- TITLE PAGE END------- %
-																																											
-																																											\pagebreak
+\thispagestyle{empty}
+\vspace*{4.5cm}
 
-																																											% Inserting table of contents and table of figures 
-																																											\tableofcontents
-																																											\listoftables
 
-																																											\pagebreak
 
-																																											% -----------  REVISION HISTORY START ----------- %
+% Logo Insertion
+\begin {figure}[h!]
+\centering
+\includegraphics [scale = .5, trim={.4cm 0 .8cm 0},clip] {figures/vic_logo.png}
+\end {figure}
 
-																																											\section{Revisions}
-																																											\begin{longtable}{| p{.23\textwidth } | p{.23\textwidth } | p{.23\textwidth } | p{.23\textwidth } |}
+{\fontfamily{\cabinfamily}\selectfont
+\Huge{Vehicle Intersection Control} }
 
-																																											\hline 
-																																											\centering \textbf{Date} & 
-																																											\multicolumn{1}{c}{\textbf {Revision Number}} &
-																																											\multicolumn{1}{|c}{\textbf {Authors}} & 
-																																											\multicolumn{1}{|c|}{\textbf {Comments}} \\ \hline
+\vspace{1 cm}
+{\LARGE{\textsc{McMaster University}}\\}  \vspace {1cm}
+{\Large Development Process and Implementation\\ \vspace {0.5 cm} SE 4G06}  \vspace {1cm}
 
-																																											\multirow{4}{*}{\centering October 22, 2016}  & 
-																																											\multirow{4}{*}{Revision 0}& 
-																																											{Alex Jackson \newline
-																																													Jean Lucas Ferreira \newline
-																																															Justin Kapinski\newline
-																																																	Matthew Hobers\newline
-																																																			Radhika Sharma\newline
-																																																					Zachary Bazen}
-																																																					 &
-																																																					 \multirow{4}{*}{-} \\ 
-																																																					 \hline 
+{\large \textsc{Group 6} \\} \vspace{1cm}
 
-																																																					 \caption{Table of Revisions} 
-																																																					 \end{longtable}
-																																																					 % -----------  REVISION HISTORY END ----------- %
+{
+Alex Jackson \\
+Jean Lucas Ferreira \\
+Justin Kapinski\\
+Matthew Hobers\\
+Radhika Sharma\\
+Zachary Bazen}
 
 
-																																																					 % --------- NOTE START --------%
-																																																					 % Headings based on suggested content for development process & implementation found on 
-																																																					 % Avenue. 
-																																																					  
-																																																					  % -------- Document Not Compiling ------ %
-																																																					  % If you can't initially compile you may need to comment out the  ---- VIC Title package ---  and
-																																																					  % --- Vehicle Intersection Control ---  on the title page if your version of LaTex doesn't have the appropriate font package. 
 
-																																																					  % ------------ NOTE END --------%
 
+\end{center}
 
+% --------- TITLE PAGE END------- %
 
+\pagebreak
 
-																																																					  % ------------ DOCUMENT CONTENT HERE ------------ %
-																																																					  \pagebreak
+% Inserting table of contents and table of figures 
+\tableofcontents
+\listoftables
 
+\pagebreak
 
-																																																					  % --------------- Overall Process Workflow Start ------------------------ %
-																																																					  \section{Overall Process Workflow}
-																																																					  \subsection{Project Steps and Order}
-																																																					  % Wassyng wants a highlevel set of steps and the order that they will completed in
+% -----------  REVISION HISTORY START ----------- %
 
-																																																					  Very highlevel (Jean)
-																																																					  (note:  sd = soft deadline)
-																																																					  \begin{enumerate}
-																																																					  	
-																																																							\item Acquire 1 (or 2) 1/10th car models (sd: mid November)
-																																																								\item Acquire hardware (rasberry Pi, camera(s), sensors ) for each car to allow automation (sd: end of November)
-																																																									\item Integrate car models with hardware (sd: early december)
-																																																										\item Look for open-source algorithms for lane-following and apply to cars (mid december)
-																																																											\item Cars can follow lanes independently (sd: end of december)
+\section{Revisions}
+\begin{longtable}{| p{.23\textwidth } | p{.23\textwidth } | p{.23\textwidth } | p{.23\textwidth } |}
 
-																																																												\item Algorithm considerations and design planning
-																																																													\item Test algorithms virtually (via simulations) (sd:  end january)
-																																																														\item Implement algorithm to the car software 
-																																																															\item test test test (end of february)
+\hline 
+\centering \textbf{Date} & 
+\multicolumn{1}{c}{\textbf {Revision Number}} &
+\multicolumn{1}{|c}{\textbf {Authors}} & 
+\multicolumn{1}{|c|}{\textbf {Comments}} \\ \hline
 
-																																																																\item freak out 
-																																																																	\item ??? 
-																																																																		
-																																																																			\item graduate :D
+\multirow{4}{*}{\centering October 22, 2016}  & 
+\multirow{4}{*}{Revision 0}& 
+{Alex Jackson \newline
+Jean Lucas Ferreira \newline
+Justin Kapinski\newline
+Matthew Hobers\newline
+Radhika Sharma\newline
+Zachary Bazen}
+&
+\multirow{4}{*}{-} \\ 
+\hline 
 
+\caption{Table of Revisions} 
+\end{longtable}
+% -----------  REVISION HISTORY END ----------- %
 
 
-																																																																			\end{enumerate}
+% --------- NOTE START --------%
+% Headings based on suggested content for development process & implementation found on 
+% Avenue. 
 
-																																																																			% For each step provide the necessary inputs and whats the expected output. 
-																																																																			\subsection{Step Inputs and Outputs}
-																																																																			Insert Text Here.
+% -------- Document Not Compiling ------ %
+% If you can't initially compile you may need to comment out the  ---- VIC Title package ---  and
+% --- Vehicle Intersection Control ---  on the title page if your version of LaTex doesn't have the appropriate font package. 
 
-																																																																			% What are the acceptance criteria for each of the outputs of a step
-																																																																			\subsection{Step Output Acceptance Criterion}
-																																																																			Insert Text Here.
+% ------------ NOTE END --------%
 
-																																																																			% --------------- Overall Process Workflow End ------------------------ %
 
 
 
+% ------------ DOCUMENT CONTENT HERE ------------ %
+\pagebreak
 
-																																																																			% ------------------- Step Completion Start ---------------------------- %
-																																																																			% Provide some detains on how each step should be done.
-																																																																			\section{Step Completion Information}
 
-																																																																			% What tools are you going to use? What versions?
-																																																																			\subsection{Tools and Versions}
-																																																																			Insert Text Here.
+% --------------- Overall Process Workflow Start ------------------------ %
+\section{Overall Process Workflow}
+\subsection{Project Steps and Order}
+% Wassyng wants a highlevel set of steps and the order that they will completed in
 
-																																																																			% Are there any special instructions on settings or how to use the tools? What
-																																																																			% information to put in version control? 
-																																																																			\subsection{Tool Setting and Use}
-																																																																			Insert Text Here.
+Very highlevel (Jean)
+(note:  sd = soft deadline)
+\begin{enumerate}
 
+\item Acquire 1 (or 2) 1/10th car models (sd: mid November)
+\item Acquire hardware (rasberry Pi, camera(s), sensors ) for each car to allow automation (sd: end of November)
+\item Integrate car models with hardware (sd: early december)
+\item Look for open-source algorithms for lane-following and apply to cars (mid december)
+\item Cars can follow lanes independently (sd: end of december)
 
-																																																																			% Any standards you should follow? (e.g. coding standards)
-																																																																			\subsection{Standards}
-																																																																			Insert Text Here. 
+\item Algorithm considerations and design planning
+\item Test algorithms virtually (via simulations) (sd:  end january)
+\item Implement algorithm to the car software 
+\item test test test (end of february)
 
-																																																																			% Who should perform each step. 
-																																																																			\subsection{Work Assignments}
+\item freak out 
+\item ??? 
 
-																																																																			Ideally we should create two subgroups (HW and SW), but we would still
-																																																																			discuss both aspects as a whole group. When it comes to implementation subgroups might be more efficient.
+\item graduate :D
 
-																																																																			% ------------------- Step Completion End ---------------------------- %
 
 
+\end{enumerate}
 
+% For each step provide the necessary inputs and whats the expected output. 
+\subsection{Step Inputs and Outputs}
+Insert Text Here.
 
-																																																																			% -------------------- Version Control Information Start ---------------------- % 
+% What are the acceptance criteria for each of the outputs of a step
+\subsection{Step Output Acceptance Criterion}
+Insert Text Here.
 
-																																																																			% How are you using version control?
-																																																																			\section{Version Control Information}
+% --------------- Overall Process Workflow End ------------------------ %
 
-																																																																			GitHub
-																																																																			Ideally \textbf{two} repos: 
-																																																																			\begin{itemize} 
-																																																																				\item  documentation and miscellaneous stuff
-																																																																					\item  source code, libraries, and dependencies.
-																																																																					\end{itemize}
-																																																																					% --------------------- Version Control Information End ---------------------- % 
 
 
 
+% ------------------- Step Completion Start ---------------------------- %
+% Provide some detains on how each step should be done.
+\section{Step Completion Information}
 
+% What tools are you going to use? What versions?
+\subsection{Tools and Versions}
+Insert Text Here.
 
-																																																																					% -------------------- Project Evolution Start ------------------------- %
-																																																																					% How are you going to deal with changes to development artifacts
-																																																																					\section{Project Evolution}
+% Are there any special instructions on settings or how to use the tools? What
+% information to put in version control? 
+\subsection{Tool Setting and Use}
+Insert Text Here.
 
-																																																																					% What bug tracking/change request tool?
-																																																																					\subsection{Bug and Change Tracking}
-																																																																					Any issues with the project (ie: bugs) will  be posted on github via the Issues panel. When a issue is posted, someone may take responsibility to fixing the bug. Once fixed, the issue will be closed.
 
-																																																																					% How do you document change requests/bugs?
-																																																																					\subsection{Project Change Documentation}
-																																																																					Github <3
+% Any standards you should follow? (e.g. coding standards)
+\subsection{Standards}
+Insert Text Here. 
 
-																																																																					% How do you classify Changes
-																																																																					\subsection{Project Change Classification}
-																																																																					Github does it for us??
+% Who should perform each step. 
+\subsection{Work Assignments}
 
-																																																																					% How do you disposition them (decide what to do, verify that they have been
-																																																																					%completed, etc)
-																																																																					\subsection{Making Project Change Decisions?} 
-																																																																					Insert Text Here.
+Ideally we should create two subgroups (HW and SW), but we would still
+discuss both aspects as a whole group. When it comes to implementation subgroups might be more efficient.
 
+% ------------------- Step Completion End ---------------------------- %
 
-																																																																					% -------------------- Project Evolution End ------------------------- %
 
-																																																																					\end{document}
-																																																																					% -------------- DOCUMENT END ---------------%
+
+
+% -------------------- Version Control Information Start ---------------------- % 
+
+% How are you using version control?
+\section{Version Control Information}
+
+GitHub
+Ideally \textbf{two} repos: 
+\begin{itemize} 
+\item  documentation and miscellaneous stuff
+\item  source code, libraries, and dependencies.
+\end{itemize}
+% --------------------- Version Control Information End ---------------------- % 
+
+
+
+
+
+% -------------------- Project Evolution Start ------------------------- %
+% How are you going to deal with changes to development artifacts
+\section{Project Evolution}
+
+% What bug tracking/change request tool?
+\subsection{Bug and Change Tracking}
+Any issues with the project (ie: bugs) will  be posted on github via the Issues panel. When a issue is posted, someone may take responsibility to fixing the bug. Once fixed, the issue will be closed.
+
+% How do you document change requests/bugs?
+\subsection{Project Change Documentation}
+Github <3
+
+% How do you classify Changes
+\subsection{Project Change Classification}
+Github does it for us??
+
+% How do you disposition them (decide what to do, verify that they have been
+%completed, etc)
+\subsection{Making Project Change Decisions?} 
+Insert Text Here.
+
+
+% -------------------- Project Evolution End ------------------------- %
+
+\end{document}
+% -------------- DOCUMENT END ---------------%
 
 
 
