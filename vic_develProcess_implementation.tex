@@ -10,7 +10,7 @@
 \usepackage[margin=1in]{geometry}
 
 
-% ---------- FONT PACKAGES START ------------ %
+% ----------  PACKAGES START ------------ %
 
 % VIC title package
 \usepackage{cabin}
@@ -36,6 +36,10 @@
 \usepackage{array}
 \renewcommand{\arraystretch}{1.4}% Spread rows out evenly in table
 
+% List package
+\usepackage{enumitem}
+\setlist{nolistsep} % compresses lists
+
 % ------------- Creates a linked Table of Contents  Start --------------- %
 \usepackage{color}   %May be necessary if you want to color links
 \usepackage{hyperref}
@@ -46,9 +50,10 @@ linkcolor=black,  %choose some color if you want links to stand out
 }
 % ------------- Creates a click-able Table of Contents  End--------------- %
 
-% ---------- FONT PACKAGES END ------------ %
+% ---------- PACKAGES END ------------ %
 
-
+\usepackage{enumitem}
+\setlist{nolistsep}
 
 
 % -------- SECTION AND SUBSECTION FORMATING START -------- % 
@@ -170,7 +175,7 @@ Zachary Bazen}
 \multirow{4}{*}{-} \\ 
 \hline 
 
-\caption{Table of Revisions} 
+\caption{VIC Table of Revisions} 
 \end{longtable}
 % -----------  REVISION HISTORY END ----------- %
 
@@ -197,37 +202,213 @@ Zachary Bazen}
 \subsection{Project Steps and Order}
 % Wassyng wants a highlevel set of steps and the order that they will completed in
 
-Very highlevel (Jean)
-(note:  sd = soft deadline)
-\begin{enumerate}
+% ------------ Task Table Start --------------- %
+\begin{longtable}{| p{.1\textwidth } | p{.61\textwidth } | p{.23\textwidth } |}
 
-\item Acquire 1 (or 2) 1/10th car models (sd: mid November)
-\item Acquire hardware (rasberry Pi, camera(s), sensors ) for each car to allow automation (sd: end of November)
-\item Integrate car models with hardware (sd: early december)
-\item Look for open-source algorithms for lane-following and apply to cars (mid december)
-\item Cars can follow lanes independently (sd: end of december)
+\hline 
+\centering \textbf{Step} & 
+\multicolumn{1}{c}{\textbf {Task}} &
+\multicolumn{1}{|c|}{\textbf {Deadline}} \\ \hline
 
-\item Algorithm considerations and design planning
-\item Test algorithms virtually (via simulations) (sd:  end january)
-\item Implement algorithm to the car software 
-\item test test test (end of february)
+\centering 0 & 
+Develop high level project requirements and potential parts list&
+\multicolumn{1}{c|}{Week of October 25} \\ \hline
 
-\item freak out 
-\item ??? 
+\centering 1 & 
+Acquire two, one tenth ($\frac {1}{10}$)  scale RC cars&
+\multicolumn{1}{c|}{Week of November 1} \\ \hline
 
-\item graduate :D
+\multicolumn{1}{|c|}{\multirow{2}{*}{2}} & 
+Acquire hardware to automate cars 
+\begin{itemize}
+	\item [{-}] micro controllers, sensor(s), camera(s) and mounting hardware
+	\vspace*{-\baselineskip}
+\end{itemize} &
+\multicolumn{1}{c|}{\multirow{2}{*}{Week of November 1}} \\ \hline
 
 
+\centering 3 & 
+Develop a track plan &
+\multicolumn{1}{c|}{Week of November 1} \\ \hline
 
-\end{enumerate}
+\centering 4 & 
+Integrate car hardware, micro-controllers and computer 
+&
+\multicolumn{1}{c|}{Week of November 15} \\ \hline
+
+\centering 5 & 
+ Look for open source lane following and obstacle detection &
+\multicolumn{1}{c|}{Week of November 15} \\ \hline
+
+\centering 6 & 
+Lane following and obstacle detection integrated and tested &
+\multicolumn{1}{c|}{Week of November 28} \\ \hline
+
+\centering 7 & 
+Intersection and Detection Algorithms Developed Concurrently  &
+\multicolumn{1}{c|}{End of December} \\ \hline
+
+\centering 8 & 
+Algorithm simulations &
+\multicolumn{1}{c|}{End of January} \\ \hline
+
+\centering 9 & 
+Integrate decision algorithms and intersection detection  with vehicles &
+\multicolumn{1}{c|}{February} \\ \hline
+
+\centering 10 & 
+Algorithm Testing and Refinement &
+\multicolumn{1}{c|}{March} \\ \hline
+
+
+\centering 11 & 
+Final Implementation and Documentation &
+\multicolumn{1}{c|}{Beginning of April} \\ \hline
+
+\caption{VIC Project Steps} 
+\end{longtable}
+% ------------ Task Table End --------------- %
+ Note: Appropriate documentation will be developed as appropriate with each step.
+
+%Very highlevel (Jean)
+%(note:  sd = soft deadline)
+%\begin{enumerate}
+%
+%\item Acquire 1 (or 2) 1/10th car models (sd: mid November)
+%\item Acquire hardware (rasberry Pi, camera(s), sensors ) for each car to allow automation (sd: end of November)
+%\item Integrate car models with hardware (sd: early december)
+%\item Look for open-source algorithms for lane-following and apply to cars (mid december)
+%\item Cars can follow lanes independently (sd: end of december)
+%
+%\item Algorithm considerations and design planning
+%\item Test algorithms virtually (via simulations) (sd:  end january)
+%\item Implement algorithm to the car software 
+%\item test test test (end of february)
+%
+%\item freak out 
+%\item ??? 
+%
+%\item graduate :D
+%
+%
+%
+%\end{enumerate}
 
 % For each step provide the necessary inputs and whats the expected output. 
+
 \subsection{Step Inputs and Outputs}
-Insert Text Here.
+% ------------ Task Table Input/Output Start --------------- %
+\begin{longtable}{| p{.1\textwidth } | p{.42\textwidth } | p{.42\textwidth } |}
+
+\hline 
+\centering \textbf{Step} & 
+\multicolumn{1}{c}{\textbf {Input}} &
+\multicolumn{1}{|c|}{\textbf {Output}} \\ \hline
+
+\centering 0 & 
+N/A &
+High-level Design Document\\ \hline
+
+\centering 1 & 
+- &
+-\\ \hline
+
+\centering 2 & 
+- &
+-\\ \hline
+
+\centering 3 & 
+- &
+-\\ \hline
+
+\centering 4 & 
+Hardware and Micro-controllers &
+Integrated hardware/software system\\ \hline
+
+\centering 5 & 
+- &
+-\\ \hline
+
+\centering 6 & 
+- &
+-\\ \hline
+
+\centering 7 & 
+- &
+-\\ \hline
+
+\centering 8 & 
+- &
+-\\ \hline
+
+\centering 9 & 
+- &
+-\\ \hline
+
+\centering 10 & 
+- &
+-\\ \hline
+
+
+\centering 11 & 
+- &
+-\\ \hline
+
+\caption{VIC Project Steps Input and Output} 
+\end{longtable}
+% ------------ Task Table Input/Output End --------------- %
 
 % What are the acceptance criteria for each of the outputs of a step
 \subsection{Step Output Acceptance Criterion}
-Insert Text Here.
+
+% ------------ Task Table Output Acceptance Criterion Start --------------- %
+\begin{longtable}{| p{.1\textwidth } | p{.87\textwidth } |}
+
+\hline 
+\centering \textbf{Step} & 
+\multicolumn{1}{c|}{\textbf {Output Acceptance Criterion}} \\ \hline
+
+\centering 0 & 
+-\\ \hline
+
+\centering 1 & 
+-\\ \hline
+
+\centering 2 & 
+-\\ \hline
+
+
+\centering 3 & 
+-\\ \hline
+
+\centering 4 & 
+Cars are able to be controlled from central control and micro controllers\\ \hline
+
+\centering 5 & 
+-\\ \hline
+
+\centering 6 & 
+-\\ \hline
+
+\centering 7 & 
+-\\ \hline
+
+\centering 8 & 
+-\\ \hline
+
+\centering 9 & 
+-\\ \hline
+
+\centering 10 & 
+-\\ \hline
+
+
+\centering 11 & 
+-\\ \hline
+
+\caption{VIC Project Steps Output Acceptance Criterion} 
+\end{longtable}
+% ------------ Task Table Output Acceptance Criterion End --------------- %
 
 % --------------- Overall Process Workflow End ------------------------ %
 
@@ -250,13 +431,19 @@ Insert Text Here.
 
 % Any standards you should follow? (e.g. coding standards)
 \subsection{Standards}
-Insert Text Here. 
+Volere\\
+IEEE\\
+Mixture of Both\\
+Coding standards and conventions\\
+etc. 
 
 % Who should perform each step. 
 \subsection{Work Assignments}
 
 Ideally we should create two subgroups (HW and SW), but we would still
-discuss both aspects as a whole group. When it comes to implementation subgroups might be more efficient.
+discuss both aspects as a whole group.\\ When it comes to implementation subgroups might be more efficient. \\
+
+\textbf{A possible here would be nice }
 
 % ------------------- Step Completion End ---------------------------- %
 
@@ -267,13 +454,13 @@ discuss both aspects as a whole group. When it comes to implementation subgroups
 
 % How are you using version control?
 \section{Version Control Information}
-
-GitHub
-Ideally \textbf{two} repos: 
-\begin{itemize} 
-\item  documentation and miscellaneous stuff
-\item  source code, libraries, and dependencies.
-\end{itemize}
+The version control of choice for this project is GitHub. Two repositories will likely be required: one for documentation and miscellaneous information and another for source code, libraries and dependencies. 
+%GitHub
+%Ideally \textbf{two} repos: 
+%\begin{itemize} 
+%\item  documentation and miscellaneous stuff
+%\item  source code, libraries, and dependencies.
+%\end{itemize}
 % --------------------- Version Control Information End ---------------------- % 
 
 
@@ -286,21 +473,70 @@ Ideally \textbf{two} repos:
 
 % What bug tracking/change request tool?
 \subsection{Bug and Change Tracking}
-Any issues with the project (ie: bugs) will  be posted on github via the Issues panel. When a issue is posted, someone may take responsibility to fixing the bug. Once fixed, the issue will be closed.
+Any issues with the project (i.e. bugs) will  be posted on GitHub via the Issues panel. When a issue is posted, the appropriate members will take responsibility to fixing the bug. Once fixed, the issue will be closed. Appropriate members will include: developers, software team, hardware team or both. 
 
 % How do you document change requests/bugs?
 \subsection{Project Change Documentation}
-Github <3
+VIC will log project changes through GitHub version control logs, personal log books and VIC documentation. 
 
 % How do you classify Changes
 \subsection{Project Change Classification}
-Github does it for us??
+VIC will classify changes in the following ways: Global change, Software change and Hardware change. \\\\
+A global change constitutes a change that affects both hardware and software aspects of the system. This type of change would fundamentally alter the functionality of the system. \\ \\
+A software change only affects the software aspects of the system. \\\\
+A hardware change only affects the hardware aspects of the system. 
+
 
 % How do you disposition them (decide what to do, verify that they have been
 %completed, etc)
-\subsection{Making Project Change Decisions?} 
-Insert Text Here.
+\subsection{Making Project Change Decisions} 
+% ------------ Making Project Change Decision Table Start --------------- %
+\begin{longtable}{| p{.15\textwidth } | p{.22\textwidth } | p{.25\textwidth } | p{.29\textwidth } |}
 
+\hline
+\centering \textbf{Change Type} & 
+\multicolumn{1}{c|}{\textbf {Change Severity}} &
+\multicolumn{1}{c}{\textbf {Decision Assignment}} & 
+\multicolumn{1}{|c|}{\textbf {Change Documentation}}  \\ \hline
+
+\multicolumn{1}{|c|}{\multirow{3}{*}{Global}} & 
+\multicolumn{1}{c}{Software} &
+\multicolumn{1}{|c|}{VIC Team} &
+Logged in VIC documents	\\\cline{2-4}
+
+ & \multicolumn{1}{c}{Hardware} & 
+ \multicolumn{1}{|c|}{VIC Team} &
+Logged in VIC documents\\ \cline{2-4}
+  
+   & \multicolumn{1}{c}{Other} & 
+ \multicolumn{1}{|c|}{VIC Team} &
+Logged in VIC documents\\ \hline
+ 
+ 
+\multicolumn{1}{|c|}{\multirow{2}{*}{Software}} & 
+\multicolumn{1}{c}{Local} &
+\multicolumn{1}{|c|}{Developer}&
+GitHub Commit Log \\\cline{2-4}
+ 
+ & 
+\multicolumn{1}{c}{API Change} &
+\multicolumn{1}{|c|}{Software Team}&
+Logged in VIC documents \\ \hline
+
+
+\multicolumn{1}{|c|}{\multirow{2}{*}{Hardware}} & 
+\multicolumn{1}{c}{Local} &
+\multicolumn{1}{|c|}{Developer}&
+Log Books \\\cline{2-4}
+ 
+ & 
+\multicolumn{1}{c}{Interface Change} &
+\multicolumn{1}{|c|}{Hardware Team}&
+Logged in VIC documents \\ \hline
+
+
+\end{longtable}
+% ------------ Making Project Change Decision Table End --------------- %
 
 % -------------------- Project Evolution End ------------------------- %
 
