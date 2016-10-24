@@ -172,7 +172,7 @@ Matthew Hobers\newline
 Radhika Sharma\newline
 Zachary Bazen}
 &
-\multirow{4}{*}{-} \\ 
+ \multirow{4}{*}{N/A} \\ 
 \hline 
 
 \caption{VIC Table of Revisions} 
@@ -298,7 +298,7 @@ Final Implementation and Documentation &
 
 \subsection{Step Inputs and Outputs}
 % ------------ Task Table Input/Output Start --------------- %
-\begin{longtable}{| p{.1\textwidth } | p{.42\textwidth } | p{.42\textwidth } |}
+\begin{longtable}{| p{.1\textwidth } | p{.43\textwidth } | p{.42\textwidth } |}
 
 \hline 
 \centering \textbf{Step} & 
@@ -362,7 +362,7 @@ Integrated hardware/software system\\ \hline
 \subsection{Step Output Acceptance Criterion}
 
 % ------------ Task Table Output Acceptance Criterion Start --------------- %
-\begin{longtable}{| p{.1\textwidth } | p{.87\textwidth } |}
+\begin{longtable}{| p{.1\textwidth } | p{.88\textwidth } |}
 
 \hline 
 \centering \textbf{Step} & 
@@ -421,12 +421,12 @@ Cars are able to be controlled from central control and micro controllers\\ \hli
 
 % What tools are you going to use? What versions?
 \subsection{Tools and Versions}
-Insert Text Here.
+TBD
 
 % Are there any special instructions on settings or how to use the tools? What
 % information to put in version control? 
 \subsection{Tool Setting and Use}
-Insert Text Here.
+TBD
 
 
 % Any standards you should follow? (e.g. coding standards)
@@ -440,8 +440,80 @@ Coding standards and conventions, for the programming language at hand.\\
 Ideally we should create two subgroups (HW and SW), but we would still
 discuss both aspects as a whole group.\\ When it comes to implementation subgroups might be more efficient. \\
 
-\textbf{A possible here would be nice }
+% ------------ Assignment Table Start --------------- %
+\begin{longtable}{| p{.1\textwidth } | p{.71\textwidth } | p{.23\textwidth } |}
 
+\hline 
+\centering \textbf{Step} & 
+\multicolumn{1}{c}{\textbf {Task}} &
+\multicolumn{1}{|c|}{\textbf {Assignment}} \\ \hline
+
+\centering 0 & 
+Develop high level project requirements and potential parts list&
+\multicolumn{1}{c|}{VIC} \\ \hline
+
+\centering 1 & 
+Acquire two, one tenth ($\frac {1}{10}$)  scale RC cars&
+\multicolumn{1}{c|}{Name} \\ \hline
+
+\multicolumn{1}{|c|}{\multirow{2}{*}{2}} & 
+Acquire hardware to automate cars 
+\begin{itemize}
+	\item [{-}] micro controllers, sensor(s), camera(s) and mounting hardware
+	\vspace*{-\baselineskip}
+\end{itemize} &
+\multicolumn{1}{c|}{\multirow{2}{*}{Name}} \\ \hline
+
+
+\centering 3 & 
+Develop a track plan &
+\multicolumn{1}{c|}{VIC} \\ \hline
+
+\centering 4 & 
+Integrate car hardware, micro-controllers and computer 
+&
+\multicolumn{1}{c|}{HD} \\ \hline
+
+\centering 5 & 
+ Look for open source lane following and obstacle detection &
+\multicolumn{1}{c|}{HD} \\ \hline
+
+\centering 6 & 
+Lane following and obstacle detection integrated and tested &
+\multicolumn{1}{c|}{SE} \\ \hline
+
+\centering 7 & 
+Intersection and Detection Algorithms Developed Concurrently  &
+\multicolumn{1}{c|}{VIC} \\ \hline
+
+\centering 8 & 
+Algorithm simulations &
+\multicolumn{1}{c|}{SE} \\ \hline
+
+\centering 9 & 
+Integrate decision algorithms and intersection detection  with vehicles &
+\multicolumn{1}{c|}{VIC} \\ \hline
+
+\centering 10 & 
+Algorithm Testing and Refinement &
+\multicolumn{1}{c|}{SE} \\ \hline
+
+
+\centering 11 & 
+Final Implementation and Documentation &
+\multicolumn{1}{c|}{VIC} \\ \hline
+
+\caption{VIC Project Assignments} 
+\end{longtable}
+
+
+% ------------ Assignment Table End --------------- %
+\noindent{\textbf{Table Key}}\\
+SE: Software Team (Name, Name Name)\\
+HD: Hardware Team (Name, Name, Name) \\
+VIC: Whole VIC Team\\
+
+\noindent{Note:} These assignments are tentative and subject to change as project advances. 
 % ------------------- Step Completion End ---------------------------- %
 
 
@@ -481,15 +553,17 @@ VIC will log project changes through GitHub version control logs, personal log b
 VIC will classify changes in the following ways: Global change, Software change and Hardware change. \\\\
 A global change constitutes a change that affects both hardware and software aspects of the system. This type of change would fundamentally alter the functionality of the system. \\ \\
 A software change only affects the software aspects of the system. \\\\
-A hardware change only affects the hardware aspects of the system. 
+A hardware change only affects the hardware aspects of the system.   
 
 
+
+
+%\pagebreak
 % How do you disposition them (decide what to do, verify that they have been
 %completed, etc)
 \subsection{Making Project Change Decisions} 
 % ------------ Making Project Change Decision Table Start --------------- %
 \begin{longtable}{| p{.15\textwidth } | p{.22\textwidth } | p{.25\textwidth } | p{.29\textwidth } |}
-
 \hline
 \centering \textbf{Change Type} & 
 \multicolumn{1}{c|}{\textbf {Change Severity}} &
