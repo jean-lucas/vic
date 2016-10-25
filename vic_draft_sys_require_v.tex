@@ -1,0 +1,420 @@
+
+
+% Document uses 12 pt font
+% 1 in margins
+% Contains a relative path for images
+
+\documentclass [12pt]{article}
+
+% page geometry 
+\usepackage[margin=1in]{geometry}
+
+
+% ----------  PACKAGES START ------------ %
+
+% VIC title package
+\usepackage{cabin}
+\usepackage[T1]{fontenc}
+
+% default font package
+\usepackage{times}
+
+% ---------- End Font Packages -------------- %
+
+% Title Packages
+\usepackage{titlesec}
+\usepackage{titletoc}
+
+% Image Package
+\usepackage{graphicx}
+
+% Table Packages
+\usepackage{longtable}
+\usepackage{multirow}
+\usepackage{multicol}
+\usepackage{multirow}
+\usepackage{array}
+\renewcommand{\arraystretch}{1.4}% Spread rows out evenly in table
+
+% List package
+\usepackage{enumitem}
+\setlist{nolistsep} % compresses lists
+
+% ------------- Creates a linked Table of Contents  Start --------------- %
+\usepackage{color}   %May be necessary if you want to color links
+\usepackage{hyperref}
+\hypersetup{
+colorlinks=true, %set true if you want colored links
+linktoc=all,     %set to all if you want both sections and subsections linked
+linkcolor=black,  %choose some color if you want links to stand out
+}
+% ------------- Creates a click-able Table of Contents  End--------------- %
+
+% ---------- PACKAGES END ------------ %
+
+\usepackage{enumitem}
+\setlist{nolistsep}
+
+
+
+
+
+% -------- SECTION AND SUBSECTION FORMATING START -------- % 
+
+\titleformat{\section} % Subsection
+{\normalfont \fontsize{14}{14} \bfseries}{\thesection }{0.5em}{}
+
+
+
+\titleformat{\subsection} % Subsection
+{\normalfont \fontsize{12}{12} \itshape \bfseries}{\thesubsection    }{0.5em}{ }
+
+\newcommand{\mysubsection}[1]
+  {\subsection{\colorbox{Gray}{\makebox[\hfill][l]{#1}}}}
+
+\titleformat{\subsubsection} % Subsubsection
+{\normalfont \fontsize{12}{12} \bfseries}{\thesubsubsection }{0.5em}{}
+
+
+
+
+% -------- SECTION AND SUBSECTION FORMATING END -------- % 
+
+
+
+% -----  IMAGE PATH START -----%
+% Relative Image Path
+\graphicspath {figures/}
+% -----  IMAGE PATH END -----%
+
+
+% -------------- DOCUMENT START ---------------%
+\begin{document}
+
+%------------------------------TOC FORMAT START --------------------------------%
+
+\titlecontents{section}
+[8pt]                                               % left margin
+{}%
+{\contentsmargin{2pt}                               % numbered entry format
+\thecontentslabel {\enspace }  %
+}
+{\contentsmargin{0pt}\Large}                        % unnumbered entry format
+{\titlerule*[.9pc]{ . }\contentspage} % filler-page format (e.g dots)
+[ ] % below code (e.g vertical space)
+
+\titlecontents{subsection}
+[25pt]                                               % left margin
+{}%
+{\contentsmargin{0pt}                               % numbered entry format
+\thecontentslabel\enspace\enspace%
+}
+{\contentsmargin{4pt}\large}                        % unnumbered entry format
+{\titlerule*[.9pc]{. }\contentspage} % filler-page format (e.g dots)
+[] % below code (e.g vertical space)
+
+
+%------------------------------TOC FORMAT END --------------------------------%
+
+
+% --------- TITLE PAGE START ------- %
+\begin {center} 
+
+\thispagestyle{empty}
+\vspace*{4.5cm}
+
+
+
+% Logo Insertion
+\begin {figure}[h!]
+\centering
+\includegraphics [scale = .5, trim={.4cm 0 .8cm 0},clip] {figures/vic_logo.png}
+\end {figure}
+
+{\fontfamily{\cabinfamily}\selectfont
+\Huge{Vehicle Intersection Control} }
+
+\vspace{1 cm}
+{\LARGE{\textsc{McMaster University}}\\}  \vspace {1cm}
+{\Large Draft System Requirements\\ \vspace {0.5 cm} SE 4G06}  \vspace {1cm}
+
+{\large \textsc{Group 6} \\} \vspace{1cm}
+
+{
+Alex Jackson \\
+Jean Lucas Ferreira \\
+Justin Kapinski\\
+Matthew Hobers\\
+Radhika Sharma\\
+Zachary Bazen}
+
+
+
+
+\end{center}
+
+% --------- TITLE PAGE END------- %
+
+\pagebreak
+
+% Inserting table of contents and table of figures 
+\tableofcontents
+\listoftables
+
+\pagebreak
+
+% -----------  REVISION HISTORY START ----------- %
+
+\section{Revisions}
+\begin{longtable}{| p{.23\textwidth } | p{.23\textwidth } | p{.23\textwidth } | p{.23\textwidth } |}
+
+\hline 
+\centering \textbf{Date} & 
+\multicolumn{1}{c}{\textbf {Revision Number}} &
+\multicolumn{1}{|c}{\textbf {Authors}} & 
+\multicolumn{1}{|c|}{\textbf {Comments}} \\ \hline
+
+\multirow{4}{*}{\centering November 7, 2016}  & 
+\multirow{4}{*}{Revision 0}& 
+{Alex Jackson \newline
+Jean Lucas Ferreira \newline
+Justin Kapinski\newline
+Matthew Hobers\newline
+Radhika Sharma\newline
+Zachary Bazen}
+&
+ \multirow{4}{*}{N/A} \\ 
+\hline 
+
+\caption{VIC Table of Revisions} 
+\end{longtable}
+% -----------  REVISION HISTORY END ----------- %
+\pagebreak
+{\huge \noindent  \textbf { --------------- Headings need to be check against Volere template ------------}}
+%---------------------------- PROJECT DRIVERS ------------------------%
+% heading in document
+\section *{\Large Project Drivers \vspace*{-6mm}}\rule{6.5in}{.1em} 
+% heading for table of contents
+\addcontentsline{toc}{section}{\textbf{ \normalsize Project Drivers}}
+
+
+
+\section{The Purpose of the Project} 
+ Insert Text Here.
+ 
+\section{The Client, the Customer, and Other Stakeholders}
+ Insert Text Here.
+
+\section{Users of the Product} 
+Insert Text Here.\\
+
+
+%---------------------------- PROJECT CONSTRAINTS ------------------------%
+% heading in document
+\section*{\Large Project Constraints \vspace*{-6mm}}\rule{6.5in}{.1em} 
+% For table of contents
+\addcontentsline{toc}{section}{\textbf{ \normalsize Project Constraints}}
+
+\section{Mandated Constraints}
+	Insert Text Here. 
+
+\section{Naming Conventions and Definitions}
+	Insert Text Here.
+	
+\section{Relevant Facts and Assumptions} 
+	Insert Text Here.
+
+%---------------------------- Functional Requirements ------------------------%
+
+\section *{\Large Functional Requirements\vspace*{-6mm}}\rule{6.5in}{.1em} 
+% For table of contents
+\addcontentsline{toc}{section}{\textbf{ \normalsize Functional Requirements}}
+
+\section{The Scope of the Work}
+Insert Text Here.
+
+\section{The Scope of the Product} 
+Insert Text Here.
+
+\section{Functional Requirements and Data Requirements} 
+Insert Text Here.
+
+
+%---------------------------- Nonfunctional Requirements ------------------------%
+
+\section *{\Large Nonfunctional Requirements\vspace*{-6mm}}\rule{6.5in}{.1em} 
+% For table of contents
+\addcontentsline{toc}{section}{\textbf{ \normalsize Nonfunctional Requirements}}
+
+
+\section {Look and Feel Requirements}
+\subsection{Appearance Requirements}
+Insert Text Here. 
+
+\subsection{Style Requirements}
+Insert Text Here. 
+
+
+\section{Usability and Humanity Requirements} 
+\subsection{Ease of Use Requirements}
+Insert Text Here.
+
+\subsection{Personalization and Internationalization Requirements}
+Insert Text Here.
+
+\subsection{Learning Requirements }
+Insert Text Here.
+
+\subsection{Understandability and Politeness Requirements}
+Insert Text Here.
+		
+\subsection{Accessibility Requirements }
+Insert Text Here.
+ 
+\section{Performance Requirements}
+\subsection{Speed Requirements }
+Insert Text Here. 
+
+\subsection{Safety-Critical Requirements }
+		Insert Text Here. 	
+
+\subsection{Precision Requirements}
+		Insert Text Here.
+
+\subsection{Reliability or Availability  Requirements}
+		Insert Text Here.
+
+\subsection{Robustness or Fault-Tolerance Requirements }
+
+		Insert Text Here.
+\subsection{Capacity Requirements }
+		Insert Text Here.
+
+\subsection{Scalability or Extensibility Requirements }
+		Insert Text Here. 
+		
+\subsection{Longevity Requirements }
+		Insert Text Here.
+
+\section{Operational an Environmental Requirements}
+\subsection{Expected Physical Environment }
+		Insert Text Here.
+		
+\subsection{Requirements for Interacting with Adjacent Systems}
+		Insert Text Here.
+
+\subsection{Production Requirements}
+		Insert Text Here. 
+
+\subsection{Release Requirements}
+		Insert Text Here.		
+
+\section{Maintainability and Support Requirements }
+\subsection{Maintenance Requirements }
+		Insert Text Here.
+
+\subsection{Supportability Requirements }
+		Insert Text Here.
+
+\subsection{Adaptability Requirements}
+		Insert Text Here.
+
+
+\section{Security Requirements }
+\subsection{Access Requirements }
+		Insert Text Here.
+
+\subsection{Integrity Requirements }
+		Insert Text Here.
+
+\subsection{Privacy Requirements }
+		Insert Text Here.
+
+\subsection{Audit  Requirements }
+		Insert Text Here. 
+
+\subsection{Immunity Requirements  }
+		Insert Text Here.
+
+\section{Cultural and Political Requirements } 
+\subsection{Cultural Requirements }
+		Insert Text Here.
+
+\subsection{Political Requirements }
+		Insert Text Here.
+
+
+\section{Legal Requirements}
+\subsection{Compliance Requirements }
+		Insert Text Here.
+\subsection{Standards Requirements }
+		Insert Text Here.
+
+
+
+
+%---------------------------- Project Issues ------------------------%
+
+\section *{\Large Project Issues\vspace*{-6mm}}\rule{6.5in}{.1em} 
+% For table of contents
+\addcontentsline{toc}{section}{\textbf{ \normalsize Project Issues}}
+
+\section{Open Issues}
+	Insert Text Here.
+
+\section{Off-the-Shelf Solutions}
+	Insert Text Here.
+
+\section{New Problems}
+	Insert Text Here.
+
+\section{Migration to the New Product} 
+	Insert Text Here.
+
+\section{Risks}
+	Insert Text Here.
+	
+\section{Costs}	
+	Insert Text Here.
+
+\section{User Documentation and Training}
+	Insert Text Here.
+
+\section{Waiting Room}
+	Insert Text Here. 
+
+
+
+
+
+
+\end{document}
+
+
+
+
+
+
+
+%		% Requirement 1
+%		\begin{longtable}{|p{.83\textwidth } |}\hline
+%
+%		
+%		\begin{tabular}{m{3.4cm}  m{4.8cm} m{4.7cm} }
+%			Requirement \# \textbf {1} & Requirement Type: \textbf {N/A} & Event /use case \#: \textbf {N/A} \\\newline
+%		\end {tabular}
+%
+%			\textbf {Description:} Insert Text Here.\\ \newline
+%			\textbf {Rational: } Insert Text Here.\\\newline 
+%			\textbf {Originator:} Insert Text Here.\\ \newline
+%			\textbf {Fit Criterion: }Insert Text Here.  \\ \newline 
+%
+%			\begin{tabular}{m{6cm}  m{8cm}}
+%			Customer Satisfaction: \textbf {} & Customer Dissatisfaction: \textbf {} \\\newline
+%			Priority: & Conflicts: \\\newline
+%			\end {tabular}		
+%
+%			Supporting Materials: \\ \newline
+%			History: \textbf {Date}\\ \hline
+%		\end {longtable}
+%		
