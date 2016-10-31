@@ -15,7 +15,9 @@
 \usepackage[T1]{fontenc}
 
 % default font package
-\usepackage{times}
+%\usepackage{times}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
 
 % ---------- End Font Packages -------------- %
 
@@ -180,8 +182,8 @@ linkcolor=black,}  %choose some color if you want links to stand out
 \Huge{Vehicle Intersection Control} }
 
 \vspace{1 cm}
-{\LARGE{\textsc{McMaster University}}\\}  \vspace {1cm}
-{\Large Draft System Requirements\\ \vspace {0.5 cm} SE 4G06}  \vspace {1cm}
+{\Large{\textsc{McMaster University}}\\}  \vspace {1cm}
+{\large Draft System Requirements\\ \vspace {0.4 cm} SE 4G06}  \vspace {1cm}
 
 {\large \textsc{Group 6} \\} \vspace{1cm}
 
@@ -249,7 +251,12 @@ Zachary Bazen}
 
 
 \subsection{The Purpose of the Project} 
-\lipsum [1] % generating text, take this out
+The purpose of this project is to allow autonomous cars to identify and navigate intersections by providing an appropriate order to proceed through the intersection. Currently multiple autonomous cars arriving at an intersection a the same time have no decision protocol that will determine which car proceeds first through the intersection.  \textbf{\{((From project goals)}
+VIC will allow autonomous vehicles to identify intersections and form a unanimous consensus
+of the order in which vehicles should proceed through an intersection. In addition, VIC will be
+able to dynamically handle changing scenarios at an intersection without running into deadlock
+or stalemate situations. To ensure safety, VIC will allow cars to navigate through the intersection
+only after a unanimous consensus has been made. \textbf{\}}
 
 \subsection{The Client, the Customer, and Other Stakeholders}
 
@@ -286,7 +293,7 @@ Insert Text Here.\\
 This section is taken from IEEE
 
 % Vehicle Requirements
-\begin{enumerate}[\textbf{VR-1:}]
+\begin{enumerate}[\textbf{VHL-1:}]
 	\setlength{\itemindent}{.2in}
 	\itemsep0pt 
 	\item Requirement 1
@@ -296,7 +303,7 @@ This section is taken from IEEE
 
 
 % VI Controller Requirements
-\begin{enumerate}[\textbf{VI-1:}]
+\begin{enumerate}[\textbf{ITC-1:}]
 	\setlength{\itemindent}{.2in}
 	\itemsep0pt 
 	\item Controller Requirement 1
@@ -306,7 +313,7 @@ This section is taken from IEEE
 
 
 % Track Requirements
-\begin{enumerate}[\textbf{TK-1:}]
+\begin{enumerate}[\textbf{TRK-1:}]
 	\setlength{\itemindent}{.2in}
 	\itemsep0pt 
 	\item Track Requirement 1
