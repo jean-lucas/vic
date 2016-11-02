@@ -278,12 +278,13 @@ Zachary Bazen}
 
 
 \subsection{The Purpose of the Project} 
-The purpose of this project is to allow autonomous cars to identify and navigate intersections by providing an appropriate order to proceed through the intersection. Currently multiple autonomous cars arriving at an intersection a the same time have no decision protocol that will determine which car proceeds first through the intersection.  \textbf{\{((From project goals)}
-VIC will allow autonomous vehicles to identify intersections and form a unanimous consensus
-of the order in which vehicles should proceed through an intersection. In addition, VIC will be
-able to dynamically handle changing scenarios at an intersection without running into deadlock
-or stalemate situations. To ensure safety, VIC will allow cars to navigate through the intersection
-only after a unanimous consensus has been made. \textbf{\}}
+The purpose of this project is to create a system that allows autonomous cars to navigate through  intersections. This will be accomplished by providing an appropriate order for the vehicles to proceed through the intersection. When multiple autonomous cars arrive at an intersection simultaneously, due to the lack of a decision making protocol, the cars have no way of determining in which order to proceed. \newline
+
+
+VIC (Vehicle Intersection Control) will allow autonomous vehicles to make navigation decisions at intersections. In addition, VIC will be able to dynamically handle changing scenarios at an intersection without running into deadlock or stalemate situations. To ensure safety, VIC will allow cars to navigate through the intersection only after a unanimous consensus has been made. \newline
+
+
+The following document will outline the functional and nonfunctional requirements of VIC.  Other topics that will be covered pertaining to VIC will include: Scope, Project Drivers, Project Constraints, and Project Issues.
 
 \subsection{The Client, the Customer, and Other Stakeholders}
 
@@ -293,7 +294,7 @@ only after a unanimous consensus has been made. \textbf{\}}
 \subsubsection{Customer}
  Insert Text Here.
 
-\subsubsection{Stackholders}
+\subsubsection{Stakeholders}
  Insert Text Here.
 
 \subsection{Users of the Product} 
@@ -391,108 +392,174 @@ The requirements for this project are separated into the three main components o
 
 \subsection {Look and Feel Requirements}
 \subsubsection{Appearance Requirements}
-Insert Text Here. 
+	\begin{itemize}
+		\item N/A
+	\end{itemize}
 
 \subsubsection{Style Requirements}
-Insert Text Here. 
-
+	\begin{itemize}
+		\item N/A
+	\end{itemize}
 
 \subsection{Usability and Humanity Requirements} 
 \subsubsection{Ease of Use Requirements}
-Insert Text Here.
+	\begin{itemize}
+		\item N/A
+	\end{itemize}
 
 \subsubsection{Personalization and Internationalization Requirements}
-Insert Text Here.
+	\begin{itemize}
+		\item The system must be able to function according to North American road standards
+	\end{itemize}
 
 \subsubsection{Learning Requirements }
-Insert Text Here.
+	\begin{itemize}
+		\item N/A
+	\end{itemize}
 
 \subsubsection{Understandability and Politeness Requirements}
-Insert Text Here.
+	\begin{itemize}
+		\item N/A
+	\end{itemize}
 		
 \subsubsection{Accessibility Requirements }
-Insert Text Here.
+	\begin{itemize}
+		\item N/A
+	\end{itemize}
  
 \subsection{Performance Requirements}
+	\begin{itemize}
+		\item N/A
+	\end{itemize}
+	Please note that the following  non functional requirements will be updated as the system is created and data is acquired.
+
 \subsubsection{Speed Requirements }
-Insert Text Here. 
+	\begin{itemize}
+		\item The system must be able to determine an order and convey it to the vehicle before a soft deadline
+	\end{itemize}
 
 \subsubsection{Safety-Critical Requirements }
-		Insert Text Here. 	
+	\begin{itemize}
+		\item The system must only signal a car to proceed when the intersection is clear
+		\item The vehicle must stop within a safe distance of an obstacle
+	\end{itemize}	
 
 \subsection{Precision Requirements}
-		Insert Text Here.
+	\begin{itemize}
+		\item The vehicle must not deviate from the lanes more than 1% of the width of the lane
+	\end{itemize}
 
 \subsubsection{Reliability or Availability  Requirements}
-		Insert Text Here.
+	\begin{itemize}
+		\item The system must operate without failure 99% of the time
+		\item The vehicle system must operate as long as car’s internal power supply is charged
+	\end{itemize}
 
 \subsubsection{Robustness or Fault-Tolerance Requirements }
-
-		Insert Text Here.
+	\begin{itemize}
+		\item In the event of a complete vehicle system failure, the vehicle must come to a stop
+	\end{itemize}
+	
 \subsubsection{Capacity Requirements }
-		Insert Text Here.
+	\begin{itemize}
+		\item N/A
+	\end{itemize}
 
 \subsubsection{Scalability or Extensibility Requirements }
-		Insert Text Here. 
+	\begin{itemize}
+		\item N/A
+	\end{itemize}
 		
 \subsubsection{Longevity Requirements }
-		Insert Text Here.
+	\begin{itemize}
+		\item N/A
+	\end{itemize}
 
 \subsection{Operational an Environmental Requirements}
 \subsubsection{Expected Physical Environment }
-		Insert Text Here.
+	\begin{itemize}
+		\item The track must be 1/10 scale of a real world intersection
+	\end{itemize}
 		
 \subsubsection{Requirements for Interacting with Adjacent Systems}
-		Insert Text Here.
+	\begin{itemize}
+		\item N/A
+	\end{itemize}
 
 \subsubsection{Production Requirements}
-		Insert Text Here. 
+	\begin{itemize}
+		\item N/A
+	\end{itemize} 
 
 \subsubsection{Release Requirements}
-		Insert Text Here.		
+	\begin{itemize}
+		\item N/A
+	\end{itemize}		
 
 \subsection{Maintainability and Support Requirements }
 \subsubsection{Maintenance Requirements }
-		Insert Text Here.
+	\begin{itemize}
+		\item N/A
+	\end{itemize}
 
 \subsubsection{Supportability Requirements }
-		Insert Text Here.
+	\begin{itemize}
+		\item N/A
+	\end{itemize}
 
 \subsubsection{Adaptability Requirements}
-		Insert Text Here.
-
+	\begin{itemize}
+		\item N/A
+	\end{itemize}
 
 \subsection{Security Requirements }
 \subsubsection{Access Requirements }
-		Insert Text Here.
+	\begin{itemize}
+		\item N/A
+	\end{itemize}
 
 \subsubsection{Integrity Requirements }
-		Insert Text Here.
+	\begin{itemize}
+		\item N/A
+	\end{itemize}
 
 \subsubsection{Privacy Requirements }
-		Insert Text Here.
+	\begin{itemize}
+		\item N/A
+	\end{itemize}
 
 \subsubsection{Audit  Requirements }
-		Insert Text Here. 
+	\begin{itemize}
+		\item N/A
+	\end{itemize} 
 
 \subsubsection{Immunity Requirements  }
-		Insert Text Here.
+	\begin{itemize}
+		\item N/A
+	\end{itemize}
 
 \subsection{Cultural and Political Requirements } 
 \subsubsection{Cultural Requirements }
-		Insert Text Here.
+	\begin{itemize}
+		\item N/A
+	\end{itemize}
 
 \subsubsection{Political Requirements }
-		Insert Text Here.
+	\begin{itemize}
+		\item N/A
+	\end{itemize}
 
 
 \subsection{Legal Requirements}
 \subsubsection{Compliance Requirements }
-		Insert Text Here.
+	\begin{itemize}
+		\item N/A
+	\end{itemize}
+	
 \subsubsection{Standards Requirements }
-		Insert Text Here.
-
-
+	\begin{itemize}
+		\item N/A
+	\end{itemize}
 
 
 %---------------------------- Project Issues ------------------------%
