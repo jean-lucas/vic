@@ -317,39 +317,57 @@ Insert Text Here.\\
 %---------------------------- Functional Requirements ------------------------%
 
 \section {Functional Requirements} 
-This section is taken from IEEE
+The requirements for this project are separated into the three main components of the system: the track, vehicle, and intersection controller.
+
 
 
 % Track Requirements
+\subsection{Track Functional Requirements}
 \begin{TRK}
 	\setlength{\itemindent}{.5in}
 	\itemsep0pt 
-	\item Track requirement 1
-	\item Track requirement 2 \\
-	\hspace *{2 cm}\vdots
-	\item Track requirement n
+	\item The track must have lanes
+	\item The track must have an intersection
+	\item The track must have an object to indicate stopping at an intersection
 \end{TRK}
 
 
 % Vehicle Requirements
+\subsection{Vehicle Functional Requirements}
 \begin{VHL}
 	\setlength{\itemindent}{.5in}
 	\itemsep0pt 
-	\item Vehicle requirement 1
-	\item Vehicle requirement 2 \\
-	\hspace *{2 cm}\vdots
-	\item Vehicle requirement n
+	
+	\item The vehicle must be able to send and receive signals to and from the system infrastructure
+	
+	\item The vehicle must be able to detect lanes and follow them
+    
+    \item The vehicle must be able to detect intersections 
+    
+    \item The vehicle must be able to stop at intersections
+    
+    \item The vehicle must be able to navigate through intersections
+    
+    \item The vehicle must be able to avoid obstacles 
+    
+    \item The vehicle must follow the laws of the Highway Traffic act
 \end{VHL}
 
 
 % VI Controller Requirements
+\subsection{Intersection Controller Functional Requirements}
 \begin{ITC}
 \setlength{\itemindent}{.5in}
 	\itemsep0pt 
-	\item Intersection control requirement 1
-	\item Intersection control requirement 2 \\
-	\hspace *{2 cm}\vdots
-	\item Intersection control requirement n
+	\item The system infrastructure must be able to detect if there is a car at the intersection
+	
+	\item The system infrastructure must be able to differentiate between autonomous and non autonomous cars
+	
+	\item The system infrastructure must be able to detect when a car has navigated through the intersection
+
+    \item The system infrastructure must be able to determine the order in which the cars should proceed
+    
+    \item The system infrastructure must be able to signal to the vehicle when it is allowed to go through the intersection
 \end{ITC}
 
 
@@ -578,32 +596,3 @@ This section is taken from IEEE
 
 
 \end{document}
-
-
-
-
-
-
-
-%		% Requirement 1
-%		\begin{longtable}{|p{.83\textwidth } |}\hline
-%
-%		
-%		\begin{tabular}{m{3.4cm}  m{4.8cm} m{4.7cm} }
-%			Requirement \# \textbf {1} & Requirement Type: \textbf {N/A} & Event /use case \#: \textbf {N/A} \\\newline
-%		\end {tabular}
-%
-%			\textbf {Description:} Insert Text Here.\\ \newline
-%			\textbf {Rational: } Insert Text Here.\\\newline 
-%			\textbf {Originator:} Insert Text Here.\\ \newline
-%			\textbf {Fit Criterion: }Insert Text Here.  \\ \newline 
-%
-%			\begin{tabular}{m{6cm}  m{8cm}}
-%			Customer Satisfaction: \textbf {} & Customer Dissatisfaction: \textbf {} \\\newline
-%			Priority: & Conflicts: \\\newline
-%			\end {tabular}		
-%
-%			Supporting Materials: \\ \newline
-%			History: \textbf {Date}\\ \hline
-%		\end {longtable}
-%		
