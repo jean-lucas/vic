@@ -47,7 +47,26 @@
 
 
 % List package
-\usepackage{enumerate}
+
+
+
+
+
+\usepackage{enumitem}
+
+
+\newlist{TRK}{enumerate}{1}
+\setlist[TRK]{label=\textbf{TRK-\arabic*:}}
+
+
+
+\newlist{VHL}{enumerate}{1}
+\setlist[VHL]{label=\textbf{VHL-\arabic*:}}
+
+\newlist{ITC}{enumerate}{1}
+\setlist[ITC]{label=\textbf{ITC-\arabic*:}}
+
+
 
 
 % ------------- Creates a linked Table of Contents  Start --------------- %
@@ -302,33 +321,36 @@ This section is taken from IEEE
 
 
 % Track Requirements
-\begin{enumerate}[\textbf{TRK-1:}]
-	\setlength{\itemindent}{.2in}
+\begin{TRK}
+	\setlength{\itemindent}{.5in}
 	\itemsep0pt 
-	\item Track Requirement 1
-	\item Track Requirement 2
-
-\end{enumerate}
+	\item Track requirement 1
+	\item Track requirement 2 \\
+	\hspace *{2 cm}\vdots
+	\item Track requirement n
+\end{TRK}
 
 
 % Vehicle Requirements
-\begin{enumerate}[\textbf{VHL-1:}]
-	\setlength{\itemindent}{.2in}
+\begin{VHL}
+	\setlength{\itemindent}{.5in}
 	\itemsep0pt 
-	\item Requirement 1
-	\item Requirement 2
-
-\end{enumerate}
+	\item Vehicle requirement 1
+	\item Vehicle requirement 2 \\
+	\hspace *{2 cm}\vdots
+	\item Vehicle requirement n
+\end{VHL}
 
 
 % VI Controller Requirements
-\begin{enumerate}[\textbf{ITC-1:}]
-	\setlength{\itemindent}{.2in}
+\begin{ITC}
+\setlength{\itemindent}{.5in}
 	\itemsep0pt 
-	\item Controller Requirement 1
-	\item Controller Requirement 2
-
-\end{enumerate}
+	\item Intersection control requirement 1
+	\item Intersection control requirement 2 \\
+	\hspace *{2 cm}\vdots
+	\item Intersection control requirement n
+\end{ITC}
 
 
 
