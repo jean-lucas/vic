@@ -39,34 +39,14 @@
 % Color Packages
 \usepackage{color}   
 \definecolor{sectionC}{rgb}{0.016,0.227,.365}
-%\definecolor{sectionC}{rgb}{1,0.749,.40}
-%\definecolor{sectionT}{rgb}{0.173,0.169,.165}
-%\definecolor{subsectionC}{rgb}{0.898,0.792,.718}
 \definecolor{subsectionC}{rgb}{.87,0.87,.87}
 \definecolor{subsubsectionC}{rgb}{.94,.93,.90}
 
 
 % List package
 
-
-
-
-
 \usepackage{enumitem}
-
-
-\newlist{TRK}{enumerate}{1}
-\setlist[TRK]{label=\textbf{TRK-\arabic*:}}
-
-
-
-\newlist{VHL}{enumerate}{1}
-\setlist[VHL]{label=\textbf{VHL-\arabic*:}}
-
-\newlist{ITC}{enumerate}{1}
-\setlist[ITC]{label=\textbf{ITC-\arabic*:}}
-
-
+\setenumerate{itemsep=0pt, itemindent=0in,leftmargin=0.5in}
 
 
 % ------------- Creates a linked Table of Contents  Start --------------- %
@@ -127,7 +107,7 @@ linkcolor=black,}  %choose some color if you want links to stand out
 {\normalfont \fontsize{12}{12}  \bfseries}{}{0em}{\colorsubsection }
 
 \newcommand{\colorsubsection}[1]{%
-  \colorbox{subsectionC}{\parbox{\dimexpr\textwidth-1\fboxsep}{ \thesubsection\ #1}}}
+  \colorbox{subsectionC}{\parbox{\dimexpr \textwidth -1\fboxsep}{ \thesubsection\ #1}}}
 
 
 % Makes a background color
@@ -272,7 +252,6 @@ Zachary Bazen}
 %---------------------------- PROJECT DRIVERS ------------------------%
 % heading in document
 
-\noindent{\textbf{\Large*** These headings to be double checked against template to ensure no topics missed ***}}
 
 \section {\textbf{Project Drivers}}
 
@@ -306,13 +285,60 @@ Insert Text Here.\\
 \section{\textbf{Project Constraints}}
 
 
+% Mandated Constraints
 \subsection{Mandated Constraints}
-\lipsum[1]  % generating text, take this out
+Vehicle intersection control has several mandated constraints tabled below. 
+\begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
+\textbf{MC-1} & \textbf{Remote control cars must be 1/10 scale} \\ \hline
+\textbf{RMC-1} & The remote control cars must fit the requirements of an existing track that was created for previous capstone projects\\ \hline \hline
+\textbf{MC-2}& \textbf{Remote control cars must be electric}\\ \hline 
+\textbf{RMC-2} & Operating conditions are indoors  \\ \hline \hline
+
+\textbf{MC-3} & \textbf{The cost of the project must not exceed \$700 dollars} \\ \hline
+\textbf{RMC-3} & This is to ensure an off-the-shelf solution can not be purchased. It also ensures the project remains economically feasible \\ \hline
+\end{longtable}
+
+
 \subsection{Naming Conventions and Definitions}
-	Insert Text Here.
+% Naming Conventions
+\subsubsection{Naming Conventions}
+\begin{enumerate}
+	\itemsep0pt 
+ 	\item \textbf{TRK-\#} - Track requirement identification  and number
+	\item \textbf{VHL-\#} - Remote control vehicle requirement identification  and number				\item \textbf{ITC-\#} - Intersection control requirement identification  and number
+	\item \textbf{MC-\#} - Mandated project constraints identification and number 
+	\item \textbf{RMC-\#} - Rational for mandated project constraints identification and number
+	\item \textbf{ASM-\#} - Project assumptions identification and number
+	\item \textbf{RASM-\#} - Rational for project assumptions identification and number
+	\item \textbf{VIC} - Vehicle intersection control
+\end{enumerate}
+
+% Definitions
+\subsubsection{Definitions}
+\begin{enumerate}
+	\itemsep0pt
+	\item \textbf{VIC} - The name given to the overall intersection control system
+\end{enumerate}
+
 	
 \subsection{Relevant Facts and Assumptions} 
-	Insert Text Here.
+
+\subsubsection{Relevant Facts}
+\begin{itemize}
+	\item N/A
+\end{itemize}
+
+\subsubsection{Assumptions}
+VIC assumptions tabled below. 
+\begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
+\textbf{ASM-1} & \textbf{Ideal driving conditions on the track} \\ \hline
+\textbf{RASM-1} & Track is situated indoors \\ \hline \hline
+\textbf{ASM-2} & \textbf{-} \\ \hline
+\textbf{RASM-2} & - \\ \hline
+
+
+\end{longtable}
+
 
 
 %---------------------------- Functional Requirements ------------------------%
@@ -324,20 +350,18 @@ The requirements for this project are separated into the three main components o
 
 % Track Requirements
 \subsection{Track Functional Requirements}
-\begin{TRK}
-	\setlength{\itemindent}{.5in}
-	\itemsep0pt 
+\begin{enumerate}[label=\textbf{TRK\arabic*:},leftmargin =0.8in]
 	\item The track must have lanes
 	\item The track must have an intersection
 	\item The track must have an object to indicate stopping at an intersection
-\end{TRK}
+\end{enumerate}
 
 
 % Vehicle Requirements
 \subsection{Vehicle Functional Requirements}
-\begin{VHL}
-	\setlength{\itemindent}{.5in}
-	\itemsep0pt 
+
+\begin{minipage}{\textwidth}
+\begin{enumerate}[label=\textbf{VHL\arabic*:}, leftmargin=0.8in]
 	
 	\item The vehicle must be able to send and receive signals to and from the system infrastructure
 	
@@ -352,14 +376,15 @@ The requirements for this project are separated into the three main components o
     \item The vehicle must be able to avoid obstacles 
     
     \item The vehicle must follow the laws of the Highway Traffic act
-\end{VHL}
+\end{enumerate}
+\end{minipage}
 
 
 % VI Controller Requirements
 \subsection{Intersection Controller Functional Requirements}
-\begin{ITC}
-\setlength{\itemindent}{.5in}
-	\itemsep0pt 
+\begin{enumerate}[label=\textbf{ITC\arabic*:}, leftmargin=0.8in]
+%	\setlength{\itemindent}{.5in}
+
 	\item The system infrastructure must be able to detect if there is a car at the intersection
 	
 	\item The system infrastructure must be able to differentiate between autonomous and non autonomous cars
@@ -369,7 +394,7 @@ The requirements for this project are separated into the three main components o
     \item The system infrastructure must be able to determine the order in which the cars should proceed
     
     \item The system infrastructure must be able to signal to the vehicle when it is allowed to go through the intersection
-\end{ITC}
+\end{enumerate}
 
 
 
@@ -393,8 +418,10 @@ The requirements for this project are separated into the three main components o
 \subsection {Look and Feel Requirements}
 \subsubsection{Appearance Requirements}
 	\begin{itemize}
-		\item N/A
+		\item  N/A
 	\end{itemize}
+	% This is a test section
+
 
 \subsubsection{Style Requirements}
 	\begin{itemize}
@@ -408,9 +435,9 @@ The requirements for this project are separated into the three main components o
 	\end{itemize}
 
 \subsubsection{Personalization and Internationalization Requirements}
-	\begin{itemize}
+	\begin{enumerate}[label=\textbf{\Alph*}:]
 		\item The system must be able to function according to North American road standards
-	\end{itemize}
+	\end{enumerate}
 
 \subsubsection{Learning Requirements }
 	\begin{itemize}
@@ -434,15 +461,15 @@ The requirements for this project are separated into the three main components o
 	Please note that the following  non functional requirements will be updated as the system is created and data is acquired.
 
 \subsubsection{Speed Requirements }
-	\begin{itemize}
+	\begin{enumerate}[label=\textbf{\Alph*}:]
 		\item The system must be able to determine an order and convey it to the vehicle before a soft deadline
-	\end{itemize}
+	\end{enumerate}
 
 \subsubsection{Safety-Critical Requirements }
-	\begin{itemize}
+	\begin{enumerate}[label=\textbf{\Alph*}:]
 		\item The system must only signal a car to proceed when the intersection is clear
 		\item The vehicle must stop within a safe distance of an obstacle
-	\end{itemize}	
+	\end{enumerate}	
 
 \subsection{Precision Requirements}
 	\begin{itemize}
@@ -451,9 +478,11 @@ The requirements for this project are separated into the three main components o
 
 \subsubsection{Reliability or Availability  Requirements}
 	\begin{itemize}
-		\item The system must operate without failure 99% of the time
-		\item The vehicle system must operate as long as car’s internal power supply is charged
+		\item The system must operate without failure 99\% of the time
+		\item The vehicle system must operate as long as car's internal power supply is charged
 	\end{itemize}
+
+
 
 \subsubsection{Robustness or Fault-Tolerance Requirements }
 	\begin{itemize}
@@ -590,10 +619,5 @@ The requirements for this project are separated into the three main components o
 
 \subsection{Waiting Room}
 	Insert Text Here. 
-
-
-
-
-
 
 \end{document}
