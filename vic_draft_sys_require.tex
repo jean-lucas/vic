@@ -256,16 +256,16 @@ Zachary Bazen}
 \section {\textbf{Project Drivers}}
 
 
-\subsection{The Purpose of the Project} 
+\subsection{\large The Purpose of the Project} 
 The purpose of this project is to create a system that allows autonomous cars to navigate through  intersections. This will be accomplished by providing an appropriate order for the vehicles to proceed through the intersection. When multiple autonomous cars arrive at an intersection simultaneously, due to the lack of a decision making protocol, the cars have no way of determining in which order to proceed. \newline
 
 
-VIC (Vehicle Intersection Control) will allow autonomous vehicles to make navigation decisions at intersections. In addition, VIC will be able to dynamically handle changing scenarios at an intersection without running into deadlock or stalemate situations. To ensure safety, VIC will allow cars to navigate through the intersection only after a unanimous consensus has been made. \newline
+Vehicle Intersection Control (also known as VIC) will allow autonomous vehicles to make navigation decisions at intersections. In addition, VIC will be able to dynamically handle changing scenarios at an intersection without running into deadlock or stalemate situations. To ensure safety, VIC will allow cars to navigate through the intersection only after a unanimous consensus has been made. \newline
 
 
 The following document will outline the functional and nonfunctional requirements of VIC.  Other topics that will be covered pertaining to VIC will include: Scope, Project Drivers, Project Constraints, and Project Issues.
 
-\subsection{The Client, the Customer, and Other Stakeholders}
+\subsection{\large The Client, the Customer, and Other Stakeholders}
 
 \subsubsection{Client}
 \lipsum[1]  % generating text, take this out
@@ -276,7 +276,7 @@ The following document will outline the functional and nonfunctional requirement
 \subsubsection{Stakeholders}
  Insert Text Here.
 
-\subsection{Users of the Product} 
+\subsection{\large Users of the Product} 
 Insert Text Here.\\
 
 
@@ -286,30 +286,34 @@ Insert Text Here.\\
 
 
 % Mandated Constraints
-\subsection{Mandated Constraints}
+\subsection{\large Mandated Constraints}
 Vehicle intersection control has several mandated constraints tabled below. 
 \begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
-\textbf{MC-1} & \textbf{Remote control cars must be 1/10 scale} \\ \hline
-\textbf{RMC-1} & The remote control cars must fit the requirements of an existing track that was created for previous capstone projects\\ \hline \hline
-\textbf{MC-2}& \textbf{Remote control cars must be electric}\\ \hline 
-\textbf{RMC-2} & Operating conditions are indoors  \\ \hline \hline
-
-\textbf{MC-3} & \textbf{The cost of the project must not exceed \$700 dollars} \\ \hline
-\textbf{RMC-3} & This is to ensure an off-the-shelf solution can not be purchased. It also ensures the project remains economically feasible \\ \hline
+\textbf{MC1} & \textbf{Remote control cars must be 1/10 scale} \\ \hline
+\textbf{RMC1} & The remote control cars must fit the requirements of an existing track that was created for previous capstone projects\\ \hline
+\end{longtable}
+\begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
+\textbf{MC2}& \textbf{Remote control cars must be electric}\\ \hline 
+\textbf{RMC2} & Operating conditions are indoors  \\ \hline
+\end{longtable}
+\begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
+\textbf{MC3} & \textbf{The cost of the project must not exceed \$700 dollars} \\ \hline
+\textbf{RMC3} & This is to ensure an off-the-shelf solution can not be purchased. It also ensures the project remains economically feasible \\ \hline
 \end{longtable}
 
 
-\subsection{Naming Conventions and Definitions}
+\subsection{\large Naming Conventions and Definitions}
 % Naming Conventions
 \subsubsection{Naming Conventions}
 \begin{enumerate}
 	\itemsep0pt 
- 	\item \textbf{TRK-\#} - Track requirement identification  and number
-	\item \textbf{VHL-\#} - Remote control vehicle requirement identification  and number				\item \textbf{ITC-\#} - Intersection control requirement identification  and number
-	\item \textbf{MC-\#} - Mandated project constraints identification and number 
-	\item \textbf{RMC-\#} - Rational for mandated project constraints identification and number
-	\item \textbf{ASM-\#} - Project assumptions identification and number
-	\item \textbf{RASM-\#} - Rational for project assumptions identification and number
+ 	\item \textbf{T\#} - Track requirement identification  and number
+	\item \textbf{V\#} - Remote control vehicle requirement identification  and number				
+	\item \textbf{IC\#} - Intersection control requirement identification  and number
+	\item \textbf{MC\#} - Mandated project constraints identification and number 
+	\item \textbf{RMC\#} - Rational for mandated project constraints identification and number
+	\item \textbf{A\#} - Project assumptions identification and number
+	\item \textbf{RA\#} - Rational for project assumptions identification and number
 	\item \textbf{VIC} - Vehicle intersection control
 \end{enumerate}
 
@@ -321,7 +325,7 @@ Vehicle intersection control has several mandated constraints tabled below.
 \end{enumerate}
 
 	
-\subsection{Relevant Facts and Assumptions} 
+\subsection{\large Relevant Facts and Assumptions} 
 
 \subsubsection{Relevant Facts}
 \begin{itemize}
@@ -331,10 +335,14 @@ Vehicle intersection control has several mandated constraints tabled below.
 \subsubsection{Assumptions}
 VIC assumptions tabled below. 
 \begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
-\textbf{ASM-1} & \textbf{Ideal driving conditions on the track} \\ \hline
-\textbf{RASM-1} & Track is situated indoors \\ \hline \hline
-\textbf{ASM-2} & \textbf{-} \\ \hline
-\textbf{RASM-2} & - \\ \hline
+\textbf{A1} & \textbf{Ideal driving conditions on the track} \\ \hline
+\textbf{RA1} & Track is situated indoors \\ \hline
+\end{longtable}
+
+
+\begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
+\textbf{A2} & \textbf{-} \\ \hline
+\textbf{RA2} & - \\ \hline
 
 
 \end{longtable}
@@ -349,8 +357,8 @@ The requirements for this project are separated into the three main components o
 
 
 % Track Requirements
-\subsection{Track Functional Requirements}
-\begin{enumerate}[label=\textbf{TRK\arabic*:},leftmargin =0.8in]
+\subsection{\large Track Functional Requirements}
+\begin{enumerate}[label=\textbf{T\arabic*:},leftmargin =0.8in]
 	\item The track must have lanes
 	\item The track must have an intersection
 	\item The track must have an object to indicate stopping at an intersection
@@ -358,10 +366,10 @@ The requirements for this project are separated into the three main components o
 
 
 % Vehicle Requirements
-\subsection{Vehicle Functional Requirements}
+\subsection{\large Vehicle Functional Requirements}
 
 \begin{minipage}{\textwidth}
-\begin{enumerate}[label=\textbf{VHL\arabic*:}, leftmargin=0.8in]
+\begin{enumerate}[label=\textbf{V\arabic*:}, leftmargin=0.8in]
 	
 	\item The vehicle must be able to send and receive signals to and from the system infrastructure
 	
@@ -381,8 +389,8 @@ The requirements for this project are separated into the three main components o
 
 
 % VI Controller Requirements
-\subsection{Intersection Controller Functional Requirements}
-\begin{enumerate}[label=\textbf{ITC\arabic*:}, leftmargin=0.8in]
+\subsection{\large Intersection Controller Functional Requirements}
+\begin{enumerate}[label=\textbf{IC\arabic*:}, leftmargin=0.8in]
 %	\setlength{\itemindent}{.5in}
 
 	\item The system infrastructure must be able to detect if there is a car at the intersection
@@ -415,7 +423,7 @@ The requirements for this project are separated into the three main components o
 
 
 
-\subsection {Look and Feel Requirements}
+\subsection {\large Look and Feel Requirements}
 \subsubsection{Appearance Requirements}
 	\begin{itemize}
 		\item  N/A
@@ -428,7 +436,7 @@ The requirements for this project are separated into the three main components o
 		\item N/A
 	\end{itemize}
 
-\subsection{Usability and Humanity Requirements} 
+\subsection{\large Usability and Humanity Requirements} 
 \subsubsection{Ease of Use Requirements}
 	\begin{itemize}
 		\item N/A
@@ -454,7 +462,7 @@ The requirements for this project are separated into the three main components o
 		\item N/A
 	\end{itemize}
  
-\subsection{Performance Requirements}
+\subsection{\large Performance Requirements}
 	\begin{itemize}
 		\item N/A
 	\end{itemize}
@@ -471,23 +479,23 @@ The requirements for this project are separated into the three main components o
 		\item The vehicle must stop within a safe distance of an obstacle
 	\end{enumerate}	
 
-\subsection{Precision Requirements}
-	\begin{itemize}
+\subsection{\large Precision Requirements}
+	\begin{enumerate}[label=\textbf{\Alph*}:]
 		\item The vehicle must not deviate from the lanes more than 1% of the width of the lane
-	\end{itemize}
+	\end{enumerate}
 
 \subsubsection{Reliability or Availability  Requirements}
-	\begin{itemize}
+	\begin{enumerate}[label=\textbf{\Alph*}:]
 		\item The system must operate without failure 99\% of the time
 		\item The vehicle system must operate as long as car's internal power supply is charged
-	\end{itemize}
+	\end{enumerate}
 
 
 
 \subsubsection{Robustness or Fault-Tolerance Requirements }
-	\begin{itemize}
+	\begin{enumerate}[label=\textbf{\Alph*}:]
 		\item In the event of a complete vehicle system failure, the vehicle must come to a stop
-	\end{itemize}
+	\end{enumerate}
 	
 \subsubsection{Capacity Requirements }
 	\begin{itemize}
@@ -504,11 +512,11 @@ The requirements for this project are separated into the three main components o
 		\item N/A
 	\end{itemize}
 
-\subsection{Operational an Environmental Requirements}
+\subsection{\large Operational and Environmental Requirements}
 \subsubsection{Expected Physical Environment }
-	\begin{itemize}
+	\begin{enumerate}[label=\textbf{\Alph*}:]
 		\item The track must be 1/10 scale of a real world intersection
-	\end{itemize}
+	\end{enumerate}
 		
 \subsubsection{Requirements for Interacting with Adjacent Systems}
 	\begin{itemize}
@@ -525,7 +533,7 @@ The requirements for this project are separated into the three main components o
 		\item N/A
 	\end{itemize}		
 
-\subsection{Maintainability and Support Requirements }
+\subsection{\large Maintainability and Support Requirements }
 \subsubsection{Maintenance Requirements }
 	\begin{itemize}
 		\item N/A
@@ -541,7 +549,7 @@ The requirements for this project are separated into the three main components o
 		\item N/A
 	\end{itemize}
 
-\subsection{Security Requirements }
+\subsection{\large Security Requirements }
 \subsubsection{Access Requirements }
 	\begin{itemize}
 		\item N/A
@@ -567,7 +575,7 @@ The requirements for this project are separated into the three main components o
 		\item N/A
 	\end{itemize}
 
-\subsection{Cultural and Political Requirements } 
+\subsection{\large Cultural and Political Requirements } 
 \subsubsection{Cultural Requirements }
 	\begin{itemize}
 		\item N/A
@@ -579,7 +587,7 @@ The requirements for this project are separated into the three main components o
 	\end{itemize}
 
 
-\subsection{Legal Requirements}
+\subsection{\large Legal Requirements}
 \subsubsection{Compliance Requirements }
 	\begin{itemize}
 		\item N/A
@@ -596,28 +604,28 @@ The requirements for this project are separated into the three main components o
 \section {Project Issues} 
 
 
-\subsection{Open Issues}
+\subsection{\large Open Issues}
 	Insert Text Here.
 
-\subsection{Off-the-Shelf Solutions}
+\subsection{\large Off-the-Shelf Solutions}
 	Insert Text Here.
 
-\subsection{New Problems}
+\subsection{\large New Problems}
 	Insert Text Here.
 
-\subsection{Migration to the New Product} 
+\subsection{\large Migration to the New Product} 
 	Insert Text Here.
 
-\subsection{Risks}
+\subsection{\large Risks}
 	Insert Text Here.
 	
-\subsection{Costs}	
+\subsection{\large Costs}	
 	Insert Text Here.
 
-\subsection{User Documentation and Training}
+\subsection{\large User Documentation and Training}
 	Insert Text Here.
 
-\subsection{Waiting Room}
+\subsection{\large Waiting Room}
 	Insert Text Here. 
 
 \end{document}
