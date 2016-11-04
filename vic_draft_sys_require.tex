@@ -44,9 +44,12 @@
 
 
 % List package
-
 \usepackage{enumitem}
 \setenumerate{itemsep=0pt, itemindent=0in,leftmargin=0.5in}
+
+% Paragraph parameter
+
+\setlength{\parindent}{0pt}
 
 
 % ------------- Creates a linked Table of Contents  Start --------------- %
@@ -107,7 +110,7 @@ linkcolor=black,}  %choose some color if you want links to stand out
 {\normalfont \fontsize{12}{12}  \bfseries}{}{0em}{\colorsubsection }
 
 \newcommand{\colorsubsection}[1]{%
-  \colorbox{subsectionC}{\parbox{\dimexpr \textwidth -1\fboxsep}{ \thesubsection\ #1}}}
+  \colorbox{subsectionC}{\parbox{\dimexpr \textwidth -1\fboxsep}{\large\thesubsection\ #1}}}
 
 
 % Makes a background color
@@ -256,19 +259,18 @@ Zachary Bazen}
 \section {\textbf{Project Drivers}}
 
 
-\subsection{\large The Purpose of the Project} 
+\subsection{The Purpose of the Project} 
 The purpose of this project is to create a system that allows autonomous cars to navigate through  intersections. This will be accomplished by providing an appropriate order for the vehicles to proceed through the intersection. When multiple autonomous cars arrive at an intersection simultaneously, due to the lack of a decision making protocol, the cars have no way of determining in which order to proceed. \newline
 
 
 Vehicle Intersection Control (also known as VIC) will allow autonomous vehicles to make navigation decisions at intersections. In addition, VIC will be able to dynamically handle changing scenarios at an intersection without running into deadlock or stalemate situations. To ensure safety, VIC will allow cars to navigate through the intersection only after a unanimous consensus has been made. \newline
 
-
 The following document will outline the functional and nonfunctional requirements of VIC.  Other topics that will be covered pertaining to VIC will include: Scope, Project Drivers, Project Constraints, and Project Issues.
 
-\subsection{\large The Client, the Customer, and Other Stakeholders}
+\subsection{The Client, the Customer, and Other Stakeholders}
 
 \subsubsection{Client}
-\lipsum[1]  % generating text, take this out
+Insert Text Here
 
 \subsubsection{Customer}
  Insert Text Here.
@@ -276,7 +278,7 @@ The following document will outline the functional and nonfunctional requirement
 \subsubsection{Stakeholders}
  Insert Text Here.
 
-\subsection{\large Users of the Product} 
+\subsection{Users of the Product} 
 Insert Text Here.\\
 
 
@@ -286,9 +288,23 @@ Insert Text Here.\\
 
 
 % Mandated Constraints
-\subsection{\large Mandated Constraints}
+\subsection{Mandated Constraints}
 Vehicle intersection control has several mandated constraints tabled below. 
 \begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
+\textbf{MC1} & \textbf{Remote control cars must be 1/10 scale} \\ \hline
+\textbf{RMC1} & The remote control cars must fit the requirements of an existing track that was created for previous capstone projects\\ \hline 
+
+\end{longtable}
+
+\begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
+
+\textbf{MC2}& \textbf{Remote control cars must be electric}\\ \hline 
+\textbf{RMC2} & Operating conditions are indoors  \\ \hline 
+
+\end{longtable}
+
+\begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
+
 \textbf{MC1} & \textbf{Remote control cars must be 1/10 scale} \\ \hline
 \textbf{RMC1} & The remote control cars must fit the requirements of an existing track that was created for previous capstone projects\\ \hline
 \end{longtable}
@@ -302,7 +318,7 @@ Vehicle intersection control has several mandated constraints tabled below.
 \end{longtable}
 
 
-\subsection{\large Naming Conventions and Definitions}
+\subsection{Naming Conventions and Definitions}
 % Naming Conventions
 \subsubsection{Naming Conventions}
 \begin{enumerate}
@@ -325,7 +341,7 @@ Vehicle intersection control has several mandated constraints tabled below.
 \end{enumerate}
 
 	
-\subsection{\large Relevant Facts and Assumptions} 
+\subsection{Relevant Facts and Assumptions} 
 
 \subsubsection{Relevant Facts}
 \begin{itemize}
@@ -336,16 +352,15 @@ Vehicle intersection control has several mandated constraints tabled below.
 VIC assumptions tabled below. 
 \begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
 \textbf{A1} & \textbf{Ideal driving conditions on the track} \\ \hline
-\textbf{RA1} & Track is situated indoors \\ \hline
+\textbf{RA1} & Track is situated indoors \\ \hline 
 \end{longtable}
-
 
 \begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
-\textbf{A2} & \textbf{-} \\ \hline
-\textbf{RA2} & - \\ \hline
-
-
+\textbf{A2} & \textbf{Intersection is a four way stop} \\ \hline
+\textbf{RA2} &  Different intersection arrangements beyond the scope of this project \\ \hline
 \end{longtable}
+
+
 
 
 
@@ -357,7 +372,9 @@ The requirements for this project are separated into the three main components o
 
 
 % Track Requirements
-\subsection{\large Track Functional Requirements}
+
+
+\subsection{Track Functional Requirements}
 \begin{enumerate}[label=\textbf{T\arabic*:},leftmargin =0.8in]
 	\item The track must have lanes
 	\item The track must have an intersection
@@ -366,10 +383,10 @@ The requirements for this project are separated into the three main components o
 
 
 % Vehicle Requirements
-\subsection{\large Vehicle Functional Requirements}
+\subsection{Vehicle Functional Requirements}
 
-\begin{minipage}{\textwidth}
-\begin{enumerate}[label=\textbf{V\arabic*:}, leftmargin=0.8in]
+\begin{enumerate}[label=\textbf{V\arabic*:}, leftmargin=0.7in]
+
 	
 	\item The vehicle must be able to send and receive signals to and from the system infrastructure
 	
@@ -385,11 +402,12 @@ The requirements for this project are separated into the three main components o
     
     \item The vehicle must follow the laws of the Highway Traffic act
 \end{enumerate}
-\end{minipage}
+
 
 
 % VI Controller Requirements
-\subsection{\large Intersection Controller Functional Requirements}
+
+\subsection{Intersection Controller Functional Requirements}
 \begin{enumerate}[label=\textbf{IC\arabic*:}, leftmargin=0.8in]
 %	\setlength{\itemindent}{.5in}
 
@@ -403,9 +421,6 @@ The requirements for this project are separated into the three main components o
     
     \item The system infrastructure must be able to signal to the vehicle when it is allowed to go through the intersection
 \end{enumerate}
-
-
-
 
 %\section{The Scope of the Work}
 %Insert Text Here.
@@ -423,7 +438,7 @@ The requirements for this project are separated into the three main components o
 
 
 
-\subsection {\large Look and Feel Requirements}
+\subsection {Look and Feel Requirements}
 \subsubsection{Appearance Requirements}
 	\begin{itemize}
 		\item  N/A
@@ -436,7 +451,7 @@ The requirements for this project are separated into the three main components o
 		\item N/A
 	\end{itemize}
 
-\subsection{\large Usability and Humanity Requirements} 
+\subsection{Usability and Humanity Requirements} 
 \subsubsection{Ease of Use Requirements}
 	\begin{itemize}
 		\item N/A
@@ -462,7 +477,7 @@ The requirements for this project are separated into the three main components o
 		\item N/A
 	\end{itemize}
  
-\subsection{\large Performance Requirements}
+\subsection{Performance Requirements}
 	\begin{itemize}
 		\item N/A
 	\end{itemize}
@@ -479,7 +494,8 @@ The requirements for this project are separated into the three main components o
 		\item The vehicle must stop within a safe distance of an obstacle
 	\end{enumerate}	
 
-\subsection{\large Precision Requirements}
+
+\subsection{Precision Requirements}
 	\begin{enumerate}[label=\textbf{\Alph*}:]
 		\item The vehicle must not deviate from the lanes more than 1% of the width of the lane
 	\end{enumerate}
@@ -512,7 +528,8 @@ The requirements for this project are separated into the three main components o
 		\item N/A
 	\end{itemize}
 
-\subsection{\large Operational and Environmental Requirements}
+% Operational and Environmental Requirements
+\subsection{Operational and Environmental Requirements}
 \subsubsection{Expected Physical Environment }
 	\begin{enumerate}[label=\textbf{\Alph*}:]
 		\item The track must be 1/10 scale of a real world intersection
@@ -533,7 +550,7 @@ The requirements for this project are separated into the three main components o
 		\item N/A
 	\end{itemize}		
 
-\subsection{\large Maintainability and Support Requirements }
+\subsection{Maintainability and Support Requirements }
 \subsubsection{Maintenance Requirements }
 	\begin{itemize}
 		\item N/A
@@ -549,7 +566,7 @@ The requirements for this project are separated into the three main components o
 		\item N/A
 	\end{itemize}
 
-\subsection{\large Security Requirements }
+\subsection{Security Requirements }
 \subsubsection{Access Requirements }
 	\begin{itemize}
 		\item N/A
@@ -575,7 +592,7 @@ The requirements for this project are separated into the three main components o
 		\item N/A
 	\end{itemize}
 
-\subsection{\large Cultural and Political Requirements } 
+\subsection{Cultural and Political Requirements } 
 \subsubsection{Cultural Requirements }
 	\begin{itemize}
 		\item N/A
@@ -587,7 +604,7 @@ The requirements for this project are separated into the three main components o
 	\end{itemize}
 
 
-\subsection{\large Legal Requirements}
+\subsection{Legal Requirements}
 \subsubsection{Compliance Requirements }
 	\begin{itemize}
 		\item N/A
@@ -604,28 +621,28 @@ The requirements for this project are separated into the three main components o
 \section {Project Issues} 
 
 
-\subsection{\large Open Issues}
+\subsection{Open Issues}
 	Insert Text Here.
 
-\subsection{\large Off-the-Shelf Solutions}
+\subsection{Off-the-Shelf Solutions}
 	Insert Text Here.
 
-\subsection{\large New Problems}
+\subsection{New Problems}
 	Insert Text Here.
 
-\subsection{\large Migration to the New Product} 
+\subsection{Migration to the New Product} 
 	Insert Text Here.
 
-\subsection{\large Risks}
+\subsection{Risks}
 	Insert Text Here.
 	
-\subsection{\large Costs}	
+\subsection{Costs}	
 	Insert Text Here.
 
-\subsection{\large User Documentation and Training}
+\subsection{User Documentation and Training}
 	Insert Text Here.
 
-\subsection{\large Waiting Room}
+\subsection{Waiting Room}
 	Insert Text Here. 
 
 \end{document}
