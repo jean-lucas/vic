@@ -269,17 +269,24 @@ The following document will outline the functional and nonfunctional requirement
 
 \subsection{The Client, the Customer, and Other Stakeholders}
 
-\subsubsection{Client}
-Insert Text Here
+\subsubsection{Client and Customer}
+	The client and the customer for this project is Shaun Marshall, the engineering group manager at General Motors
 
-\subsubsection{Customer}
- Insert Text Here.
 
 \subsubsection{Stakeholders}
- Insert Text Here.
+ 
+ 	The stakeholders consists of:
+ 		\begin{itemize}
+
+ 		\item The developers and system designers of VIC
+ 		\item Dr. Alan Wassyng, the project supervisor
+ 		\item The teaching assistans of the courses, as the evaluators of the overall system.
+ 		\end{itemize} 
 
 \subsection{Users of the Product} 
-Insert Text Here.\\
+
+This product is expected to be used by researchers in the field of autonomous vehicles.
+
 
 
 %---------------------------- PROJECT CONSTRAINTS ------------------------%
@@ -358,6 +365,16 @@ VIC assumptions tabled below.
 \begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
 \textbf{A2} & \textbf{Intersection is a four way stop} \\ \hline
 \textbf{RA2} &  Different intersection arrangements beyond the scope of this project \\ \hline
+\end{longtable}
+
+\begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
+\textbf{A3} & \textbf{Only autonmous car will be present on the track} \\ \hline
+\textbf{RA3} &  This will help simplify the scope of the project\\ \hline
+\end{longtable}
+
+\begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
+\textbf{A4} & \textbf{Cars will not have a large variance in size} \\ \hline
+\textbf{RA4} &  The 1/10th model cars will only consists of sedan or coupe styled cars. We will not consider large vehicles such as trucks or buses.\\ \hline
 \end{longtable}
 
 
@@ -478,9 +495,6 @@ The requirements for this project are separated into the three main components o
 	\end{itemize}
  
 \subsection{Performance Requirements}
-	\begin{itemize}
-		\item N/A
-	\end{itemize}
 	Please note that the following  non functional requirements will be updated as the system is created and data is acquired.
 
 \subsubsection{Speed Requirements }
@@ -495,9 +509,9 @@ The requirements for this project are separated into the three main components o
 	\end{enumerate}	
 
 
-\subsection{Precision Requirements}
+\subsubsection{Precision Requirements}
 	\begin{enumerate}[label=\textbf{\Alph*}:]
-		\item The vehicle must not deviate from the lanes more than 1% of the width of the lane
+		\item The vehicle must not deviate from the lanes more than 1\%
 	\end{enumerate}
 
 \subsubsection{Reliability or Availability  Requirements}
@@ -514,9 +528,10 @@ The requirements for this project are separated into the three main components o
 	\end{enumerate}
 	
 \subsubsection{Capacity Requirements }
-	\begin{itemize}
-		\item N/A
-	\end{itemize}
+	\begin{enumerate}[label=\textbf{\Alph*}:]
+		\item The intersection controller shall be able to manage one intersection at a time
+		\item The intersection controller shall be able to communicate with a maximum of four cars at a time
+	\end{enumerate}
 
 \subsubsection{Scalability or Extensibility Requirements }
 	\begin{itemize}
@@ -524,9 +539,9 @@ The requirements for this project are separated into the three main components o
 	\end{itemize}
 		
 \subsubsection{Longevity Requirements }
-	\begin{itemize}
-		\item N/A
-	\end{itemize}
+	\begin{enumerate}[label=\textbf{\Alph*}:]
+		\item Components should be functional for up to one year
+	\end{enumerate}
 
 % Operational and Environmental Requirements
 \subsection{Operational and Environmental Requirements}
@@ -536,25 +551,15 @@ The requirements for this project are separated into the three main components o
 	\end{enumerate}
 		
 \subsubsection{Requirements for Interacting with Adjacent Systems}
-	\begin{itemize}
-		\item N/A
-	\end{itemize}
-
-\subsubsection{Production Requirements}
-	\begin{itemize}
-		\item N/A
-	\end{itemize} 
-
-\subsubsection{Release Requirements}
-	\begin{itemize}
-		\item N/A
-	\end{itemize}		
+	\begin{enumerate}[label=\textbf{\Alph*}:]
+		\item The components must be able to use the API of existing and partner components
+	\end{enumerate}
 
 \subsection{Maintainability and Support Requirements }
 \subsubsection{Maintenance Requirements }
-	\begin{itemize}
-		\item N/A
-	\end{itemize}
+	\begin{enumerate}[label=\textbf{\Alph*}:]
+		\item  Issues must be resolved within one week of discovering an error in the system
+	\end{enumerate}
 
 \subsubsection{Supportability Requirements }
 	\begin{itemize}
@@ -568,14 +573,14 @@ The requirements for this project are separated into the three main components o
 
 \subsection{Security Requirements }
 \subsubsection{Access Requirements }
-	\begin{itemize}
-		\item N/A
-	\end{itemize}
+	\begin{enumerate}[label=\textbf{\Alph*}:]
+		\item All stated stakeholders have full access to the product
+	\end{enumerate}
 
 \subsubsection{Integrity Requirements }
-	\begin{itemize}
-		\item N/A
-	\end{itemize}
+	\begin{enumerate}[label=\textbf{\Alph*}:]
+		\item The system will not be altered by external signals
+	\end{enumerate}
 
 \subsubsection{Privacy Requirements }
 	\begin{itemize}
@@ -622,27 +627,42 @@ The requirements for this project are separated into the three main components o
 
 
 \subsection{Open Issues}
-	Insert Text Here.
+	\begin{enumerate}[label=\textbf{\Alph*}:]
+		\item The track design is unknown
+	\end{enumerate}
 
 \subsection{Off-the-Shelf Solutions}
-	Insert Text Here.
 
-\subsection{New Problems}
-	Insert Text Here.
+\subsubsection{Ready-Made Products}
+	\begin{enumerate}[label=\textbf{\Alph*}:]
+		\item Autonomous Intersection Management, and existing product that partially solves our problem
+	\end{enumerate}
 
-\subsection{Migration to the New Product} 
-	Insert Text Here.
 
 \subsection{Risks}
-	Insert Text Here.
+	\begin{enumerate}[label=\textbf{\Alph*}:]
+		\item Component failure
+		\item Parts damaged
+		\item Potential to minor injuries to humans
+	\end{enumerate}
 	
 \subsection{Costs}	
-	Insert Text Here.
+		
+		The general budget for the major components are as follow:
 
-\subsection{User Documentation and Training}
-	Insert Text Here.
+		\begin{enumerate}[label=\textbf{\Alph*}:]
+			\item 1/10th model car \$200.0 each
+			\item Cameras and sensors \$100.00
+			\item Micro-controllers \$200  
+		\end{enumerate}
+
 
 \subsection{Waiting Room}
-	Insert Text Here. 
+	\begin{enumerate}[label=\textbf{\Alph*}:]
+		\item Having the system work with other autonomous car models
+		\item Having the system work with non-autonomous cars
+	\end{enumerate} 
+
+
 
 \end{document}
