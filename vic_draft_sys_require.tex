@@ -10,6 +10,10 @@
 
 % ----------  PACKAGES START ------------ %
 
+% Table cell color
+\usepackage[table]{xcolor}
+
+
 % VIC title package
 \usepackage{cabin}
 \usepackage[T1]{fontenc}
@@ -41,6 +45,7 @@
 \definecolor{sectionC}{rgb}{0.016,0.227,.365}
 \definecolor{subsectionC}{rgb}{.87,0.87,.87}
 \definecolor{subsubsectionC}{rgb}{.94,.93,.90}
+\definecolor{tableCell}{rgb}{.96,.95,.90}
 
 
 % List package
@@ -217,7 +222,9 @@ Zachary Bazen}
 % Inserting table of contents and table of figures 
 
 \tableofcontents
+\listoffigures
 \listoftables
+
 
 \pagebreak
 
@@ -225,8 +232,7 @@ Zachary Bazen}
 
 %\section*{Revisions}
 \thispagestyle{empty}
-\noindent {\textbf{\large Revisions}}
-\addcontentsline{toc}{section}{\textbf{\normalsize Revisions}}
+\section{Revisions}
 \begin{longtable}{| p{.2\textwidth } | p{.23\textwidth } | p{.23\textwidth } | p{.23\textwidth } |}
 
 \hline 
@@ -235,7 +241,7 @@ Zachary Bazen}
 \multicolumn{1}{|c}{\textbf {Authors}} & 
 \multicolumn{1}{|c|}{\textbf {Comments}} \\ \hline
 
-\multirow{4}{*}{\centering November 7, 2016}  & 
+\multirow{4}{*}{\centering November 14, 2016}  & 
 \multirow{4}{*}{Revision 0}& 
 {Alex Jackson \newline
 Jean Lucas Ferreira \newline
@@ -310,15 +316,6 @@ Vehicle intersection control has several mandated constraints tabled below.
 
 \end{longtable}
 
-%\begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
-%
-%\textbf{MC1} & \textbf{Remote control cars must be 1/10 scale} \\ \hline
-%\textbf{RMC1} & The remote control cars must fit the requirements of an existing track that was created for previous capstone projects\\ \hline
-%\end{longtable}
-%\begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
-%\textbf{MC2}& \textbf{Remote control cars must be electric}\\ \hline 
-%\textbf{RMC2} & Operating conditions are indoors  \\ \hline
-%\end{longtable}
 \begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
 \textbf{MC3} & \textbf{The cost of the project must not exceed \$700 dollars} \\ \hline
 \textbf{RMC3} & This is to ensure an off-the-shelf solution can not be purchased. It also ensures the project remains economically feasible \\ \hline
@@ -328,17 +325,37 @@ Vehicle intersection control has several mandated constraints tabled below.
 \subsection{Naming Conventions and Definitions}
 % Naming Conventions
 \subsubsection{Naming Conventions}
-\begin{enumerate}
-	\itemsep0pt 
- 	\item \textbf{T\#} - Track requirement identification  and number
-	\item \textbf{V\#} - Remote control vehicle requirement identification  and number				
-	\item \textbf{IC\#} - Intersection control requirement identification  and number
-	\item \textbf{MC\#} - Mandated project constraints identification and number 
-	\item \textbf{RMC\#} - Rational for mandated project constraints identification and number
-	\item \textbf{A\#} - Project assumptions identification and number
-	\item \textbf{RA\#} - Rational for project assumptions identification and number
-	\item \textbf{VIC} - Vehicle intersection control
-\end{enumerate}
+\begin{longtable}{ |p{.13\textwidth }  p{.825\textwidth }|}  \hline
+\textbf{T\#} &  Track requirement identification  and number \\ 
+
+\cellcolor{tableCell}\textbf{V\#}  & \cellcolor{tableCell}Remote control vehicle requirement identification  and number \\ 
+
+\textbf{IC\#} & Intersection control requirement identification  and number \\ 
+
+\cellcolor{tableCell}\textbf{MC\#} &  \cellcolor{tableCell}Mandated project constraints identification and number \\ 
+
+\textbf{RMC\#} & Rational for mandated project constraints identification and number\\ 
+
+\cellcolor{tableCell}\textbf{A\#} & \cellcolor{tableCell}Project assumptions identification and number \\ 
+
+\textbf{RA\#} & Rational for project assumptions identification and number \\ 
+
+\cellcolor{tableCell}\textbf{VIC} & \cellcolor{tableCell}Vehicle intersection control \\ \hline
+
+
+\end{longtable}
+%
+%\begin{enumerate}
+%	\itemsep0pt 
+% 	\item \textbf{T\#} - Track requirement identification  and number
+%	\item \textbf{V\#} - Remote control vehicle requirement identification  and number				
+%	\item \textbf{IC\#} - Intersection control requirement identification  and number
+%	\item \textbf{MC\#} - Mandated project constraints identification and number 
+%	\item \textbf{RMC\#} - Rational for mandated project constraints identification and number
+%	\item \textbf{A\#} - Project assumptions identification and number
+%	\item \textbf{RA\#} - Rational for project assumptions identification and number
+%	\item \textbf{VIC} - Vehicle intersection control
+%\end{enumerate}
 
 % Definitions
 \subsubsection{Definitions}
@@ -378,8 +395,30 @@ VIC assumptions tabled below.
 \end{longtable}
 
 
+\section{Context Diagrams}
+\begin{figure} [h!]
+	\centering
+	\includegraphics [scale =1] {figures/context_1.png}
+	\caption{Insert Text Here}
+\end{figure}
+\begin{figure} [h!]
+	\centering
+	\includegraphics [scale =1] {figures/context_2.png}
+	\caption{Insert Text Here 2}
+\end{figure}
+
+\section{Constants}
+\begin{itemize}
+\item TBD
+
+\end{itemize}
 
 
+\section{Monitored and Controlled Variables}
+\begin{itemize}
+\item TBD
+
+\end{itemize}
 
 %---------------------------- Functional Requirements ------------------------%
 
@@ -390,54 +429,108 @@ The requirements for this project are separated into the three main components o
 
 % Track Requirements
 
+% if one requirements gets deleted it will be shown in the requirement likelihood of change as ??
+% with all the other labels numbers updated
+
+ % ------ NOTE ------% 
+% CAN ONLY ADD REQUIREMENTS TO END OF LIST WITH OWN UNIQUE LABEL
+% Which would then have to be put at the end of the requirement group in likelihood of change section
+% If we add requirements in the middle, the likelihood of change will get messed up
 
 \subsection{Track Functional Requirements}
-\begin{enumerate}[label=\textbf{T\arabic*:},leftmargin =0.8in]
-	\item The track must have lanes
-	\item The track must have an intersection
-	\item The track must have an object to indicate stopping at an intersection
+\begin{enumerate}[label=\textbf{T\arabic*:}, ref=T\arabic*, leftmargin =0.8in]
+	\item \label{T1} \hyperref[sec:changeL]{The track must have lanes } % Unlikely
+	\item \label{T2} \hyperref[sec:changeL]{The track must have an intersection} % Unlikely
+	\item \label {T3} \hyperref[sec:changeL]{The track must have an object to indicate stopping at an intersection}  % Unlikely
 \end{enumerate}
+
+
+
 
 
 % Vehicle Requirements
 \subsection{Vehicle Functional Requirements}
 
-\begin{enumerate}[label=\textbf{V\arabic*:}, leftmargin=0.7in]
+\begin{enumerate}[label=\textbf{V\arabic*:}, ref =V\arabic*, leftmargin=0.7in]
 
 	
-	\item The vehicle must be able to send and receive signals to and from the system infrastructure
+	\item \label{V1}  \hyperref[sec:changeL]{The vehicle must be able to send and receive signals to and from the system} infrastructure % Llikely
 	
-	\item The vehicle must be able to detect lanes and follow them
+	\item \label{V2} \hyperref[sec:changeL]{The vehicle must be able to detect lanes and follow them} % Unlikely
     
-    \item The vehicle must be able to detect intersections 
+    \item \label{V3} \hyperref[sec:changeL]{The vehicle must be able to detect intersections}  % Unlikely
     
-    \item The vehicle must be able to stop at intersections
+    \item \label{V4} \hyperref[sec:changeL]{The vehicle must be able to stop at intersections} % Unlikely
     
-    \item The vehicle must be able to navigate through intersections
+    \item \label{V5} \hyperref[sec:changeL]{The vehicle must be able to navigate through intersections} % Unlikely
     
-    \item The vehicle must be able to avoid obstacles 
+    \item \label{V6} \hyperref[sec:changeL]{The vehicle must be able to avoid obstacles} % Unlikely
     
-    \item The vehicle must follow the laws of the Highway Traffic act
+    \item \label{V7} \hyperref[sec:changeL]{The vehicle must follow the laws of the Highway Traffic act} % Unlikely
 \end{enumerate}
+
+
 
 
 
 % VI Controller Requirements
 
 \subsection{Intersection Controller Functional Requirements}
-\begin{enumerate}[label=\textbf{IC\arabic*:}, leftmargin=0.8in]
+\begin{enumerate}[label=\textbf{IC\arabic*:}, ref =IC\arabic*, leftmargin=0.8in]
 %	\setlength{\itemindent}{.5in}
 
-	\item The system infrastructure must be able to detect if there is a car at the intersection
-	
-	\item The system infrastructure must be able to differentiate between autonomous and non autonomous cars
-	
-	\item The system infrastructure must be able to detect when a car has navigated through the intersection
+	\item \label{IC1} \hyperref[sec:changeL]{The system infrastructure must be able to detect if there is a car at the intersection } % Likely
 
-    \item The system infrastructure must be able to determine the order in which the cars should proceed
+	
+	\item \label{IC2}\hyperref[sec:changeL]{The system infrastructure must be able to differentiate between autonomous and non autonomous cars} % Likely
+	
+	\item \label{IC3}\hyperref[sec:changeL]{The system infrastructure must be able to detect when a car has navigated through the intersection} % Likely
+
+    \item \label{IC4}\hyperref[sec:changeL]{The system infrastructure must be able to determine the order in which the cars should proceed} % Likely
     
-    \item The system infrastructure must be able to signal to the vehicle when it is allowed to go through the intersection
+    \item \label{IC5} \hyperref[sec:changeL]{The system infrastructure must be able to signal to the vehicle when it is allowed to go through the intersection} % Likely
 \end{enumerate}
+
+\section{Functional Decomposition Diagrams}
+\begin{figure} [h!]
+	\centering
+	\includegraphics [scale =1] {figures/decomp_1.png}
+	\caption{Insert Text Here 3}
+\end{figure}
+
+
+\section{Functional Requirements Likelihood of Change} \label{sec:changeL}
+
+\begin{longtable}{| p{.2\textwidth } | p{.3\textwidth } |  p{.3\textwidth } |}\hline 
+\multicolumn{1}{|c|}{\textbf {Requirement Group}} & \multicolumn{1}{c|}{\textbf {Requirement}} & \multicolumn{1}{c|}{\textbf {Likelihood of Change}} \\ \hline
+
+% Track Requirement
+\multicolumn{1}{|c|}{\textbf {\multirow{3}{*}{\centering Track}}}  & \multicolumn{1}{c |}{\ref{T1}} & \multicolumn{1}{c |}{Unlikely} \\\cline{2-3}
+                                 & \multicolumn{1}{c |}{\ref{T2}   } & \multicolumn{1}{c |}{Unlikely} \\\cline{2-3}
+                                 & \multicolumn{1}{c |}{\ref{T3}} & \multicolumn{1}{c |}{Unlikely} \\\cline{2-3} \hline 
+
+
+ 
+% Vehicle Requirement
+\multicolumn{1}{|c|}{\textbf {\multirow{7}{*}{\centering Vehicle}}}  & \multicolumn{1}{c |}{\ref{V1}} & \multicolumn{1}{c |}{Likely} \\\cline{2-3}
+                                 & \multicolumn{1}{c | }{\ref{V2}} & \multicolumn{1}{c |}{Unlikely} \\\cline{2-3}
+                                 & \multicolumn{1}{c | }{\ref{V3}} & \multicolumn{1}{c |}{Unlikely} \\\cline{2-3}
+                                 & \multicolumn{1}{c | }{\ref{V4}} & \multicolumn{1}{c |}{Unlikely} \\\cline{2-3}
+                                 & \multicolumn{1}{c | }{\ref{V5}} & \multicolumn{1}{c |}{Unlikely} \\\cline{2-3}
+                                 & \multicolumn{1}{c | }{\ref{V6}} & \multicolumn{1}{c |}{Unlikely} \\\cline{2-3}
+                                 & \multicolumn{1}{c | }{\ref{V7}} & \multicolumn{1}{c |}{Unlikely} \\\cline{2-3} \hline 
+
+% Intersection Requirement                               
+\multicolumn{1}{|c|}{\textbf {\multirow{5}{*}{Intersection Control}}}  & \multicolumn{1}{c |}{\ref{IC1}} & \multicolumn{1}{c |}{Likely} \\\cline{2-3}
+                                 & \multicolumn{1}{c | }{\ref{IC2}} & \multicolumn{1}{c |}{Likely} \\\cline{2-3}
+                                 & \multicolumn{1}{c | }{\ref{IC3}} & \multicolumn{1}{c |}{Likely} \\\cline{2-3}
+                                 & \multicolumn{1}{c | }{\ref{IC4}} & \multicolumn{1}{c |}{Likely} \\\cline{2-3}
+                                 & \multicolumn{1}{c | }{\ref{IC5}} & \multicolumn{1}{c |}{Likely} \\\cline{2-3} \hline
+
+
+\end{longtable}
+
+
 
 %\section{The Scope of the Work}
 %Insert Text Here.
@@ -645,6 +738,8 @@ The requirements for this project are separated into the three main components o
 		\item Parts damaged
 		\item Potential to minor injuries to humans
 	\end{enumerate}
+	
+
 	
 \subsection{Costs}	
 		
