@@ -267,17 +267,17 @@ Zachary Bazen}
 
 
 \subsection{The Purpose of the Project} 
-The purpose of this project is to create a system that allows autonomous cars to navigate through  intersections. This will be accomplished by providing an appropriate order for the vehicles to proceed through the intersection. When multiple autonomous cars arrive at an intersection simultaneously, due to the lack of a decision making protocol, the cars have no way of determining in which order to proceed. \newline
+When multiple autonomous cars arrive at an intersection simultaneously, due to the lack of a decision making protocol, the cars have no way of determining in which order to proceed. The purpose of this project will be create a system that allows autonomous cars to navigate through  intersections. This will be accomplished by providing an appropriate order for the vehicles to proceed through the intersection.  \newline
 
 
-Vehicle Intersection Control (also known as VIC) will allow autonomous vehicles to make navigation decisions at intersections. In addition, VIC will be able to dynamically handle changing scenarios at an intersection without running into deadlock or stalemate situations. To ensure safety, VIC will allow cars to navigate through the intersection only after a unanimous consensus has been made. \newline
+Vehicle Intersection Control (also known as VIC) will allow autonomous vehicles to make navigation decisions at intersections. In addition, VIC will be able to dynamically handle changing scenarios at an intersection without running into deadlock or stalemate situations. To ensure safety, VIC will allow cars to navigate through the intersection only after the scheduling algorithm determines the order in which they should proceed. \newline
 
 The following document will outline the functional and nonfunctional requirements of VIC.  Other topics that will be covered pertaining to VIC will include: Scope, Project Drivers, Project Constraints, and Project Issues.
 
 \subsection{The Client, the Customer, and Other Stakeholders}
 
 \subsubsection{Client and Customer}
-	The client and the customer for this project is Shaun Marshall, the engineering group manager at General Motors
+	The client for this project is Shaun Marshall and the engineering group manager at General Motors. 
 
 
 \subsubsection{Stakeholders}
@@ -287,16 +287,13 @@ The following document will outline the functional and nonfunctional requirement
 
  		\item The developers and system designers of VIC
  		\item Dr. Alan Wassyng, the project supervisor
- 		\item The teaching assistans of the courses, as the evaluators of the overall system.
+ 		\item The teaching assistants of the course
  		\end{itemize} 
 
 \subsection{Users of the Product} 
 
-This product is expected to be used by researchers in the field of autonomous vehicles.
+This product is expected to be used by researchers in the field of autonomous vehicles.  VIC will act as a prototype to solve the problem of intersection control for autonomous vehicles.  It is expected that VIC will be used to create a larger program that will accomplish what VIC does, as well as accounting for a real world environment.  VIC is not expected to be used by autonomous cars in a real world environment. 
 
-
-
-%---------------------------- PROJECT CONSTRAINTS ------------------------%
 % heading in document
 \section{\textbf{Project Constraints}}
 
@@ -306,20 +303,20 @@ This product is expected to be used by researchers in the field of autonomous ve
 Vehicle intersection control has several mandated constraints tabled below. 
 \begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
 \textbf{MC1} & \textbf{Remote control cars must be 1/10 scale} \\ \hline
-\textbf{RMC1} & The remote control cars must fit the requirements of an existing track that was created for previous capstone projects\\ \hline 
+\textbf{RMC1} & The remote control cars must be large enough to mount all the required hardware\\ \hline 
 
 \end{longtable}
 
 \begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
 
 \textbf{MC2}& \textbf{Remote control cars must be electric}\\ \hline 
-\textbf{RMC2} & Operating conditions are indoors  \\ \hline 
+\textbf{RMC2} & Cars will be operated indoors, gasoline powered remote control cars are a safety hazard indoors\\ \hline 
 
 \end{longtable}
 
 \begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
 \textbf{MC3} & \textbf{The cost of the project must not exceed \$700 dollars} \\ \hline
-\textbf{RMC3} & This is to ensure an off-the-shelf solution can not be purchased. It also ensures the project remains economically feasible \\ \hline
+\textbf{RMC3} & This is to ensure an off-the-shelf solution can not be purchased. It also ensures the project remains economically feasible. \\ \hline
 \end{longtable}
 
 
@@ -382,7 +379,7 @@ VIC assumptions tabled below.
 
 \begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
 \textbf{A2} & \textbf{Intersection is a four way stop} \\ \hline
-\textbf{RA2} &  Different intersection arrangements beyond the scope of this project \\ \hline
+\textbf{RA2} &  Different intersection arrangements are beyond the scope of this project \\ \hline
 \end{longtable}
 
 \begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
@@ -731,22 +728,22 @@ The requirements for this project are separated into the three main components o
 
 \subsection{Open Issues}
 	\begin{enumerate}[label=\textbf{\Alph*}:]
-		\item The track design is unknown
+		\item The track design is not finalized. 
 	\end{enumerate}
 
 \subsection{Off-the-Shelf Solutions}
 
 \subsubsection{Ready-Made Products}
 	\begin{enumerate}[label=\textbf{\Alph*}:]
-		\item Autonomous Intersection Management, and existing product that partially solves our problem
+		\item Autonomous Intersection Management, an existing product that partially solves the problem of autonomous intersection navigation. 
 	\end{enumerate}
 
 
 \subsection{Risks}
 	\begin{enumerate}[label=\textbf{\Alph*}:]
-		\item Component failure
-		\item Parts damaged
-		\item Potential to minor injuries to humans
+		\item Component failure - Failure of components can result in damage to the remote control cars.
+		\item Damaged parts - Damaged parts will result in delay of the project and will require more parts to be bought.
+		\item Potential of minor injuries to humans - Humans can be injured if parts malfunction. 
 	\end{enumerate}
 	
 
@@ -756,9 +753,9 @@ The requirements for this project are separated into the three main components o
 		The general budget for the major components are as follow:
 
 		\begin{enumerate}[label=\textbf{\Alph*}:]
-			\item 1/10th model car \$200.0 each
+			\item 1/10th model car \$200.00 each
 			\item Cameras and sensors \$100.00
-			\item Micro-controllers \$200  
+			\item Micro-controllers \$200.00
 		\end{enumerate}
 
 
