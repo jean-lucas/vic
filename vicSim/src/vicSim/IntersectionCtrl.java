@@ -1,6 +1,7 @@
 package vicSim;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.TreeMap;
 
 public class IntersectionCtrl {
@@ -9,8 +10,6 @@ public class IntersectionCtrl {
 	public static final int HIGH_PRI = 3;
 	public static final int MED_PRI = 2;
 	public static final int LOW_PRI = 1;
-	
-	
 	
 	
 	
@@ -63,7 +62,6 @@ public class IntersectionCtrl {
 			System.out.println();
 		}
 		
-		
 	}
 	
 	
@@ -86,73 +84,60 @@ public class IntersectionCtrl {
 		Car c4 = new Car(1,-2,4); //coming north going west
 		
 		
-		ArrayList<Car> cars = new ArrayList<Car>();
-		cars.add(c1);
-		cars.add(c2);
-		cars.add(c3);
-		cars.add(c4);
-		
-		
-		try {
-			makeOrder(cars);
-		} 
-		catch (Exception e) {
-			e.printStackTrace();
+		for  (int i = 0; i < 10; i++) {
+			try {
+								
+				HashMap<Thread, Car> carThreads = new HashMap<Thread, Car>();
+				ArrayList<Car> carsInCurrentEvent = new ArrayList<Car>();
+				
+				
+				Thread t1 = new Thread(c1,"1");
+				Thread t2 = new Thread(c2,"2");
+				Thread t3 = new Thread(c3,"3");
+				Thread t4 = new Thread(c4,"4");
+
+				
+				carThreads.put(t1,  c1);
+				carThreads.put(t2,  c2);
+				carThreads.put(t3,  c3);
+				carThreads.put(t4,  c4);
+				
+				
+				//start the threads
+				for (Thread t: carThreads.keySet()) {
+					t.start();
+				}
+				
+				//set a timeout to only catch a few threads
+				for (Thread t: carThreads.keySet()) {
+					t.join(200);
+					if (!t.isAlive())
+						carsInCurrentEvent.add(carThreads.get(t));
+					else 
+						t.interrupt();
+				}
+				
+				
+				System.out.println(" ------------------ # of cars in current Event : " + carsInCurrentEvent.size() + " --------------------------   " );
+				
+				
+				//running the order maker
+				makeOrder(carsInCurrentEvent);
+			
+			}
+
+			catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
-	}
+			
+		}
+		
+		
+
 	
 }
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-// if Car implements Runnable we can use this  
-public static void main(String[] args) throws InterruptedException {
-	
-	Car c1 = new Car("N", "S", 1);
-	Car c2 = new Car("E", "S", 2);
-	
-	Thread t1 = new Thread(c1,"cat");
-	Thread t2 = new Thread(c2,"bob");
-
-	LinkedList<Thread> q = new LinkedList<Thread>();
-	Thread[] cars = {t1,t2};	
-	
-	
-	for  (Thread car: cars) {
-		car.start();
-	}
-	
-	for  (Thread car: cars) {
-		car.join(0,1);
-		
-		if (!car.isAlive()) {
-			System.out.println("car: " + car.getName() + "  has finished");
-			q.addLast(car);
-		}
-		else 
-			car.join();
-	}
-	
-	while (!q.isEmpty()) {
-		System.out.println(q.peek().getName());
-		q.removeFirst();
-	}
-
-}
-*/
