@@ -1,12 +1,15 @@
 package vicSim;
 
-public class Car {
+import java.util.Random;
+
+public class Car implements Runnable {
 	
 	
 	private int comingFrom;
 	private int goingTo;
 	private final int ID;
 	private int priority;
+
 	
 	public Car(int cf, int gt, final int id) {
 		this.comingFrom = cf;
@@ -70,12 +73,36 @@ public class Car {
 	}	
 	
 	
-//	@Override
-//	void run() {
-//		for (int i = 0; i < 5; i++) {
-//			this.sendRequest();
-//		}
-//	}
+	private void generateRandomInfo() {
+		
+		Random rand = new Random();
+		int r1,r2,sign1,sign2;
+		r1 = 1 + rand.nextInt(2);
+		sign1 = rand.nextInt(2);
+		r2 = 1 + rand.nextInt(2);
+		sign2 = rand.nextInt(2);
+		
+		r1 = (sign1 == 0) ? -1*r1 : r1;
+		r2 = (sign2 == 0) ? -1*r2 : r2;
+		
+		this.goingTo = r1;
+		this.comingFrom = r2;
+		
+	}
+	
+	
+	@Override
+	public void run() {
+			
+			// Generate a new event for this car, and sleep
+			// for a random time between 0-499 ms
+			this.generateRandomInfo();
+			Random seed = new Random();
+			try {
+				Thread.sleep(seed.nextInt(500));
+			} 
+			catch (InterruptedException e) {}
+	}
 }
 
 

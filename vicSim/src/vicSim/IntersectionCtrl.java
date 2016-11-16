@@ -1,6 +1,180 @@
 package vicSim;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.TreeMap;
+
+public class IntersectionCtrl {
+
+	
+	private final int HIGH_PRI = 3;
+	private final int MED_PRI = 2;
+	private final int LOW_PRI = 1;
+	
+	private int numberOfEventsToRun;
+	
+	private TreeMap<Integer, ArrayList<Car>> generatedOrder;
+	
+	/*
+	 *  1 -> arriving from North
+	 * -1 -> arriving from South
+	 *  2 -> arriving from East
+	 * -2 -> arriving from West
+	 * 
+	 */
+	
+	private Car c1 = new Car(1,1,1); 
+	private Car c2 = new Car(1,2,2); 
+	private Car c3 = new Car(-1,-2,3); 
+	private Car c4 = new Car(1,-2,4);
+	
+	public IntersectionCtrl(int numEvents) {
+		this.numberOfEventsToRun = numEvents;
+	}
+	
+	
+	
+	/**
+	 * 
+	 * Turning right :  | comingFrom - goingTo | = 1
+	 * Turning left  :  | comingFrom | + | goingTo | = 3
+	 * Going Straight:  | comingFrom | = | goingTo | 
+	 * 
+	 */
+	private void generateOrder(ArrayList<Car> cars) {
+		
+		this.generatedOrder = new TreeMap<Integer, ArrayList<Car>>();
+		
+		generatedOrder.put(HIGH_PRI, new ArrayList<Car>());
+		generatedOrder.put(MED_PRI, new ArrayList<Car>());
+		generatedOrder.put(LOW_PRI, new ArrayList<Car>());
+	
+			//setup the order based on which direction a car is going
+			for (Car c: cars) {
+				
+				//turning right
+				if (Math.abs(c.getCf() - c.getGt()) == 1) {
+					c.setPri(HIGH_PRI);
+					generatedOrder.get(HIGH_PRI).add(c);
+				}
+				
+				//going straight
+				else if (Math.abs(c.getCf()) == Math.abs(c.getGt())) {
+					c.setPri(MED_PRI);
+					generatedOrder.get(MED_PRI).add(c);
+				}
+				
+				//turning left
+				else if ( (Math.abs(c.getCf()) + Math.abs(c.getGt())) == 3) {
+					c.setPri(LOW_PRI);
+					generatedOrder.get(LOW_PRI).add(c);
+				}
+				
+				else {
+					System.out.println("Invalid  directions set");
+				}
+				
+			}
+			
+			printGeneratedOrder();
+				
+	
+	}
+	
+	
+	
+	private void  printGeneratedOrder() {
+		System.out.printf("%4s %12s %20s %20s \n\n", "ID", "Priority", "Arriving From", "Going To" );
+		
+		for (int pri: generatedOrder.descendingKeySet()) {
+			
+			for (Car c: generatedOrder.get(pri)) {
+				System.out.println(c.prettyPrintStatus());
+			}
+			
+			System.out.println();
+		}
+	}
+	
+	
+	private void runSimulation() {
+		
+		HashMap<Thread, Car> carThreads;
+		ArrayList<Car> carsInCurrentEvent;
+		
+		for  (int i = 0; i < numberOfEventsToRun; i++) {
+			try {
+								
+				carThreads = new HashMap<Thread, Car>();
+				carsInCurrentEvent = new ArrayList<Car>();
+				
+				
+				Thread t1 = new Thread(c1,"1");
+				Thread t2 = new Thread(c2,"2");
+				Thread t3 = new Thread(c3,"3");
+				Thread t4 = new Thread(c4,"4");
+
+				
+				carThreads.put(t1,  c1);
+				carThreads.put(t2,  c2);
+				carThreads.put(t3,  c3);
+				carThreads.put(t4,  c4);
+				
+				
+				//start the threads
+				for (Thread t: carThreads.keySet()) {
+					t.start();
+				}
+				
+				//set a timeout to only catch a few threads
+				for (Thread t: carThreads.keySet()) {
+					t.join(200);
+					if (!t.isAlive())
+						carsInCurrentEvent.add(carThreads.get(t));
+					else 
+						t.interrupt();
+				}
+				
+				
+				System.out.println(" ------------------ # of cars in current Event : " + carsInCurrentEvent.size() + " --------------------------   " );
+				
+				
+				//running the order maker
+				generateOrder(carsInCurrentEvent);			
+			}
+
+			catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+			
+	}
+		
+	
+		
+	
+	
+	
+	
+	public static void main(String[] args) {
+		
+		IntersectionCtrl ic = new IntersectionCtrl(10);
+		ic.runSimulation();
+
+	}
+}
+
+
+
+
+
+
+
+
+/*package vicSim;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.TreeMap;
 
 public class IntersectionCtrl {
@@ -9,8 +183,6 @@ public class IntersectionCtrl {
 	public static final int HIGH_PRI = 3;
 	public static final int MED_PRI = 2;
 	public static final int LOW_PRI = 1;
-	
-	
 	
 	
 	
@@ -63,7 +235,6 @@ public class IntersectionCtrl {
 			System.out.println();
 		}
 		
-		
 	}
 	
 	
@@ -72,13 +243,13 @@ public class IntersectionCtrl {
 	
 	public static void main(String[] args) {
 		
-		/*
+		
 		 *  1 -> arriving from North
 		 * -1 -> arriving from South
 		 *  2 -> arriving from East
 		 * -2 -> arriving from West
 		 * 
-		 */
+		 
 		
 		Car c1 = new Car(1,1,1); //coming north going north
 		Car c2 = new Car(1,2,2); //coming north going east
@@ -86,73 +257,61 @@ public class IntersectionCtrl {
 		Car c4 = new Car(1,-2,4); //coming north going west
 		
 		
-		ArrayList<Car> cars = new ArrayList<Car>();
-		cars.add(c1);
-		cars.add(c2);
-		cars.add(c3);
-		cars.add(c4);
-		
-		
-		try {
-			makeOrder(cars);
-		} 
-		catch (Exception e) {
-			e.printStackTrace();
+		for  (int i = 0; i < 10; i++) {
+			try {
+								
+				HashMap<Thread, Car> carThreads = new HashMap<Thread, Car>();
+				ArrayList<Car> carsInCurrentEvent = new ArrayList<Car>();
+				
+				
+				Thread t1 = new Thread(c1,"1");
+				Thread t2 = new Thread(c2,"2");
+				Thread t3 = new Thread(c3,"3");
+				Thread t4 = new Thread(c4,"4");
+
+				
+				carThreads.put(t1,  c1);
+				carThreads.put(t2,  c2);
+				carThreads.put(t3,  c3);
+				carThreads.put(t4,  c4);
+				
+				
+				//start the threads
+				for (Thread t: carThreads.keySet()) {
+					t.start();
+				}
+				
+				//set a timeout to only catch a few threads
+				for (Thread t: carThreads.keySet()) {
+					t.join(200);
+					if (!t.isAlive())
+						carsInCurrentEvent.add(carThreads.get(t));
+					else 
+						t.interrupt();
+				}
+				
+				
+				System.out.println(" ------------------ # of cars in current Event : " + carsInCurrentEvent.size() + " --------------------------   " );
+				
+				
+				//running the order maker
+				makeOrder(carsInCurrentEvent);
+			
+			}
+
+			catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
-	}
+			
+		}
+		
+		
+
 	
 }
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-// if Car implements Runnable we can use this  
-public static void main(String[] args) throws InterruptedException {
-	
-	Car c1 = new Car("N", "S", 1);
-	Car c2 = new Car("E", "S", 2);
-	
-	Thread t1 = new Thread(c1,"cat");
-	Thread t2 = new Thread(c2,"bob");
-
-	LinkedList<Thread> q = new LinkedList<Thread>();
-	Thread[] cars = {t1,t2};	
-	
-	
-	for  (Thread car: cars) {
-		car.start();
-	}
-	
-	for  (Thread car: cars) {
-		car.join(0,1);
-		
-		if (!car.isAlive()) {
-			System.out.println("car: " + car.getName() + "  has finished");
-			q.addLast(car);
-		}
-		else 
-			car.join();
-	}
-	
-	while (!q.isEmpty()) {
-		System.out.println(q.peek().getName());
-		q.removeFirst();
-	}
-
-}
 */
