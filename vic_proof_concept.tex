@@ -80,7 +80,7 @@ linkcolor=black,}  %choose some color if you want links to stand out
 \pagestyle{fancy}
 
 % Header
-\lhead{Draft System Design }
+\lhead{Proof of Concept }
 \rhead{Revision: 0}
 \fancyhead[LE,CO]{VIC - Group 6}
 
@@ -223,8 +223,8 @@ Zachary Bazen}
 % Inserting table of contents and table of figures 
 
 \tableofcontents
-\listoftables
-\listoffigures
+%\listoftables
+% \listoffigures
 
 
 
@@ -232,32 +232,32 @@ Zachary Bazen}
 
 % -----------  REVISION HISTORY START ----------- %
 
-%\section*{Revisions}
-\thispagestyle{empty}
-\section{Revisions}
-\begin{longtable}{| p{.2\textwidth } | p{.23\textwidth } | p{.23\textwidth } | p{.23\textwidth } |}
-
-\hline 
-\centering \textbf{Date} & 
-\multicolumn{1}{c}{\textbf {Revision Number}} &
-\multicolumn{1}{|c}{\textbf {Authors}} & 
-\multicolumn{1}{|c|}{\textbf {Comments}} \\ \hline
-
-\multirow{4}{*}{\centering December 1, 2016}  & 
-\multirow{4}{*}{Revision 0}& 
-{Alex Jackson \newline
-Jean Lucas Ferreira \newline
-Justin Kapinski\newline
-Mathew Hobers\newline
-Radhika Sharma\newline
-Zachary Bazen}
-&
- \multirow{4}{*}{N/A} \\ 
-\hline 
-
-\caption{VIC Table of Revisions} 
-\end{longtable}
-% -----------  REVISION HISTORY END ----------- %
+%%\section*{Revisions}
+%\thispagestyle{empty}
+%\section{Revisions}
+%\begin{longtable}{| p{.2\textwidth } | p{.23\textwidth } | p{.23\textwidth } | p{.23\textwidth } |}
+%
+%\hline 
+%\centering \textbf{Date} & 
+%\multicolumn{1}{c}{\textbf {Revision Number}} &
+%\multicolumn{1}{|c}{\textbf {Authors}} & 
+%\multicolumn{1}{|c|}{\textbf {Comments}} \\ \hline
+%
+%\multirow{4}{*}{\centering December 1, 2016}  & 
+%\multirow{4}{*}{Revision 0}& 
+%{Alex Jackson \newline
+%Jean Lucas Ferreira \newline
+%Justin Kapinski\newline
+%Mathew Hobers\newline
+%Radhika Sharma\newline
+%Zachary Bazen}
+%&
+% \multirow{4}{*}{N/A} \\ 
+%\hline 
+%
+%\caption{VIC Table of Revisions} 
+%\end{longtable}
+%% -----------  REVISION HISTORY END ----------- %
 \pagebreak
 
 
@@ -265,43 +265,49 @@ Zachary Bazen}
 
 \subsection{Lane Following}
 
-- Use existing software or make own \\
-- look at previous examples to build own algorithm
+ Follow existing software solutions and modify it to suit the needs of the project requirements \\ \\
+To capture images in real time we plan to attach a webcam to each vehicle.  \\
+Proceeding through the intersection: we intend the vehicle to proceed at slow speeds in a straight line until sufficient data is available to follow lanes again
 
-\subsection{Car to Controller Communication}
-- Assuming already paired before demo
+%- Use existing software or make own \\
+%- look at previous examples to build own algorithm
+
+\subsection{Car to Intersection Controller Communication}
+
+ Vehicles will communicate to the intersection controller via Bluetooth.
 
 \subsection{Overall Power Supply}
-- More batteries for everything
+ Each vehicle will be fitted with various sensors, microcontrollers, and a webcam. All of these electronic components will be a strain on the power supply. Thus,  we will buy an additional power supply to be used while the other is charging. 
 
 \subsection{How far the car as traveled}
-- necessary to know speed of the motor to get control over the engine \\
-- start car at know spot and then use hallo effect senor to measure wheel rotation to get the distance \\
+Knowing the distance each car has travelled will allow us to perform various calculations, such as velocity control. \\
+This will be accomplished by implementing a Hall effect sensor on each car.
+
 
 \subsection{Obstacle Detection}
-- how do we ensure that we don't detect something in the next lane
+Obstacles may be present on track, and collision with such obstacles must be avoided. \\
+We can define an obstacle as any foreign object that cannot be safely driven over by the car. \\
+Obstacle detection will be possible through a sensor in front of the car. The sensor will be limited to detect obstacles only within the current driving lane. A viable sensor to implement is an infrared sensor. 
+
+% - Possible obstacles include cardboard cutouts, wooden blocks, and other cars using the track
 
 
 \section {Software Challenges}
 \subsection{Processing speed}
-- can't write in python \\
-- see how other ppl did this 
+Some code will be critical to the performance and it might not be possible to write this code in a high level language like Python. \\We will consult how past groups dealt with this problem, and consider an optimal language to satisfy the processing requirements of the vehicle.
  
 
 \section{Open Issues}
 
 
-\subsection{Intersection Computer and Micro controller}
-- programming languages \\
-- how will the sensors info be relayed into algorithms\\
-- processing time --> maybe make the car go slower 
+\subsection{Intersection Computer and Microcontroller}
 
+\begin{itemize}
+    \item  What programming languages should be used and how to interface between them
+    \item How will the algorithms access the data from the sensors
+    \item Will the processing power of the Raspberry Pi be good enough to run image processing algorithms in real time
+\end{itemize}
 
-\section{Some Assumptions}
-- Define obstacle in assumptions \\
-- its going to be x big \\
-- another car \\
-- block \\
 
 
 \end{document}
