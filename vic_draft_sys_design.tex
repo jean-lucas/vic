@@ -266,7 +266,7 @@ Zachary Bazen}
 % -------------- START INTRODUCTION ---------------- %
 \section {Introduction}
 \begin{center}
-	\hl{\textbf{\large***NO IDEA WHATS TO BE INCLUDED IN THIS DOCUMENT. JUST LOOKED AT PREVIOUS DELIVERABLES FOR SOME POSSIBLE HEADINGS. WE WILL HAVE TO CHECK IF WE NEED TO SITE WHERE WE GOT HEADINGS FROM. PROBABLY NEED MORE HEADINGS THAN LISTED HERE***}}
+	\hl{\textbf{\large***BASED ON SUGGESTED CONTENT AND DOCUMENTS FOUND ON AVENUE \\ WE NEED TO FIGURE OUT APPROPRIATE NAMING AND LABELING FOR V\&V STUFF	 ***}}
 \end{center}
 
 \subsection{Document Purpose}
@@ -306,40 +306,71 @@ Insert Text Here.
 
 % -------------- END INTRODUCTION ---------------- %
 
+% -------------- START MONITORED VARIABLES ---------------- %
+\section{Monitored Variables}
+\begin{longtable}{ |p{.23\textwidth }  p{.725\textwidth }|}  \hline
+\textbf{m\_Variable} & Unit \\ 
+
+\cellcolor{tableCell}\textbf{m\_Variable 2}  & \cellcolor{tableCell}Unit \\ 
+
+\textbf{m\_Variable 3} & Unit \\ \hline
+\end{longtable}
+
+% -------------- END MONITORED VARIABLES  ---------------- %
+
+% -------------- START CONTROLLED VARIABLES ---------------- %
+\section{Controlled Variables}
+\begin{longtable}{ |p{.23\textwidth }  p{.725\textwidth }|}  \hline
+\textbf{c\_Variable} & Unit \\ 
+
+\cellcolor{tableCell}\textbf{c\_Variable 2}  & \cellcolor{tableCell}Unit \\ 
+
+\textbf{c\_Variable 3} & Unit \\ \hline
+\end{longtable}
+
+% -------------- END CONTROLLED VARIABLES  ---------------- %
+
 
 % -------------- START OVERALL DESIGN DESCRIPTION ---------------- %
-\section{Overall Design Description}
+\section{System Overview}
 Insert Text Here. 
+
+\subsection{Behavior Overview}
+Insert Text or Image Here. 
+
+\subsection{Context Diagrams}
+Insert Text or Image Here.
+
+\subsection{System Component Diagrams}
+Insert Text or Image Here. 
 
 % -------------- END OVERALL DESIGN DESCRIPTION  ---------------- %
 
 
+
+
 % -------------- START SYSTEM COMPONENTS ---------------- %
 \section{System Components}
-\subsection{System Functionality}
-Insert Text Here. 
 
-% Mandated Constraints
-\subsection{Random Table}
-
-\begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
-\textbf{Insert Text Here} & \textbf{Insert Text Here} \\ \hline
-\textbf{Insert Text Here} & -\\ \hline 
+\subsection{Intersection Control Component}
+\begin{longtable}{| p{.25\textwidth } | p{.7\textwidth } | }\hline 
+\textbf{Identification} & - \\ \hline
+\textbf{Inputs} & - \\ \hline
+\textbf{Outputs} & - \\ \hline
+\textbf{Description} & \lipsum[1]\\ \hline 
+\textbf{Timing Constraints} & Insert Timing Constraints Here\\ \hline 
+\textbf{Initialization} & Insert Initialization Stuff Here\\ \hline 
 \end{longtable}
 
-
-\subsection{System Context}
-Insert Text Here. 
-
-\subsection{System Overview}
-Insert Text Here. 
-
-\subsection{Maybe Diagrams}
-\begin{figure} [h!]
-	\centering
-	\includegraphics [scale = 1] {figures/random_diagram.png}
-	\caption{Random Diagram}
-\end{figure}
+\subsection{RC Vehicle Component}
+\begin{longtable}{| p{.25\textwidth } | p{.7\textwidth } | }\hline 
+\textbf{Identification} & - \\ \hline
+\textbf{Inputs} & - \\ \hline
+\textbf{Outputs} & - \\ \hline
+\textbf{Description} & \lipsum[1]\\ \hline 
+\textbf{Timing Constraints} & Insert Timing Constraints Here\\ \hline 
+\textbf{Initialization} & Insert Initialization Stuff Here\\ \hline 
+\end{longtable}
 
 % -------------- END SYSTEM COMPONENTS  ---------------- %
 
@@ -347,53 +378,60 @@ Insert Text Here.
 % -------------- START SUBSYSTEM COMPONENTS ---------------- %
 \section{Subsystem Components}
 
-\subsection{ETC}
-Insert Text Here. 
+\subsection{Hardware}
 
-\subsection{ETC2}
-Insert Text Here. 
+\subsubsection{The First Hardware Component}
+\begin{longtable}{| p{.25\textwidth } | p{.7\textwidth } | }\hline 
+\textbf{Identification} & - \\ \hline
+\textbf{Inputs} & - \\ \hline
+\textbf{Outputs} & - \\ \hline
+\textbf{Description} & Insert Description Here\\ \hline 
+\textbf{Timing Constraints} & Insert Timing Constraints Here\\ \hline 
+\textbf{Initialization} & Insert Initialization Stuff Here\\ \hline 
+\end{longtable}
 
+\subsubsection{The Second Hardware Component}
+\begin{longtable}{| p{.25\textwidth } | p{.7\textwidth } | }\hline 
+\textbf{Identification} & - \\ \hline
+\textbf{Inputs} & - \\ \hline
+\textbf{Outputs} & - \\ \hline
+\textbf{Description} & Insert Description Here\\ \hline 
+\textbf{Timing Constraints} & Insert Timing Constraints Here\\ \hline 
+\textbf{Initialization} & Insert Initialization Stuff Here\\ \hline 
+\end{longtable}
+
+\subsection{Software}
+\subsubsection{The First Software Component}
+\begin{longtable}{| p{.25\textwidth } | p{.7\textwidth } | }\hline 
+\textbf{Identification} & - \\ \hline
+\textbf{Inputs} & - \\ \hline
+\textbf{Outputs} & - \\ \hline
+\textbf{Description} & Insert Description Here\\ \hline 
+\textbf{Timing Constraints} & Insert Timing Constraints Here\\ \hline 
+\textbf{Initialization} & Insert Initialization Stuff Here\\ \hline 
+\end{longtable}
+
+\subsubsection{The Second Software Component}
+\begin{longtable}{| p{.25\textwidth } | p{.7\textwidth } | }\hline 
+\textbf{Identification} & - \\ \hline
+\textbf{Inputs} & - \\ \hline
+\textbf{Outputs} & - \\ \hline
+\textbf{Description} & Insert Description Here\\ \hline 
+\textbf{Timing Constraints} & Insert Timing Constraints Here\\ \hline 
+\textbf{Initialization} & Insert Initialization Stuff Here\\ \hline 
+\end{longtable}
 
 
 % -------------- END SUBSYSTEM COMPONENTS  ---------------- %
 
 
-% -------------- START MIS---------------- %
-\section{Module Interface Specification}
-\subsection {MIS 1}
-
-\hl{***NEED TO LOOK UP MIS TABLE STYLES***}
-
-\begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
-\textbf{Insert Text Here} & \textbf{Insert Text Here} \\ \hline
-\textbf{Insert Text Here} & -\\ \hline 
-\end{longtable}
-
-
-\subsection {MIS 2 }
-
-\begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
-\textbf{Insert Text Here} & \textbf{Insert Text Here} \\ \hline
-\textbf{Insert Text Here} & -\\ \hline 
-\end{longtable}
-
-
-\subsection {MIS ETC}
-
-\begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
-\textbf{Insert Text Here} & \textbf{Insert Text Here} \\ \hline
-\textbf{Insert Text Here} & -\\ \hline 
-\end{longtable}
-
-
-% -------------- END MIS ---------------- %
 
 
 % -------------- START MID---------------- %
 \section{Module Interface Design}
 \subsection {MID 1}
 
-\hl{***NEED TO LOOK UP MID TABLE STYLES***}
+\hl{***NEED TO LOOK UP MID TABLE STYLES. WHATS A GOOD WAY TO DO THIS?***}
 
 \begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
 \textbf{Insert Text Here} & \textbf{Insert Text Here} \\ \hline
@@ -418,42 +456,48 @@ Insert Text Here.
 
 % -------------- END MID ---------------- %
 
-% -------------- START FUNCTION TABLES---------------- %
-\section{Function Tables}
-\subsection {Table 1}
+%% -------------- START FUNCTION TABLES---------------- %
+%\section{Function Tables}
+%\subsection {Table 1}
+%
+%\hl{***NEED TO LOOK UP FUNCTION TABLE STYLES AND IF WE NEED THEM***}
+%
+%\begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
+%\textbf{Insert Text Here} & \textbf{Insert Text Here} \\ \hline
+%\textbf{Insert Text Here} & -\\ \hline 
+%\end{longtable}
+%
+%
+%\subsection {Table 2 }
+%
+%\begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
+%\textbf{Insert Text Here} & \textbf{Insert Text Here} \\ \hline
+%\textbf{Insert Text Here} & -\\ \hline 
+%\end{longtable}
+%
+%
+%\subsection {Table 3}
+%
+%\begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
+%\textbf{Insert Text Here} & \textbf{Insert Text Here} \\ \hline
+%\textbf{Insert Text Here} & -\\ \hline 
+%\end{longtable}
+%
+%% -------------- END FUNCTION TABLES ---------------- %
 
-\hl{***NEED TO LOOK UP FUNCTION TABLE STYLES AND IF WE NEED THEM***}
-
-\begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
-\textbf{Insert Text Here} & \textbf{Insert Text Here} \\ \hline
-\textbf{Insert Text Here} & -\\ \hline 
-\end{longtable}
 
 
-\subsection {Table 2 }
+% -------------- START NORMAL OPERATION ---------------- %
+\section{Normal Operation}
+Insert Text Here. 
 
-\begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
-\textbf{Insert Text Here} & \textbf{Insert Text Here} \\ \hline
-\textbf{Insert Text Here} & -\\ \hline 
-\end{longtable}
+% -------------- END NORMAL OPERATION ---------------- %
 
+% -------------- START UNDESIRED EVENT HANDLING ---------------- %
+\section{Undesired Event Handling}
+Insert Text Here. 
 
-\subsection {Table 3}
-
-\begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
-\textbf{Insert Text Here} & \textbf{Insert Text Here} \\ \hline
-\textbf{Insert Text Here} & -\\ \hline 
-\end{longtable}
-
-% -------------- END FUNCTION TABLES ---------------- %
-
-
-
-% -------------- START APPENDIX ---------------- %
-\section{Appendix}
-\textbf{Possible Appendix Here}
-
-% -------------- END APPENDIX ---------------- %
+% -------------- END UNDESIRED EVENT HANDLING ---------------- %
 
 
 % -------------- START REFERENCES ---------------- %
