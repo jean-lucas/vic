@@ -265,36 +265,60 @@ Zachary Bazen}
 
 \subsection{Lane Following}
 
- Follow existing software solutions and modify it to suit the needs of the project requirements \\ \\
-To capture images in real time we plan to attach a webcam to each vehicle.  \\
-Proceeding through the intersection: we intend the vehicle to proceed at slow speeds in a straight line until sufficient data is available to follow lanes again
+Challenge:  Follow existing software solutions and modify it to suit the needs of the project requirements.  Current off the shelf solutions are only capable of having a car follow lanes on a track.  The off the shelf solution must be modified to also direct the car through the intersection.   \\
+
+Rationale: This will pose a challenge to the project because integrating code into VIC will require in depth knowledge of the code to make the appropriate modifications. \\
+
+
+
+To capture images in real time, a webcam will be mounted to each vehicle.  The off the shelf solution will utilize the camera to determine where the lanes are. To allow the vehicle to navigate through the intersection, the vehicle will proceed at a low speed in a straight line until sufficient data is available to follow lanes again. This solution is assuming that the camera will be able to view the entire intersection as the vehicle approaches the intersection. 
 
 %- Use existing software or make own \\
 %- look at previous examples to build own algorithm
 
 \subsection{Car to Intersection Controller Communication}
 
- Vehicles will communicate to the intersection controller via Bluetooth.
+Challenge: Communication from vehicle to controller. \\
 
-\subsection{Overall Power Supply}
- Each vehicle will be fitted with various sensors, microcontrollers, and a webcam. All of these electronic components will be a strain on the power supply. Thus,  we will buy an additional power supply to be used while the other is charging. 
+Rationale: Having the vehicle communicate it's intentions to the controller is a challenge because the method of communication must require minimal hardware.  This is because the vehicle will be in motion most of the time.  Due to the constant motion of the vehicle, signals cannot be transmitted through physical wires. This solution would be highly inefficient. \\
 
-\subsection{How far the car as traveled}
-Knowing the distance each car has travelled will allow us to perform various calculations, such as velocity control. \\
-This will be accomplished by implementing a Hall effect sensor on each car.
+ Vehicles will communicate to the intersection controller via Bluetooth. This solves the problem of communication modularity. Furthermore, using Bluetooth for communication ensures that the connectivity between the vehicle and controller will be consistent throughout the demonstration. 
+
+\subsection{Vehicle Power Supply}
+Challenge: Providing power to the vehicle as well as the additional sensors that will be mounted to the vehicle. \\
+
+Rationale: The vehicle power's consumption requires most of the power from the battery. It will be difficult to also provide sufficient power to the sensors and controller. \\
+
+To solve this issue, an additional power supply to be used while the other battery is charging. 
+
+\subsection{Measuring Distance Travelled}
+
+Challenge: Knowing the distance each car has travelled. \\
+
+Rationale : This task is necessary to perform various calculations such as the velocity of the vehicle. This feedback is necessary to ensure that the vehicle is moving at the desired speed. The vehicles do not come with any method of speed detection.  \\
+
+
+Utilizing a Hall effect sensor on each vehicle will solve this issue. 
 
 
 \subsection{Obstacle Detection}
-Obstacles may be present on track, and collision with such obstacles must be avoided. \\
-We can define an obstacle as any foreign object that cannot be safely driven over by the car. \\
-Obstacle detection will be possible through a sensor in front of the car. The sensor will be limited to detect obstacles only within the current driving lane. A viable sensor to implement is an infrared sensor. 
+
+Challenge: Obstacles may be present on track, and collision with such obstacles must be avoided. Obstacles are defined as any foreign object that cannot be safely driven over by the car. \\
+
+Rationale: This is a project requirement directly from the client. Furthermore, obstacle avoidance is desirable to ensure that the vehicle is not damaged during demonstrations. \\
+
+The obstacle detection will be possible through the use of a sensor in front of the car. The sensor will be limited to detecting obstacles only within the current driving lane. A viable sensor to implement is an infrared sensor.  
 
 % - Possible obstacles include cardboard cutouts, wooden blocks, and other cars using the track
 
 
 \section {Software Challenges}
 \subsection{Processing speed}
-Some code will be critical to the performance and it might not be possible to write this code in a high level language like Python. \\We will consult how past groups dealt with this problem, and consider an optimal language to satisfy the processing requirements of the vehicle.
+Challenge: Having the components relay information to the system in a timely manner. If information is passed too slowly, this can compromise the performance of the system. \\
+
+Rationale: Some code will be critical to the performance and it might not be possible to write this code in a high level language like Python. \\
+
+We will consult how past groups dealt with this problem, and consider an optimal language to satisfy the processing requirements of the vehicle. 
  
 
 \section{Open Issues}
