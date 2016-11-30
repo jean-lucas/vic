@@ -2,7 +2,7 @@
 % 1 in margins
 % Contains a relative path for images
 
-\documentclass [11pt]{article}
+\documentclass [10pt]{article}
 
 % page geometry 
 \usepackage[margin=1in]{geometry}
@@ -21,7 +21,7 @@
 % default font package
 %\usepackage{times}
 \usepackage{helvet}
-\renewcommand{\familydefault}{\sfdefault}
+%\renewcommand{\familydefault}{\sfdefault}
 
 % ---------- End Font Packages -------------- %
 
@@ -145,6 +145,8 @@ linkcolor=black,}  %choose some color if you want links to stand out
 %------------------------------TOC FORMAT START --------------------------------%
 \usepackage{tocloft}
 
+\renewcommand*\contentsname{Table of Contents}
+
 % Section indentations
 \cftsetindents{section}{0em}{1.5em}
 \cftsetindents{subsection}{1em}{2em}
@@ -203,12 +205,12 @@ linkcolor=black,}  %choose some color if you want links to stand out
 {\large \textsc{Group 6} \\} \vspace{1cm}
 
 {
-Alex Jackson \\
-Jean Lucas Ferreira \\
-Justin Kapinski\\
-Mathew Hobers\\
-Radhika Sharma\\
-Zachary Bazen}
+Alex Jackson - 1302526\\
+Jean Lucas Ferreira - 1152120 \\
+Justin Kapinski - 1305257\\
+Mathew Hobers - 1228607\\
+Radhika Sharma - 1150430\\
+Zachary Bazen - 1200979}
 
 
 
@@ -284,7 +286,9 @@ Insert Text Here.
 % Naming Conventions
 \subsubsection{Naming Conventions}
 
-\begin{longtable}{ |p{.23\textwidth } p{.725\textwidth }|}  \hline
+
+\begin{longtable}{ |p{.23\textwidth } p{.725\textwidth }|} \caption{Naming Conventions} \hline
+
 \textbf{m\_ic\_variableName} & Monitored variable for intersection controller \\ 
 
 \cellcolor{tableCell}\textbf{c\_ic\_variableName}  & \cellcolor{tableCell}Control variable for intersection controller \\ 
@@ -316,16 +320,6 @@ Insert Text Here.
 %\cellcolor{tableCell}\textbf{-}  & \cellcolor{tableCell}- \\ \hline
 
 
-\subsubsection{Formating Conventions}
-\begin{longtable}{ |p{.23\textwidth }   p{.725\textwidth }|}  \hline
-\textbf{Convent 1} &  Description \\ 
-
-\cellcolor{tableCell}\textbf{Convent 2}  & \cellcolor{tableCell}Description \\ 
-
-\textbf{Convent 3} & Description \\ \hline
-\end{longtable}
-\subsection{References and Acknowledgments}
-Insert Text Here. 
 
 % -------------- END INTRODUCTION ---------------- %
 
@@ -334,16 +328,16 @@ Insert Text Here.
 
 \subsection{Intersection Controller}
 
-\begin{longtable}{ |p{.33\textwidth }  p{.625\textwidth }|}  \hline
-\textbf{m\_ic\_readSensor[8]} & Boolean  \\
+\begin{longtable}{ |p{.33\textwidth }  p{.625\textwidth }|}\caption{Intersection Controller Monitored Variables}   \hline
+\textbf{m\_ic\_readSensor} & [8]:Boolean  \\
 
-\cellcolor{tableCell}\textbf{m\_ic\_carSignal[4]}  & \cellcolor{tableCell}Byte[ ] \\  \hline
+\cellcolor{tableCell}\textbf{m\_ic\_carSignal}  & \cellcolor{tableCell}[4]:Byte[ ] \\  \hline
 \end{longtable}
 
 \subsection{Autonomous Vehicle Controller}
 
 \begin{longtable}{ |p{.33\textwidth }  p{.625\textwidth }|}  \hline
-\textbf{m\_vc\_videoCapture[x][y]} & Bytes  \\ 
+\textbf{m\_vc\_videoCapture} & [x][y]:Bytes  \\ 
 
 \cellcolor{tableCell}\textbf{m\_vc\_frontDistance}  & \cellcolor{tableCell}Double \\ 
 
@@ -380,9 +374,9 @@ Insert Text Here.
 
 \cellcolor{tableCell}\textbf{c\_vc\_carSpeed}  & \cellcolor{tableCell}Integer \\ 
 
-\textbf{c\_vc\_vehicleBreak} & Boolean \\ 
+\textbf{c\_vc\_vehicleBrake} & Boolean \\ 
 
-\cellcolor{tableCell}\textbf{c\_vc\_requestTheIC}  & \cellcolor{tableCell}Byte[ ]\\ \hline
+\cellcolor{tableCell}\textbf{c\_vc\_requestIC}  & \cellcolor{tableCell}Byte[ ]\\ \hline
 \end{longtable}
 
 % -------------- END CONTROLLED VARIABLES  ---------------- %
