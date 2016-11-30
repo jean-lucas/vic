@@ -234,16 +234,25 @@ Zachary Bazen}
 %\section*{Revisions}
 \thispagestyle{empty}
 \section{Revisions}
-\begin{longtable}{| p{.2\textwidth } | p{.23\textwidth } | p{.23\textwidth } | p{.23\textwidth } |}
+\begin{longtable}{| p{.2\textwidth } | p{.21\textwidth } | p{.21\textwidth } | p{.27\textwidth } |}
 
 \hline 
 \centering \textbf{Date} & 
 \multicolumn{1}{c}{\textbf {Revision Number}} &
-\multicolumn{1}{|c}{\textbf {Authors}} & 
-\multicolumn{1}{|c|}{\textbf {Comments}} \\ \hline
+\multicolumn{1}{|c|}{\textbf {Authors}} & 
+\multicolumn{1}{c|}{\textbf {Comments}} \\ \hline
 
-\multirow{4}{*}{\centering November 14, 2016}  & 
-\multirow{4}{*}{Revision 0}& 
+
+% Track Requirement
+\multicolumn{1}{|c|}{\multirow{3}{*}{November 29,2016}} 
+				     &\multicolumn{1}{c}{\multirow{3}{*}{Revision 1}} 
+				     &\multicolumn{1}{|l|}{\multirow{3}{*}{Zachary Bazen}} 
+				     & Updated monitored and controlled variables \\
+                               &  &  & \cellcolor{tableCell}Updated naming \newline conventions \\ \hline 
+
+
+\multirow{5}{*}{\centering November 14, 2016}  & 
+\multicolumn{1}{c|}{\multirow{5}{*}{Revision 0}}& 
 {Alex Jackson \newline
 Jean Lucas Ferreira \newline
 Justin Kapinski\newline
@@ -251,7 +260,7 @@ Mathew Hobers\newline
 Radhika Sharma\newline
 Zachary Bazen}
 &
- \multirow{4}{*}{N/A} \\ 
+ \multicolumn{1}{c|}{\multirow{5}{*}{N/A}} \\ 
 \hline 
 
 \caption{VIC Table of Revisions} 
@@ -323,7 +332,7 @@ Vehicle intersection control has several mandated constraints tabled below.
 \subsection{Naming Conventions and Definitions}
 % Naming Conventions
 \subsubsection{Naming Conventions}
-\begin{longtable}{ |p{.13\textwidth }  p{.825\textwidth }|}  \hline
+\begin{longtable}{ |p{.24\textwidth }  p{.72\textwidth }|}  \hline
 \textbf{T\#} &  Track requirement identification  and number \\ 
 
 \cellcolor{tableCell}\textbf{V\#}  & \cellcolor{tableCell}Remote control vehicle requirement identification  and number \\ 
@@ -338,7 +347,15 @@ Vehicle intersection control has several mandated constraints tabled below.
 
 \textbf{RA\#} & Rational for project assumptions identification and number \\ 
 
-\cellcolor{tableCell}\textbf{VIC} & \cellcolor{tableCell}Vehicle intersection control \\ \hline
+\cellcolor{tableCell}\textbf{VIC} & \cellcolor{tableCell}Vehicle intersection control \\ 
+
+\textbf{m\_ic\_variableName} & Monitored variable for intersection controller \\ 
+
+\cellcolor{tableCell}\textbf{c\_ic\_variableName}  & \cellcolor{tableCell}Control variable for intersection controller \\ 
+
+\textbf{m\_vc\_variableName} & Monitored variable for autonomous vehicle controller \\ 
+
+\cellcolor{tableCell}\textbf{c\_vc\_variableName}  & \cellcolor{tableCell}Control variable for autonomous vehicle controller \\ \hline
 
 
 \end{longtable}
@@ -419,10 +436,60 @@ VIC assumptions tabled below.
 
 
 \section{Monitored and Controlled Variables}
-\begin{itemize}
-\item TBD
+\subsection{Monitored Variables}
 
-\end{itemize}
+\subsubsection{Intersection Controller}
+
+\begin{longtable}{ |p{.33\textwidth }  p{.625\textwidth }|}  \hline
+\textbf{m\_ic\_readSensor[8]} &   \\
+
+\cellcolor{tableCell}\textbf{m\_ic\_carSignal[4]}  & \cellcolor{tableCell}\\  \hline
+\end{longtable}
+
+\subsubsection{Autonomous Vehicle Controller}
+
+\begin{longtable}{ |p{.33\textwidth }  p{.625\textwidth }|}  \hline
+\textbf{m\_vc\_videoCapture[x][y]} &  \\ 
+
+\cellcolor{tableCell}\textbf{m\_vc\_frontDistance}  & \cellcolor{tableCell} \\ 
+
+
+\textbf{m\_vc\_speedSignal} & \\
+
+\cellcolor{tableCell}\textbf{m\_vc\_hallEffect}  & \cellcolor{tableCell} \\ 
+
+\textbf{m\_vc\_vehicleOrientation} & \\\hline
+\end{longtable}
+
+
+% -------------- END MONITORED VARIABLES  ---------------- %
+
+
+
+
+% -------------- START CONTROLLED VARIABLES ---------------- %
+
+\subsection{Controlled Variables}
+
+
+\subsubsection{Intersection Controller}
+
+\begin{longtable}{ |p{.33\textwidth }  p{.625\textwidth }|}  \hline
+
+\textbf{c\_ic\_carProceedSignal} & \\ \hline
+\end{longtable}
+
+\subsubsection{Autonomous Vehicle Controller}
+
+\begin{longtable}{ |p{.33\textwidth }  p{.625\textwidth }|}  \hline
+\textbf{c\_vc\_wheelAngle} &   \\
+
+\cellcolor{tableCell}\textbf{c\_vc\_carSpeed}  & \cellcolor{tableCell} \\ 
+
+\textbf{c\_vc\_vehicleBreak} & \\ 
+
+\cellcolor{tableCell}\textbf{c\_vc\_requestTheIC}  & \cellcolor{tableCell}\\ \hline
+\end{longtable}
 
 %---------------------------- Functional Requirements ------------------------%
 
@@ -533,7 +600,8 @@ The requirements for this project are separated into the three main components o
                                  & \multicolumn{1}{c | }{\ref{V6}} & \multicolumn{1}{c |}{Unlikely} \\\cline{2-3}
                                  & \multicolumn{1}{c | }{\ref{V7}} & \multicolumn{1}{c |}{Unlikely} \\\cline{2-3} \hline 
 
-% Intersection Requirement                               
+% Intersection Requirement   
+                        
 \multicolumn{1}{|c|}{\textbf {\multirow{5}{*}{Intersection Control}}}  & \multicolumn{1}{c |}{\ref{IC1}} & \multicolumn{1}{c |}{Likely} \\\cline{2-3}
                                  & \multicolumn{1}{c | }{\ref{IC2}} & \multicolumn{1}{c |}{Likely} \\\cline{2-3}
                                  & \multicolumn{1}{c | }{\ref{IC3}} & \multicolumn{1}{c |}{Likely} \\\cline{2-3}

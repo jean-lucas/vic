@@ -14,7 +14,6 @@
 \usepackage[table]{xcolor}
 \usepackage{color,soul}
 
-
 % VIC title package
 \usepackage{cabin}
 \usepackage[T1]{fontenc}
@@ -243,7 +242,7 @@ Zachary Bazen}
 \multicolumn{1}{|c}{\textbf {Authors}} & 
 \multicolumn{1}{|c|}{\textbf {Comments}} \\ \hline
 
-\multirow{4}{*}{\centering December 12, 2016}  & 
+\multirow{4}{*}{\centering December 21, 2016}  & 
 \multirow{4}{*}{Revision 0}& 
 {Alex Jackson \newline
 Jean Lucas Ferreira \newline
@@ -265,12 +264,12 @@ Zachary Bazen}
 
 % -------------- START INTRODUCTION ---------------- %
 \section {Introduction}
-\begin{center}
-	\hl{\textbf{\large***BASED ON SUGGESTED CONTENT AND DOCUMENTS FOUND ON AVENUE \\ WE NEED TO FIGURE OUT APPROPRIATE NAMING AND LABELING FOR V\&V STUFF	 ***}}
-\end{center}
+%\begin{center}
+%	\hl{\textbf{\large***BASED ON SUGGESTED CONTENT AND DOCUMENTS FOUND ON AVENUE \\ WE NEED TO FIGURE OUT APPROPRIATE NAMING AND LABELING FOR V\&V STUFF	 ***}}
+%\end{center}
 
 \subsection{Document Purpose}
-Insert Text Here. 
+Insert Text Here.
 
 \subsection{System Scope}
 Insert Text Here. 
@@ -285,19 +284,43 @@ Insert Text Here.
 % Naming Conventions
 \subsubsection{Naming Conventions}
 
-\begin{longtable}{ |p{.13\textwidth }  p{.825\textwidth }|}  \hline
-\textbf{AB1234} &  Description \\ 
+\begin{longtable}{ |p{.23\textwidth } p{.725\textwidth }|}  \hline
+\textbf{m\_ic\_variableName} & Monitored variable for intersection controller \\ 
 
-\cellcolor{tableCell}\textbf{CD4567}  & \cellcolor{tableCell} Description \\ 
+\cellcolor{tableCell}\textbf{c\_ic\_variableName}  & \cellcolor{tableCell}Control variable for intersection controller \\ 
 
-\textbf{EF89410} & Description \\ \hline
+\textbf{m\_vc\_variableName} & Monitored variable for autonomous vehicle controller \\ 
+
+\cellcolor{tableCell}\textbf{c\_vc\_variableName}  & \cellcolor{tableCell}Control variable for autonomous vehicle controller \\ 
+
+\textbf{ICD\#} & Intersection Controller Design Component ID \\ 
+
+\cellcolor{tableCell}\textbf{ICD\#.H\#}  & \cellcolor{tableCell}Intersection Controller Hardware Design Subsystem ID \\
+
+\textbf{ICD\#.S\#} & Intersection Controller Software Design Subsystem ID \\ 
+
+\cellcolor{tableCell}\textbf{VCD\#}  & \cellcolor{tableCell}Autonomous Vehicle Controller Design Component ID\\  
+
+\textbf{VCD\#.H\#} & Intersection Controller Hardware Design Subsystem ID \\ 
+
+\cellcolor{tableCell}\textbf{VCD\#.S\#}  & \cellcolor{tableCell}Autonomous Vehicle Controller Software Design Subsystem ID \\\hline
+
+
+
 \end{longtable}
 
+
+% Table Pattern
+%\textbf{-} & - \\
+%
+%\cellcolor{tableCell}\textbf{-}  & \cellcolor{tableCell}- \\ \hline
+
+
 \subsubsection{Formating Conventions}
-\begin{longtable}{ |p{.13\textwidth }  p{.825\textwidth }|}  \hline
+\begin{longtable}{ |p{.23\textwidth }   p{.725\textwidth }|}  \hline
 \textbf{Convent 1} &  Description \\ 
 
-\cellcolor{tableCell}\textbf{Convent 2}  & \cellcolor{tableCell} Description \\ 
+\cellcolor{tableCell}\textbf{Convent 2}  & \cellcolor{tableCell}Description \\ 
 
 \textbf{Convent 3} & Description \\ \hline
 \end{longtable}
@@ -308,24 +331,58 @@ Insert Text Here.
 
 % -------------- START MONITORED VARIABLES ---------------- %
 \section{Monitored Variables}
-\begin{longtable}{ |p{.23\textwidth }  p{.725\textwidth }|}  \hline
-\textbf{m\_Variable} & Unit \\ 
 
-\cellcolor{tableCell}\textbf{m\_Variable 2}  & \cellcolor{tableCell}Unit \\ 
+\subsection{Intersection Controller}
 
-\textbf{m\_Variable 3} & Unit \\ \hline
+\begin{longtable}{ |p{.33\textwidth }  p{.625\textwidth }|}  \hline
+\textbf{m\_ic\_readSensor[8]} & Boolean  \\
+
+\cellcolor{tableCell}\textbf{m\_ic\_carSignal[4]}  & \cellcolor{tableCell}Byte[ ] \\  \hline
 \end{longtable}
+
+\subsection{Autonomous Vehicle Controller}
+
+\begin{longtable}{ |p{.33\textwidth }  p{.625\textwidth }|}  \hline
+\textbf{m\_vc\_videoCapture[x][y]} & Bytes  \\ 
+
+\cellcolor{tableCell}\textbf{m\_vc\_frontDistance}  & \cellcolor{tableCell}Double \\ 
+
+
+\textbf{m\_vc\_speedSignal} & Boolean \\
+
+\cellcolor{tableCell}\textbf{m\_vc\_hallEffect}  & \cellcolor{tableCell}Double \\ 
+
+\textbf{m\_vc\_vehicleOrientation} & Character \\\hline
+\end{longtable}
+
 
 % -------------- END MONITORED VARIABLES  ---------------- %
 
+
+
+
 % -------------- START CONTROLLED VARIABLES ---------------- %
+
 \section{Controlled Variables}
-\begin{longtable}{ |p{.23\textwidth }  p{.725\textwidth }|}  \hline
-\textbf{c\_Variable} & Unit \\ 
 
-\cellcolor{tableCell}\textbf{c\_Variable 2}  & \cellcolor{tableCell}Unit \\ 
 
-\textbf{c\_Variable 3} & Unit \\ \hline
+\subsection{Intersection Controller}
+
+\begin{longtable}{ |p{.33\textwidth }  p{.625\textwidth }|}  \hline
+
+\textbf{c\_ic\_carProceedSignal} & Boolean \\ \hline
+\end{longtable}
+
+\subsection{Autonomous Vehicle Controller}
+
+\begin{longtable}{ |p{.33\textwidth }  p{.625\textwidth }|}  \hline
+\textbf{c\_vc\_wheelAngle} & Double  \\
+
+\cellcolor{tableCell}\textbf{c\_vc\_carSpeed}  & \cellcolor{tableCell}Integer \\ 
+
+\textbf{c\_vc\_vehicleBreak} & Boolean \\ 
+
+\cellcolor{tableCell}\textbf{c\_vc\_requestTheIC}  & \cellcolor{tableCell}Byte[ ]\\ \hline
 \end{longtable}
 
 % -------------- END CONTROLLED VARIABLES  ---------------- %
@@ -351,25 +408,80 @@ Insert Text or Image Here.
 
 % -------------- START SYSTEM COMPONENTS ---------------- %
 \section{System Components}
-
+ 
 \subsection{Intersection Control Component}
+
+
 \begin{longtable}{| p{.25\textwidth } | p{.7\textwidth } | }\hline 
-\textbf{Identification} & - \\ \hline
-\textbf{Inputs} & - \\ \hline
-\textbf{Outputs} & - \\ \hline
-\textbf{Description} & \lipsum[1]\\ \hline 
-\textbf{Timing Constraints} & Insert Timing Constraints Here\\ \hline 
-\textbf{Initialization} & Insert Initialization Stuff Here\\ \hline 
+\multicolumn{2}{|c|}{\textbf{IDC1}}  \\ \hline 
+%
+
+%
+\multicolumn{1}{|c|}{\textbf {\multirow{2}{*}{\centering Inputs}}}  
+					 & m\_ic\_carSignal[4]  \\\cline{2-2}
+                                 &\cellcolor{tableCell}m\_ic\_readSensors[8] \\\hline
+%
+
+
+
+%
+\multicolumn{1}{|c|}{\textbf {\multirow{1}{*}{\centering Outputs}}}  
+					 & c\_ic\_carSignal[4]  \\\hline
+%
+
+\multicolumn{1}{|c|}{\textbf {\multirow{1}{*}{\centering Description}}} 
+					&Insert Description Here\\ \hline 
+
+\multicolumn{1}{|c|}{\textbf {\multirow{3}{*}{\centering Timing Constraints}}} 
+					 & 1 second intersection arrival decision   \\
+                                 &\cellcolor{tableCell}1 second intersection schedule  \\
+                                 & \multicolumn{1}{l |}{0.5 second intersection departure decision} \\ \hline
+
+\multicolumn{1}{|c|}{\textbf {\multirow{3}{*}{\centering Deadline}}} 
+					 & Decisions must be made before the next intersection arrival poll  \\
+                                 &\cellcolor{tableCell}- \\
+                                 & \multicolumn{1}{l |}{-} \\ \hline
+
+\multicolumn{1}{|c|}{\textbf {\multirow{3}{*}{\centering Initialization}}} & Connect to autonomous vehicles over Bluetooth communication  \\
+                                 &\cellcolor{tableCell}Clear all intersection arrival queues \\
+                                 & \multicolumn{1}{l |}{-} \\ \hline
 \end{longtable}
 
+% Vehicle Component 
 \subsection{RC Vehicle Component}
 \begin{longtable}{| p{.25\textwidth } | p{.7\textwidth } | }\hline 
-\textbf{Identification} & - \\ \hline
-\textbf{Inputs} & - \\ \hline
-\textbf{Outputs} & - \\ \hline
-\textbf{Description} & \lipsum[1]\\ \hline 
-\textbf{Timing Constraints} & Insert Timing Constraints Here\\ \hline 
-\textbf{Initialization} & Insert Initialization Stuff Here\\ \hline 
+\multicolumn{2}{|c|}{\textbf{VCD1}}  \\ \hline 
+%
+%
+\multicolumn{1}{|c|}{\textbf {\multirow{6}{*}{\centering Inputs}}}  & m\_vc\_videoCapture[x][y]  \\\cline{2-2}
+                                 &\cellcolor{tableCell}m\_vc\_frontDistance \\
+                                 & \multicolumn{1}{l |}{m\_vc\_hallEffect} \\ 
+                                 & \multicolumn{1}{l |}{\cellcolor{tableCell}m\_ic\_carProceedSignal} \\ 
+					 &- \\
+                                 &\cellcolor{tableCell}m\_vc\_- \\\hline 
+%
+%
+
+%
+%
+\multicolumn{1}{|c|}{\textbf {\multirow{4}{*}{\centering Outputs}}}  & c\_vc\_ wheelAngle \\
+                                 &\cellcolor{tableCell}c\_vc\_carSpeed \\
+                                 & \multicolumn{1}{l |}{c\_vc\_vehicleBreak} \\ 
+                                 &\cellcolor{tableCell}c\_vc\_requestTheIC \\\hline 
+%
+%
+
+\multicolumn{1}{|c|}{\textbf {\multirow{1}{*}{\centering Description}}} & Insert Description Here\\ \hline 
+
+\multicolumn{1}{|c|}{\textbf {\multirow{4}{*}{\centering Timing Constraints}}} 
+					 & Process images in sufficient time to make decisions regarding wheel angles (Time: TBD) \\
+                                 &\cellcolor{tableCell}- \\
+                                 & \multicolumn{1}{l |}{-} \\ \hline
+
+\multicolumn{1}{|c|}{\textbf {\multirow{3}{*}{\centering Initialization}}} 
+					 & Initialize all speed controls to zero  \\
+                                 &\cellcolor{tableCell}Initialize wheel angle to zero\\
+                                 & \multicolumn{1}{l |}{Connect to intersection over Bluetooth communication} \\ \hline
 \end{longtable}
 
 % -------------- END SYSTEM COMPONENTS  ---------------- %
@@ -401,7 +513,7 @@ Insert Text or Image Here.
 \end{longtable}
 
 \subsection{Software}
-\subsubsection{The First Software Component}
+\subsubsection{The First Software Component (MIS)}
 \begin{longtable}{| p{.25\textwidth } | p{.7\textwidth } | }\hline 
 \textbf{Identification} & - \\ \hline
 \textbf{Inputs} & - \\ \hline
@@ -411,7 +523,7 @@ Insert Text or Image Here.
 \textbf{Initialization} & Insert Initialization Stuff Here\\ \hline 
 \end{longtable}
 
-\subsubsection{The Second Software Component}
+\subsubsection{The Second Software Component (MIS)}
 \begin{longtable}{| p{.25\textwidth } | p{.7\textwidth } | }\hline 
 \textbf{Identification} & - \\ \hline
 \textbf{Inputs} & - \\ \hline
@@ -431,7 +543,7 @@ Insert Text or Image Here.
 \section{Module Interface Design}
 \subsection {MID 1}
 
-\hl{***NEED TO LOOK UP MID TABLE STYLES. WHATS A GOOD WAY TO DO THIS?***}
+\hl{***I thing this would get covered in the Software Component***}
 
 \begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
 \textbf{Insert Text Here} & \textbf{Insert Text Here} \\ \hline
