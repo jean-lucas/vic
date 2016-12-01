@@ -145,7 +145,7 @@ linkcolor=black,}  %choose some color if you want links to stand out
 %------------------------------TOC FORMAT START --------------------------------%
 \usepackage{tocloft}
 
-\renewcommand*\contentsname{Table of Contents}
+
 
 % Section indentations
 \cftsetindents{section}{0em}{1.5em}
@@ -154,6 +154,7 @@ linkcolor=black,}  %choose some color if you want links to stand out
 
 % Toc title size
 \renewcommand\cfttoctitlefont{\Large\bfseries}
+\renewcommand*\contentsname{Table of Contents}
 
 % Removes bold headings from toc
 %\renewcommand{\cftsecfont}{\normalfont}
@@ -287,7 +288,7 @@ Insert Text Here.
 \subsubsection{Naming Conventions}
 
 
-\begin{longtable}{ |p{.23\textwidth } p{.725\textwidth }|} \caption{Naming Conventions} \hline
+\begin{longtable}{ |p{.23\textwidth } p{.725\textwidth }|} \caption{Naming Conventions} \\ \hline
 
 \textbf{m\_ic\_variableName} & Monitored variable for intersection controller \\ 
 
@@ -328,7 +329,7 @@ Insert Text Here.
 
 \subsection{Intersection Controller}
 
-\begin{longtable}{ |p{.33\textwidth }  p{.625\textwidth }|}\caption{Intersection Controller Monitored Variables}   \hline
+\begin{longtable}{ |p{.33\textwidth }  p{.625\textwidth }|}\caption{Intersection Controller Monitored Variables} \\   \hline
 \textbf{m\_ic\_readSensor} & [8]:Boolean  \\
 
 \cellcolor{tableCell}\textbf{m\_ic\_carSignal}  & \cellcolor{tableCell}[4]:Byte[ ] \\  \hline
