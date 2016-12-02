@@ -274,22 +274,46 @@ Zachary Bazen}
 %\end{center}
 
 \subsection{Document Purpose}
-Insert Text Here.
+The purpose of this document is to provide insight into the system design of VIC (Vehicle Intersection Controller). VIC is a system that allows autonomous cars to proceed through stop sign intersections when the vehicles arrive simultaneously. 
 
 \subsection{System Scope}
-Insert Text Here. 
+VIC will focus on solving the aforementioned problem on a controlled indoor track. 1/10 scale autonomous vehicles will be used to simulate real world autonomous cars. To prevent damage of hardware, the autonomous vehicles will be able to detect obstacles. VIC will ignore situations involving non-autonomous cars. 
 
 \subsection{Document Overview and Intended Audience}
-Insert Text Here. 
-
-\subsection{Document Conventions}
-Insert Text Here.
+This document will outline the module guides, the module interface specification, and the component descriptions. Furthermore, the document will provide a behaviour overview, context diagrams and system component diagrams. The intended audience for this document is Sean Marshall (the engineering team leader at GM) who proposed the problem, Dr. Alan Wassyng and the teaching assistants as supervisors of the project, and ourselves as designers of the system. 
 
  
 % Naming Conventions
+
+\subsection{Acronyms}
+
+\begin{longtable}{ |p{.23\textwidth } p{.725\textwidth }|} \caption{Acronyms} \\ \hline
+
+
+\textbf{VIC} & Vehicle Intersection Control \\ 
+
+\cellcolor{tableCell}\textbf{IC}  & \cellcolor{tableCell}Intersection Controller \\
+
+\textbf{VC} &Vehicle Controller\\\hline
+
+
+\end{longtable}
+
+\subsection{Definitions}
+
+\begin{longtable}{ |p{.23\textwidth } p{.725\textwidth }|} \caption{Definitions} \\ \hline
+
+
+\textbf{VIC} & The entire system including the intersection controller, the vehicles, and their corresponding controllers. \\ 
+
+\cellcolor{tableCell}\textbf{IC}  & \cellcolor{tableCell}The Intersection Controller is the system that tracks the arrival and departure of the vehicles, as well as determining the order in which the vehicles must proceed through the intersection.\\
+
+\textbf{VC} & The Vehicle Controller is the system that will allow the 1/10 scale RC car to follow lanes, maintain a desired speed, steer itself, and send requests to the intersection controller. \\\hline
+
+
+\end{longtable}
+
 \subsubsection{Naming Conventions}
-
-
 \begin{longtable}{ |p{.23\textwidth } p{.725\textwidth }|} \caption{Naming Conventions} \\ \hline
 
 \textbf{m\_ic\_variableName} & Monitored variable for intersection controller \\ 
@@ -302,15 +326,11 @@ Insert Text Here.
 
 \textbf{ICD\#} & Intersection Controller Design Component ID \\ 
 
-\cellcolor{tableCell}\textbf{ICD\#.H\#}  & \cellcolor{tableCell}Intersection Controller Hardware Design Subsystem ID \\
+\cellcolor{tableCell}\textbf{ICM\#}  & \cellcolor{tableCell}Intersection Controller Module Guide ID \\
 
-\textbf{ICD\#.S\#} & Intersection Controller Software Design Subsystem ID \\ 
+\textbf{VCD\#} & Vehicle Controller Design Component ID\\
 
-\cellcolor{tableCell}\textbf{VCD\#}  & \cellcolor{tableCell}Autonomous Vehicle Controller Design Component ID\\  
-
-\textbf{VCD\#.H\#} & Intersection Controller Hardware Design Subsystem ID \\ 
-
-\cellcolor{tableCell}\textbf{VCD\#.S\#}  & \cellcolor{tableCell}Autonomous Vehicle Controller Software Design Subsystem ID \\\hline
+\cellcolor{tableCell}\textbf{VCM\#}  & \cellcolor{tableCell}Vehicle Controller Module Guide ID \\\hline
 
 
 
@@ -387,13 +407,28 @@ Insert Text Here.
 
 % -------------- START OVERALL DESIGN DESCRIPTION ---------------- %
 \section{System Overview}
-Insert Text Here. 
+
 
 \subsection{Behavior Overview}
 Insert Text or Image Here. 
 
 \subsection{Context Diagrams}
-Insert Text or Image Here.
+
+\begin{figure} [h!]
+	\caption{Car Controller Context Diagram} \bigskip
+	\centering
+	\includegraphics [scale =0.8] {figures/CarCtrl_ContextDiag.pdf}
+
+\end{figure}
+
+\break
+
+\begin{figure} [h!]
+	\caption{Intersection Controller Context Diagram} \bigskip
+	\centering
+	\includegraphics [scale = 0.8] {figures/IC_ContextDiagram.pdf}
+
+\end{figure}
 
 \subsection{System Component Diagrams}
 Insert Text or Image Here. 
@@ -413,6 +448,9 @@ Insert Text or Image Here.
 \multicolumn{2}{|c|}{\textbf{IDC1}}  \\ \hline 
 %
 
+\multicolumn{1}{|c|}{\textbf {\multirow{1}{*}{\centering Description}}} 
+					& The Intersection Controller directs traffic at an intersection by communicating with vehicles and determines which order they should proceed\\ \hline
+
 %
 \multicolumn{1}{|c|}{\textbf {\multirow{2}{*}{\centering Inputs}}}  
 					 & m\_ic\_carSignal[4]  \\\cline{2-2}
@@ -426,36 +464,35 @@ Insert Text or Image Here.
 					 & c\_ic\_carSignal[4]  \\\hline
 %
 
-\multicolumn{1}{|c|}{\textbf {\multirow{1}{*}{\centering Description}}} 
-					&Insert Description Here\\ \hline 
+ 
 
 \multicolumn{1}{|c|}{\textbf {\multirow{3}{*}{\centering Timing Constraints}}} 
 					 & 1 second intersection arrival decision   \\
                                  &\cellcolor{tableCell}1 second intersection schedule  \\
                                  & \multicolumn{1}{l |}{0.5 second intersection departure decision} \\ \hline
 
-\multicolumn{1}{|c|}{\textbf {\multirow{3}{*}{\centering Deadline}}} 
-					 & Decisions must be made before the next intersection arrival poll  \\
-                                 &\cellcolor{tableCell}- \\
-                                 & \multicolumn{1}{l |}{-} \\ \hline
+\multicolumn{1}{|c|}{\textbf {\multirow{1}{*}{\centering Deadline}}} 
+					 & Decisions must be made before the next intersection arrival poll  \\ \hline
 
-\multicolumn{1}{|c|}{\textbf {\multirow{3}{*}{\centering Initialization}}} & Connect to autonomous vehicles over Bluetooth communication  \\
-                                 &\cellcolor{tableCell}Clear all intersection arrival queues \\
-                                 & \multicolumn{1}{l |}{-} \\ \hline
+
+
+\multicolumn{1}{|c|}{\textbf {\multirow{2}{*}{\centering Initialization}}} & \cellcolor{tableCell}Connect to autonomous vehicles over Bluetooth communication  \\
+                                 &Clear all intersection arrival queues \\ \hline
 \end{longtable}
 
 % Vehicle Component 
-\subsection{RC Vehicle Component}
+\subsection{Vehicle Controller Component}
 \begin{longtable}{| p{.25\textwidth } | p{.7\textwidth } | }\hline 
 \multicolumn{2}{|c|}{\textbf{VCD1}}  \\ \hline 
 %
+
+\multicolumn{1}{|c|}{\textbf {\multirow{3}{*}{\centering Description}}} & A 1:10 scale RC car will be controlled by the Vehicle Controller. The vehicle will be able to follow lanes and stop at intersections. It will communicate with an Intersection Controller and proceed through the intersection after receiving the appropriate signal from it\\ \hline 
+
 %
-\multicolumn{1}{|c|}{\textbf {\multirow{6}{*}{\centering Inputs}}}  & m\_vc\_videoCapture[x][y]  \\\cline{2-2}
+\multicolumn{1}{|c|}{\textbf {\multirow{4}{*}{\centering Inputs}}}  & m\_vc\_videoCapture[x][y]  \\\cline{2-2}
                                  &\cellcolor{tableCell}m\_vc\_frontDistance \\
                                  & \multicolumn{1}{l |}{m\_vc\_hallEffect} \\ 
-                                 & \multicolumn{1}{l |}{\cellcolor{tableCell}m\_ic\_carProceedSignal} \\ 
-					 &- \\
-                                 &\cellcolor{tableCell}m\_vc\_- \\\hline 
+                                 & \multicolumn{1}{l |}{\cellcolor{tableCell}m\_ic\_carProceedSignal} \\ \hline
 %
 %
 
@@ -468,20 +505,84 @@ Insert Text or Image Here.
 %
 %
 
-\multicolumn{1}{|c|}{\textbf {\multirow{1}{*}{\centering Description}}} & Insert Description Here\\ \hline 
 
-\multicolumn{1}{|c|}{\textbf {\multirow{4}{*}{\centering Timing Constraints}}} 
-					 & Process images in sufficient time to make decisions regarding wheel angles (Time: TBD) \\
-                                 &\cellcolor{tableCell}- \\
-                                 & \multicolumn{1}{l |}{-} \\ \hline
+
+\multicolumn{1}{|c|}{\textbf {\multirow{1}{*}{\centering Timing Constraints}}} 
+					 & Process images within 20 ms  \\ \hline
 
 \multicolumn{1}{|c|}{\textbf {\multirow{3}{*}{\centering Initialization}}} 
-					 & Initialize all speed controls to zero  \\
-                                 &\cellcolor{tableCell}Initialize wheel angle to zero\\
-                                 & \multicolumn{1}{l |}{Connect to intersection over Bluetooth communication} \\ \hline
+					 & \cellcolor{tableCell}Initialize all speed controls to zero  \\
+                                 &Initialize wheel angle to zero\\
+                                 & \multicolumn{1}{l |}{\cellcolor{tableCell}Connect to intersection over Bluetooth communication} \\ \hline
 \end{longtable}
 
 % -------------- END SYSTEM COMPONENTS  ---------------- %
+
+
+\section{Module Guide}
+
+
+% IC modules - hardware and software
+\subsection{Intersection Controller Modules}
+
+\begin{longtable}{ |p{0.1\textwidth }  | p{0.2\textwidth } |  p{0.3\textwidth } |  p{0.3\textwidth } |}  \hline
+    
+    \textbf{ID} & \textbf{Name} &  \textbf{Responsibilities} & \textbf{Secrets} \\ \hline
+    
+    \cellcolor{tableCell}ICM.1  & \cellcolor{tableCell}DecisionMaker & \cellcolor{tableCell}Determine order of car progression & \cellcolor{tableCell} Scheduling algorithm \\ \hline
+    
+    ICM.2 & VehicleDetection & Know when a car is on top of one of the intersection sensors, and the corresponding sensor & Relationship between magnetic sensor and car \\ \hline
+    
+    \cellcolor{tableCell}ICM.3  & \cellcolor{tableCell}Communication & \cellcolor{tableCell}Interpret receiving car signals and sending signals to a car & \cellcolor{tableCell}Communication protocol \\ \hline
+
+\end{longtable}
+
+
+
+
+
+
+%  Vehicle Hardware modules
+\subsection{Vehicle Controller Hardware Modules}
+
+\begin{longtable}{ |p{0.1\textwidth }  | p{0.2\textwidth } |  p{0.3\textwidth } |  p{0.3\textwidth } |}  \hline
+    
+    \textbf{ID} & \textbf{Name} &  \textbf{Responsibilities} & \textbf{Secrets} \\ \hline
+    
+    \cellcolor{tableCell}VCM.1  & \cellcolor{tableCell}SignalConverter & \cellcolor{tableCell}Convert a software signals to a physical signal, and vice versa & \cellcolor{tableCell}How to convert signal  \\ \hline
+    
+    VCM.2 & SpeedConverter & Convert wheel rotation count to a speed value & Speed calculation algorithm \\ \hline
+    
+    \cellcolor{tableCell}VCM.3  & \cellcolor{tableCell}ServoController & \cellcolor{tableCell}Set a physical wheel angle & 
+    \cellcolor{tableCell}How to convert a software value to a PWM (Pulse Width Modulation) signal \\ \hline
+    
+    VCM.4 & MotorSpeedController & Control PWM signal & How to convert speed into a PWM signal \\ \hline
+    
+    \cellcolor{tableCell}VCM.5  & \cellcolor{tableCell}MotorHBridge \newline Controller & \cellcolor{tableCell}Setting H bridge gates & \cellcolor{tableCell}Which gates correspond to which action of the motor  \\ \hline
+    
+    
+\end{longtable}
+
+
+%  Vehicle Software modules
+\subsection{Vehicle Controller Software Modules}
+
+\begin{longtable}{ |p{0.1\textwidth }  | p{0.2\textwidth } |  p{0.3\textwidth } |  p{0.3\textwidth } |}  \hline
+    
+    \textbf{ID} & \textbf{Name} &  \textbf{Responsibilities} & \textbf{Secrets} \\ \hline
+    
+    \cellcolor{tableCell}VCM.6  & \cellcolor{tableCell}ImageProcessing & \cellcolor{tableCell}Interpret image into environment state & \cellcolor{tableCell}Image processing algorithm  \\ \hline
+    
+    VCM.7 & VehicleNavigaton & Control the navigation of the car & How the car navigates on the track \\ \hline
+    \cellcolor{tableCell}VCM.7.1 & \cellcolor{tableCell}VehicleNavigaton\_\newline Speed  & \cellcolor{tableCell}Ensure car speed is maintained at desired speed range & \cellcolor{tableCell}Speed control algorithm \\ \hline
+    VCM.7.2 & VehicleNavigaton\_\newline LanePositioning  & Car position with respect to lane & How to stay in lane \\ \hline
+    
+    \cellcolor{tableCell}VCM.8  & \cellcolor{tableCell}Communication & \cellcolor{tableCell} Interpret signal from Intersection Controller. Prepare and send signal to the Intersection Controller & \cellcolor{tableCell}Communication Protocol \\ \hline
+
+    
+    
+\end{longtable}
+
 
 
 % -------------- START SUBSYSTEM COMPONENTS ---------------- %
@@ -532,6 +633,10 @@ Insert Text or Image Here.
 
 
 % -------------- END SUBSYSTEM COMPONENTS  ---------------- %
+
+
+
+
 
 
 
@@ -593,20 +698,6 @@ Insert Text or Image Here.
 %\end{longtable}
 %
 %% -------------- END FUNCTION TABLES ---------------- %
-
-
-
-% -------------- START NORMAL OPERATION ---------------- %
-\section{Normal Operation}
-Insert Text Here. 
-
-% -------------- END NORMAL OPERATION ---------------- %
-
-% -------------- START UNDESIRED EVENT HANDLING ---------------- %
-\section{Undesired Event Handling}
-Insert Text Here. 
-
-% -------------- END UNDESIRED EVENT HANDLING ---------------- %
 
 
 % -------------- START REFERENCES ---------------- %
