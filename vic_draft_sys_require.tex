@@ -21,7 +21,7 @@
 % default font package
 %\usepackage{times}
 \usepackage{helvet}
-\renewcommand{\familydefault}{\sfdefault}
+%\renewcommand{\familydefault}{\sfdefault}
 
 % ---------- End Font Packages -------------- %
 
@@ -197,18 +197,24 @@ linkcolor=black,}  %choose some color if you want links to stand out
 \Huge{Vehicle Intersection Control} }
 
 \vspace{1 cm}
-{\Large{\textsc{McMaster University}}\\}  \vspace {1cm}
-{\large Draft System Requirements\\ \vspace {0.4 cm} SE 4G06}  \vspace {1cm}
+{\Large \textbf{\textsc{McMaster University}}\\}  \vspace {1cm}
+{\Large Draft System Requirements\\ \vspace {0.4 cm} SE 4G06}  \vspace {1cm}
 
 {\large \textsc{Group 6} \\} \vspace{1cm}
 
-{
-Alex Jackson \\
-Jean Lucas Ferreira \\
-Justin Kapinski\\
-Mathew Hobers\\
-Radhika Sharma\\
-Zachary Bazen}
+
+\begin{tabular}{ l c  l}
+Alex Jackson &-& 1302526\\
+Jean Lucas Ferreira &-& 1152120 \\
+Justin Kapinski &-& 1305257\\
+Mathew Hobers &-& 1228607\\
+Radhika Sharma &-& 1150430\\
+Zachary Bazen &-& 1200979
+\end{tabular}
+
+
+
+
 
 
 
@@ -238,15 +244,15 @@ Zachary Bazen}
 
 \hline 
 \centering \textbf{Date} & 
-\multicolumn{1}{c}{\textbf {Revision Number}} &
-\multicolumn{1}{|c|}{\textbf {Authors}} & 
+\multicolumn{1}{c|}{\textbf {Revision Number}} &
+\multicolumn{1}{c|}{\textbf {Authors}} & 
 \multicolumn{1}{c|}{\textbf {Comments}} \\ \hline
 
 
 % Track Requirement
 \multicolumn{1}{|c|}{\multirow{3}{*}{November 29,2016}} 
-				     &\multicolumn{1}{c}{\multirow{3}{*}{Revision 1}} 
-				     &\multicolumn{1}{|l|}{\multirow{3}{*}{Zachary Bazen}} 
+				     &\multicolumn{1}{c|}{\multirow{3}{*}{Revision 1}} 
+				     &\multicolumn{1}{l|}{\multirow{3}{*}{Zachary Bazen}} 
 				     & Updated monitored and controlled variables \\
                                &  &  & \cellcolor{tableCell}Updated naming \newline conventions \\ \hline 
 
@@ -562,20 +568,25 @@ The requirements for this project are separated into the three main components o
     \item \label{IC5} \hyperref[sec:changeL]{The system infrastructure must be able to signal to the vehicle when it is allowed to go through the intersection} % Likely
 \end{enumerate}
 
+\pagebreak
 
 \section{Functional Decomposition Diagrams}
-\begin{figure} [h!]
-	
-	\centering
-	\includegraphics [scale =.9] {figures/function_decomp_track_n.pdf}
-	\caption{Functional Track Navigation Decomposition}
-\end{figure}
-\break
-\begin{figure} [h!]
 
+\vspace{-8mm}
+
+\begin{figure} [h!]
+	\caption{Functional Track Navigation Decomposition}\bigskip
 	\centering
-	\includegraphics [scale =.9] {figures/function_decomp_IC.pdf}
-	\caption{Functional Intersection Controller Decomposition}
+	\includegraphics [scale =.7] {figures/function_decomp_track_n.pdf}
+	
+\end{figure}
+
+
+\begin{figure} [h!]
+	\caption{Functional Intersection Controller Decomposition}\bigskip
+	\centering
+	\includegraphics [scale =.7] {figures/function_decomp_IC.pdf}
+	
 \end{figure}
 
 
