@@ -54,6 +54,7 @@
 \usepackage{enumitem}
 \setenumerate{itemsep=0pt, itemindent=0in,leftmargin=0.5in}
 
+
 % Paragraph parameter
 
 \setlength{\parindent}{0pt}
@@ -203,17 +204,18 @@ linkcolor=black,}  %choose some color if you want links to stand out
 
 \vspace{1 cm}
 {\Large\textbf{\textsc{McMaster University}}\\}  \vspace {1cm}
-{\large Draft System Design\\ \vspace {0.4 cm} SE 4G06}  \vspace {1cm}
+{\Large Draft System Design\\ \vspace {0.4 cm} SE 4G06}  \vspace {1cm}
 
 {\large \textsc{Group 6} \\} \vspace{1cm}
 
-{
-Alex Jackson - 1302526\\
-Jean Lucas Ferreira - 1152120 \\
-Justin Kapinski - 1305257\\
-Mathew Hobers - 1228607\\
-Radhika Sharma - 1150430\\
-Zachary Bazen - 1200979}
+\begin{tabular}{ l c  l}
+Alex Jackson &-& 1302526\\
+Jean Lucas Ferreira &-& 1152120 \\
+Justin Kapinski &-& 1305257\\
+Mathew Hobers &-& 1228607\\
+Radhika Sharma &-& 1150430\\
+Zachary Bazen &-& 1200979
+\end{tabular}
 
 
 
@@ -239,7 +241,7 @@ Zachary Bazen - 1200979}
 %\section*{Revisions}
 \thispagestyle{empty}
 \section{Revisions}
-\begin{longtable}{| p{.2\textwidth } | p{.23\textwidth } | p{.23\textwidth } | p{.23\textwidth } |}
+\begin{longtable}{| p{.2\textwidth } | p{.23\textwidth } | p{.23\textwidth } | p{.23\textwidth } |} \caption{VIC Table of Revisions}  \\
 
 \hline 
 \centering \textbf{Date} & 
@@ -259,7 +261,7 @@ Zachary Bazen}
  \multirow{4}{*}{N/A} \\ 
 \hline 
 
-\caption{VIC Table of Revisions} 
+
 \end{longtable}
 % -----------  REVISION HISTORY END ----------- %
 \pagebreak
@@ -352,15 +354,15 @@ This document will outline the module guides, the module interface specification
 \subsection{Intersection Controller}
 
 \begin{longtable}{ |p{.33\textwidth }  p{.625\textwidth }|}\caption{Intersection Controller Monitored Variables} \\   \hline
-\textbf{m\_ic\_readSensor} & [8]:Boolean  \\
+\textbf{m\_ic\_readSensor} & Boolean [8]  \\
 
-\cellcolor{tableCell}\textbf{m\_ic\_carSignal}  & \cellcolor{tableCell}[4]:Byte[ ] \\  \hline
+\cellcolor{tableCell}\textbf{m\_ic\_carSignal}  & \cellcolor{tableCell} Byte [4][ ] \\  \hline
 \end{longtable}
 
 \subsection{Autonomous Vehicle Controller}
 
 \begin{longtable}{ |p{.33\textwidth }  p{.625\textwidth }|}  \hline
-\textbf{m\_vc\_videoCapture} & [x][y]:Bytes  \\ 
+\textbf{m\_vc\_videoCapture} & Bytes [ ][ ]  \\ 
 
 \cellcolor{tableCell}\textbf{m\_vc\_frontDistance}  & \cellcolor{tableCell}Double \\ 
 
@@ -410,7 +412,7 @@ This document will outline the module guides, the module interface specification
 
 
 \subsection{Behavior Overview}
-Insert Text or Image Here. 
+     
 
 \subsection{Context Diagrams}
 
@@ -534,6 +536,9 @@ Insert Text or Image Here.
     ICM.2 & VehicleDetection & Know when a car is on top of one of the intersection sensors, and the corresponding sensor & Relationship between magnetic sensor and car \\ \hline
     
     \cellcolor{tableCell}ICM.3  & \cellcolor{tableCell}Communication & \cellcolor{tableCell}Interpret receiving car signals and sending signals to a car & \cellcolor{tableCell}Communication protocol \\ \hline
+    
+    
+        ICM.4 & IC\_Main & Control information flow of intersection controller & Manages intersection modules \\ \hline
 
 \end{longtable}
 
@@ -574,99 +579,135 @@ Insert Text or Image Here.
     \cellcolor{tableCell}VCM.6  & \cellcolor{tableCell}ImageProcessing & \cellcolor{tableCell}Interpret image into environment state & \cellcolor{tableCell}Image processing algorithm  \\ \hline
     
     VCM.7 & VehicleNavigaton & Control the navigation of the car & How the car navigates on the track \\ \hline
-    \cellcolor{tableCell}VCM.7.1 & \cellcolor{tableCell}VehicleNavigaton\_\newline Speed  & \cellcolor{tableCell}Ensure car speed is maintained at desired speed range & \cellcolor{tableCell}Speed control algorithm \\ \hline
-    VCM.7.2 & VehicleNavigaton\_\newline LanePositioning  & Car position with respect to lane & How to stay in lane \\ \hline
+    % \cellcolor{tableCell}VCM.7.1 & \cellcolor{tableCell}VehicleNavigaton\_\newline Speed  & \cellcolor{tableCell}Ensure car speed is maintained at desired speed range & \cellcolor{tableCell}Speed control algorithm \\ \hline
+    % VCM.7.2 & VehicleNavigaton\_\newline LanePositioning  & Car position with respect to lane & How to stay in lane \\ \hline
     
     \cellcolor{tableCell}VCM.8  & \cellcolor{tableCell}Communication & \cellcolor{tableCell} Interpret signal from Intersection Controller. Prepare and send signal to the Intersection Controller & \cellcolor{tableCell}Communication Protocol \\ \hline
 
+    VCM.9 & VC\_Main & Control information flow of the car & Manage car modules \\ \hline
     
-    
 \end{longtable}
 
 
 
-% -------------- START SUBSYSTEM COMPONENTS ---------------- %
-\section{Subsystem Components}
+% % -------------- START SUBSYSTEM COMPONENTS ---------------- %
+% \section{Subsystem Components}
 
-\subsection{Hardware}
+% \subsection{Hardware}
 
-\subsubsection{The First Hardware Component}
-\begin{longtable}{| p{.25\textwidth } | p{.7\textwidth } | }\hline 
-\textbf{Identification} & - \\ \hline
-\textbf{Inputs} & - \\ \hline
-\textbf{Outputs} & - \\ \hline
-\textbf{Description} & Insert Description Here\\ \hline 
-\textbf{Timing Constraints} & Insert Timing Constraints Here\\ \hline 
-\textbf{Initialization} & Insert Initialization Stuff Here\\ \hline 
-\end{longtable}
+% \subsubsection{The First Hardware Component}
+% \begin{longtable}{| p{.25\textwidth } | p{.7\textwidth } | }\hline 
+% \textbf{Identification} & - \\ \hline
+% \textbf{Inputs} & - \\ \hline
+% \textbf{Outputs} & - \\ \hline
+% \textbf{Description} & Insert Description Here\\ \hline 
+% \textbf{Timing Constraints} & Insert Timing Constraints Here\\ \hline 
+% \textbf{Initialization} & Insert Initialization Stuff Here\\ \hline 
+% \end{longtable}
 
-\subsubsection{The Second Hardware Component}
-\begin{longtable}{| p{.25\textwidth } | p{.7\textwidth } | }\hline 
-\textbf{Identification} & - \\ \hline
-\textbf{Inputs} & - \\ \hline
-\textbf{Outputs} & - \\ \hline
-\textbf{Description} & Insert Description Here\\ \hline 
-\textbf{Timing Constraints} & Insert Timing Constraints Here\\ \hline 
-\textbf{Initialization} & Insert Initialization Stuff Here\\ \hline 
-\end{longtable}
+% \subsubsection{The Second Hardware Component}
+% \begin{longtable}{| p{.25\textwidth } | p{.7\textwidth } | }\hline 
+% \textbf{Identification} & - \\ \hline
+% \textbf{Inputs} & - \\ \hline
+% \textbf{Outputs} & - \\ \hline
+% \textbf{Description} & Insert Description Here\\ \hline 
+% \textbf{Timing Constraints} & Insert Timing Constraints Here\\ \hline 
+% \textbf{Initialization} & Insert Initialization Stuff Here\\ \hline 
+% \end{longtable}
 
-\subsection{Software}
-\subsubsection{The First Software Component (MIS)}
-\begin{longtable}{| p{.25\textwidth } | p{.7\textwidth } | }\hline 
-\textbf{Identification} & - \\ \hline
-\textbf{Inputs} & - \\ \hline
-\textbf{Outputs} & - \\ \hline
-\textbf{Description} & Insert Description Here\\ \hline 
-\textbf{Timing Constraints} & Insert Timing Constraints Here\\ \hline 
-\textbf{Initialization} & Insert Initialization Stuff Here\\ \hline 
-\end{longtable}
+% \subsection{Software}
+% \subsubsection{The First Software Component (MIS)}
+% \begin{longtable}{| p{.25\textwidth } | p{.7\textwidth } | }\hline 
+% \textbf{Identification} & - \\ \hline
+% \textbf{Inputs} & - \\ \hline
+% \textbf{Outputs} & - \\ \hline
+% \textbf{Description} & Insert Description Here\\ \hline 
+% \textbf{Timing Constraints} & Insert Timing Constraints Here\\ \hline 
+% \textbf{Initialization} & Insert Initialization Stuff Here\\ \hline 
+% \end{longtable}
 
-\subsubsection{The Second Software Component (MIS)}
-\begin{longtable}{| p{.25\textwidth } | p{.7\textwidth } | }\hline 
-\textbf{Identification} & - \\ \hline
-\textbf{Inputs} & - \\ \hline
-\textbf{Outputs} & - \\ \hline
-\textbf{Description} & Insert Description Here\\ \hline 
-\textbf{Timing Constraints} & Insert Timing Constraints Here\\ \hline 
-\textbf{Initialization} & Insert Initialization Stuff Here\\ \hline 
-\end{longtable}
-
-
-% -------------- END SUBSYSTEM COMPONENTS  ---------------- %
+% \subsubsection{The Second Software Component (MIS)}
+% \begin{longtable}{| p{.25\textwidth } | p{.7\textwidth } | }\hline 
+% \textbf{Identification} & - \\ \hline
+% \textbf{Inputs} & - \\ \hline
+% \textbf{Outputs} & - \\ \hline
+% \textbf{Description} & Insert Description Here\\ \hline 
+% \textbf{Timing Constraints} & Insert Timing Constraints Here\\ \hline 
+% \textbf{Initialization} & Insert Initialization Stuff Here\\ \hline 
+% \end{longtable}
 
 
+% % -------------- END SUBSYSTEM COMPONENTS  ---------------- %
+
+
+% -------------- START MIS---------------- %
+\section{Module Interface Specification}
 
 
 
 
+\begin{longtable}{| p{.35\textwidth } | p{.6\textwidth } | }\caption{MIS Name 1} \\\hline  
+ \multicolumn{2}{|l|}{\textbf {ICM.1 DecisionMaker}}\\ \hline
+ 
+\cellcolor{tableCell}DecisionMaker() & \cellcolor{tableCell}Constructor to initialize the scheduling algorithm \newline\\ \hline 
+
+addCarToDecision& - Description2 \newline - Description2  \\ \hline 
+
+\cellcolor{tableCell}Constructor/Method 3 & \cellcolor{tableCell}- Description \newline - Description  
+\\ \hline
 
 
-% -------------- START MID---------------- %
-\section{Module Interface Design}
-\subsection {MID 1}
-
-\hl{***I thing this would get covered in the Software Component***}
-
-\begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
-\textbf{Insert Text Here} & \textbf{Insert Text Here} \\ \hline
-\textbf{Insert Text Here} & -\\ \hline 
-\end{longtable}
-
-
-\subsection {MID 2 }
-
-\begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
-\textbf{Insert Text Here} & \textbf{Insert Text Here} \\ \hline
-\textbf{Insert Text Here} & -\\ \hline 
+Constructor/Method 2 & - Description 4 \newline - Description 4  \\ \hline
 \end{longtable}
 
 
-\subsection {MID ETC}
 
-\begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
-\textbf{Insert Text Here} & \textbf{Insert Text Here} \\ \hline
-\textbf{Insert Text Here} & -\\ \hline 
+\begin{longtable}{| p{.35\textwidth } | p{.6\textwidth } | }\caption{MIS Name 2} \\\hline  
+ \multicolumn{2}{|l|}{\textbf {Module ID/Name 2}}\\ \hline
+\cellcolor{tableCell}Constructor/Method 1 & \cellcolor{tableCell}- Description \newline - Description  \\ \hline 
+
+Constructor/Method 2 & - Description2 \newline - Description2  \\ \hline 
+
+\cellcolor{tableCell}Constructor/Method 3 & \cellcolor{tableCell}- Description \newline - Description  
+\\ \hline
+
+
+Constructor/Method 2 & - Description 4 \newline - Description 4  \\ \hline
 \end{longtable}
+% -------------- END MIS---------------- 
+
+
+
+
+
+
+
+% % -------------- START MID---------------- %
+% \section{Module Interface Design}
+% \subsection {MID 1}
+
+
+
+% \begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
+% \textbf{Insert Text Here} & \textbf{Insert Text Here} \\ \hline
+% \textbf{Insert Text Here} & -\\ \hline 
+% \end{longtable}
+
+
+% \subsection {MID 2 }
+
+% \begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
+% \textbf{Insert Text Here} & \textbf{Insert Text Here} \\ \hline
+% \textbf{Insert Text Here} & -\\ \hline 
+% \end{longtable}
+
+
+% \subsection {MID ETC}
+
+% \begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
+% \textbf{Insert Text Here} & \textbf{Insert Text Here} \\ \hline
+% \textbf{Insert Text Here} & -\\ \hline 
+% \end{longtable}
 
 % -------------- END MID ---------------- %
 
