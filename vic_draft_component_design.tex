@@ -73,30 +73,7 @@ linkcolor=black,}  %choose some color if you want links to stand out
 
 
 
-% ------------------- START HEADER AND FOOTER ---------------------------%
-\usepackage{fancyhdr}
 
-% Helps with the n of total n pages
-\usepackage{lastpage}
-
-\pagestyle{fancy}
-
-% Header
-\lhead{Draft Component Design }
-\rhead{Revision: 0}
-\fancyhead[LE,CO]{VIC - Group 6}
-
-% Removes line under the header 
-\renewcommand{\headrulewidth}{0pt}
-\setlength{\headsep}{.2in}
-
-% Footer 
-
-% Set the right side of the footer to be the page number
-\fancyfoot[R]{Page \textbf{\thepage}\ of \textbf{\pageref{LastPage}}}
-\fancyfoot[C]{}
-
-% ------------------- END HEADER AND FOOTER ---------------------------%
 
 
 
@@ -179,6 +156,31 @@ linkcolor=black,}  %choose some color if you want links to stand out
 
 
 
+% ------------------- START HEADER AND FOOTER ---------------------------%
+\usepackage{fancyhdr}
+
+% Helps with the n of total n pages
+\usepackage{lastpage}
+
+\pagestyle{fancy}
+
+% Header
+\lhead{Draft Component Design }
+\rhead{Revision: 0}
+\fancyhead[LE,CO]{VIC - Group 6}
+
+% Removes line under the header 
+\renewcommand{\headrulewidth}{0pt}
+\setlength{\headsep}{.2in}
+
+% Footer 
+
+% Set the right side of the footer to be the page number
+\fancyfoot[R]{Page \textbf{\thepage}\ of \textbf{\pageref{LastPage}}}
+\fancyfoot[C]{}
+
+% ------------------- END HEADER AND FOOTER ---------------------------%
+
 
 
 
@@ -239,7 +241,9 @@ Zachary Bazen &-& 1200979
 % -----------  REVISION HISTORY START ----------- %
 
 %\section*{Revisions}
-\thispagestyle{empty}
+\thispagestyle{plain}
+
+
 \section{Revisions}
 \begin{longtable}{| p{.2\textwidth } | p{.23\textwidth } | p{.23\textwidth } | p{.23\textwidth } |} \caption{VIC Table of Revisions}  \\
 
@@ -270,6 +274,92 @@ Zachary Bazen}
 % heading in document
 
 % -------------- START INTRODUCTION ---------------- %
-\section {Draft Component Design Starts Here}
+\begin{center}
+\textbf{\Large \hl{Possible Headings - Taken from suggested content. May need addtional headings}}
+\end{center}
+
+\section {Introduction}
+
+
+\subsection{Document Purpose}
+Insert Text Here. 
+
+\subsubsection{System Scope}
+Insert Text Here. 
+
+\subsubsection{Document Overview and Intended Audience}
+Insert Text Here. 
+
+\subsubsection{Acronyms}
+Insert Text Here. 
+
+\subsubsection{Definitions}
+Insert Text Here. 
+
+\section{Module Guide}
+\begin{center}
+    \textbf{\hl{"i. Module [number] name, services (responsibilities) and secrets\\
+ii. Views of the module decomposition (maybe a table showing a Uses Relationship
+- hopefully a Uses hierarchy)"}}
+\end{center}
+
+
+\begin{center}
+    \textbf{\hl{Possibly move the module guide from draft system design}}
+\end{center}
+
+\section{Module Specifications}
+\subsection{Module \#1}
+
+\begin{center}
+    \textbf{Insert MIS (Possibly move from draft system design)}
+\end{center}
+
+\begin{center}
+    \textbf{Insert MID (Table)} \\
+    
+    \textbf{Insert Hardware Design}\\
+    
+    
+  $\vdots$\\
+  $\vdots$\\
+  $\vdots$\\
+     
+\end{center}
+
+
+
+
+\subsection{Module \#N}
+
+\begin{center}
+    \textbf{Insert MIS (Possibly move from draft system design)}
+\end{center}
+
+\begin{center}
+    \textbf{Insert MID (Table)}\\
+    
+    \textbf{Insert Hardware Design}\\
+    
+\end{center}
+
+\section{Scheduling}
+
+\begin{center}
+    \textbf{\hl{"i. Derived timing constraints (from requirements)\\
+ii. Scheduling of "set" programs"}}
+\end{center}
+
+
+\section{Design Notes}
+Insert Text Here.
+
+\section{Data Dictionary (if necessary)}
+Insert Text Here.
+
+
+\section{References}
+Insert Text Here.
+
 
 \end{document}
