@@ -6,6 +6,7 @@
 
 % page geometry 
 \usepackage[margin=1in]{geometry}
+\usepackage{changepage}
 
 
 % ----------  PACKAGES START ------------ %
@@ -42,6 +43,8 @@
 \setlength{\LTpre}{0.5pt} % Reduces white space around tables (top)
 %\setlength{\LTpost}{0pt} % Reduces white space around tables (bottom)
 
+
+
 % Color Packages
 \usepackage{color}   
 \definecolor{sectionC}{rgb}{0.016,0.227,.365}
@@ -52,7 +55,7 @@
 
 % List package
 \usepackage{enumitem}
-\setenumerate{itemsep=0pt, itemindent=0in,leftmargin=0.5in}
+\setenumerate{nosep=0pt, itemindent=0in,leftmargin=.1in, topsep= 2pt,  label = -}
 
 
 % Paragraph parameter
@@ -95,6 +98,8 @@ linkcolor=black,}  %choose some color if you want links to stand out
 % Set the right side of the footer to be the page number
 \fancyfoot[R]{Page \textbf{\thepage}\ of \textbf{\pageref{LastPage}}}
 \fancyfoot[C]{}
+
+
 
 % ------------------- END HEADER AND FOOTER ---------------------------%
 
@@ -143,6 +148,9 @@ linkcolor=black,}  %choose some color if you want links to stand out
 % ------ PARAGRAPH FORMAT END ----%
 
 
+% ------------ BEGIN LANDSCAPE MODE ----------------%
+\usepackage{pdflscape}
+% ------------ END LANDSCAPE MODE ----------------%
 
 
 %------------------------------TOC FORMAT START --------------------------------%
@@ -239,7 +247,7 @@ Zachary Bazen &-& 1200979
 % -----------  REVISION HISTORY START ----------- %
 
 %\section*{Revisions}
-\thispagestyle{empty}
+%\thispagestyle{empty}
 \section{Revisions}
 \begin{longtable}{| p{.2\textwidth } | p{.23\textwidth } | p{.23\textwidth } | p{.23\textwidth } |} \caption{VIC Table of Revisions}  \\
 
@@ -270,6 +278,227 @@ Zachary Bazen}
 % heading in document
 
 % -------------- START INTRODUCTION ---------------- %
-\section {Hazard Analysis Document starts Here}
+\section {Section 1}
+
+%\begin{landscape}
+%\section{Test}
+%Insert Text Here
+%
+%\end{landscape}
+
+\lipsum[1]
+
+% Begin landscape page
+
+
+\newpage
+
+
+\paperwidth=\pdfpageheight
+\paperheight=\pdfpagewidth
+\pdfpageheight=\paperheight
+\pdfpagewidth=\paperwidth
+\headwidth=\textheight
+
+\begingroup
+ 
+\vsize=\textwidth
+\hsize=\textheight
+
+
+\begingroup
+\setlength\LTleft{-5.5em}
+%\begin{minipage}{\textwidth}
+\begin{longtable}{| p{.18\textwidth } | p{.09\textwidth } | p{.23\textwidth } |p{.23\textwidth } | p{.23\textwidth } | p{.23\textwidth } | p{.24\textwidth }| } \caption{VIC Hazard Analysis}\\
+
+\hline 
+\rowcolor{tableCell}\centering \textbf{Design Component} & 
+\multicolumn{1}{c|}{\textbf {Ref. \#}} &
+\multicolumn{1}{c|}{\textbf {Failure Modes}} & 
+\multicolumn{1}{c|}{\textbf {Effects of Failure}} & 
+\multicolumn{1}{c|}{\textbf {Detection}} & 
+\multicolumn{1}{c|}{\textbf {Controls}} & 
+\multicolumn{1}{c|}{\textbf {Recommended Action}} \\ \hline
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{minipage}{\columnwidth}
+\begin{enumerate}
+\item Insert Text Here
+
+\end{enumerate}
+\end{minipage}
+& 
+
+-
+& 
+\begin{minipage}{\columnwidth}
+\vspace{2mm}
+\begin{enumerate}
+\item Insert Text Here
+\item Insert Text Here
+\item Insert Text Here
+\end{enumerate}
+\end{minipage}
+
+&
+\begin{minipage}{\columnwidth}
+\vspace{2mm}
+\begin{enumerate}
+\item Insert Text Here
+\item Insert Text Here
+\item Insert Text Here
+\end{enumerate}
+\end{minipage}
+
+
+& 
+\begin{minipage}{\columnwidth}
+\vspace{2mm}
+\begin{enumerate}
+\item Insert Text Here
+\item Insert Text Here
+\item Insert Text Here
+\end{enumerate}
+\end{minipage}
+
+&
+\begin{minipage}{\columnwidth}
+\vspace{2mm}
+\begin{enumerate}
+\item Insert Text Here
+\item Insert Text Here
+\item Insert Text Here
+\end{enumerate}
+\end{minipage}
+& 
+
+\begin{minipage}{\columnwidth}
+\vspace{2mm}
+\begin{enumerate}
+\item Insert Text Here
+\item Insert Text Here
+\item Insert Text Here
+\end{enumerate}
+\end{minipage}\\ \hline 
+
+
+%%%%%%%%%%%%%%%%%%
+\rowcolor{tableCell}\begin{minipage}{\columnwidth}
+\begin{enumerate}
+\item Insert Text Here
+
+\end{enumerate}
+\end{minipage}
+& 
+
+-
+& 
+\begin{minipage}{\columnwidth}
+\vspace{2mm}
+\begin{enumerate}
+\item Insert Text Here
+\item Insert Text Here
+\item Insert Text Here
+\end{enumerate}
+\end{minipage}
+
+&
+\begin{minipage}{\columnwidth}
+\vspace{2mm}
+\begin{enumerate}
+\item Insert Text Here
+\item Insert Text Here
+\item Insert Text Here
+\end{enumerate}
+\end{minipage}
+
+
+& 
+\begin{minipage}{\columnwidth}
+\vspace{2mm}
+\begin{enumerate}
+\item Insert Text Here
+\item Insert Text Here
+\item Insert Text Here
+\end{enumerate}
+\end{minipage}
+
+&
+\begin{minipage}{\columnwidth}
+\vspace{2mm}
+\begin{enumerate}
+\item Insert Text Here
+\item Insert Text Here
+\item Insert Text Here
+\end{enumerate}
+\end{minipage}
+& 
+
+\begin{minipage}{\columnwidth}
+\vspace{2mm}
+\begin{enumerate}
+\item Insert Text Here
+\item Insert Text Here
+\item Insert Text Here
+\end{enumerate}
+\end{minipage}\\ \hline 
+
+%%%%%%%%%%%%%%%%%
+
+
+
+\end{longtable}
+\endgroup
+%\end{minipage}
+
+% % Begin portrait page again
+
+
+
+\endgroup
+
+
+\newpage
+
+
+\paperwidth=\pdfpageheight
+\paperheight=\pdfpagewidth
+\pdfpageheight=\paperheight
+\pdfpagewidth=\paperwidth
+\headwidth=\textwidth
+
+
+% Bg
+\section{Section 2}
+
+\begin{landscape}
+\lipsum[3]
+\end{landscape}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 \end{document}
