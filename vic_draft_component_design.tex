@@ -297,62 +297,545 @@ Insert Text Here.
 Insert Text Here. 
 
 \section{Module Guide}
-\begin{center}
-    \textbf{\hl{"i. Module [number] name, services (responsibilities) and secrets\\
-ii. Views of the module decomposition (maybe a table showing a Uses Relationship
-- hopefully a Uses hierarchy)"}}
-\end{center}
+
+\subsection{Module Overview}
+
+% IC modules - hardware and software
+\subsubsection{Intersection Controller Modules}
+
+\begin{longtable}{ |p{0.1\textwidth }  | p{0.2\textwidth } |  p{0.3\textwidth } |  p{0.3\textwidth } |}  \hline
+    
+    \textbf{ID} & \textbf{Name} &  \textbf{Responsibilities} & \textbf{Secrets} \\ \hline
+    
+    \cellcolor{tableCell}ICM.1  & \cellcolor{tableCell}DecisionMaker & \cellcolor{tableCell}Determine order of car progression & \cellcolor{tableCell} Scheduling algorithm \\ \hline
+    
+    ICM.2 & VehicleDetection & Know when a car is on top of one of the intersection sensors, and the corresponding sensor & Relationship between magnetic sensor and car \\ \hline
+    
+    \cellcolor{tableCell}ICM.3  & \cellcolor{tableCell}Communication & \cellcolor{tableCell}Interpret receiving car signals and sending signals to a car & \cellcolor{tableCell}Communication protocol \\ \hline
+    
+    
+        ICM.4 & IC\_Main & Control information flow of intersection controller & Manages intersection modules \\ \hline
+
+\end{longtable}
 
 
-\begin{center}
-    \textbf{\hl{Possibly move the module guide from draft system design}}
-\end{center}
+
+
+
+
+%  Vehicle Hardware modules
+\subsubsection{Vehicle Controller Hardware Modules}
+
+\begin{longtable}{ |p{0.1\textwidth }  | p{0.2\textwidth } |  p{0.3\textwidth } |  p{0.3\textwidth } |}  \hline
+    
+    \textbf{ID} & \textbf{Name} &  \textbf{Responsibilities} & \textbf{Secrets} \\ \hline 
+    
+    
+    \cellcolor{tableCell}VCM.1  & \cellcolor{tableCell}SignalConverter & \cellcolor{tableCell}Convert a software signals to a physical signal, and vice versa & \cellcolor{tableCell}How to convert signal  \\ \hline
+    
+    VCM.2 & SpeedConverter & Convert wheel rotation count to a speed value & Speed calculation algorithm \\ \hline
+    
+    \cellcolor{tableCell}VCM.3  & \cellcolor{tableCell}ServoController & \cellcolor{tableCell}Set a physical wheel angle & 
+    \cellcolor{tableCell}How to convert a software value to a PWM (Pulse Width Modulation) signal \\ \hline
+    
+    VCM.4 & MotorSpeedController & Control PWM signal & How to convert speed into a PWM signal \\ \hline\hline
+    
+    \cellcolor{tableCell}VCM.5  & \cellcolor{tableCell}MotorHBridge \newline Controller & \cellcolor{tableCell}Setting H bridge gates & \cellcolor{tableCell}Which gates correspond to which action of the motor  \\ \hline
+    
+    
+\end{longtable}
+
+
+%  Vehicle Software modules
+\subsubsection{Vehicle Controller Software Modules}
+
+\begin{longtable}{ |p{0.1\textwidth }  | p{0.2\textwidth } |  p{0.3\textwidth } |  p{0.3\textwidth } |}  \hline
+    
+    \textbf{ID} & \textbf{Name} &  \textbf{Responsibilities} & \textbf{Secrets} \\ \hline
+    
+    \cellcolor{tableCell}VCM.6  &\cellcolor{tableCell}ImageProcessing &\cellcolor{tableCell}Interpret image into environment state &\cellcolor{tableCell}Image processing algorithm  \\ \hline
+    
+    VCM.7 & VehicleNavigaton & Control the navigation of the car & How the car navigates on the track \\ \hline
+    % \cellcolor{tableCell}VCM.7.1 & \cellcolor{tableCell}VehicleNavigaton\_\newline Speed  & \cellcolor{tableCell}Ensure car speed is maintained at desired speed range & \cellcolor{tableCell}Speed control algorithm \\ \hline
+    % VCM.7.2 & VehicleNavigaton\_\newline LanePositioning  & Car position with respect to lane & How to stay in lane \\ \hline
+    
+    \cellcolor{tableCell}VCM.8  & \cellcolor{tableCell}Communication & \cellcolor{tableCell}Interpret signal from Intersection Controller. Prepare and send signal to the Intersection Controller & \cellcolor{tableCell}Communication Protocol \\ \hline
+
+    VCM.9 & VC\_Main & Control information flow of the car & Manage car modules \\ \hline
+    
+\end{longtable}
+
+\subsection{Intersection Software Module Description}
+\textbf{Design Notes} \\
+<Description goes here for all the intersection software modules> \\
+
+\begin{longtable}{p{.98\textwidth}}
+\rowcolor{tableCell}\textbf{<ID and Name 1>} \\
+\end{longtable}
+
+
+
+\textbf{Behavioural Description} 
+
+<Description goes here.> \\
+
+\textbf{Inputs} \\
+<List one after the other> \\
+
+\textbf{Outputs} \\
+<List one after the other> \\
+
+\textbf{Initialization Description} \\
+<Describe here> \\
+
+\textbf{Derived Timing Constraints} \\
+<Describe here> \\
+
+
+\begin{longtable}{p{.98\textwidth}}
+\rowcolor{tableCell}\textbf{<ID and Name 2>} \\
+\end{longtable}
+
+\textbf{Behavioural Description} 
+
+<Description goes here.> \\
+
+\textbf{Inputs} \\
+<List one after the other> \\
+
+\textbf{Outputs} \\
+<List one after the other> \\
+
+\textbf{Initialization Description} \\
+<Describe here> \\
+
+\textbf{Derived Timing Constraints} \\
+<Describe here> \\
+
+
+\subsection{Vehicle Software Module Description}
+
+\textbf{Design Notes} \\
+<Description goes here for all the intersection software modules> \\
+
+\begin{longtable}{p{.98\textwidth}}
+\rowcolor{tableCell}\textbf{<ID and Name 1>} \\
+\end{longtable}
+
+
+
+\textbf{Behavioural Description} 
+
+<Description goes here.> \\
+
+\textbf{Inputs} \\
+<List one after the other> \\
+
+\textbf{Outputs} \\
+<List one after the other> \\
+
+\textbf{Initialization Description} \\
+<Describe here> \\
+
+\textbf{Derived Timing Constraints} \\
+<Describe here> \\
+
+
+
+\begin{longtable}{p{.98\textwidth}}
+\rowcolor{tableCell}\textbf{<ID and Name 2>} \\
+\end{longtable}
+
+\textbf{Behavioural Description} 
+
+<Description goes here.> \\
+
+\textbf{Inputs} \\
+<List one after the other> \\
+
+\textbf{Outputs} \\
+<List one after the other> \\
+
+\textbf{Initialization Description} \\
+<Describe here> \\
+
+\textbf{Derived Timing Constraints} \\
+<Describe here> \\
+
+\subsection{Vehicle Hardware Component Description}
+
+\textbf{Design Notes\ choices} \\
+<Description goes here for all the intersection software modules> \\
+
+\begin{longtable}{p{.98\textwidth}}
+\rowcolor{tableCell}\textbf{<ID and Name 1>} \\
+\end{longtable}
+
+\textbf{Inputs} \\
+<List one after the other> \\
+
+\textbf{Outputs} \\
+<List one after the other> \\
+
+\begin{longtable}{p{.98\textwidth}}
+\rowcolor{tableCell}\textbf{<ID and Name 2>} \\
+\end{longtable}
+
+\textbf{Inputs} \\
+<List one after the other> \\
+
+\textbf{Outputs} \\
+<List one after the other> \\
+
+
 
 \section{Module Specifications}
-\subsection{Module \#1}
+
+There are two main components to VIC: the intersection component and the vehicle component. The following module specifications are grouped in this way. 
+\subsection{Intersection Module Interface Specification}
+
+    \begin{center}
+        \hl{These may be subject to change}
+    \end{center}
+
+\begin{longtable}{| p{.35\textwidth } | p{.6\textwidth } | }\caption{ICM.1 DecisionMaker} \\\hline  
+ \multicolumn{2}{|l|}{\textbf {ICM.1 DecisionMaker}}\\ \hline
+ 
+\cellcolor{tableCell}DecisionMaker()& \cellcolor{tableCell}Constructor to initialize the scheduling algorithm \\ \hline 
+
+getSchedule(cars[ ]) : carQueue & When function is called, it will return a queue of cars in the order which they should proceed. Expects an array of car objects when called\\ \hline 
+
+%\cellcolor{tableCell}Constructor/Method 3 & \cellcolor{tableCell}- Description \newline - Description  
+%\\ \hline
+
+
+%Constructor/Method 2 & - Description 4 \newline - Description 4  \\ \hline
+\end{longtable}
+
+\begin{longtable}{| p{.35\textwidth } | p{.6\textwidth } | }\caption{ICM.2 VehicleDetection} \\\hline  
+ \multicolumn{2}{|l|}{\textbf {ICM.2 VehicleDetection}}\\ \hline
+ 
+\cellcolor{tableCell}VehicleDet()& \cellcolor{tableCell}Constructor to initialize the detection of vehicles at the intersection. \\ \hline 
+
+getSignalsState( ) : bool[ ] & Returns the state of the sensors at the intersection when the function is called. Returns an array of boolean values signifying if the sensors have been tripped or not. \\ \hline 
+
+%\cellcolor{tableCell}Constructor/Method 3 & \cellcolor{tableCell}- Description \newline - Description  
+%\\ \hline
+
+
+%Constructor/Method 2 & - Description 4 \newline - Description 4  \\ \hline
+\end{longtable}
+
+\begin{longtable}{| p{.35\textwidth } | p{.6\textwidth } | }\caption{ICM.3 Communication} \\\hline  
+ \multicolumn{2}{|l|}{\textbf {ICM.3 Communication}}\\ \hline
+ 
+\cellcolor{tableCell}RecieveRequest() : Request& \cellcolor{tableCell}Function to allow the controller recieve a request to be scheduled from the car.\\ \hline 
+
+
+SendResponse(car c) : void & Function that allows the intersectrion to send a car the response to proceed through the intersection. \\ \hline
+
+
+
+
+%Constructor/Method 2 & - Description 4 \newline - Description 4  \\ \hline
+\end{longtable}
+
+\begin{longtable}{| p{.35\textwidth } | p{.6\textwidth } | }\caption{ICM.4 IC\_Main} \\\hline  
+ \multicolumn{2}{|l|}{\textbf {ICM.4 IC\_Main}}\\ \hline
+ 
+\cellcolor{tableCell}Main( ) & \cellcolor{tableCell}Main Function for VIC. \\ \hline 
+
+
+%\cellcolor{tableCell}Constructor/Method 3 & \cellcolor{tableCell}- Description \newline - Description  
+%\\ \hline
+
+
+%Constructor/Method 2 & - Description 4 \newline - Description 4  \\ \hline
+\end{longtable}
+
+
+\subsection{Intersection Module Internal Design}
 
 \begin{center}
-    \textbf{Insert MIS (Possibly move from draft system design)}
+    \hl {double check whats included in the MID'S}
 \end{center}
+
+
+\textbf{<ID and Name 1>} \\
+
+<Description goes here.>  \\
+
+\textbf{Variables} 
+
+% skip the captions --> treat it like a list or something
+% Simplifies the tables for everyone
+\begin{longtable}{ p{.35\textwidth }  p{.6\textwidth }} \\ 
+
+ 
+\rowcolor{tableCell} <Variable 1 >& <Desciption> \\ 
+<Variable 2>& <Desciption> \\
+
+\rowcolor{tableCell}<Variable 3> & <Desciption> \\ 
+<Variable 4>& <Desciption> \\
+
+\end{longtable}
+
+\textbf{Objects} 
+% skip the captions --> treat it like a list or something
+% Simplifies the tables for everyone
+\begin{longtable}{ p{.35\textwidth }  p{.6\textwidth }} \\ 
+
+ 
+\rowcolor{tableCell} <Object 1 >& <Desciption> \\ 
+<Object 2>& <Desciption> \\
+
+\rowcolor{tableCell}<Object 3> & <Desciption> \\ 
+<Object 4>& <Desciption> \\
+
+\end{longtable}
+
+
+\textbf{Methods} 
+% skip the captions --> treat it like a list or something
+% Simplifies the tables for everyone
+\begin{longtable}{ p{.35\textwidth }  p{.6\textwidth }} \\ 
+
+ 
+\rowcolor{tableCell} <Method 1 >& <Desciption, parameters and return>\\ 
+<Method 2>& <Desciption, parameters and return>\\
+
+\rowcolor{tableCell}<Method 3> & <Desciption, parameters and return> \\ 
+<Method 4>& <Desciption, parameters and return> \\
+
+\end{longtable}
+
+
+
+
+
+
+\textbf{<ID and Name 2>} \\
+
+<Description goes here.>  \\
+
+\textbf{Variables} 
+
+% skip the captions --> treat it like a list or something
+% Simplifies the tables for everyone
+\begin{longtable}{ p{.35\textwidth }  p{.6\textwidth }} \\ 
+
+ 
+\rowcolor{tableCell} <Variable 1 >& <Desciption> \\ 
+<Variable 2>& <Desciption> \\
+
+\rowcolor{tableCell}<Variable 3> & <Desciption> \\ 
+<Variable 4>& <Desciption> \\
+
+\end{longtable}
+
+\textbf{Objects} 
+% skip the captions --> treat it like a list or something
+% Simplifies the tables for everyone
+\begin{longtable}{ p{.35\textwidth }  p{.6\textwidth }} \\ 
+
+ 
+\rowcolor{tableCell} <Object 1 >& <Desciption> \\ 
+<Object 2>& <Desciption> \\
+
+\rowcolor{tableCell}<Object 3> & <Desciption> \\ 
+<Object 4>& <Desciption> \\
+
+\end{longtable}
+
+
+\textbf{Methods} 
+% skip the captions --> treat it like a list or something
+% Simplifies the tables for everyone
+\begin{longtable}{ p{.35\textwidth }  p{.6\textwidth }} \\ 
+
+ 
+\rowcolor{tableCell} <Method 1 >& <Desciption, parameters and return>\\ 
+<Method 2>& <Desciption, parameters and return>\\
+
+\rowcolor{tableCell}<Method 3> & <Desciption, parameters and return> \\ 
+<Method 4>& <Desciption, parameters and return> \\
+
+\end{longtable}
+
+
+
+
+
+
+
+
+\subsection{Vehicle Module Interface Specifications}
+\begin{longtable}{| p{.35\textwidth } | p{.6\textwidth } | }\caption{VCM.6 ImageProcessing} \\\hline  
+ \multicolumn{2}{|l|}{\textbf {VCM.6 ImageProcessing}}\\ \hline
+\cellcolor{tableCell}ImgProc( ) & \cellcolor{tableCell}Function to capture images of the track environment from a webcam and process it into information that can be analysed by software.  \\ \hline 
+
+getImageInfo( ) : ADT & Function to relay image information when called.  \\ \hline 
+
+
+\end{longtable}
+
+\begin{longtable}{| p{.35\textwidth } | p{.6\textwidth } | }\caption{VCM.7 VehicleNavigation} \\\hline  
+ \multicolumn{2}{|l|}{\textbf {VCM.7 VehicleNavigation}}\\ \hline
+\cellcolor{tableCell}VehicleNav( ) & \cellcolor{tableCell}Function to signal to the vehicle if there is a change in the navigation, and if so, what changes should be made. \\ \hline 
+
+GetCarState( ) : enum &Function to relay the car state. Will return the states as an enum. Exact states will be determined later. \\ \hline 
+
+\cellcolor{tableCell}driveThroughIntersection( ) : void & \cellcolor{tableCell}Function to signal the car to proceed through the intersection. 
+\\ \hline
+
+\end{longtable}
+
+\begin{longtable}{| p{.35\textwidth } | p{.6\textwidth } | }\caption{VCM.8 Communication} \\\hline  
+ \multicolumn{2}{|l|}{\textbf {VCM.8 Communication}}\\ \hline
+\cellcolor{tableCell}SendRequest(Request r) : void & \cellcolor{tableCell}Function to allow the car to send a request to the interection controller. \\ \hline 
+
+Recieve Response( ) : Car &Function to allow the vehicle to revice a response to proceed from the intersection controller. \\ \hline 
+
+\end{longtable}
+
+
+\begin{longtable}{| p{.35\textwidth } | p{.6\textwidth } | }\caption{VCM.9 VC\_Main} \\\hline  
+ \multicolumn{2}{|l|}{\textbf {VCM.9 VC\_Main}}\\ \hline
+\cellcolor{tableCell}VC\_Main& \cellcolor{tableCell}Function to control all software aspects of the vehicle control.  \\ \hline 
+
+\end{longtable}
+
+
+
+
+
+
+\subsection{Vehicle Module Internal Design}
 
 \begin{center}
-    \textbf{Insert MID (Table)} \\
-    
-    \textbf{Insert Hardware Design}\\
-    
-    
-  $\vdots$\\
-  $\vdots$\\
-  $\vdots$\\
-     
+    \hl {double check whats included in the MID'S}
 \end{center}
 
 
+\textbf{<ID and Name 1>} \\
+
+<Description goes here.>  \\
+
+\textbf{Variables} 
+
+% skip the captions --> treat it like a list or something
+% Simplifies the tables for everyone
+\begin{longtable}{ p{.35\textwidth }  p{.6\textwidth }} \\ 
+
+ 
+\rowcolor{tableCell} <Variable 1 >& <Desciption> \\ 
+<Variable 2>& <Desciption> \\
+
+\rowcolor{tableCell}<Variable 3> & <Desciption> \\ 
+<Variable 4>& <Desciption> \\
+
+\end{longtable}
+
+\textbf{Objects} 
+% skip the captions --> treat it like a list or something
+% Simplifies the tables for everyone
+\begin{longtable}{ p{.35\textwidth }  p{.6\textwidth }} \\ 
+
+ 
+\rowcolor{tableCell} <Object 1 >& <Desciption> \\ 
+<Object 2>& <Desciption> \\
+
+\rowcolor{tableCell}<Object 3> & <Desciption> \\ 
+<Object 4>& <Desciption> \\
+
+\end{longtable}
 
 
-\subsection{Module \#N}
+\textbf{Methods} 
+% skip the captions --> treat it like a list or something
+% Simplifies the tables for everyone
+\begin{longtable}{ p{.35\textwidth }  p{.6\textwidth }} \\ 
+
+ 
+\rowcolor{tableCell} <Method 1 >& <Desciption, parameters and return>\\ 
+<Method 2>& <Desciption, parameters and return>\\
+
+\rowcolor{tableCell}<Method 3> & <Desciption, parameters and return> \\ 
+<Method 4>& <Desciption, parameters and return> \\
+
+\end{longtable}
+
+
+
+
+
+\textbf{<ID and Name 2>} \\
+
+<Description goes here.>  \\
+
+\textbf{Variables} 
+
+% skip the captions --> treat it like a list or something
+% Simplifies the tables for everyone
+\begin{longtable}{ p{.35\textwidth }  p{.6\textwidth }} \\ 
+
+ 
+\rowcolor{tableCell} <Variable 1 >& <Desciption> \\ 
+<Variable 2>& <Desciption> \\
+
+\rowcolor{tableCell}<Variable 3> & <Desciption> \\ 
+<Variable 4>& <Desciption> \\
+
+\end{longtable}
+
+\textbf{Objects} 
+% skip the captions --> treat it like a list or something
+% Simplifies the tables for everyone
+\begin{longtable}{ p{.35\textwidth }  p{.6\textwidth }} \\ 
+
+ 
+\rowcolor{tableCell} <Object 1 >& <Desciption> \\ 
+<Object 2>& <Desciption> \\
+
+\rowcolor{tableCell}<Object 3> & <Desciption> \\ 
+<Object 4>& <Desciption> \\
+
+\end{longtable}
+
+
+\textbf{Methods} 
+% skip the captions --> treat it like a list or something
+% Simplifies the tables for everyone
+\begin{longtable}{ p{.35\textwidth }  p{.6\textwidth }} \\ 
+
+ 
+\rowcolor{tableCell} <Method 1 >& <Desciption, parameters and return>\\ 
+<Method 2>& <Desciption, parameters and return>\\
+
+\rowcolor{tableCell}<Method 3> & <Desciption, parameters and return> \\ 
+<Method 4>& <Desciption, parameters and return> \\
+
+\end{longtable}
+
+
+
+
+\subsection{Vehicle Hardware Modules}
 
 \begin{center}
-    \textbf{Insert MIS (Possibly move from draft system design)}
+    \hl{All things hardware related. We didn't do "MIS" for the hardware yet. Note the id numbers may get you confused but they follow the module guide}
 \end{center}
 
-\begin{center}
-    \textbf{Insert MID (Table)}\\
-    
-    \textbf{Insert Hardware Design}\\
-    
-\end{center}
 
 \section{Scheduling}
 
 \begin{center}
-    \textbf{\hl{"i. Derived timing constraints (from requirements)\\
-ii. Scheduling of "set" programs"}}
+    \textbf{\hl{Unsure what this is"}}
 \end{center}
 
 
-\section{Design Notes}
-Insert Text Here.
+%\section{Design Notes}
+%Insert Text Here.
 
 \section{Data Dictionary (if necessary)}
 Insert Text Here.
