@@ -11,9 +11,6 @@ using namespace std;
 Point getMidpoint(Point a, Point b);
 double calculateAvgAngle(vector<Point> vec, Point center, int n);
 
-struct avgLine {
-	Point a,b;
-};
 
 int main(int argc, char** argv) {
 
@@ -22,7 +19,6 @@ int main(int argc, char** argv) {
 //	const char* imgFile = "roadWithStop.jpg";
 
 	Mat source = imread(imgFile, -1);
-	bool doProb = false;
 
 	if (source.empty()) {
 		printf("could not load img \n");
@@ -35,60 +31,33 @@ int main(int argc, char** argv) {
 
 	cvtColor(cannyDetect1, houghTrans, CV_GRAY2BGR);
 
-	if (doProb) {
-	//Do hough line stuff on  cannyDetect
-	vector<Vec2f> lines;
+	// for contours
+	vector<vector<Point> > contours;
+	vector<Vec4i> hier;
+	findContours(cannyDetect1, contours, hier, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, Point(0,0));
+	Mat drawing = Mat::zeros(cannyDetect1.size(), CV_8UC3);
 
-	HoughLines(cannyDetect1, lines, 1, CV_PI/180, 95, 0, 0);
-
-	int lSize = lines.size();
-	double rhoTot, thetaTot;
-
-
-	for (size_t i = 0; i <  lines.size(); i++) {
-		float rho = lines[i][0];
-		float theta = lines[i][1];
-
-		rhoTot += rho;
-		thetaTot += theta;
-
-
-		//draw the lines in the lines vector
-		Point pt1, pt2;
-		double a = cos(theta), b = sin(theta);
-		double x0 = a*rho, y0 = b*rho;
-		pt1.x = cvRound(x0 + 1000*(-b));
-		pt1.y = cvRound(y0 + 1000*(a));
-		pt2.x = cvRound(x0 - 1000*(-b));
-		pt2.y = cvRound(y0 - 1000*(a));
-
-		line(houghTrans, pt1, pt2, Scalar(0,0,255), 3, CV_AA);
-
-		printf("Distance rho: %f \t Angle theta: %f\n", rho, theta);
-		//imshow("Canny Lines", cannyDetect1);
-		//imshow("Hough", houghTrans);
-
-		//waitKey(2500);
+	printf("Calculating arc length of contours \n\n");
+	double arc = 0;
+	for (int i = 0; i < contours.size(); i++) {
+		arc = arcLength(contours[i],false);
+		if (arc > 100) {
+		  for (int j = 0; j < contours[i].size(); j++) {
+			printf("( %d, %d )    ", contours[i][j].x, contours[i][j].y);
+   		  }
+		  printf("\n\n");
+		  printf("(x, y) -> ( x2, y2) (%d, %d) ->  (%d, %d) \t", contours[i][0].x, contours[i][0].y, contours[i][1].x, contours[i][1].y);
+		  printf("i = %d \t arcLength = %f \n",i,arc);
+		  Scalar color = Scalar(255,i*20,255);
+		  drawContours(drawing, contours, i, color, 2,8,hier,0,Point());
+		}
 	}
 
-	//draw the average of the lines
-	Point pt1, pt2;
-	float rho = rhoTot/lSize;
-	float theta = thetaTot/lSize;
 
-        double a = cos(theta), b = sin(theta);
-        double x0 = a*rho, y0 = b*rho;
-        pt1.x = cvRound(x0 + 1000*(-b));
-        pt1.y = cvRound(y0 + 1000*(a));
-        pt2.x = cvRound(x0 - 1000*(-b));
-        pt2.y = cvRound(y0 - 1000*(a));
 
-        line(houghTrans, pt1, pt2, Scalar(0,255,0), 3, CV_AA);
-
-	}
+	imshow("Contour", drawing);
 
 	//use prob Hough trans
-	else {
 		Size size = houghTrans.size();
 		int imgHeight = size.height;
 		int imgWidth  = size.width;
@@ -126,8 +95,8 @@ int main(int argc, char** argv) {
 
 		printf("Theta1: %f \t Theta2: %f \n", theta1, theta2);
 
-	}
 
+//	imshow("source", source);
 //	imshow("Canny", cannyDetect1);
 	imshow("Hough", houghTrans);
 	waitKey();
