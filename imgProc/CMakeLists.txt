@@ -26,9 +26,19 @@ if(CMAKE_VERSION VERSION_LESS "2.8.11")
   include_directories(${OpenCV_INCLUDE_DIRS})
 endif()
 
+
+file(GLOB carCtrl_SRC
+	"*.h"
+	"*.cpp"
+)
+
 # Declare the executable target built from your sources
-add_executable(carCtrl carCtrl.cpp)
+
+add_executable(carCtrl ${carCtrl_SRC})
+#add_executable(laneDetect laneDetect.cpp)
+#add_executable(carCtrl carCtrl.cpp)
 
 # Link your application with OpenCV libraries
+target_link_libraries(carCtrl ${OpenCV_LIBS})
 target_link_libraries(carCtrl ${OpenCV_LIBS})
 

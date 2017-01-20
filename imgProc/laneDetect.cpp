@@ -11,6 +11,11 @@ using namespace cv;
 using namespace std;
 
 
+Point getMidpoint(Point a, Point b);
+double calculateAvgAngle(vector<Point> vec, Point center);
+double calculateAvgLineSize(vector<Point> vec, Point center);
+double lineLength(Point a, Point b);
+
 
 int getLaneStatus() {
 

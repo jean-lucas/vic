@@ -16,7 +16,7 @@ struct imageData {
 
 	bool intersectionDetected;
 	bool objectDetected;
-}
+};
 
 
 
@@ -26,14 +26,14 @@ struct btRequest {
 	int socket;
 	char* message;
 
-}
+};
 
 
 //bluetooth response structure 
 struct btResponse {
 	char senderAddr[18];
 	char* message;
-}
+};
 
 
 
