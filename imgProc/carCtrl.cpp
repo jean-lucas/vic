@@ -1,5 +1,7 @@
 #include <stdio.h>
 
+
+#include "carCtrl.h"
 #include "laneDetect.h"
 
 int main(int argc, char** argv) {
@@ -7,9 +9,7 @@ int main(int argc, char** argv) {
 	printf("This is from main\n");
 
 
-	const char* img = "road.jpg";
-
-	int k = getLaneStatus(imgPath);
+	int k = getLaneStatus();
 
 	printf("got value of %d\n",k );
 	return 0;

@@ -12,27 +12,38 @@ using namespace std;
 
 
 
-int getLaneStatus(const char* pathName) {
+int getLaneStatus() {
 
-	const char* imgFile = pathName;
+//	const char* imgFile = pathName;
 //	const char* imgFile = "road.jpg";
 //	const char* imgFile = "straightRoad.jpg";
 //	const char* imgFile = "roadWithStop.jpg";
 
-	Mat source = imread(imgFile, -1);
+//	Mat capMat = imread(imgFile, -1);
 
-	if (source.empty()) {
-		printf("could not load img \n");
-		exit(0);
+	// if (capMat.empty()) {
+	// 	printf("could not load img \n");
+	// 	exit(0);
+	// }
+
+	VideoCapture cap(DEFAULT_CAMERA_ID);
+
+	if (!cap.isOpened()) {
+		printf("failed to open capture\n");
+		return 0;
 	}
 
-	Mat cannyMat, houghMat;
+
+	Mat capMat, cannyMat, houghMat;
+
+	cap >> capMat;
 
 
-	//finds edges in the sourceMath  via the Canny Edge detection algorithm, and puts 
+
+	//finds edges in the capMatMath  via the Canny Edge detection algorithm, and puts 
 	//result in cannyMat
 	//Canny(inputMay, outputMat, threshold_1, threshold_2, apertureSize, L2Gradient )
-	Canny(source, cannyMat, 65, 100, 3);
+	Canny(capMat, cannyMat, 65, 100, 3);
 
 	//converts img in cannyMat to another colour space and puts it in houghMat
 	cvtColor(cannyMat, houghMat, CV_GRAY2BGR);
@@ -103,10 +114,16 @@ int getLaneStatus(const char* pathName) {
 
 	printf("avg line sizes:  left: %.2f \t right: %.2f \n",avgLeftSize, avgRightSize);
 
-//	imshow("source", source);
+//	imshow("capMat", capMat);
 //	imshow("Canny", cannyMat);
 	imshow("Hough", houghMat);
 	waitKey();
+
+
+
+	cap.release();
+
+
 	return 0;
 }
 
