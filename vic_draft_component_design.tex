@@ -136,6 +136,10 @@ linkcolor=black,}  %choose some color if you want links to stand out
 \renewcommand\cfttoctitlefont{\Large\bfseries}
 \renewcommand*\contentsname{Table of Contents}
 
+\newcommand{\carSpeed}{1.4 m/s}
+\newcommand{\intersectionLength}{0.6m}
+
+
 % Removes bold headings from toc
 %\renewcommand{\cftsecfont}{\normalfont}
 
@@ -307,7 +311,7 @@ Insert Text Here.
     
     \textbf{ID} & \textbf{Name} &  \textbf{Responsibilities} & \textbf{Secrets} \\ \hline
     
-    \cellcolor{tableCell}ICM.1  & \cellcolor{tableCell}DecisionMaker & \cellcolor{tableCell}Determine order of car progression & \cellcolor{tableCell} Scheduling algorithm \\ \hline
+    \cellcolor{tableCell}ICM.1  & \cellcolor{tableCell}TrafficController & \cellcolor{tableCell}Determine order of car progression & \cellcolor{tableCell} Scheduling algorithm \\ \hline
     
     ICM.2 & VehicleDetection & Know when a car is on top of one of the intersection sensors, and the corresponding sensor & Relationship between magnetic sensor and car \\ \hline
     
@@ -331,7 +335,7 @@ Insert Text Here.
     \textbf{ID} & \textbf{Name} &  \textbf{Responsibilities} & \textbf{Secrets} \\ \hline 
     
     
-    \cellcolor{tableCell}VCM.1  & \cellcolor{tableCell}SignalConverter & \cellcolor{tableCell}Convert a software signals to a physical signal, and vice versa & \cellcolor{tableCell}How to convert signal  \\ \hline
+    \cellcolor{tableCell}VCM.1  & \cellcolor{tableCell}PWM & \cellcolor{tableCell}Convert a software signals to a physical PWM signal & \cellcolor{tableCell}How to convert a software value to PWM  \\ \hline
     
     VCM.2 & SpeedConverter & Convert wheel rotation count to a speed value & Speed calculation algorithm \\ \hline
     
@@ -339,9 +343,6 @@ Insert Text Here.
     \cellcolor{tableCell}How to convert a software value to a PWM (Pulse Width Modulation) signal \\ \hline
     
     VCM.4 & MotorSpeedController & Control PWM signal & How to convert speed into a PWM signal \\ \hline\hline
-    
-    \cellcolor{tableCell}VCM.5  & \cellcolor{tableCell}MotorHBridge \newline Controller & \cellcolor{tableCell}Setting H bridge gates & \cellcolor{tableCell}Which gates correspond to which action of the motor  \\ \hline
-    
     
 \end{longtable}
 
@@ -367,125 +368,262 @@ Insert Text Here.
 
 \subsection{Intersection Software Module Description}
 \textbf{Design Notes} \\
-<Description goes here for all the intersection software modules> \\
+The Vluetooth communication implementation  \\
 
 \begin{longtable}{p{.98\textwidth}}
-\rowcolor{tableCell}\textbf{<ID and Name 1>} \\
+\rowcolor{tableCell}\textbf{ICM.1 - TrafficController} \\
 \end{longtable}
 
 
 
 \textbf{Behavioural Description} 
 
-<Description goes here.> \\
+Will receive input from IC\_ Main only when IC\_ Main have input from Communication and Vehicle Detection. Traffic Controller will then assess the input and decide if the vehicle may proceed or not. If more than one car is approaching the intersection, Traffic Controller will notify the vehicles whether they may proceed or not based on the intersection conditions.  \\
 
-\textbf{Inputs} \\
-<List one after the other> \\
+\textbf{Inputs}
+The module will get information about the current intersection state, and the list of cars dictating which direction they are coming from, and where they are going. \\
+
+% Car Orientation Description, Current Intersection State, Traffic Queue <Car> \\
 
 \textbf{Outputs} \\
-<List one after the other> \\
+TrafficController will output whether or not the vehicle can proceed 
+ \\
 
 \textbf{Initialization Description} \\
-<Describe here> \\
+ TrafficController will be initialized once, when the IC\_Main has been initialized. It does not require any specific initialization procedure.\\
 
 \textbf{Derived Timing Constraints} \\
-<Describe here> \\
+    The TrafficController will have a soft deadline of 1 second, however a hard deadline will not be enforced.
+ \\
 
 
 \begin{longtable}{p{.98\textwidth}}
-\rowcolor{tableCell}\textbf{<ID and Name 2>} \\
+\rowcolor{tableCell}\textbf{ICM.2 - VehicleDetection} \\
 \end{longtable}
 
 \textbf{Behavioural Description} 
 
-<Description goes here.> \\
+Vehicle Detection will make use of a camera to view the intersection, from a bird's eye view. It will create and update a data structure which will hold the state of the intersection.  \\
 
 \textbf{Inputs} \\
-<List one after the other> \\
+This module will have no inputs from other modules.  \\
 
 \textbf{Outputs} \\
-<List one after the other> \\
+VehicleDetection will output a data structure containing the state of the intersection.  \\
 
 \textbf{Initialization Description} \\
-<Describe here> \\
+IC\_Main will initialize this module. Upon initialization, VehicleDetection will turn on the web camera. \\
 
 \textbf{Derived Timing Constraints} \\
-<Describe here> \\
+The car will be travelling at maximum \carSpeed 
+The length of the intersection is about \intersectionLength. 
+We want to detect the car at every 1/6 of the intersection. Therefore, the VehicleDetection must be able to update within the time constraint setup by IC\_Main.
+%
+
+
+
+
+
+\begin{longtable}{p{.98\textwidth}}
+\rowcolor{tableCell}\textbf{ICM.3 - Communications} \\
+\end{longtable}
+
+\textbf{Behavioural Description} 
+ It will be responsible for the two-way communication from the car to the intersection controller. It will create a list of communications coming in and coming out. \\
+
+\textbf{Inputs} \\
+  A Bluetooth signal containing information from the requesting vehicle. Such as the car the orientation and destination of the car, and communication information.\\
+
+\textbf{Outputs} \\
+    The module will have two outputs. One will the information of inbound cars to the IC\_Main, the other will be a response to the cars that it can proceed or not. \\
+
+\textbf{Initialization Description} \\
+    The inbound and outbound list of cars will be initialized empty, and the module will remain running continuously.\\
+
+
+\textbf{Derived Timing Constraints}\\
+    Limited to the speed of the Bluetooth connection.\\
+
+
+
+
+\begin{longtable}{p{.98\textwidth}}
+\rowcolor{tableCell}\textbf{ICM.4 - IC\_Main} \\
+\end{longtable}
+
+\textbf{Behavioural Description} \\
+    It will be responsible for controlling the flow of information between all components of the intersection controller. Also maintains a list of the current traffic state, and updated accordingly. \\
+    
+\textbf{Inputs} \\
+    Inbound communication from the Communications module, the current state of the intersection from the VehicleDetection module, and the response from the TrafficController. \\
+
+\textbf{Outputs} \\
+    The output will be cars going into the outbound list of cars that may proceed through the intersection. \\
+
+\textbf{Initialization Description} \\
+    Ensure the list of active cars in the intersection is cleared. It also initializes all other modules connected to it. \\
+
+\textbf{Derived Timing Constraints} \\
+
+The timing constraint is based on the speed of the car, and the length of the intersection. In order to detect when a car has entered and left the intersection, we must process the current intersection state within this given time.
+    
+    
+
+    $$ processingTime = \frac{intersection Segment Length}{carSpeed}  $$
+    
+    $$ processingTime = \frac{ \frac{1}{6} * \intersectionLength }{\carSpeed}$$
+    
+    $$ processingTime = 0.07 seconds$$ \\
+
+
 
 
 \subsection{Vehicle Software Module Description}
 
-\textbf{Design Notes} \\
-<Description goes here for all the intersection software modules> \\
+% \textbf{Design Notes} \\
+% <Description goes here for all the intersection software modules> \\
 
 \begin{longtable}{p{.98\textwidth}}
-\rowcolor{tableCell}\textbf{<ID and Name 1>} \\
+\rowcolor{tableCell}\textbf{VCM.6 - ImageProcessing} \\
 \end{longtable}
 
 
 
 \textbf{Behavioural Description} 
-
-<Description goes here.> \\
+    The image processing module of the vehicle controller is responsible for detecting lane positioning and obstacles. Once these factors have been detected it must produce
+    digital information pertaining to the state of the track as seen in the current image. It must then pass this information on to the vehicle navigation module which will make appropriate adjustments.
+    \\
 
 \textbf{Inputs} \\
-<List one after the other> \\
+    A  path to the image produced by the webcam installed on the car. The image will be taken just prior to calling the image processing module.\\
 
 \textbf{Outputs} \\
-<List one after the other> \\
+    Digitally interpreted information regarding the state of the track. \\
 
 \textbf{Initialization Description} \\
-<Describe here> \\
+    The image processing module will be initialized once the car has been turned on. It does not have any specialized initialization procedure.
+    \\
 
 \textbf{Derived Timing Constraints} \\
-<Describe here> \\
+   The time constraint for the imageProcessing is bounded by the time constraint in VC\_Main.\\
+    
+    
+    
+    
+
+\begin{longtable}{p{.98\textwidth}}
+\rowcolor{tableCell}\textbf{VCM.7 - VehicleNavigation} \\
+\end{longtable}
+
+\textbf{Behavioural Description} 
+    The vehicle navigation module of the vehicle controller is responsible for ensuring that the vehicle follows the correct lane on the track, stops at intersections, and avoids obstacles. This module will apply any necessary adjustments in trajectory to ensure that these responsibilities are met.\\
+
+\textbf{Inputs} \\
+Information regarding the current state of the track. \\
+
+\textbf{Outputs} \\
+ Adjustments to the vehicle's steering, acceleration, and braking necessary to continue following the track.\\
+
+\textbf{Initialization Description} \\
+The vehicle navigation module will be initialized once the vehicle has been turned on. The vehicle's steering angle, speed, and acceleration with be initialized at zero (i.e. standing still with the steering pointed directly forwards). \\
+
+\textbf{Derived Timing Constraints} \\
+The vehicle navigation module has negligible processing time constraints. \\
+
+\begin{longtable}{p{.98\textwidth}}
+\rowcolor{tableCell}\textbf{VCM.8 - Communication} \\
+\end{longtable}
+
+\textbf{Behavioural Description} 
+Responsible for establishing communication from the car to the intersection controller, when it begins to approach an intersection. It will also receive the response from the intersection controller if it can proceed through the intersection.
+\\
+
+\textbf{Inputs} \\
+    The state of the car, such as the current orientation and intended direction. It will also receive input from the intersection controller if it is allowed to proceed through the intersection. \\
+
+\textbf{Outputs} \\
+    One output will be the information about the car to the intersection communication module. The other will be the `go-ahead' signal to the car controller.\\
+
+\textbf{Initialization Description} \\
+ Will be initialized when the car is initiated, and paired to the intersection controller.\\
+
+\textbf{Derived Timing Constraints} \\
+Limited to the speed of the Bluetooth connection.  \\
+
 
 
 
 \begin{longtable}{p{.98\textwidth}}
-\rowcolor{tableCell}\textbf{<ID and Name 2>} \\
+\rowcolor{tableCell}\textbf{VCM.9 - VC\_Main} \\
 \end{longtable}
 
 \textbf{Behavioural Description} 
+This module will assist the vehicle in navigating the intersection. It will work in conjunction with the imaging processing module. Further more, VC\_Main will make navigation decisions about the intersection environment and instruct the car on how to proceed. VC\_Main will also control the communication for the vehicle. \\
 
-<Description goes here.> \\
+\textbf{Inputs}
+The inputs to this module will be the "go ahead" signal from the intersection controller as well as a struct from ImageProcessing. \\ 
 
-\textbf{Inputs} \\
-<List one after the other> \\
+\textbf{Outputs}
+This module will output the "request to go" signal to the Communication module as well as the navigation instructions to the VehicleNavigation Module. \\
 
-\textbf{Outputs} \\
-<List one after the other> \\
+\textbf{Initialization Description}
+Upon initialization, VC\_Main will start up the VehicleNavigation module, the ImageProcessing module and the Communication Module. \\
 
-\textbf{Initialization Description} \\
-<Describe here> \\
+\textbf{Derived Timing Constraints} 
+The exact car speed is unknown, but it will be estimated to be \carSpeed, and we will require to get an update on the track status every 3cm to maintain accuracy. Therefore, at this speed and this update rate, the IC\_Main must process all necessary information within the following time:
+    
+    
 
-\textbf{Derived Timing Constraints} \\
-<Describe here> \\
+    $$ processingTime = \frac{minDistanceUpdateRate}{carSpeed} $$
+    $$ processingTime = \frac{0.03m}{\carSpeed} $$
+    $$ processingTime = 0.02\ seconds$$
+    
+a picture must be processed every 0.02 seconds. \\
 
 \subsection{Vehicle Hardware Component Description}
 
-\textbf{Design Notes\ choices} \\
-<Description goes here for all the intersection software modules> \\
+\textbf{Design Notes} \\
+The reason Hall Effect sensors were chosen to measure the speed of the vehicle is because they are simple to use and they are cheap. \\
 
 \begin{longtable}{p{.98\textwidth}}
-\rowcolor{tableCell}\textbf{<ID and Name 1>} \\
+\rowcolor{tableCell}\textbf{VCM.1 - PWM} \\
+\end{longtable}
+
+\textbf{Inputs} \\ The duty cycle and frequency for the PWM.
+ \\
+
+\textbf{Outputs} \\
+Physical PWM signal on a GPIO pin. \\
+
+\begin{longtable}{p{.98\textwidth}}
+\rowcolor{tableCell}\textbf{VCM.2 - SpeedConverter} \\
 \end{longtable}
 
 \textbf{Inputs} \\
-<List one after the other> \\
+Signal from Hall Effect sensor mounted next to wheel. \\
 
 \textbf{Outputs} \\
-<List one after the other> \\
+The approximate speed of the vehicle. \\
 
 \begin{longtable}{p{.98\textwidth}}
-\rowcolor{tableCell}\textbf{<ID and Name 2>} \\
+\rowcolor{tableCell}\textbf{VCM.3 - ServoController} \\
 \end{longtable}
 
 \textbf{Inputs} \\
-<List one after the other> \\
+The desired angle for the servo in software. \\
 
 \textbf{Outputs} \\
-<List one after the other> \\
+A physical signal on a GPIO pin telling the servo to go to the desired angle. \\
+
+\begin{longtable}{p{.98\textwidth}}
+\rowcolor{tableCell}\textbf{VCM.4 - MotorSpeedController} \\
+\end{longtable}
+
+\textbf{Inputs} \\
+The desired speed of the vehicle in software. \\
+
+\textbf{Outputs} \\
+A physical signal on a GPIO pin telling the motor to go at a specific speed. \\
 
 
 
@@ -498,12 +636,13 @@ There are two main components to VIC: the intersection component and the vehicle
         \hl{These may be subject to change}
     \end{center}
 
-\begin{longtable}{| p{.35\textwidth } | p{.6\textwidth } | }\caption{ICM.1 DecisionMaker} \\\hline  
- \multicolumn{2}{|l|}{\textbf {ICM.1 DecisionMaker}}\\ \hline
+\begin{longtable}{| p{.35\textwidth } | p{.6\textwidth } | }\caption{ICM.1 -  TrafficControl} \\\hline  
+ \multicolumn{2}{|l|}{\textbf {ICM.1 TrafficControl}}\\ \hline
  
-\cellcolor{tableCell}DecisionMaker()& \cellcolor{tableCell}Constructor to initialize the scheduling algorithm \\ \hline 
+\cellcolor{tableCell}TrafficControl()& \cellcolor{tableCell}Constructor to initialize the scheduling algorithm \\ \hline 
 
-getSchedule(cars[ ]) : carQueue & When function is called, it will return a queue of cars in the order which they should proceed. Expects an array of car objects when called\\ \hline 
+getTrafficPermission(Queue<cars>, intersectionState[ ]) : Boolean & When called, it will evaluate all active cars and the current intersection state, then make a decision whether the most recent car can proceed or not. \\ \hline
+% When function is called, it will return a queue of cars in the order which they should proceed. Expects an array of car objects when called\\ \hline 
 
 %\cellcolor{tableCell}Constructor/Method 3 & \cellcolor{tableCell}- Description \newline - Description  
 %\\ \hline
@@ -515,9 +654,9 @@ getSchedule(cars[ ]) : carQueue & When function is called, it will return a queu
 \begin{longtable}{| p{.35\textwidth } | p{.6\textwidth } | }\caption{ICM.2 VehicleDetection} \\\hline  
  \multicolumn{2}{|l|}{\textbf {ICM.2 VehicleDetection}}\\ \hline
  
-\cellcolor{tableCell}VehicleDet()& \cellcolor{tableCell}Constructor to initialize the detection of vehicles at the intersection. \\ \hline 
+\cellcolor{tableCell}VehicleDetection()& \cellcolor{tableCell}Constructor to initialize the detection of vehicles at the intersection. \\ \hline 
 
-getSignalsState( ) : bool[ ] & Returns the state of the sensors at the intersection when the function is called. Returns an array of boolean values signifying if the sensors have been tripped or not. \\ \hline 
+getIntersectionState( ) : Boolean[ ] & Returns the state of the intersection when the function is called. Returns an array of boolean values signifying where a car is positioned in the intersection. \\ \hline 
 
 %\cellcolor{tableCell}Constructor/Method 3 & \cellcolor{tableCell}- Description \newline - Description  
 %\\ \hline
@@ -532,7 +671,7 @@ getSignalsState( ) : bool[ ] & Returns the state of the sensors at the intersect
 \cellcolor{tableCell}RecieveRequest() : Request& \cellcolor{tableCell}Function to allow the controller recieve a request to be scheduled from the car.\\ \hline 
 
 
-SendResponse(car c) : void & Function that allows the intersectrion to send a car the response to proceed through the intersection. \\ \hline
+0SendResponse(car c) : void & Function that allows the intersectrion to send a car the response to proceed through the intersection. \\ \hline
 
 
 
@@ -543,7 +682,7 @@ SendResponse(car c) : void & Function that allows the intersectrion to send a ca
 \begin{longtable}{| p{.35\textwidth } | p{.6\textwidth } | }\caption{ICM.4 IC\_Main} \\\hline  
  \multicolumn{2}{|l|}{\textbf {ICM.4 IC\_Main}}\\ \hline
  
-\cellcolor{tableCell}Main( ) & \cellcolor{tableCell}Main Function for VIC. \\ \hline 
+\cellcolor{tableCell}main( ) & \cellcolor{tableCell}Main Function for VIC. \\ \hline 
 
 
 %\cellcolor{tableCell}Constructor/Method 3 & \cellcolor{tableCell}- Description \newline - Description  
@@ -556,14 +695,11 @@ SendResponse(car c) : void & Function that allows the intersectrion to send a ca
 
 \subsection{Intersection Module Internal Design}
 
-\begin{center}
-    \hl {double check whats included in the MID'S}
-\end{center}
 
 
-\textbf{<ID and Name 1>} \\
-
-<Description goes here.>  \\
+\begin{longtable}{p{.98\textwidth}}
+\rowcolor{subsectionC}\textbf{ICM.1 - TrafficControl} \\
+\end{longtable}
 
 \textbf{Variables} 
 
@@ -613,10 +749,10 @@ SendResponse(car c) : void & Function that allows the intersectrion to send a ca
 
 
 
-
-\textbf{<ID and Name 2>} \\
-
-<Description goes here.>  \\
+\begin{longtable}{p{.98\textwidth}}
+\rowcolor{subsectionC}\textbf{ICM.2 - VehicleDetection} \\
+\end{longtable}
+  
 
 \textbf{Variables} 
 
@@ -662,7 +798,103 @@ SendResponse(car c) : void & Function that allows the intersectrion to send a ca
 
 \end{longtable}
 
+\begin{longtable}{p{.98\textwidth}}
+\rowcolor{subsectionC}\textbf{ICM.3 - Communication} \\
+\end{longtable}
+  
 
+\textbf{Variables} 
+
+% skip the captions --> treat it like a list or something
+% Simplifies the tables for everyone
+\begin{longtable}{ p{.35\textwidth }  p{.6\textwidth }} \\ 
+
+ 
+\rowcolor{tableCell} <Variable 1 >& <Desciption> \\ 
+<Variable 2>& <Desciption> \\
+
+\rowcolor{tableCell}<Variable 3> & <Desciption> \\ 
+<Variable 4>& <Desciption> \\
+
+\end{longtable}
+
+\textbf{Objects} 
+% skip the captions --> treat it like a list or something
+% Simplifies the tables for everyone
+\begin{longtable}{ p{.35\textwidth }  p{.6\textwidth }} \\ 
+
+ 
+\rowcolor{tableCell} <Object 1 >& <Desciption> \\ 
+<Object 2>& <Desciption> \\
+
+\rowcolor{tableCell}<Object 3> & <Desciption> \\ 
+<Object 4>& <Desciption> \\
+
+\end{longtable}
+
+
+\textbf{Methods} 
+% skip the captions --> treat it like a list or something
+% Simplifies the tables for everyone
+\begin{longtable}{ p{.35\textwidth }  p{.6\textwidth }} \\ 
+
+ 
+\rowcolor{tableCell} <Method 1 >& <Desciption, parameters and return>\\ 
+<Method 2>& <Desciption, parameters and return>\\
+
+\rowcolor{tableCell}<Method 3> & <Desciption, parameters and return> \\ 
+<Method 4>& <Desciption, parameters and return> \\
+
+\end{longtable}
+
+\begin{longtable}{p{.98\textwidth}}
+\rowcolor{subsectionC}\textbf{ICM.4 - IC\_Main} \\
+\end{longtable}
+  
+
+\textbf{Variables} 
+
+% skip the captions --> treat it like a list or something
+% Simplifies the tables for everyone
+\begin{longtable}{ p{.35\textwidth }  p{.6\textwidth }} \\ 
+
+ 
+\rowcolor{tableCell} <Variable 1 >& <Desciption> \\ 
+<Variable 2>& <Desciption> \\
+
+\rowcolor{tableCell}<Variable 3> & <Desciption> \\ 
+<Variable 4>& <Desciption> \\
+
+\end{longtable}
+
+\textbf{Objects} 
+% skip the captions --> treat it like a list or something
+% Simplifies the tables for everyone
+\begin{longtable}{ p{.35\textwidth }  p{.6\textwidth }} \\ 
+
+ 
+\rowcolor{tableCell} <Object 1 >& <Desciption> \\ 
+<Object 2>& <Desciption> \\
+
+\rowcolor{tableCell}<Object 3> & <Desciption> \\ 
+<Object 4>& <Desciption> \\
+
+\end{longtable}
+
+
+\textbf{Methods} 
+% skip the captions --> treat it like a list or something
+% Simplifies the tables for everyone
+\begin{longtable}{ p{.35\textwidth }  p{.6\textwidth }} \\ 
+
+ 
+\rowcolor{tableCell} <Method 1 >& <Desciption, parameters and return>\\ 
+<Method 2>& <Desciption, parameters and return>\\
+
+\rowcolor{tableCell}<Method 3> & <Desciption, parameters and return> \\ 
+<Method 4>& <Desciption, parameters and return> \\
+
+\end{longtable}
 
 
 
@@ -672,29 +904,29 @@ SendResponse(car c) : void & Function that allows the intersectrion to send a ca
 \subsection{Vehicle Module Interface Specifications}
 \begin{longtable}{| p{.35\textwidth } | p{.6\textwidth } | }\caption{VCM.6 ImageProcessing} \\\hline  
  \multicolumn{2}{|l|}{\textbf {VCM.6 ImageProcessing}}\\ \hline
-\cellcolor{tableCell}ImgProc( ) & \cellcolor{tableCell}Function to capture images of the track environment from a webcam and process it into information that can be analysed by software.  \\ \hline 
+\cellcolor{tableCell}ImageProcessing() : ImageData & \cellcolor{tableCell}Function to capture images of the track environment from a webcam and process it into information that can be analysed by software. Will return a struct called ImageData.  \\ \hline 
 
-getImageInfo( ) : ADT & Function to relay image information when called.  \\ \hline 
+% getImageInfo( ) : ADT & Function to relay image information when called.  \\ \hline 
 
 
 \end{longtable}
 
 \begin{longtable}{| p{.35\textwidth } | p{.6\textwidth } | }\caption{VCM.7 VehicleNavigation} \\\hline  
  \multicolumn{2}{|l|}{\textbf {VCM.7 VehicleNavigation}}\\ \hline
-\cellcolor{tableCell}VehicleNav( ) & \cellcolor{tableCell}Function to signal to the vehicle if there is a change in the navigation, and if so, what changes should be made. \\ \hline 
+\cellcolor{tableCell}VehicleNavigation(struct *ImageData,  struct *communicationResponse) & \cellcolor{tableCell}Function to signal to the vehicle if there is a change in the navigation, and if so, what changes should be made. \\ \hline 
 
-GetCarState( ) : enum &Function to relay the car state. Will return the states as an enum. Exact states will be determined later. \\ \hline 
+% getSpeed( ) : Float &Function to relay the car state. Will return the states as an enum. Exact states will be determined later. \\ \hline 
 
-\cellcolor{tableCell}driveThroughIntersection( ) : void & \cellcolor{tableCell}Function to signal the car to proceed through the intersection. 
-\\ \hline
+% \cellcolor{tableCell}driveThroughIntersection( ) : void & \cellcolor{tableCell}Function to signal the car to proceed through the intersection. 
+% \\ \hline
 
 \end{longtable}
 
 \begin{longtable}{| p{.35\textwidth } | p{.6\textwidth } | }\caption{VCM.8 Communication} \\\hline  
  \multicolumn{2}{|l|}{\textbf {VCM.8 Communication}}\\ \hline
-\cellcolor{tableCell}SendRequest(Request r) : void & \cellcolor{tableCell}Function to allow the car to send a request to the interection controller. \\ \hline 
+\cellcolor{tableCell}SendRequest(struct *request) : void & \cellcolor{tableCell}Function to allow the car to send a request to the interection controller. \\ \hline 
 
-Recieve Response( ) : Car &Function to allow the vehicle to revice a response to proceed from the intersection controller. \\ \hline 
+RecieveResponse( ) : struct* response  &Function to allow the vehicle to revice a response to proceed from the intersection controller. \\ \hline 
 
 \end{longtable}
 
@@ -712,12 +944,11 @@ Recieve Response( ) : Car &Function to allow the vehicle to revice a response to
 
 \subsection{Vehicle Module Internal Design}
 
-\begin{center}
-    \hl {double check whats included in the MID'S}
-\end{center}
 
 
-\textbf{<ID and Name 1>} \\
+\begin{longtable}{p{.98\textwidth}}
+\rowcolor{subsectionC}\textbf{<ID> - <Name>} \\
+\end{longtable}
 
 <Description goes here.>  \\
 
@@ -769,8 +1000,9 @@ Recieve Response( ) : Car &Function to allow the vehicle to revice a response to
 
 
 
-\textbf{<ID and Name 2>} \\
-
+\begin{longtable}{p{.98\textwidth}}
+\rowcolor{subsectionC}\textbf{<ID> - <Name 2>} \\
+\end{longtable}
 <Description goes here.>  \\
 
 \textbf{Variables} 
@@ -820,12 +1052,128 @@ Recieve Response( ) : Car &Function to allow the vehicle to revice a response to
 
 
 
-\subsection{Vehicle Hardware Modules}
+\subsection{Vehicle Hardware Module Interface Specification}
+\newcommand{\VCMPWMsig}{set\_PWM(pin\_number, duty\_cycle) : void}
+\newcommand{\VCMPWMdesc}{Used to output a PWM signal to a given GPIO pin at a given duty cycle.}
 
-\begin{center}
-    \hl{All things hardware related. We didn't do "MIS" for the hardware yet. Note the id numbers may get you confused but they follow the module guide}
-\end{center}
+\newcommand{\VCMSPEEDsig}{get\_speed( ) : double}
+\newcommand{\VCMSPEEDdesc}{Returns the current speed of the vehicle as measured by the Hall Effect sensor.}
 
+\newcommand{\VCMSERVOsig}{set\_angle( angle : double ) : void}
+\newcommand{\VCMSERVOdesc}{Outputs a physical signal to the servo to go to the specified angle.}
+
+\newcommand{\VCMMOTORsig}{set\_speed( speed : double ) : void}
+\newcommand{\VCMMOTORdesc}{Outputs a physical signal to the motor to go at a specified speed.}
+
+\begin{longtable}{| p{.35\textwidth } | p{.6\textwidth } | }\caption{VCM.1 PWM} \\\hline  
+\multicolumn{2}{|l|}{\textbf {VCM.1 PWM}}\\ \hline
+ \rowcolor{tableCell}  \VCMPWMsig & \VCMPWMdesc \\\hline
+\end{longtable}
+
+\begin{longtable}{| p{.35\textwidth } | p{.6\textwidth } | }\caption{VCM.2 SpeedConverter} \\\hline  
+\multicolumn{2}{|l|}{\textbf {VCM.2 SpeedConverter}}\\ \hline
+ \rowcolor{tableCell} \VCMSPEEDsig & \VCMSPEEDdesc \\\hline
+\end{longtable}
+
+\begin{longtable}{| p{.35\textwidth } | p{.6\textwidth } | }\caption{VCM.3 ServoController} \\\hline  
+\multicolumn{2}{|l|}{\textbf {VCM.3 ServoController}}\\ \hline
+ \rowcolor{tableCell} \VCMSERVOsig & \VCMSERVOdesc \\\hline
+\end{longtable}
+
+\begin{longtable}{| p{.35\textwidth } | p{.6\textwidth } | }\caption{VCM.4 MotorSpeedController} \\\hline  
+\multicolumn{2}{|l|}{\textbf {VCM.4 MotorSpeedController}}\\ \hline
+ \rowcolor{tableCell} \VCMMOTORsig & \VCMMOTORdesc \\\hline
+\end{longtable}
+
+\section{Vehicle Hardware Module Internal Design}
+
+
+\begin{longtable}{p{.98\textwidth}}
+\rowcolor{subsectionC}\textbf{VCM.1 - PWM} \\
+\end{longtable}
+
+Generate PWM signals on GPIO pins of the Raspberry PI.  \\
+
+\textbf{Variables} \\
+None.\\
+
+
+\textbf{Methods} 
+% skip the captions --> treat it like a list or something
+% Simplifies the tables for everyone
+\begin{longtable}{ p{.35\textwidth }  p{.6\textwidth }} \\ 
+
+ 
+\rowcolor{tableCell} \VCMPWMsig & \VCMPWMdesc\\ 
+\end{longtable}
+
+
+
+\begin{longtable}{p{.98\textwidth}}
+\rowcolor{subsectionC}\textbf{VCM.2 - SpeedConverter} \\
+\end{longtable}
+
+
+
+Convert the physical signal from the Hall Effect sensor mounted next to the wheel into a velocity.  \\
+
+\textbf{Variables} \\
+None.\\
+
+
+\textbf{Methods} 
+% skip the captions --> treat it like a list or something
+% Simplifies the tables for everyone
+\begin{longtable}{ p{.35\textwidth }  p{.6\textwidth }} \\ 
+
+ 
+\rowcolor{tableCell} \VCMSPEEDsig & \VCMSPEEDdesc\\ 
+\end{longtable}
+
+
+
+
+\begin{longtable}{p{.98\textwidth}}
+\rowcolor{subsectionC}\textbf{VCM.3 - ServoController} \\
+\end{longtable}
+
+Generate physical signals that will control the steering servo of the vehicle.  \\
+
+\textbf{Variables} 
+\begin{longtable}{ p{.35\textwidth }  p{.6\textwidth }} \\ 
+
+ 
+\rowcolor{tableCell} current\_angle : double & Stores the current direction of the servo so it can continuously send the correct angle to the servo.\\ 
+\end{longtable}
+
+\textbf{Methods} 
+% skip the captions --> treat it like a list or something
+% Simplifies the tables for everyone
+\begin{longtable}{ p{.35\textwidth }  p{.6\textwidth }} \\ 
+
+ 
+\rowcolor{tableCell} \VCMSERVOsig & \VCMSERVOdesc\\ 
+\end{longtable}
+
+
+\begin{longtable}{p{.98\textwidth}}
+\rowcolor{subsectionC}\textbf{VCM.4 - MotorSpeedController} \\
+\end{longtable}
+
+Generate physical signals that will control the motor of the vehicle.  \\
+
+\textbf{Variables}  \\
+None. \\
+
+
+\textbf{Methods} 
+% skip the captions --> treat it like a list or something
+% Simplifies the tables for everyone
+\begin{longtable}{ p{.35\textwidth }  p{.6\textwidth }} \\ 
+
+ 
+\rowcolor{tableCell} \VCMMOTORsig & \VCMMOTORdesc\\ 
+\end{longtable}
 
 \section{Scheduling}
 
