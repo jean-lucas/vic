@@ -9,6 +9,9 @@
 
 
 % ----------  PACKAGES START ------------ %
+% Math Packages
+\usepackage{amsmath}
+\usepackage{mathtools}
 
 % Table cell color package and highlighting
 \usepackage[table]{xcolor}
@@ -24,6 +27,30 @@
 %\renewcommand{\familydefault}{\sfdefault}
 
 % ---------- End Font Packages -------------- %
+
+\usepackage{listings}
+
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  language=C++,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
 
 % Title Packages
 \usepackage{titlesec}
@@ -136,8 +163,8 @@ linkcolor=black,}  %choose some color if you want links to stand out
 \renewcommand\cfttoctitlefont{\Large\bfseries}
 \renewcommand*\contentsname{Table of Contents}
 
-\newcommand{\carSpeed}{1.4 m/s}
-\newcommand{\intersectionLength}{0.6m}
+\newcommand{\carSpeed}{1.4\ m/s}
+\newcommand{\intersectionLength}{0.6\ m}
 
 
 % Removes bold headings from toc
@@ -278,27 +305,61 @@ Zachary Bazen}
 % heading in document
 
 % -------------- START INTRODUCTION ---------------- %
-\begin{center}
-\textbf{\Large \hl{Possible Headings - Taken from suggested content. May need addtional headings}}
-\end{center}
+
 
 \section {Introduction}
 
 
 \subsection{Document Purpose}
-Insert Text Here. 
+The purpose of this document is to provide a comprehensive system overview of the VIC (Vehicle Intersection Control) system. In addition, it is also intended to provide comprehensive subsystem details that will allow the system to be implemented. 
 
-\subsubsection{System Scope}
-Insert Text Here. 
+%\subsubsection{System Scope}
+%Insert Text Here. 
 
-\subsubsection{Document Overview and Intended Audience}
-Insert Text Here. 
+\subsection{Document Overview and Intended Audience}
+This document contains three main sections. The first section, Module Guide, provides an overview of all the system modules and a natural language description of each module. Each module description includes information on intended behaviour, inputs, outputs, initialization and timing constraints. Module Interface Specifications and Module Internal Design details are included in the second section. The third section contains system sequence diagrams. \\
 
-\subsubsection{Acronyms}
-Insert Text Here. 
+When reading this document it will be helpful to note that there are two main components to VIC. These two components are the intersection component and the vehicle component.  Each section is organized with this division.   \\
 
-\subsubsection{Definitions}
-Insert Text Here. 
+The intended audience for this document is Sean Marshall (the engineering team leader at GM) who proposed the problem, Dr. Alan Wassyng and the teaching assistants as supervisors of the project, and ourselves as designers of the system.
+
+\subsection{Definitions}
+
+\begin{longtable}{ |p{.23\textwidth } p{.725\textwidth }|} \caption{Definitions} \\ \hline
+
+
+\textbf{VIC} & The entire system including the intersection controller, the vehicles, and their corresponding controllers. \\ 
+
+\rowcolor{tableCell}\textbf{IC}  & The Intersection Controller is the system that tracks the arrival and departure of the vehicles, as well as determining the order in which the vehicles must proceed through the intersection.\\
+
+\textbf{VC} & The Vehicle Controller is the system that will allow the 1/10 scale RC car to follow lanes, maintain a desired speed, steer itself, and send requests to the intersection controller. \\\hline
+
+
+\end{longtable}
+
+\subsection{Naming Conventions}
+\begin{longtable}{ |p{.23\textwidth } p{.725\textwidth }|} \caption{Naming Conventions} \\ \hline
+
+\textbf{m\_ic\_variableName} & Monitored variable for intersection controller \\ 
+
+\cellcolor{tableCell}\textbf{c\_ic\_variableName}  & \cellcolor{tableCell}Control variable for intersection controller \\ 
+
+\textbf{m\_vc\_variableName} & Monitored variable for autonomous vehicle controller \\ 
+
+\cellcolor{tableCell}\textbf{c\_vc\_variableName}  & \cellcolor{tableCell}Control variable for autonomous vehicle controller \\ 
+
+\textbf{ICD\#} & Intersection Controller Design Component ID \\ 
+
+\cellcolor{tableCell}\textbf{ICM\#}  & \cellcolor{tableCell}Intersection Controller Module Guide ID \\
+
+\textbf{VCD\#} & Vehicle Controller Design Component ID\\
+
+\cellcolor{tableCell}\textbf{VCM\#}  & \cellcolor{tableCell}Vehicle Controller Module Guide ID \\\hline
+
+
+
+\end{longtable}
+
 
 \section{Module Guide}
 
@@ -366,9 +427,9 @@ Insert Text Here.
     
 \end{longtable}
 
-\subsection{Intersection Software Module Description}
-\textbf{Design Notes} \\
-The Vluetooth communication implementation  \\
+% \subsection{Intersection Software Module Description}
+% \textbf{Design Notes} \\
+% The Vluetooth communication implementation  \\
 
 \begin{longtable}{p{.98\textwidth}}
 \rowcolor{tableCell}\textbf{ICM.1 - TrafficController} \\
@@ -415,9 +476,11 @@ VehicleDetection will output a data structure containing the state of the inters
 IC\_Main will initialize this module. Upon initialization, VehicleDetection will turn on the web camera. \\
 
 \textbf{Derived Timing Constraints} \\
-The car will be travelling at maximum \carSpeed 
-The length of the intersection is about \intersectionLength. 
-We want to detect the car at every 1/6 of the intersection. Therefore, the VehicleDetection must be able to update within the time constraint setup by IC\_Main.
+Time constraint for VehicleDetection must be bounded by the time constraint set by the IC\_Main.  \\
+
+% The car will be travelling at maximum \carSpeed 
+% The length of the intersection is about \intersectionLength. 
+% We want to detect the car at every 1/6 of the intersection. Therefore, the VehicleDetection must be able to update within the time constraint setup by IC\_Main. \\
 %
 
 
@@ -466,14 +529,13 @@ We want to detect the car at every 1/6 of the intersection. Therefore, the Vehic
 \textbf{Derived Timing Constraints} \\
 
 The timing constraint is based on the speed of the car, and the length of the intersection. In order to detect when a car has entered and left the intersection, we must process the current intersection state within this given time.
-    
-    
-
-    $$ processingTime = \frac{intersection Segment Length}{carSpeed}  $$
-    
-    $$ processingTime = \frac{ \frac{1}{6} * \intersectionLength }{\carSpeed}$$
-    
-    $$ processingTime = 0.07 seconds$$ \\
+     
+    \begin{align*} 
+       processing\_Time & = \frac{intersection\ Segment\ Length}{car\ Speed}\\
+       processing\_Time & = \frac{ \frac{1}{6} * \intersectionLength }{\carSpeed}\\
+       processing \ Time & = 0.07\ seconds\\
+    \end{align*}
+  
 
 
 
@@ -495,10 +557,10 @@ The timing constraint is based on the speed of the car, and the length of the in
     \\
 
 \textbf{Inputs} \\
-    A  path to the image produced by the webcam installed on the car. The image will be taken just prior to calling the image processing module.\\
+    Webcam video stream.\\
 
 \textbf{Outputs} \\
-    Digitally interpreted information regarding the state of the track. \\
+    Digitally interpreted information regarding the state of the car with respect to the track. \\
 
 \textbf{Initialization Description} \\
     The image processing module will be initialized once the car has been turned on. It does not have any specialized initialization procedure.
@@ -519,7 +581,7 @@ The timing constraint is based on the speed of the car, and the length of the in
     The vehicle navigation module of the vehicle controller is responsible for ensuring that the vehicle follows the correct lane on the track, stops at intersections, and avoids obstacles. This module will apply any necessary adjustments in trajectory to ensure that these responsibilities are met.\\
 
 \textbf{Inputs} \\
-Information regarding the current state of the track. \\
+Information regarding the current state of the car with respect to the track. \\
 
 \textbf{Outputs} \\
  Adjustments to the vehicle's steering, acceleration, and braking necessary to continue following the track.\\
@@ -539,7 +601,7 @@ Responsible for establishing communication from the car to the intersection cont
 \\
 
 \textbf{Inputs} \\
-    The state of the car, such as the current orientation and intended direction. It will also receive input from the intersection controller if it is allowed to proceed through the intersection. \\
+    The state of the car, such as the current orientation and intended direction. \\ Bluetooth signal from the intersection controller. \\
 
 \textbf{Outputs} \\
     One output will be the information about the car to the intersection communication module. The other will be the `go-ahead' signal to the car controller.\\
@@ -558,32 +620,36 @@ Limited to the speed of the Bluetooth connection.  \\
 \end{longtable}
 
 \textbf{Behavioural Description} 
-This module will assist the vehicle in navigating the intersection. It will work in conjunction with the imaging processing module. Further more, VC\_Main will make navigation decisions about the intersection environment and instruct the car on how to proceed. VC\_Main will also control the communication for the vehicle. \\
+This module is responsible for maintaining an active loop while the car is in operation. It will gather information from the ImageProcessing and Communication modules, and transpose that information to the VehicleNavigation module to make certain decision. \\
+
 
 \textbf{Inputs}
-The inputs to this module will be the "go ahead" signal from the intersection controller as well as a struct from ImageProcessing. \\ 
+Parsed Bluetooth signals from the car Communication module. \\
+Digital information pertaining to the state of the car with respect to the track. \\
 
 \textbf{Outputs}
-This module will output the "request to go" signal to the Communication module as well as the navigation instructions to the VehicleNavigation Module. \\
+A request for the car Communication module to signal the intersection controller. \\
 
 \textbf{Initialization Description}
 Upon initialization, VC\_Main will start up the VehicleNavigation module, the ImageProcessing module and the Communication Module. \\
 
 \textbf{Derived Timing Constraints} 
 The exact car speed is unknown, but it will be estimated to be \carSpeed, and we will require to get an update on the track status every 3cm to maintain accuracy. Therefore, at this speed and this update rate, the IC\_Main must process all necessary information within the following time:
-    
-    
 
-    $$ processingTime = \frac{minDistanceUpdateRate}{carSpeed} $$
-    $$ processingTime = \frac{0.03m}{\carSpeed} $$
-    $$ processingTime = 0.02\ seconds$$
-    
-a picture must be processed every 0.02 seconds. \\
+  
+    \begin{align*}
+     processing\ time & = \frac{distance\ update\ rate}{car\ speed} \\
+     processing\ time & = \frac{0.03\ m}{\carSpeed} \\
+     processing\ time & = 0.02\ seconds\\
+    \end{align*}
+
+ 
+If one instance of a loop iteration has not completed within this given time, the ImageProcessing module will be called immediately. In order to maintain an accurate position on the track.
 
 \subsection{Vehicle Hardware Component Description}
 
 \textbf{Design Notes} \\
-The reason Hall Effect sensors were chosen to measure the speed of the vehicle is because they are simple to use and they are cheap. \\
+Hall Effect sensors were chosen to measure the speed of the vehicle for the simplicity in implementation and cost. \\
 
 \begin{longtable}{p{.98\textwidth}}
 \rowcolor{tableCell}\textbf{VCM.1 - PWM} \\
@@ -629,15 +695,11 @@ A physical signal on a GPIO pin telling the motor to go at a specific speed. \\
 
 \section{Module Specifications}
 
-There are two main components to VIC: the intersection component and the vehicle component. The following module specifications are grouped in this way. 
 \subsection{Intersection Module Interface Specification}
 
-    \begin{center}
-        \hl{These may be subject to change}
-    \end{center}
 
 \begin{longtable}{| p{.35\textwidth } | p{.6\textwidth } | }\caption{ICM.1 -  TrafficControl} \\\hline  
- \multicolumn{2}{|l|}{\textbf {ICM.1 TrafficControl}}\\ \hline
+ \multicolumn{2}{|l|}{\textbf {ICM.1 - TrafficControl}}\\ \hline
  
 \cellcolor{tableCell}TrafficControl()& \cellcolor{tableCell}Constructor to initialize the scheduling algorithm \\ \hline 
 
@@ -651,8 +713,8 @@ getTrafficPermission(Queue<cars>, intersectionState[ ]) : Boolean & When called,
 %Constructor/Method 2 & - Description 4 \newline - Description 4  \\ \hline
 \end{longtable}
 
-\begin{longtable}{| p{.35\textwidth } | p{.6\textwidth } | }\caption{ICM.2 VehicleDetection} \\\hline  
- \multicolumn{2}{|l|}{\textbf {ICM.2 VehicleDetection}}\\ \hline
+\begin{longtable}{| p{.35\textwidth } | p{.6\textwidth } | }\caption{ICM.2 - VehicleDetection} \\\hline  
+ \multicolumn{2}{|l|}{\textbf {ICM.2 - VehicleDetection}}\\ \hline
  
 \cellcolor{tableCell}VehicleDetection()& \cellcolor{tableCell}Constructor to initialize the detection of vehicles at the intersection. \\ \hline 
 
@@ -665,13 +727,13 @@ getIntersectionState( ) : Boolean[ ] & Returns the state of the intersection whe
 %Constructor/Method 2 & - Description 4 \newline - Description 4  \\ \hline
 \end{longtable}
 
-\begin{longtable}{| p{.35\textwidth } | p{.6\textwidth } | }\caption{ICM.3 Communication} \\\hline  
- \multicolumn{2}{|l|}{\textbf {ICM.3 Communication}}\\ \hline
+\begin{longtable}{| p{.35\textwidth } | p{.6\textwidth } | }\caption{ICM.3 - Communication} \\\hline  
+ \multicolumn{2}{|l|}{\textbf {ICM.3 - Communication}}\\ \hline
  
 \cellcolor{tableCell}RecieveRequest() : Request& \cellcolor{tableCell}Function to allow the controller recieve a request to be scheduled from the car.\\ \hline 
 
 
-0SendResponse(car c) : void & Function that allows the intersectrion to send a car the response to proceed through the intersection. \\ \hline
+SendResponse(car c) : void & Function that allows the intersectrion to send a car the response to proceed through the intersection. \\ \hline
 
 
 
@@ -679,10 +741,10 @@ getIntersectionState( ) : Boolean[ ] & Returns the state of the intersection whe
 %Constructor/Method 2 & - Description 4 \newline - Description 4  \\ \hline
 \end{longtable}
 
-\begin{longtable}{| p{.35\textwidth } | p{.6\textwidth } | }\caption{ICM.4 IC\_Main} \\\hline  
- \multicolumn{2}{|l|}{\textbf {ICM.4 IC\_Main}}\\ \hline
+\begin{longtable}{| p{.35\textwidth } | p{.6\textwidth } | }\caption{ICM.4 - IC\_Main} \\\hline  
+ \multicolumn{2}{|l|}{\textbf {ICM.4 - IC\_Main}}\\ \hline
  
-\cellcolor{tableCell}main( ) & \cellcolor{tableCell}Main Function for VIC. \\ \hline 
+\cellcolor{tableCell}main() : void & \cellcolor{tableCell}Main Function for VIC. \\ \hline 
 
 
 %\cellcolor{tableCell}Constructor/Method 3 & \cellcolor{tableCell}- Description \newline - Description  
@@ -694,6 +756,33 @@ getIntersectionState( ) : Boolean[ ] & Returns the state of the intersection whe
 
 
 \subsection{Intersection Module Internal Design}
+\begin{longtable}{p{.98\textwidth}}
+
+\rowcolor{tableCell}\textbf{Non-Primitive Types for the Intersection Controller} \\
+\end{longtable}
+
+\textbf{Car} \\
+Holds information pertaining to car requests to the intersection.
+
+
+\begin{longtable}{ p{.3\textwidth }  p{.4\textwidth }} \\ 
+    \rowcolor{tableCell}\textbf{Fields} & \textbf{Type} \\ 
+    \rowcolor{tableCell} direction\_from & string \\
+    \rowcolor{tableCell} direction\_to& string \\
+    \rowcolor{tableCell} socket & int \\
+    \rowcolor{tableCell} thread\_info & Thread \\
+\end{longtable}
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -701,49 +790,45 @@ getIntersectionState( ) : Boolean[ ] & Returns the state of the intersection whe
 \rowcolor{subsectionC}\textbf{ICM.1 - TrafficControl} \\
 \end{longtable}
 
-\textbf{Variables} 
+This section does not have any private methods or objects.  Functionally it will run as an algorithm. The decision to make it a separate class was made to reduce the complexity of the IC\_Main module. Currently, there are no predicted changes for the Module Interface Design for this module. \\
+%\textbf{Dependancies } 
 
-% skip the captions --> treat it like a list or something
-% Simplifies the tables for everyone
-\begin{longtable}{ p{.35\textwidth }  p{.6\textwidth }} \\ 
+%\begin{itemize}
+%\itemsep 0pt
+%    \item
+%\end{itemize}
 
- 
-\rowcolor{tableCell} <Variable 1 >& <Desciption> \\ 
-<Variable 2>& <Desciption> \\
+%\textbf{Constants}
+%\begin{longtable}{ p{.35\textwidth }  p{.1\textwidth } p{.5\textwidth}} \\ 
 
-\rowcolor{tableCell}<Variable 3> & <Desciption> \\ 
-<Variable 4>& <Desciption> \\
+%\rowcolor{tableCell} \textbf{Name} & \textbf{Type} & \textbf{Description} \\ 
 
-\end{longtable}
-
-\textbf{Objects} 
-% skip the captions --> treat it like a list or something
-% Simplifies the tables for everyone
-\begin{longtable}{ p{.35\textwidth }  p{.6\textwidth }} \\ 
-
- 
-\rowcolor{tableCell} <Object 1 >& <Desciption> \\ 
-<Object 2>& <Desciption> \\
-
-\rowcolor{tableCell}<Object 3> & <Desciption> \\ 
-<Object 4>& <Desciption> \\
-
-\end{longtable}
+%\rowcolor{tableCell}  & & \\ 
+%\end{longtable}
 
 
-\textbf{Methods} 
-% skip the captions --> treat it like a list or something
-% Simplifies the tables for everyone
-\begin{longtable}{ p{.35\textwidth }  p{.6\textwidth }} \\ 
 
- 
-\rowcolor{tableCell} <Method 1 >& <Desciption, parameters and return>\\ 
-<Method 2>& <Desciption, parameters and return>\\
+%\textbf{Objects, Macros, Structs, and Types}
+%\begin{longtable}{ p{.2\textwidth }  p{.2\textwidth } p{.5\textwidth}} \\ 
 
-\rowcolor{tableCell}<Method 3> & <Desciption, parameters and return> \\ 
-<Method 4>& <Desciption, parameters and return> \\
+%\rowcolor{tableCell} \textbf{Name} & \textbf{Defined By} & \textbf{Description} \\ \hline
 
-\end{longtable}
+
+%\end{longtable}
+
+
+
+%\textbf{Access Methods}
+
+
+%\begin{longtable}{ p{.2\textwidth }  p{.15\textwidth } p{.45\textwidth} p{.1\textwidth}} \\ 
+
+%\rowcolor{tableCell} \textbf{Name} & \textbf{Parameters} & \textbf{Description} &\textbf{Return Type} \\ 
+
+
+
+%\end{longtable}
+
 
 
 
@@ -754,47 +839,46 @@ getIntersectionState( ) : Boolean[ ] & Returns the state of the intersection whe
 \end{longtable}
   
 
-\textbf{Variables} 
+\textbf{Dependancies } 
 
-% skip the captions --> treat it like a list or something
-% Simplifies the tables for everyone
-\begin{longtable}{ p{.35\textwidth }  p{.6\textwidth }} \\ 
+\begin{itemize}
+    \itemsep 0pt
+    \item opencv/core.hpp
+    \item opencv/imgproc.hpp
+    \item opencv/highhui.hpp
+    \item stdio.h
+    \item math.h 
+\end{itemize}
 
- 
-\rowcolor{tableCell} <Variable 1 >& <Desciption> \\ 
-<Variable 2>& <Desciption> \\
-
-\rowcolor{tableCell}<Variable 3> & <Desciption> \\ 
-<Variable 4>& <Desciption> \\
-
-\end{longtable}
-
-\textbf{Objects} 
-% skip the captions --> treat it like a list or something
-% Simplifies the tables for everyone
-\begin{longtable}{ p{.35\textwidth }  p{.6\textwidth }} \\ 
-
- 
-\rowcolor{tableCell} <Object 1 >& <Desciption> \\ 
-<Object 2>& <Desciption> \\
-
-\rowcolor{tableCell}<Object 3> & <Desciption> \\ 
-<Object 4>& <Desciption> \\
-
+\textbf{Constants}
+\begin{longtable}{ p{.35\textwidth }  p{.1\textwidth } p{.5\textwidth}} \\ 
+\rowcolor{tableCell} \textbf{Name} & \textbf{Type} & \textbf{Description} \\ \rowcolor{tableCell}CAMERA\_ID&int&integer value to access the webcam\\ 
 \end{longtable}
 
 
-\textbf{Methods} 
-% skip the captions --> treat it like a list or something
-% Simplifies the tables for everyone
-\begin{longtable}{ p{.35\textwidth }  p{.6\textwidth }} \\ 
 
- 
-\rowcolor{tableCell} <Method 1 >& <Desciption, parameters and return>\\ 
-<Method 2>& <Desciption, parameters and return>\\
 
-\rowcolor{tableCell}<Method 3> & <Desciption, parameters and return> \\ 
-<Method 4>& <Desciption, parameters and return> \\
+%\textbf{Objects, Macros, Structs, and Types}
+%\begin{longtable}{ p{.2\textwidth }  p{.2\textwidth } p{.5\textwidth}} \\ 
+
+%\rowcolor{tableCell} \textbf{Name} & \textbf{Defined By} & \textbf{Description} \\ \hline
+
+
+%\end{longtable}
+
+
+
+\textbf{Access Methods}
+
+
+\begin{longtable}{ p{.2\textwidth }  p{.15\textwidth } p{.45\textwidth} p{.1\textwidth}} \\ 
+
+\rowcolor{tableCell} \textbf{Name} & \textbf{Parameters} & \textbf{Description} &\textbf{Return Type} \\
+\rowcolor{tableCell}  update\_intersection\_state &none  &Continuously convert images from the webcam and represent them as boolean values in an array&none
+
+
+
+
 
 \end{longtable}
 
@@ -803,117 +887,115 @@ getIntersectionState( ) : Boolean[ ] & Returns the state of the intersection whe
 \end{longtable}
   
 
-\textbf{Variables} 
 
-% skip the captions --> treat it like a list or something
-% Simplifies the tables for everyone
-\begin{longtable}{ p{.35\textwidth }  p{.6\textwidth }} \\ 
 
- 
-\rowcolor{tableCell} <Variable 1 >& <Desciption> \\ 
-<Variable 2>& <Desciption> \\
 
-\rowcolor{tableCell}<Variable 3> & <Desciption> \\ 
-<Variable 4>& <Desciption> \\
+\textbf{Dependancies } 
 
-\end{longtable}
+\begin{itemize}
+    \itemsep 0pt
+    \item bluetooth 
+    \item deque
+    \item threading
+    
+\end{itemize}
 
-\textbf{Objects} 
-% skip the captions --> treat it like a list or something
-% Simplifies the tables for everyone
-\begin{longtable}{ p{.35\textwidth }  p{.6\textwidth }} \\ 
-
- 
-\rowcolor{tableCell} <Object 1 >& <Desciption> \\ 
-<Object 2>& <Desciption> \\
-
-\rowcolor{tableCell}<Object 3> & <Desciption> \\ 
-<Object 4>& <Desciption> \\
-
+\textbf{Constants}
+\begin{longtable}{ p{.35\textwidth }  p{.1\textwidth } p{.5\textwidth}} \\ 
+\rowcolor{tableCell} \textbf{Name} & \textbf{Type} & \textbf{Description} \\
+\rowcolor{tableCell} HOST\_ADDRESS & string & Stores the host bluetooth address\\ 
 \end{longtable}
 
 
-\textbf{Methods} 
-% skip the captions --> treat it like a list or something
-% Simplifies the tables for everyone
-\begin{longtable}{ p{.35\textwidth }  p{.6\textwidth }} \\ 
 
- 
-\rowcolor{tableCell} <Method 1 >& <Desciption, parameters and return>\\ 
-<Method 2>& <Desciption, parameters and return>\\
 
-\rowcolor{tableCell}<Method 3> & <Desciption, parameters and return> \\ 
-<Method 4>& <Desciption, parameters and return> \\
+\textbf{Objects, Macros, Structs, and Types}
+\begin{longtable}{ p{.2\textwidth }  p{.21\textwidth } p{.51\textwidth}} \\ 
+
+\rowcolor{tableCell} \textbf{Name} & \textbf{Defined By} & \textbf{Description} \\\hline
+\rowcolor{tableCell} arrival\_buffer & ArrayList<Car> & Provides arrival buffer for multiple car requests
+
 
 \end{longtable}
+
+
+
+\textbf{Access Methods}
+
+
+\begin{longtable}{ p{.25\textwidth }  p{.1\textwidth } p{.45\textwidth} p{.1\textwidth}} \\ 
+
+\rowcolor{tableCell} \textbf{Name} & \textbf{Parameters} & \textbf{Description} &\textbf{Return Type} \\\hline
+\rowcolor{tableCell} get\_last\_car & none & returns car at top of the communication buffer & Car\\
+
+
+\end{longtable}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{longtable}{p{.98\textwidth}}
-\rowcolor{subsectionC}\textbf{ICM.4 - IC\_Main} \\
+\rowcolor{subsectionC}\textbf{ICM.4 - IC\_Main} \\ 
 \end{longtable}
   
-
-\textbf{Variables} 
+ 
 
 % skip the captions --> treat it like a list or something
 % Simplifies the tables for everyone
-\begin{longtable}{ p{.35\textwidth }  p{.6\textwidth }} \\ 
 
- 
-\rowcolor{tableCell} <Variable 1 >& <Desciption> \\ 
-<Variable 2>& <Desciption> \\
+%\textbf{Dependancies } 
 
-\rowcolor{tableCell}<Variable 3> & <Desciption> \\ 
-<Variable 4>& <Desciption> \\
+%\begin{itemize}
+%    \itemsep 0pt
+%    \item -
+%\end{itemize}
 
-\end{longtable}
-
-\textbf{Objects} 
-% skip the captions --> treat it like a list or something
-% Simplifies the tables for everyone
-\begin{longtable}{ p{.35\textwidth }  p{.6\textwidth }} \\ 
-
- 
-\rowcolor{tableCell} <Object 1 >& <Desciption> \\ 
-<Object 2>& <Desciption> \\
-
-\rowcolor{tableCell}<Object 3> & <Desciption> \\ 
-<Object 4>& <Desciption> \\
-
-\end{longtable}
+%\textbf{Constants}
+%\begin{longtable}{ p{.35\textwidth }  p{.1\textwidth } p{.5\textwidth}} \\ 
+%\rowcolor{tableCell} \textbf{Name} & \textbf{Type} & \textbf{Description} \\ \rowcolor{tableCell}trafficQueue&Array-List&Array-List containing the cars that have been scheduled\\ 
+%\end{longtable}
 
 
-\textbf{Methods} 
-% skip the captions --> treat it like a list or something
-% Simplifies the tables for everyone
-\begin{longtable}{ p{.35\textwidth }  p{.6\textwidth }} \\ 
 
- 
-\rowcolor{tableCell} <Method 1 >& <Desciption, parameters and return>\\ 
-<Method 2>& <Desciption, parameters and return>\\
 
-\rowcolor{tableCell}<Method 3> & <Desciption, parameters and return> \\ 
-<Method 4>& <Desciption, parameters and return> \\
+\textbf{Objects, Macros, Structs, and Types}
+\begin{longtable}{ p{.22\textwidth }  p{.2\textwidth } p{.5\textwidth}} \\ 
 
+\rowcolor{tableCell} \textbf{Name} & \textbf{Defined By} & \textbf{Description} \\ \hline
+\rowcolor{tableCell} trafficQueue& ArrayList<Car>& Array-List containing the cars that wish to be scheduled\\ 
 \end{longtable}
 
 
+\textbf{Access Methods}
+
+
+\begin{longtable}{ p{.25\textwidth }  p{.1\textwidth } p{.45\textwidth} p{.1\textwidth}} \\ 
+
+\rowcolor{tableCell} \textbf{Name} & \textbf{Parameters} & \textbf{Description} &\textbf{Return Type} \\
+\rowcolor{tableCell}  remove\_queue&int[]&Removes cars from the traffic queue at the given indicies&none \\
+\rowcolor{tableCell} add\_queue&Request&Creates car object from request and adds it to the traffic\_queue&none\\
+\rowcolor{tableCell} check\_intersection\_state & Boolean[]&Determines which cars have left the intersection&int[]\\
+\rowcolor{tableCell}run&none&Method that will facilitate the passing of information to other modules. Will determine when cars should be added or removed from the queue.&none\\
 
 
 
+
+\end{longtable}
 
 \subsection{Vehicle Module Interface Specifications}
-\begin{longtable}{| p{.35\textwidth } | p{.6\textwidth } | }\caption{VCM.6 ImageProcessing} \\\hline  
- \multicolumn{2}{|l|}{\textbf {VCM.6 ImageProcessing}}\\ \hline
-\cellcolor{tableCell}ImageProcessing() : ImageData & \cellcolor{tableCell}Function to capture images of the track environment from a webcam and process it into information that can be analysed by software. Will return a struct called ImageData.  \\ \hline 
+\textbf{Design Notes} \\
+Please see section 4.4 for the definitions of the non-primitive types.
+\begin{longtable}{| p{.35\textwidth } | p{.6\textwidth } | }\caption{VCM.6 - ImageProcessing} \\\hline  
+ \multicolumn{2}{|l|}{\textbf {VCM.6 - ImageProcessing}}\\ \hline
+\cellcolor{tableCell}get\_lane\_status() : ImageData & \cellcolor{tableCell}Function to capture images of the track environment from a webcam and process it into information that can be analysed by software. Will return a defined type of ImageData.  \\ \hline 
 
+test\_camera() : bool & Confirm the connected webcam is functional \\ \hline
 % getImageInfo( ) : ADT & Function to relay image information when called.  \\ \hline 
 
 
 \end{longtable}
 
-\begin{longtable}{| p{.35\textwidth } | p{.6\textwidth } | }\caption{VCM.7 VehicleNavigation} \\\hline  
- \multicolumn{2}{|l|}{\textbf {VCM.7 VehicleNavigation}}\\ \hline
-\cellcolor{tableCell}VehicleNavigation(struct *ImageData,  struct *communicationResponse) & \cellcolor{tableCell}Function to signal to the vehicle if there is a change in the navigation, and if so, what changes should be made. \\ \hline 
+\begin{longtable}{| p{.35\textwidth } | p{.6\textwidth } | }\caption{VCM.7 - VehicleNavigation} \\\hline  
+ \multicolumn{2}{|l|}{\textbf {VCM.7 - VehicleNavigation}}\\ \hline
+\cellcolor{tableCell}update\_navigation(struct *ImageData,  struct *CarStatus) & \cellcolor{tableCell}Function to signal to the vehicle if there is a change in the navigation, and if so, what changes should be made. \\ \hline 
 
 % getSpeed( ) : Float &Function to relay the car state. Will return the states as an enum. Exact states will be determined later. \\ \hline 
 
@@ -922,19 +1004,22 @@ getIntersectionState( ) : Boolean[ ] & Returns the state of the intersection whe
 
 \end{longtable}
 
-\begin{longtable}{| p{.35\textwidth } | p{.6\textwidth } | }\caption{VCM.8 Communication} \\\hline  
- \multicolumn{2}{|l|}{\textbf {VCM.8 Communication}}\\ \hline
-\cellcolor{tableCell}SendRequest(struct *request) : void & \cellcolor{tableCell}Function to allow the car to send a request to the interection controller. \\ \hline 
+\begin{longtable}{| p{.35\textwidth } | p{.6\textwidth } | }\caption{VCM.8 - Communication} \\\hline  
+ \multicolumn{2}{|l|}{\textbf {VCM.8 - Communication}}\\ \hline
+\cellcolor{tableCell}send\_request(struct *SignalRequest) : bool & \cellcolor{tableCell}Function to allow the car to send a request to the intersection controller. Will return true if request was successfully sent. \\ \hline 
 
-RecieveResponse( ) : struct* response  &Function to allow the vehicle to revice a response to proceed from the intersection controller. \\ \hline 
+recieve\_response() : struct* SignalResponse  &Function to allow the vehicle to receive a response from the intersection controller. \\ \hline 
 
 \end{longtable}
 
 
-\begin{longtable}{| p{.35\textwidth } | p{.6\textwidth } | }\caption{VCM.9 VC\_Main} \\\hline  
- \multicolumn{2}{|l|}{\textbf {VCM.9 VC\_Main}}\\ \hline
-\cellcolor{tableCell}VC\_Main& \cellcolor{tableCell}Function to control all software aspects of the vehicle control.  \\ \hline 
+\begin{longtable}{| p{.35\textwidth } | p{.6\textwidth } | }\caption{VCM.9 - VC\_Main} \\\hline  
+ \multicolumn{2}{|l|}{\textbf {VCM.9 - VC\_Main}}\\ \hline
+\cellcolor{tableCell}main() : int & \cellcolor{tableCell}Function to initiate the vehicle controller.  \\ \hline 
 
+init() : void & Initiate any necessary modules \\ \hline
+
+\cellcolor{tableCell}run() : int & \cellcolor{tableCell}Enter the program main loop.  \\ \hline 
 \end{longtable}
 
 
@@ -944,110 +1029,372 @@ RecieveResponse( ) : struct* response  &Function to allow the vehicle to revice 
 
 \subsection{Vehicle Module Internal Design}
 
+\begin{longtable}{p{.98\textwidth}}
+
+\rowcolor{tableCell}\textbf{Non-Primitive Types for the Vehicle Controller} \\
+\end{longtable}
+\textbf{ImageData}\\
+% \textit{Description} \\
+\indent Holds information pertaining to the data gathered from the image processed by the ImageProcessing module. \\
+
+% \textit{Fields}
+
+
+
+
+\begin{longtable}{ p{.3\textwidth }  p{.4\textwidth }} \\ 
+    \rowcolor{tableCell}\textbf{Fields} & \textbf{Type} \\ \hline
+    \rowcolor{tableCell}avg\_left\_angle & double \\ \hline
+    \rowcolor{tableCell}avg\_right\_angle & double \\ \hline
+    \rowcolor{tableCell}left\_line\_length & double \\ \hline
+    \rowcolor{tableCell}right\_line\_length& double \\ \hline
+    \rowcolor{tableCell}intersection\_distance & double \\ \hline
+    \rowcolor{tableCell}intersection\_detected & bool \\ \hline
+    \rowcolor{tableCell}obstacle\_detected & bool \\ \hline
+    
+\end{longtable}
+
+\textbf{CarStatus}\\
+% \textit{Description} \\
+\indent \indent Holds information pertaining to the data about the car. \\
+
+% \textit{Fields}
+
+\begin{longtable}{ p{.3\textwidth }  p{.4\textwidth }} \\ 
+    \rowcolor{tableCell}\textbf{Fields} & \textbf{Type} \\ \hline
+    \rowcolor{tableCell}car\_id & int \\ \hline
+    \rowcolor{tableCell}current\_speed & double \\ \hline
+    \rowcolor{tableCell}current\_wheel\_angle & double \\ \hline
+    \rowcolor{tableCell}intersection\_stop & bool \\ \hline
+    \rowcolor{tableCell}obstacle\_stop & bool\\ \hline
+   \rowcolor{tableCell}current\_lane & int \\ \hline
+\end{longtable}
+
+\textbf{SignalRequest}\\
+% \textit{Description} \\
+\indent \indent Holds information required for the car communication module to establish a connection and send message to the intersection controller. \\
+
+% \textit{Fields}
+
+\begin{longtable}{ p{.3\textwidth }  p{.4\textwidth }} \\ 
+    \rowcolor{tableCell}\textbf{Fields} & \textbf{Type} \\ \hline
+    \rowcolor{tableCell}port & int \\ \hline
+    \rowcolor{tableCell}hostname & string \\ \hline
+    \rowcolor{tableCell}host\_address & string \\ \hline
+    \rowcolor{tableCell}message & string \\ \hline
+    \rowcolor{tableCell}message\_size & int \\ \hline
+    \rowcolor{tableCell}keep\_alive & bool \\ \hline
+\end{longtable}
+
+
+\textbf{SignalResponse}\\
+% \textit{Description} \\
+\indent \indent Holds information retrieved from the signal sent from the intersection controller to the car communication module. \\
+
+% \textit{Fields}
+
+\begin{longtable}{ p{.3\textwidth }  p{.4\textwidth }} \\ 
+    \rowcolor{tableCell}\textbf{Fields} & \textbf{Type} \\ \hline
+    \rowcolor{tableCell}hostname & string \\ \hline
+    \rowcolor{tableCell}host\_address & string \\ \hline
+    \rowcolor{tableCell}message & string \\ \hline
+    \rowcolor{tableCell}message\_size & int \\ \hline
+\end{longtable}
+
 
 
 \begin{longtable}{p{.98\textwidth}}
-\rowcolor{subsectionC}\textbf{<ID> - <Name>} \\
-\end{longtable}
 
-<Description goes here.>  \\
-
-\textbf{Variables} 
-
-% skip the captions --> treat it like a list or something
-% Simplifies the tables for everyone
-\begin{longtable}{ p{.35\textwidth }  p{.6\textwidth }} \\ 
-
- 
-\rowcolor{tableCell} <Variable 1 >& <Desciption> \\ 
-<Variable 2>& <Desciption> \\
-
-\rowcolor{tableCell}<Variable 3> & <Desciption> \\ 
-<Variable 4>& <Desciption> \\
-
-\end{longtable}
-
-\textbf{Objects} 
-% skip the captions --> treat it like a list or something
-% Simplifies the tables for everyone
-\begin{longtable}{ p{.35\textwidth }  p{.6\textwidth }} \\ 
-
- 
-\rowcolor{tableCell} <Object 1 >& <Desciption> \\ 
-<Object 2>& <Desciption> \\
-
-\rowcolor{tableCell}<Object 3> & <Desciption> \\ 
-<Object 4>& <Desciption> \\
-
+\rowcolor{subsectionC}\textbf{VCM.6 - ImageProcessing} \\
 \end{longtable}
 
 
-\textbf{Methods} 
-% skip the captions --> treat it like a list or something
-% Simplifies the tables for everyone
-\begin{longtable}{ p{.35\textwidth }  p{.6\textwidth }} \\ 
 
- 
-\rowcolor{tableCell} <Method 1 >& <Desciption, parameters and return>\\ 
-<Method 2>& <Desciption, parameters and return>\\
+\textbf{Dependencies} 
+\begin{itemize} 
+\itemsep 0em 
+\item opencv/core.hpp
+\item opencv/imgproc.hpp
+\item opencv/highui.hpp
+\item stdio.h
+\item vector
+\item algorithm
+\item math.h
+\item image\_processing.h
+\item vic\_types.h
+\end{itemize}
 
-\rowcolor{tableCell}<Method 3> & <Desciption, parameters and return> \\ 
-<Method 4>& <Desciption, parameters and return> \\
+\textbf{Constants}
+\begin{longtable}{ p{.35\textwidth }  p{.1\textwidth } p{.5\textwidth}} \\ 
+
+\rowcolor{tableCell} \textbf{Name} & \textbf{Type} & \textbf{Description} \\ \hline
+
+\rowcolor{tableCell} DEFAULT\_CAMERA\_ID & int & Integer value to access the webcam  \\ \hline
+\rowcolor{tableCell} MIN\_LINE\_DISTANCE & double & Minimum distance between two lines for the Hough Transform  \\
 
 \end{longtable}
+
+% \item DEFAULT\_CAMERA\_ID - \textit{integer value to access the webcam}
+% \item CANNY\_THRESHOLD\_1 - \textit{Canny line detection algorithm threshold number one}
+% \item CANNY\_THRESHOLD\_2 - \textit{Canny line detection algorithm threshold number two}
+% \item MIN\_LINE\_DISTANCE - \textit{Hough transform parameter}
+
+
+
+\textbf{Objects, Macros, Structs, and Types}
+\begin{longtable}{ p{.2\textwidth }  p{.2\textwidth } p{.5\textwidth}} \\ 
+
+\rowcolor{tableCell} \textbf{Name} & \textbf{Defined By} & \textbf{Description} \\ \hline
+
+\rowcolor{tableCell} ImageData & vic\_types.h &  Hold  information about the captured image of the track \\ \hline
+\rowcolor{tableCell} Point & OpenCV & Describes a two dimensional point with fields x and y \\ \hline
+\rowcolor{tableCell} Vector & vector & Many vectors will be used to maintain collection of certain elements \\ \hline
+\rowcolor{tableCell} VideoCap & OpenCV  & Provides an API for handling image and video capturing \\ \hline
+\rowcolor{tableCell} Mat & OpenCV  & n-dimensional array for representing image data \\ \hline
+
+\end{longtable}
+
+
+
+\textbf{Access Methods}
+
+
+\begin{longtable}{ p{.2\textwidth }  p{.15\textwidth } p{.45\textwidth} p{.1\textwidth}} \\ 
+
+\rowcolor{tableCell} \textbf{Name} & \textbf{Parameters} & \textbf{Description} &\textbf{Return Type} \\ \hline
+
+\rowcolor{tableCell} lane\_status & none &  Evaluate and convert captured image into useful information about the state of the car on the track & ImageData \\ \hline
+
+\rowcolor{tableCell} test\_camera & none &  Test whether the camera attached to the car is functional, return true if it is & bool \\ \hline
+
+\rowcolor{tableCell} get\_midpoint & Point a \newline Point b &  Find the midpoint of a line connecting two points & Point \\ \hline
+
+\rowcolor{tableCell} calculate\_avg\_angle & vector<Point> vec \newline Point center &  Find the average angle between a list of points with respect to a center point & double \\ \hline
+
+
+\end{longtable}
+
+
+
+        
+        
+    
 
 
 
 
 
 \begin{longtable}{p{.98\textwidth}}
-\rowcolor{subsectionC}\textbf{<ID> - <Name 2>} \\
+\rowcolor{subsectionC}\textbf{VCM.7 - VehicleNavigation} \\
 \end{longtable}
-<Description goes here.>  \\
 
-\textbf{Variables} 
+\textbf{Dependencies} 
+\begin{itemize} 
+\itemsep 0em 
+\item stdio.h
+\item algorithm
+\item math.h
+\item vehicle\_navigation.h
+\item vic\_types.h
+\end{itemize}
 
-% skip the captions --> treat it like a list or something
-% Simplifies the tables for everyone
-\begin{longtable}{ p{.35\textwidth }  p{.6\textwidth }} \\ 
+\textbf{Constants}
+\begin{longtable}{ p{.35\textwidth }  p{.1\textwidth } p{.5\textwidth}} \\ 
+
+\rowcolor{tableCell} \textbf{Name} & \textbf{Type} & \textbf{Description} \\ \hline
+\rowcolor{tableCell} MAX\_SPEED & double & Maximum allowed speed of the car\\ \hline
+\rowcolor{tableCell} MAX\_ANGLE & double & Maximum allowed wheel rotation angle\\ \hline
+
+
+\end{longtable}
+
+
+
+\textbf{Objects, Macros, Structs, and Types}
+\begin{longtable}{ p{.2\textwidth }  p{.2\textwidth } p{.5\textwidth}} \\ 
+
+\rowcolor{tableCell} \textbf{Name} & \textbf{Defined By} & \textbf{Description} \\ \hline
+
+\rowcolor{tableCell} ImageData & vic\_types.h &  Hold  information about the captured image of the track \\ \hline
+\rowcolor{tableCell} CarStatus & vic\_types.h & Hold information about the car  \\ \hline
+
+
+\end{longtable}
+
+% \textbf{Variables} 
+
+% % skip the captions --> treat it like a list or something
+% % Simplifies the tables for everyone
+% \begin{longtable}{ p{.35\textwidth }  p{.6\textwidth }} \\ 
 
  
-\rowcolor{tableCell} <Variable 1 >& <Desciption> \\ 
-<Variable 2>& <Desciption> \\
+% \rowcolor{tableCell} <desired\_speed : double> & <Stores the speed required to maintain course on the track.> \\
 
-\rowcolor{tableCell}<Variable 3> & <Desciption> \\ 
-<Variable 4>& <Desciption> \\
+% \rowcolor{tableCell} <desired\_angle : double> & <Stores steering angle required to continue following the track.> \\
 
-\end{longtable}
+% \end{longtable}
 
-\textbf{Objects} 
-% skip the captions --> treat it like a list or something
-% Simplifies the tables for everyone
-\begin{longtable}{ p{.35\textwidth }  p{.6\textwidth }} \\ 
+% \textbf{Structs} 
 
- 
-\rowcolor{tableCell} <Object 1 >& <Desciption> \\ 
-<Object 2>& <Desciption> \\
-
-\rowcolor{tableCell}<Object 3> & <Desciption> \\ 
-<Object 4>& <Desciption> \\
-
-\end{longtable}
-
-
-\textbf{Methods} 
-% skip the captions --> treat it like a list or something
-% Simplifies the tables for everyone
-\begin{longtable}{ p{.35\textwidth }  p{.6\textwidth }} \\ 
+% % skip the captions --> treat it like a list or something
+% % Simplifies the tables for everyone
+% \begin{longtable}{ p{.35\textwidth }  p{.6\textwidth }} \\ 
 
  
-\rowcolor{tableCell} <Method 1 >& <Desciption, parameters and return>\\ 
-<Method 2>& <Desciption, parameters and return>\\
+% \rowcolor{tableCell} <image\_data> & <Stores interpreted information about what the vehicle sees.> \\
 
-\rowcolor{tableCell}<Method 3> & <Desciption, parameters and return> \\ 
-<Method 4>& <Desciption, parameters and return> \\
+% \end{longtable}
+
+\textbf{Access Methods} 
+
+\begin{longtable}{ p{.2\textwidth }  p{.15\textwidth } p{.45\textwidth} p{.1\textwidth}} \\ 
+
+\rowcolor{tableCell} \textbf{Name} & \textbf{Parameters} & \textbf{Description} &\textbf{Return Type} \\ \hline
+
+\rowcolor{tableCell} get\_speed & none &  Returns the current speed of the vehicle & double \\ \hline
+\rowcolor{tableCell} get\_angle & none &   Returns the current steering angle of the vehicle & double \\ \hline
+\rowcolor{tableCell} calculate\_angle & ImageData img & Calculate an appropriate steering angle based on the ImageData information & double \\ \hline
+
 
 \end{longtable}
+% skip the captions --> treat it like a list or something
+% Simplifies the tables for everyone
+% \begin{longtable}{ p{.35\textwidth }  p{.6\textwidth }} \\ 
+
+ 
+% \rowcolor{tableCell} <get\_speed() : double> & Returns the current speed of the vehicle. \\
+
+% \rowcolor{tableCell} <get\_angle() : double> & Returns the current steering angle of the vehicle. \\
+% \rowcolor{tableCell} calculate\_angle(image\_data : ) : double> & <Returns the current steering angle of the vehicle. \\
+
+% \end{longtable}
+
+% \begin{longtable}{p{.98\textwidth}}
+% \rowcolor{subsectionC}\textbf{VCM.8 - Communication} \\
+% \end{longtable}
+
+
+\begin{longtable}{p{.98\textwidth}}
+\rowcolor{subsectionC}\textbf{VCM.8 - Communication} \\
+\end{longtable}
+
+
+\textbf{Dependencies} 
+\begin{itemize} 
+\itemsep 0em 
+\item stdlib.h
+\item bluetooth.h
+\item rfcomm.h
+\item communications.h
+\item vic\_types.h
+\end{itemize}
+
+\textbf{Constants}
+\begin{longtable}{ p{.35\textwidth }  p{.1\textwidth } p{.5\textwidth}} \\ 
+
+\rowcolor{tableCell} \textbf{Name} & \textbf{Type} & \textbf{Description} \\ \hline
+\rowcolor{tableCell} CAR\_HOSTNAME & char* & hostname of the car\\ \hline
+\rowcolor{tableCell} INTERSECTION\_HOSTNAME & char* & hostname of the intersection controller \\ \hline
+
+
+
+\end{longtable}
+
+
+\textbf{Objects, Macros, Structs, and Types}
+\begin{longtable}{ p{.2\textwidth }  p{.2\textwidth } p{.5\textwidth}} \\ 
+
+\rowcolor{tableCell} \textbf{Name} & \textbf{Defined By} & \textbf{Description} \\ \hline
+
+\rowcolor{tableCell} SignalRequest & vic\_types.h &  Information for the signal to sent to the intersection controller \\ \hline
+\rowcolor{tableCell} SignalResponse & vic\_types.h &  Information for the signal received fromthe intersection controller \\ \hline
+
+
+
+\end{longtable}
+
+
+
+\textbf{Access Methods} 
+
+\begin{longtable}{ p{.2\textwidth }  p{.15\textwidth } p{.45\textwidth} p{.1\textwidth}} \\ 
+
+\rowcolor{tableCell} \textbf{Name} & \textbf{Parameters} & \textbf{Description} &\textbf{Return Type} \\ \hline
+\rowcolor{tableCell} send\_request & SignalRequest & Send signal request to the intersection controller & bool \\ \hline
+\rowcolor{tableCell} receive\_response & none & Receive signal fromthe intersection controller &  Signal Response \\ \hline
+
+\end{longtable}
+
+
+\begin{longtable}{p{.98\textwidth}}
+\rowcolor{subsectionC}\textbf{VCM.9 - VC\_Main} \\
+\end{longtable}
+
+
+
+
+\textbf{Dependencies} 
+\begin{itemize} 
+\itemsep 0em 
+\item stdlib.h
+\item communications.h
+\item image\_processing.h
+\item vehicle\_navigation.h
+\item vic\_types.h
+\end{itemize}
+
+\textbf{Constants}
+\begin{longtable}{ p{.35\textwidth }  p{.1\textwidth } p{.5\textwidth}} \\ 
+
+\rowcolor{tableCell} \textbf{Name} & \textbf{Type} & \textbf{Description} \\ \hline
+\rowcolor{tableCell} CAR\_ID & int & car identification value\\ \hline
+
+
+
+
+\end{longtable}
+
+
+\textbf{Objects, Macros, Structs, and Types}
+\begin{longtable}{ p{.2\textwidth }  p{.2\textwidth } p{.5\textwidth}} \\ 
+
+\rowcolor{tableCell} \textbf{Name} & \textbf{Defined By} & \textbf{Description} \\ \hline
+
+\rowcolor{tableCell} ImageData & vic\_types.h &  Hold  information about the captured image of the track \\ \hline
+\rowcolor{tableCell} CarStatus & vic\_types.h & Hold information about the car  \\ \hline
+
+
+
+
+\end{longtable}
+
+
+
+\textbf{Access Methods} 
+
+\begin{longtable}{ p{.2\textwidth }  p{.15\textwidth } p{.45\textwidth} p{.1\textwidth}} \\ 
+
+\rowcolor{tableCell} \textbf{Name} & \textbf{Parameters} & \textbf{Description} &\textbf{Return Type} \\ \hline
+\rowcolor{tableCell} main & none & Function to initiate the vehicle controller.
+ & int \\ \hline
+\rowcolor{tableCell} init & none & Initiate any necessary modules &  int \\ \hline
+\rowcolor{tableCell} run & none & Enter the program main loop &  int \\ \hline
+
+\end{longtable}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1065,27 +1412,27 @@ RecieveResponse( ) : struct* response  &Function to allow the vehicle to revice 
 \newcommand{\VCMMOTORsig}{set\_speed( speed : double ) : void}
 \newcommand{\VCMMOTORdesc}{Outputs a physical signal to the motor to go at a specified speed.}
 
-\begin{longtable}{| p{.35\textwidth } | p{.6\textwidth } | }\caption{VCM.1 PWM} \\\hline  
-\multicolumn{2}{|l|}{\textbf {VCM.1 PWM}}\\ \hline
+\begin{longtable}{| p{.35\textwidth } | p{.6\textwidth } | }\caption{VCM.1 - PWM} \\\hline  
+\multicolumn{2}{|l|}{\textbf {VCM.1 - PWM}}\\ \hline
  \rowcolor{tableCell}  \VCMPWMsig & \VCMPWMdesc \\\hline
 \end{longtable}
 
-\begin{longtable}{| p{.35\textwidth } | p{.6\textwidth } | }\caption{VCM.2 SpeedConverter} \\\hline  
-\multicolumn{2}{|l|}{\textbf {VCM.2 SpeedConverter}}\\ \hline
+\begin{longtable}{| p{.35\textwidth } | p{.6\textwidth } | }\caption{VCM.2 - SpeedConverter} \\\hline  
+\multicolumn{2}{|l|}{\textbf {VCM.2 - SpeedConverter}}\\ \hline
  \rowcolor{tableCell} \VCMSPEEDsig & \VCMSPEEDdesc \\\hline
 \end{longtable}
 
-\begin{longtable}{| p{.35\textwidth } | p{.6\textwidth } | }\caption{VCM.3 ServoController} \\\hline  
-\multicolumn{2}{|l|}{\textbf {VCM.3 ServoController}}\\ \hline
+\begin{longtable}{| p{.35\textwidth } | p{.6\textwidth } | }\caption{VCM.3 - ServoController} \\\hline  
+\multicolumn{2}{|l|}{\textbf {VCM.3 - ServoController}}\\ \hline
  \rowcolor{tableCell} \VCMSERVOsig & \VCMSERVOdesc \\\hline
 \end{longtable}
 
-\begin{longtable}{| p{.35\textwidth } | p{.6\textwidth } | }\caption{VCM.4 MotorSpeedController} \\\hline  
-\multicolumn{2}{|l|}{\textbf {VCM.4 MotorSpeedController}}\\ \hline
+\begin{longtable}{| p{.35\textwidth } | p{.6\textwidth } | }\caption{VCM.4 - MotorSpeedController} \\\hline  
+\multicolumn{2}{|l|}{\textbf {VCM.4 - MotorSpeedController}}\\ \hline
  \rowcolor{tableCell} \VCMMOTORsig & \VCMMOTORdesc \\\hline
 \end{longtable}
 
-\section{Vehicle Hardware Module Internal Design}
+\subsection{Vehicle Hardware Module Internal Design}
 
 
 \begin{longtable}{p{.98\textwidth}}
@@ -1177,20 +1524,32 @@ None. \\
 
 \section{Scheduling}
 
-\begin{center}
-    \textbf{\hl{Unsure what this is"}}
-\end{center}
+
+\begin {figure}[h!]
+\centering
+\caption{Intersection Component Sequence Diagram} \vspace{4mm}
+\includegraphics [scale = .3, angle = 90, trim={0 0 0 0},clip] {figures/IC_Sequence_Diagram.pdf}
+
+\end {figure}
+
+
+\begin {figure}[h!]
+\centering
+\caption{Intersection Component Sequence Diagram} \vspace{4mm}
+\includegraphics [scale = .6, trim={0 0 0 0},clip] {figures/carSequenceDiag.pdf}
+
+\end {figure}
 
 
 %\section{Design Notes}
 %Insert Text Here.
 
-\section{Data Dictionary (if necessary)}
-Insert Text Here.
+% \section{Data Dictionary (if necessary)}
+% Insert Text Here.
 
 
-\section{References}
-Insert Text Here.
+% \section{References}
+% Insert Text Here.
 
 
 \end{document}
