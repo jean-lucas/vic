@@ -17,7 +17,20 @@ double calculateAvgLineSize(vector<Point> vec, Point center);
 double lineLength(Point a, Point b);
 
 
-int getLaneStatus() {
+/* Test if camera can capture images/videos */
+int test_camera() {
+
+	VideoCapture cap(DEFAULT_CAMERA_ID);
+
+	if (!cap.isOpened()) {
+		printf("failed to open capture\n");
+		return 0;
+	}
+	return 1;
+}
+
+
+int get_lane_status() {
 
 //	const char* imgFile = pathName;
 //	const char* imgFile = "road.jpg";
