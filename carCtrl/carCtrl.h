@@ -7,7 +7,16 @@
 
 
 
+//digital information pertaining to the image capture
+struct imageData {
 
+	float avgLeftAngle, avgRightAngle;
+	float avgLeftDistance, avgRightDistance;
+	float distanceToObject;
+
+	bool intersectionDetected;
+	bool objectDetected;
+};
 
 
 

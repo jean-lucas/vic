@@ -41,7 +41,11 @@ int getLaneStatus() {
 
 	Mat capMat, cannyMat, houghMat;
 
+	//retrieve the current frame
 	cap >> capMat;
+
+	//close the video capture to conserve battery
+	cap.release();
 
 
 
@@ -103,20 +107,18 @@ int getLaneStatus() {
 
 	}
 
-	double theta1 = calculateAvgAngle(leftLines, centerPoint);
-	double theta2 = calculateAvgAngle(rightLines,centerPoint);
+	
+	//get avg angle between lines of both sides of center point;
+	double theta1,theta2;
+	theta1 = calculateAvgAngle(leftLines, centerPoint);
+	theta2 = calculateAvgAngle(rightLines,centerPoint);
 
-	printf("Theta1: %f \t Theta2: %f \n", theta1, theta2);
-
-
-	//if there is about the same number of lines on both sides, consider measuring the avg line length to
-	//get the lane position
+	//get avg line length on both sides of center point to check if car is centered
 	double avgLeftSize, avgRightSize;
-	if ( abs(leftLines.size() - rightLines.size())  <= 4) {
-		avgLeftSize = calculateAvgLineSize(leftLines, centerPoint);
-		avgRightSize = calculateAvgLineSize(rightLines, centerPoint);
-	}
-
+	avgLeftSize = calculateAvgLineSize(leftLines, centerPoint);
+	avgRightSize = calculateAvgLineSize(rightLines, centerPoint);
+	
+	printf("Theta1: %f \t Theta2: %f \n", theta1, theta2);
 	printf("avg line sizes:  left: %.2f \t right: %.2f \n",avgLeftSize, avgRightSize);
 
 //	imshow("capMat", capMat);
@@ -124,9 +126,6 @@ int getLaneStatus() {
 	imshow("Hough", houghMat);
 	waitKey();
 
-
-
-	cap.release();
 
 
 	return 0;
@@ -141,6 +140,9 @@ double lineLength(Point a, Point b) {
 double calculateAvgLineSize(vector<Point> vec, Point center) {
 	double current;
 	int n = vec.size();
+	
+	if (n < 1) return 0;
+
 	for (int i = 0; i < n; i++) {
 		current += lineLength(vec[i], center);
 	}
@@ -150,9 +152,13 @@ double calculateAvgLineSize(vector<Point> vec, Point center) {
 double calculateAvgAngle(vector<Point> vec, Point center) {
 	double currAngle, top, bot;
 	int n = vec.size();
+
+	if  (n < 1) return 0;
+
 	for (int i = 0; i < n; i++) {
 		top = fabs(vec[i].x - center.x);
-		bot = sqrt( pow(vec[i].x - center.x, 2) + pow(vec[i].y - center.y, 2));
+		bot = lineLength(vec[i], center);
+		// bot = sqrt( pow(vec[i].x - center.x, 2) + pow(vec[i].y - center.y, 2));
 		currAngle += acos(top/bot);
 		// printf("angle (rad)  (deg)= %f   %f \n", top/bot, (180/CV_PI)*top/bot);
 	}

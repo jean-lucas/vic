@@ -29,6 +29,7 @@ endif()
 
 file(GLOB carCtrl_SRC
 	"*.h"
+	"*.c"
 	"*.cpp"
 )
 
