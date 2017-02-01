@@ -30,19 +30,19 @@ int test_camera() {
 }
 
 
-int get_lane_status() {
+int get_lane_status(struct Imageta *img_data) {
 
 //	const char* imgFile = pathName;
 //	const char* imgFile = "road.jpg";
 //	const char* imgFile = "straightRoad.jpg";
-	const char* imgFile = "roadWithStop.jpg";
+//	const char* imgFile = "roadWithStop.jpg";
 
-//	Mat capMat = imread(imgFile, -1);
+	Mat capMat = imread(imgFile, -1);
 
-	// if (capMat.empty()) {
-	// 	printf("could not load img \n");
-	// 	exit(0);
-	// }
+	if (capMat.empty()) {
+		printf("could not load img \n");
+		exit(0);
+	}
 
 	VideoCapture cap(DEFAULT_CAMERA_ID);
 
@@ -54,9 +54,9 @@ int get_lane_status() {
 
 	Mat capMat, cannyMat, houghMat;
 
-	capMat = imread(imgFile, -1);
+	//capMat = imread(imgFile, -1);
 	//retrieve the current frame
-//	cap >> capMat;
+	cap >> capMat;
 
 	//close camera
 	cap.release();
@@ -150,10 +150,7 @@ int get_lane_status() {
 //	imshow("capMat", capMat);
 //	imshow("Canny", cannyMat);
 	imshow("Hough", houghMat);
-	waitKey();
-
-
-
+//	waitKey();
 
 	return 0;
 }

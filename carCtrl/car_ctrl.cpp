@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 #include "car_ctrl.h"
 #include "laneDetect.h"
@@ -33,9 +34,16 @@ int main(int argc, char** argv) {
 int init () {
 
 	unsigned int status = 1;
-
 	status &= test_camera();
-
 	return status;
+}
 
+int run() {
+
+	ImageDate img_data;
+
+	while (1) {
+		get_lane_status(&img_data);
+		sleep(1);
+	}
 }
