@@ -5,3 +5,6 @@
 *.out
 *.synctex.gz
 *.toc
+
+/carCtrl/build/CMakeFiles/*
+/carCtrl/build/CMakeFiles/
