@@ -6,6 +6,6 @@
 #include "vic_types.h"
 
 // Constants
-double MAX_SPEED = 50
-double MAX_ANGLE = 50
+// double MAX_SPEED = 50
+// double MAX_ANGLE = 50
 

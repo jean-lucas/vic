@@ -114,7 +114,7 @@ CMAKE_OBJCOPY:FILEPATH=/usr/bin/objcopy
 CMAKE_OBJDUMP:FILEPATH=/usr/bin/objdump
 
 //Value Computed by CMake
-CMAKE_PROJECT_NAME:STATIC=carCtrl
+CMAKE_PROJECT_NAME:STATIC=car_ctrl
 
 //Path to a program.
 CMAKE_RANLIB:FILEPATH=/usr/bin/ranlib
@@ -170,6 +170,12 @@ carCtrl_BINARY_DIR:STATIC=/home/pi/homescripts/carCtrl/build
 
 //Value Computed by CMake
 carCtrl_SOURCE_DIR:STATIC=/home/pi/homescripts/carCtrl
+
+//Value Computed by CMake
+car_ctrl_BINARY_DIR:STATIC=/home/pi/homescripts/carCtrl/build
+
+//Value Computed by CMake
+car_ctrl_SOURCE_DIR:STATIC=/home/pi/homescripts/carCtrl
 
 
 ########################

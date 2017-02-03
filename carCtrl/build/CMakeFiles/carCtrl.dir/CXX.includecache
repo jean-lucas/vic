@@ -15,10 +15,26 @@ carCtrl.h
 /home/pi/homescripts/carCtrl/carCtrl.h
 laneDetect.h
 /home/pi/homescripts/carCtrl/laneDetect.h
-carComms.h
-/home/pi/homescripts/carCtrl/carComms.h
 
 /home/pi/homescripts/carCtrl/carCtrl.h
+
+/home/pi/homescripts/carCtrl/car_ctrl.cpp
+stdio.h
+-
+stdlib.h
+-
+unistd.h
+-
+car_ctrl.h
+/home/pi/homescripts/carCtrl/car_ctrl.h
+laneDetect.h
+/home/pi/homescripts/carCtrl/laneDetect.h
+carComms.h
+/home/pi/homescripts/carCtrl/carComms.h
+vic_types.h
+/home/pi/homescripts/carCtrl/vic_types.h
+
+/home/pi/homescripts/carCtrl/car_ctrl.h
 
 /home/pi/homescripts/carCtrl/laneDetect.cpp
 opencv2/core/core.hpp
@@ -37,6 +53,10 @@ laneDetect.h
 /home/pi/homescripts/carCtrl/laneDetect.h
 
 /home/pi/homescripts/carCtrl/laneDetect.h
+vic_types.h
+/home/pi/homescripts/carCtrl/vic_types.h
+
+/home/pi/homescripts/carCtrl/vic_types.h
 
 /home/pi/homescripts/opencv/build/opencv2/opencv_modules.hpp
 
