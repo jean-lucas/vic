@@ -6,7 +6,7 @@
 #include "laneDetect.h"
 #include "carComms.h"
 #include "vic_types.h"
-
+#include "blink.h"
 
 
 
@@ -63,4 +63,6 @@ int run() {
 	printf("Value received from ImageData:\n");
 	printf(" %f\n %f\n %f\n %f\n %f\n %d\n %d\n", img_data.avg_left_angle, img_data.avg_right_angle, img_data.left_line_length, \
 		img_data.right_line_length, img_data.intersection_distance, img_data.intersection_detected, img_data.obstacle_detected);
+
+	toggleLight();
 }

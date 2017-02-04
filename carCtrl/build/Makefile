@@ -123,6 +123,60 @@ car_ctrl/fast:
 	$(MAKE) -f CMakeFiles/car_ctrl.dir/build.make CMakeFiles/car_ctrl.dir/build
 .PHONY : car_ctrl/fast
 
+blink.o: blink.c.o
+
+.PHONY : blink.o
+
+# target to build an object file
+blink.c.o:
+	$(MAKE) -f CMakeFiles/car_ctrl.dir/build.make CMakeFiles/car_ctrl.dir/blink.c.o
+.PHONY : blink.c.o
+
+blink.i: blink.c.i
+
+.PHONY : blink.i
+
+# target to preprocess a source file
+blink.c.i:
+	$(MAKE) -f CMakeFiles/car_ctrl.dir/build.make CMakeFiles/car_ctrl.dir/blink.c.i
+.PHONY : blink.c.i
+
+blink.s: blink.c.s
+
+.PHONY : blink.s
+
+# target to generate assembly for a file
+blink.c.s:
+	$(MAKE) -f CMakeFiles/car_ctrl.dir/build.make CMakeFiles/car_ctrl.dir/blink.c.s
+.PHONY : blink.c.s
+
+carComms.o: carComms.c.o
+
+.PHONY : carComms.o
+
+# target to build an object file
+carComms.c.o:
+	$(MAKE) -f CMakeFiles/car_ctrl.dir/build.make CMakeFiles/car_ctrl.dir/carComms.c.o
+.PHONY : carComms.c.o
+
+carComms.i: carComms.c.i
+
+.PHONY : carComms.i
+
+# target to preprocess a source file
+carComms.c.i:
+	$(MAKE) -f CMakeFiles/car_ctrl.dir/build.make CMakeFiles/car_ctrl.dir/carComms.c.i
+.PHONY : carComms.c.i
+
+carComms.s: carComms.c.s
+
+.PHONY : carComms.s
+
+# target to generate assembly for a file
+carComms.c.s:
+	$(MAKE) -f CMakeFiles/car_ctrl.dir/build.make CMakeFiles/car_ctrl.dir/carComms.c.s
+.PHONY : carComms.c.s
+
 car_ctrl.o: car_ctrl.cpp.o
 
 .PHONY : car_ctrl.o
@@ -213,6 +267,12 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... car_ctrl"
+	@echo "... blink.o"
+	@echo "... blink.i"
+	@echo "... blink.s"
+	@echo "... carComms.o"
+	@echo "... carComms.i"
+	@echo "... carComms.s"
 	@echo "... car_ctrl.o"
 	@echo "... car_ctrl.i"
 	@echo "... car_ctrl.s"

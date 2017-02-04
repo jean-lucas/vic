@@ -35,7 +35,8 @@ int get_lane_status(struct ImageData *img_data) {
 //	const char* imgFile = "road.jpg";
 //	const char* imgFile = "straightRoad.jpg";
 //	const char* imgFile = "roadWithStop.jpg";
-	const char* imgFile = "roadWithInt.jpg";
+//	const char* imgFile = "roadWithInt.jpg";
+	const char* imgFile = "track1.jpg";
 
 //	Mat capMat = imread(imgFile, -1);
 
@@ -66,7 +67,8 @@ int get_lane_status(struct ImageData *img_data) {
 	//finds edges in the capMatMath  via the Canny Edge detection algorithm, and puts 
 	//result in cannyMat
 	//Canny(inputMay, outputMat, threshold_1, threshold_2, apertureSize, L2Gradient )
-	Canny(capMat, cannyMat, 65, 100, 3);
+	Canny(capMat, cannyMat, 50, 200, 3);
+//	Canny(capMat, cannyMat, 55, 110, 3);
 
 	//converts img in cannyMat to another colour space and puts it in houghMat
 	cvtColor(cannyMat, houghMat, CV_GRAY2BGR);
@@ -89,7 +91,7 @@ int get_lane_status(struct ImageData *img_data) {
 	vector<Vec4i> contour_hier;
 
 	//(inputMat, output vector N x 4, distance resolution of accumulator, angle of accumulator, threshold, minLineLength, maxLineGap )
-	HoughLinesP(cannyMat, lines, 1, CV_PI/180,50,10,40);
+	HoughLinesP(cannyMat, lines, 1, CV_PI/180,50,5,1);
 
 	//
 	findContours(cannyMat, contours, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE);
@@ -156,12 +158,12 @@ int get_lane_status(struct ImageData *img_data) {
 	//detected contours
 	for (size_t i = 0; i < contours.size(); i++) {
 
-		if (isContourConvex(contours[i])) {
+//		if (isContourConvex(contours[i])) {
 			double area = contourArea(contours[i]);
 			printf("area = %f\t", area);
 			printf("position (%d , %d)\n", contours[i][0].x, contours[i][0].y);
 			circle(houghMat,Point(contours[i][0].x, contours[i][0].y),15,Scalar(255,200,0));
-		}
+//		}
 	}
 
 
