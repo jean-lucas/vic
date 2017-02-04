@@ -5,14 +5,12 @@
 #include "vehicle_navigation.h"
 #include "vic_types.h"
 #include "servo_controller.h"
+#include "motor_speed_controller.h"
 
 int update_navigation(ImageData *img, CarStatus *car){
 	
 	double speed_ok = 0;
 	double angle_ok = 0;
-	
-	//TODO: Update vehicle speed
-	speed_ok = 1;
 	
 	//Update steering angle
 	double angle_diff_abs = abs(img->avg_left_angle - img->avg_right_angle);
@@ -36,6 +34,18 @@ int update_navigation(ImageData *img, CarStatus *car){
 	car->current_wheel_angle = new_angle;
 	set_angle(new_angle);
 	angle_ok = 1;
+	
+	//TODO: Update vehicle speed
+	double new_speed;
+	
+	new_speed = car->current_speed;
+	if(new_speed > MAX_SPEED){
+		new_speed = MAX_SPEED;
+	}
+	
+	car->current_speed = new_speed;
+	set_speed(new_speed);
+	speed_ok = 1;
 	
 	return speed_ok*angle_ok;
 }
