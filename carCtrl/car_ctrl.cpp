@@ -6,17 +6,19 @@
 #include "laneDetect.h"
 #include "carComms.h"
 #include "vic_types.h"
+#include "blink.h"
+
+
+
+
+CarStatus car_stat;
+ImageData img_data;
+
 
 
 
 
 int main(int argc, char** argv) {
-
-	printf("This is from main\n");
-
-
-	//int k = get_lane_status();
-	//int i =	sendToIC("blah blah\n");
 
 
 	if (!init()) {
@@ -25,7 +27,7 @@ int main(int argc, char** argv) {
 	}
 
 	run();
-	
+
 	return 0;
 }
 
@@ -34,16 +36,33 @@ int main(int argc, char** argv) {
 int init () {
 
 	unsigned int status = 1;
+
+	car_stat.current_speed 	= 0;
+	car_stat.current_wheel_angle = 0;
+	car_stat.car_id = CAR_ID;
+	car_stat.intersection_stop = 0;
+	car_stat.obstacle_stop = 0;
+	car_stat.current_lane = OUTER_LANE;
+
 	status &= test_camera();
+
+
 	return status;
 }
 
 int run() {
 
-	ImageDate img_data;
+	ImageData img_data;
 
-	while (1) {
+//	while (1) {
 		get_lane_status(&img_data);
-		sleep(1);
-	}
+//		sleep(1);
+//	}
+
+
+	printf("Value received from ImageData:\n");
+	printf(" %f\n %f\n %f\n %f\n %f\n %d\n %d\n", img_data.avg_left_angle, img_data.avg_right_angle, img_data.left_line_length, \
+		img_data.right_line_length, img_data.intersection_distance, img_data.intersection_detected, img_data.obstacle_detected);
+
+	toggleLight();
 }

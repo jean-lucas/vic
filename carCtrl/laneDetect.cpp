@@ -15,8 +15,7 @@ Point getMidpoint(Point a, Point b);
 double calculateAvgAngle(vector<Point> vec, Point center);
 double calculateAvgLineSize(vector<Point> vec, Point center);
 double lineLength(Point a, Point b);
-
-
+double getDistanceToLine(Point a, Point b);
 /* Test if camera can capture images/videos */
 int test_camera() {
 
@@ -30,43 +29,46 @@ int test_camera() {
 }
 
 
-int get_lane_status(struct Imageta *img_data) {
+int get_lane_status(struct ImageData *img_data) {
 
 //	const char* imgFile = pathName;
 //	const char* imgFile = "road.jpg";
 //	const char* imgFile = "straightRoad.jpg";
 //	const char* imgFile = "roadWithStop.jpg";
+//	const char* imgFile = "roadWithInt.jpg";
+	const char* imgFile = "track1.jpg";
 
-	Mat capMat = imread(imgFile, -1);
+//	Mat capMat = imread(imgFile, -1);
 
-	if (capMat.empty()) {
-		printf("could not load img \n");
-		exit(0);
-	}
+//	if (capMat.empty()) {
+//		printf("could not load img \n");
+//		exit(0);
+//	}
 
-	VideoCapture cap(DEFAULT_CAMERA_ID);
+//	VideoCapture cap(DEFAULT_CAMERA_ID);
 
-	if (!cap.isOpened()) {
-		printf("failed to open capture\n");
-		return 0;
-	}
+//	if (!cap.isOpened()) {
+//		printf("failed to open capture\n");
+//		return 0;
+//	}
 
 
 	Mat capMat, cannyMat, houghMat;
 
-	//capMat = imread(imgFile, -1);
+	capMat = imread(imgFile, -1);
 	//retrieve the current frame
-	cap >> capMat;
+//	cap >> capMat;
 
 	//close camera
-	cap.release();
+//	cap.release();
 
 
 
 	//finds edges in the capMatMath  via the Canny Edge detection algorithm, and puts 
 	//result in cannyMat
 	//Canny(inputMay, outputMat, threshold_1, threshold_2, apertureSize, L2Gradient )
-	Canny(capMat, cannyMat, 65, 100, 3);
+	Canny(capMat, cannyMat, 50, 200, 3);
+//	Canny(capMat, cannyMat, 55, 110, 3);
 
 	//converts img in cannyMat to another colour space and puts it in houghMat
 	cvtColor(cannyMat, houghMat, CV_GRAY2BGR);
@@ -84,19 +86,48 @@ int get_lane_status(struct Imageta *img_data) {
 	vector<Vec4f> lines;
 	vector<Point> leftLines; //left lines and right lines are based on the center point (CAREFUL!)
 	vector<Point> rightLines;
-	vector<Vec3f> circles; //for houghCirlce detection
+	
+	vector<vector<Point> > contours;
+	vector<Vec4i> contour_hier;
 
 	//(inputMat, output vector N x 4, distance resolution of accumulator, angle of accumulator, threshold, minLineLength, maxLineGap )
-	HoughLinesP(cannyMat, lines, 1, CV_PI/180,50,10,40);
+	HoughLinesP(cannyMat, lines, 1, CV_PI/180,50,5,1);
 
-	//detect circles in our image
-	HoughCircles(cannyMat, circles, HOUGH_GRADIENT,1,50,200,100);
+	//
+	findContours(cannyMat, contours, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE);
+
+	//to  detect an intersection, we can look for the horizontal lines across the lane.
+	//for  this we can just compare the y values between two points of a line.
+	bool intersectionDetected = false;
+	double estimatedIntersectionDistance = 0;
+
+
+	//to detect an obstacle, we can try to find a countour  within our image, find the area of the given contour
+	//and thus determnine if an obstacle  is ahead or not.
+	//Instead of  using contours we can follow a similar approach to the intersection detection above
+	bool  obstacleDetected = false;
 
 	//draw detected lines
 	for (size_t i = 0; i < lines.size(); i++) {
 		Point a = Point(lines[i][0],lines[i][1]);
 		Point b = Point(lines[i][2],lines[i][3]);
 		Point mid = getMidpoint(a,b);
+
+		//if we have already detected an intersection in the current frame
+		//no point of continuing to check
+		if (!intersectionDetected) {
+			if ( fabs(a.y-b.y) <= STRAIGHT_LINE_THRESHOLD) {
+				printf("found intersection at points (%d %d) to (%d %d)\n", a.x,a.y,b.x,b.y);
+				circle(houghMat,a,10,Scalar(255,60,200));
+				circle(houghMat,b,10,Scalar(255,60,200));
+				intersectionDetected = true;
+			}
+		}
+
+		else if (estimatedIntersectionDistance <= 0) {
+			estimatedIntersectionDistance = getDistanceToLine(mid, centerPoint) * PIXEL_TO_METER_FACTOR;
+			printf("estimatedDistance to intersection = %f meters or %f pixels\n", estimatedIntersectionDistance, getDistanceToLine(mid, centerPoint));
+		} 
 
 
 		//if an end-point of a line plus the midpoint are to one side of the img center,
@@ -123,15 +154,16 @@ int get_lane_status(struct Imageta *img_data) {
 
 	}
 
-	//draw detected circles
-	for (size_t i = 0; i < circles.size(); i++) {
-		Point center(cvRound(circles[i][0]), cvRound(circles[i][1]));
-		int radius = cvRound(circles[i][2]);
 
-		circle(houghMat,center,3, Scalar(0,255,0), -1, 8, 0);
-		circle(houghMat, center, radius, Scalar(0,0,255), 3,8,0);
+	//detected contours
+	for (size_t i = 0; i < contours.size(); i++) {
 
-
+//		if (isContourConvex(contours[i])) {
+			double area = contourArea(contours[i]);
+			printf("area = %f\t", area);
+			printf("position (%d , %d)\n", contours[i][0].x, contours[i][0].y);
+			circle(houghMat,Point(contours[i][0].x, contours[i][0].y),15,Scalar(255,200,0));
+//		}
 	}
 
 
@@ -145,12 +177,21 @@ int get_lane_status(struct Imageta *img_data) {
 	avgRightSize = calculateAvgLineSize(rightLines, centerPoint);
 
 	printf("Theta1: %f \nTheta2: %f \n", theta1, theta2);
-	printf("avg line sizes:  left: %f \nright: %f \n",avgLeftSize, avgRightSize);
+	printf("leftLine: %f \trightLine: %f \n",avgLeftSize, avgRightSize);
+
+	img_data->avg_left_angle 	= theta1;
+	img_data->avg_right_angle 	= theta2;
+	img_data->left_line_length 	= avgLeftSize;
+	img_data->right_line_length 	= avgRightSize;
+	img_data->intersection_distance = estimatedIntersectionDistance;
+	img_data->intersection_detected = intersectionDetected;
+	img_data->obstacle_detected 	= obstacleDetected;
+
 
 //	imshow("capMat", capMat);
 //	imshow("Canny", cannyMat);
 	imshow("Hough", houghMat);
-//	waitKey();
+	waitKey();
 
 	return 0;
 }
@@ -192,6 +233,13 @@ Point getMidpoint(Point a, Point b) {
 	double midY = (a.y + b.y)/2.0;
 	return Point(midX, midY);
 }
+
+double getDistanceToLine(Point a, Point b) {
+
+	double distance = sqrt(pow( (double) a.x - b.x, 2) + pow( (double) a.y - b.y, 2));
+	return distance;
+}
+
 
 
 

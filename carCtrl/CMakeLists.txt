@@ -2,7 +2,7 @@
 cmake_minimum_required(VERSION 2.8)
 
 # Define project name
-project(carCtrl)
+project(car_ctrl)
 
 
 SET("OpenCV_DIR" "/home/pi/homescripts/opencv/build")
@@ -26,8 +26,9 @@ if(CMAKE_VERSION VERSION_LESS "2.8.11")
   include_directories(${OpenCV_INCLUDE_DIRS})
 endif()
 
+link_directories(/usr/include/)
 
-file(GLOB carCtrl_SRC
+file(GLOB car_ctrl_SRC
 	"*.h"
 	"*.c"
 	"*.cpp"
@@ -35,11 +36,11 @@ file(GLOB carCtrl_SRC
 
 # Declare the executable target built from your sources
 
-add_executable(carCtrl ${carCtrl_SRC})
-#add_executable(laneDetect laneDetect.cpp)
-#add_executable(carCtrl carCtrl.cpp)
+add_executable(car_ctrl ${car_ctrl_SRC})
 
 # Link your application with OpenCV libraries
-target_link_libraries(carCtrl ${OpenCV_LIBS})
-target_link_libraries(carCtrl ${OpenCV_LIBS})
+target_link_libraries(car_ctrl ${OpenCV_LIBS})
+target_link_libraries(car_ctrl ${OpenCV_LIBS})
+target_link_libraries(car_ctrl wiringPi)
+target_link_libraries(car_ctrl bluetooth )
 

@@ -57,33 +57,9 @@ include CMakeFiles/carCtrl.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/carCtrl.dir/flags.make
 
-CMakeFiles/carCtrl.dir/carComms.c.o: CMakeFiles/carCtrl.dir/flags.make
-CMakeFiles/carCtrl.dir/carComms.c.o: ../carComms.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pi/homescripts/carCtrl/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/carCtrl.dir/carComms.c.o"
-	/usr/bin/cc  $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/carCtrl.dir/carComms.c.o   -c /home/pi/homescripts/carCtrl/carComms.c
-
-CMakeFiles/carCtrl.dir/carComms.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/carCtrl.dir/carComms.c.i"
-	/usr/bin/cc  $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/pi/homescripts/carCtrl/carComms.c > CMakeFiles/carCtrl.dir/carComms.c.i
-
-CMakeFiles/carCtrl.dir/carComms.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/carCtrl.dir/carComms.c.s"
-	/usr/bin/cc  $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/pi/homescripts/carCtrl/carComms.c -o CMakeFiles/carCtrl.dir/carComms.c.s
-
-CMakeFiles/carCtrl.dir/carComms.c.o.requires:
-
-.PHONY : CMakeFiles/carCtrl.dir/carComms.c.o.requires
-
-CMakeFiles/carCtrl.dir/carComms.c.o.provides: CMakeFiles/carCtrl.dir/carComms.c.o.requires
-	$(MAKE) -f CMakeFiles/carCtrl.dir/build.make CMakeFiles/carCtrl.dir/carComms.c.o.provides.build
-.PHONY : CMakeFiles/carCtrl.dir/carComms.c.o.provides
-
-CMakeFiles/carCtrl.dir/carComms.c.o.provides.build: CMakeFiles/carCtrl.dir/carComms.c.o
-
-
 CMakeFiles/carCtrl.dir/carCtrl.cpp.o: CMakeFiles/carCtrl.dir/flags.make
 CMakeFiles/carCtrl.dir/carCtrl.cpp.o: ../carCtrl.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pi/homescripts/carCtrl/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/carCtrl.dir/carCtrl.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pi/homescripts/carCtrl/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/carCtrl.dir/carCtrl.cpp.o"
 	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/carCtrl.dir/carCtrl.cpp.o -c /home/pi/homescripts/carCtrl/carCtrl.cpp
 
 CMakeFiles/carCtrl.dir/carCtrl.cpp.i: cmake_force
@@ -103,6 +79,30 @@ CMakeFiles/carCtrl.dir/carCtrl.cpp.o.provides: CMakeFiles/carCtrl.dir/carCtrl.cp
 .PHONY : CMakeFiles/carCtrl.dir/carCtrl.cpp.o.provides
 
 CMakeFiles/carCtrl.dir/carCtrl.cpp.o.provides.build: CMakeFiles/carCtrl.dir/carCtrl.cpp.o
+
+
+CMakeFiles/carCtrl.dir/car_ctrl.cpp.o: CMakeFiles/carCtrl.dir/flags.make
+CMakeFiles/carCtrl.dir/car_ctrl.cpp.o: ../car_ctrl.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pi/homescripts/carCtrl/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/carCtrl.dir/car_ctrl.cpp.o"
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/carCtrl.dir/car_ctrl.cpp.o -c /home/pi/homescripts/carCtrl/car_ctrl.cpp
+
+CMakeFiles/carCtrl.dir/car_ctrl.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/carCtrl.dir/car_ctrl.cpp.i"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/pi/homescripts/carCtrl/car_ctrl.cpp > CMakeFiles/carCtrl.dir/car_ctrl.cpp.i
+
+CMakeFiles/carCtrl.dir/car_ctrl.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/carCtrl.dir/car_ctrl.cpp.s"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/pi/homescripts/carCtrl/car_ctrl.cpp -o CMakeFiles/carCtrl.dir/car_ctrl.cpp.s
+
+CMakeFiles/carCtrl.dir/car_ctrl.cpp.o.requires:
+
+.PHONY : CMakeFiles/carCtrl.dir/car_ctrl.cpp.o.requires
+
+CMakeFiles/carCtrl.dir/car_ctrl.cpp.o.provides: CMakeFiles/carCtrl.dir/car_ctrl.cpp.o.requires
+	$(MAKE) -f CMakeFiles/carCtrl.dir/build.make CMakeFiles/carCtrl.dir/car_ctrl.cpp.o.provides.build
+.PHONY : CMakeFiles/carCtrl.dir/car_ctrl.cpp.o.provides
+
+CMakeFiles/carCtrl.dir/car_ctrl.cpp.o.provides.build: CMakeFiles/carCtrl.dir/car_ctrl.cpp.o
 
 
 CMakeFiles/carCtrl.dir/laneDetect.cpp.o: CMakeFiles/carCtrl.dir/flags.make
@@ -131,15 +131,15 @@ CMakeFiles/carCtrl.dir/laneDetect.cpp.o.provides.build: CMakeFiles/carCtrl.dir/l
 
 # Object files for target carCtrl
 carCtrl_OBJECTS = \
-"CMakeFiles/carCtrl.dir/carComms.c.o" \
 "CMakeFiles/carCtrl.dir/carCtrl.cpp.o" \
+"CMakeFiles/carCtrl.dir/car_ctrl.cpp.o" \
 "CMakeFiles/carCtrl.dir/laneDetect.cpp.o"
 
 # External object files for target carCtrl
 carCtrl_EXTERNAL_OBJECTS =
 
-carCtrl: CMakeFiles/carCtrl.dir/carComms.c.o
 carCtrl: CMakeFiles/carCtrl.dir/carCtrl.cpp.o
+carCtrl: CMakeFiles/carCtrl.dir/car_ctrl.cpp.o
 carCtrl: CMakeFiles/carCtrl.dir/laneDetect.cpp.o
 carCtrl: CMakeFiles/carCtrl.dir/build.make
 carCtrl: /home/pi/homescripts/opencv/build/lib/libopencv_shape.so.3.2.0
@@ -167,8 +167,8 @@ CMakeFiles/carCtrl.dir/build: carCtrl
 
 .PHONY : CMakeFiles/carCtrl.dir/build
 
-CMakeFiles/carCtrl.dir/requires: CMakeFiles/carCtrl.dir/carComms.c.o.requires
 CMakeFiles/carCtrl.dir/requires: CMakeFiles/carCtrl.dir/carCtrl.cpp.o.requires
+CMakeFiles/carCtrl.dir/requires: CMakeFiles/carCtrl.dir/car_ctrl.cpp.o.requires
 CMakeFiles/carCtrl.dir/requires: CMakeFiles/carCtrl.dir/laneDetect.cpp.o.requires
 
 .PHONY : CMakeFiles/carCtrl.dir/requires

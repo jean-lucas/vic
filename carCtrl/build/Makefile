@@ -111,17 +111,44 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named carCtrl
+# Target rules for targets named car_ctrl
 
 # Build rule for target.
-carCtrl: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 carCtrl
-.PHONY : carCtrl
+car_ctrl: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 car_ctrl
+.PHONY : car_ctrl
 
 # fast build rule for target.
-carCtrl/fast:
-	$(MAKE) -f CMakeFiles/carCtrl.dir/build.make CMakeFiles/carCtrl.dir/build
-.PHONY : carCtrl/fast
+car_ctrl/fast:
+	$(MAKE) -f CMakeFiles/car_ctrl.dir/build.make CMakeFiles/car_ctrl.dir/build
+.PHONY : car_ctrl/fast
+
+blink.o: blink.c.o
+
+.PHONY : blink.o
+
+# target to build an object file
+blink.c.o:
+	$(MAKE) -f CMakeFiles/car_ctrl.dir/build.make CMakeFiles/car_ctrl.dir/blink.c.o
+.PHONY : blink.c.o
+
+blink.i: blink.c.i
+
+.PHONY : blink.i
+
+# target to preprocess a source file
+blink.c.i:
+	$(MAKE) -f CMakeFiles/car_ctrl.dir/build.make CMakeFiles/car_ctrl.dir/blink.c.i
+.PHONY : blink.c.i
+
+blink.s: blink.c.s
+
+.PHONY : blink.s
+
+# target to generate assembly for a file
+blink.c.s:
+	$(MAKE) -f CMakeFiles/car_ctrl.dir/build.make CMakeFiles/car_ctrl.dir/blink.c.s
+.PHONY : blink.c.s
 
 carComms.o: carComms.c.o
 
@@ -129,7 +156,7 @@ carComms.o: carComms.c.o
 
 # target to build an object file
 carComms.c.o:
-	$(MAKE) -f CMakeFiles/carCtrl.dir/build.make CMakeFiles/carCtrl.dir/carComms.c.o
+	$(MAKE) -f CMakeFiles/car_ctrl.dir/build.make CMakeFiles/car_ctrl.dir/carComms.c.o
 .PHONY : carComms.c.o
 
 carComms.i: carComms.c.i
@@ -138,7 +165,7 @@ carComms.i: carComms.c.i
 
 # target to preprocess a source file
 carComms.c.i:
-	$(MAKE) -f CMakeFiles/carCtrl.dir/build.make CMakeFiles/carCtrl.dir/carComms.c.i
+	$(MAKE) -f CMakeFiles/car_ctrl.dir/build.make CMakeFiles/car_ctrl.dir/carComms.c.i
 .PHONY : carComms.c.i
 
 carComms.s: carComms.c.s
@@ -147,35 +174,35 @@ carComms.s: carComms.c.s
 
 # target to generate assembly for a file
 carComms.c.s:
-	$(MAKE) -f CMakeFiles/carCtrl.dir/build.make CMakeFiles/carCtrl.dir/carComms.c.s
+	$(MAKE) -f CMakeFiles/car_ctrl.dir/build.make CMakeFiles/car_ctrl.dir/carComms.c.s
 .PHONY : carComms.c.s
 
-carCtrl.o: carCtrl.cpp.o
+car_ctrl.o: car_ctrl.cpp.o
 
-.PHONY : carCtrl.o
+.PHONY : car_ctrl.o
 
 # target to build an object file
-carCtrl.cpp.o:
-	$(MAKE) -f CMakeFiles/carCtrl.dir/build.make CMakeFiles/carCtrl.dir/carCtrl.cpp.o
-.PHONY : carCtrl.cpp.o
+car_ctrl.cpp.o:
+	$(MAKE) -f CMakeFiles/car_ctrl.dir/build.make CMakeFiles/car_ctrl.dir/car_ctrl.cpp.o
+.PHONY : car_ctrl.cpp.o
 
-carCtrl.i: carCtrl.cpp.i
+car_ctrl.i: car_ctrl.cpp.i
 
-.PHONY : carCtrl.i
+.PHONY : car_ctrl.i
 
 # target to preprocess a source file
-carCtrl.cpp.i:
-	$(MAKE) -f CMakeFiles/carCtrl.dir/build.make CMakeFiles/carCtrl.dir/carCtrl.cpp.i
-.PHONY : carCtrl.cpp.i
+car_ctrl.cpp.i:
+	$(MAKE) -f CMakeFiles/car_ctrl.dir/build.make CMakeFiles/car_ctrl.dir/car_ctrl.cpp.i
+.PHONY : car_ctrl.cpp.i
 
-carCtrl.s: carCtrl.cpp.s
+car_ctrl.s: car_ctrl.cpp.s
 
-.PHONY : carCtrl.s
+.PHONY : car_ctrl.s
 
 # target to generate assembly for a file
-carCtrl.cpp.s:
-	$(MAKE) -f CMakeFiles/carCtrl.dir/build.make CMakeFiles/carCtrl.dir/carCtrl.cpp.s
-.PHONY : carCtrl.cpp.s
+car_ctrl.cpp.s:
+	$(MAKE) -f CMakeFiles/car_ctrl.dir/build.make CMakeFiles/car_ctrl.dir/car_ctrl.cpp.s
+.PHONY : car_ctrl.cpp.s
 
 laneDetect.o: laneDetect.cpp.o
 
@@ -183,7 +210,7 @@ laneDetect.o: laneDetect.cpp.o
 
 # target to build an object file
 laneDetect.cpp.o:
-	$(MAKE) -f CMakeFiles/carCtrl.dir/build.make CMakeFiles/carCtrl.dir/laneDetect.cpp.o
+	$(MAKE) -f CMakeFiles/car_ctrl.dir/build.make CMakeFiles/car_ctrl.dir/laneDetect.cpp.o
 .PHONY : laneDetect.cpp.o
 
 laneDetect.i: laneDetect.cpp.i
@@ -192,7 +219,7 @@ laneDetect.i: laneDetect.cpp.i
 
 # target to preprocess a source file
 laneDetect.cpp.i:
-	$(MAKE) -f CMakeFiles/carCtrl.dir/build.make CMakeFiles/carCtrl.dir/laneDetect.cpp.i
+	$(MAKE) -f CMakeFiles/car_ctrl.dir/build.make CMakeFiles/car_ctrl.dir/laneDetect.cpp.i
 .PHONY : laneDetect.cpp.i
 
 laneDetect.s: laneDetect.cpp.s
@@ -201,8 +228,35 @@ laneDetect.s: laneDetect.cpp.s
 
 # target to generate assembly for a file
 laneDetect.cpp.s:
-	$(MAKE) -f CMakeFiles/carCtrl.dir/build.make CMakeFiles/carCtrl.dir/laneDetect.cpp.s
+	$(MAKE) -f CMakeFiles/car_ctrl.dir/build.make CMakeFiles/car_ctrl.dir/laneDetect.cpp.s
 .PHONY : laneDetect.cpp.s
+
+vehicle_navigation.o: vehicle_navigation.cpp.o
+
+.PHONY : vehicle_navigation.o
+
+# target to build an object file
+vehicle_navigation.cpp.o:
+	$(MAKE) -f CMakeFiles/car_ctrl.dir/build.make CMakeFiles/car_ctrl.dir/vehicle_navigation.cpp.o
+.PHONY : vehicle_navigation.cpp.o
+
+vehicle_navigation.i: vehicle_navigation.cpp.i
+
+.PHONY : vehicle_navigation.i
+
+# target to preprocess a source file
+vehicle_navigation.cpp.i:
+	$(MAKE) -f CMakeFiles/car_ctrl.dir/build.make CMakeFiles/car_ctrl.dir/vehicle_navigation.cpp.i
+.PHONY : vehicle_navigation.cpp.i
+
+vehicle_navigation.s: vehicle_navigation.cpp.s
+
+.PHONY : vehicle_navigation.s
+
+# target to generate assembly for a file
+vehicle_navigation.cpp.s:
+	$(MAKE) -f CMakeFiles/car_ctrl.dir/build.make CMakeFiles/car_ctrl.dir/vehicle_navigation.cpp.s
+.PHONY : vehicle_navigation.cpp.s
 
 # Help Target
 help:
@@ -212,16 +266,22 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... carCtrl"
+	@echo "... car_ctrl"
+	@echo "... blink.o"
+	@echo "... blink.i"
+	@echo "... blink.s"
 	@echo "... carComms.o"
 	@echo "... carComms.i"
 	@echo "... carComms.s"
-	@echo "... carCtrl.o"
-	@echo "... carCtrl.i"
-	@echo "... carCtrl.s"
+	@echo "... car_ctrl.o"
+	@echo "... car_ctrl.i"
+	@echo "... car_ctrl.s"
 	@echo "... laneDetect.o"
 	@echo "... laneDetect.i"
 	@echo "... laneDetect.s"
+	@echo "... vehicle_navigation.o"
+	@echo "... vehicle_navigation.i"
+	@echo "... vehicle_navigation.s"
 .PHONY : help
 
 
