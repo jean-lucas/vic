@@ -17,5 +17,7 @@ const int BCM_PIN_13    = 23;
 const int MAX_SERVO_PWN = 180;
 const int MIN_SERVO_PWM = 110;
 
+/* Must call before using any hardware functions */
+void vichw_init(void);
 
 #endif

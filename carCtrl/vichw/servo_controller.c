@@ -4,8 +4,17 @@
 #include "servo_controller.h"
 #include "vic_hardware.h"
 
+#define SERVO_PIN BCM_PIN_13
 
-void set_angle(double angle)
+void vichw_init_servo(void)
+{
+	pinMode(SERVO_PIN, PWM_OUTPUT);
+	pwmSetMode(PWM_MODE_MS);
+	pwmSetClock(PWM_CLOCK);
+	pwmSetRange(PWM_RANGE);
+}
+
+void vichw_set_angle(double angle)
 {
 	int pwm = DEFAULT_PWM;
 	if (angle < 0.0) {
@@ -18,10 +27,6 @@ void set_angle(double angle)
 
 	if (pwm > MAX_SERVO_PWN) pwm = MAX_SERVO_PWN;
 	if (pwm < MIN_SERVO_PWM) pwm = MIN_SERVO_PWM;
-
-	pinMode(BCM_PIN_13, PWM_OUTPUT);
-	pwmSetMode(PWM_MODE_MS);
-	pwmSetClock(PWM_CLOCK);
-	pwmSetRange(PWM_RANGE);
-	pwmWrite(BCM_PIN_13, pwm);
+	
+	pwmWrite(SERVO_PIN, pwm);
 }

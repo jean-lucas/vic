@@ -4,8 +4,17 @@
 #include "motor_speed_controller.h"
 #include "vic_hardware.h"
 
+#define MOTOR_PIN BCM_PIN_18
 
-void set_speed(double speed)
+void vichw_init_speed(void)
+{
+	pinMode(MOTOR_PIN, PWM_OUTPUT);
+	pwmSetMode(PWM_MODE_MS);
+	pwmSetClock(PWM_CLOCK);
+	pwmSetRange(PWM_RANGE);
+}
+
+void vichw_set_speed(double speed)
 {
 	int pwm = DEFAULT_PWM;
 	if (speed < 0.0) {
@@ -19,15 +28,11 @@ void set_speed(double speed)
 	if (pwm > MAX_SPEED_PWN) pwm = MAX_SPEED_PWN;
 	if (pwm < MIN_SPEED_PWM) pwm = MIN_SPEED_PWM;
 
-	pinMode(BCM_PIN_18, PWM_OUTPUT);
-	pwmSetMode(PWM_MODE_MS);
-	pwmSetClock(PWM_CLOCK);
-	pwmSetRange(PWM_RANGE);
-	pwmWrite(BCM_PIN_18, pwm);
+	pwmWrite(MOTOR_PIN, pwm);
 }
 
 
-//TODO: implement me
-double get_speed() {
+/* TODO: implement me */
+double vichw_get_speed() {
 	return 0;
 }
