@@ -4,8 +4,8 @@
 
 #include "vehicle_navigation.h"
 #include "vic_types.h"
-#include "servo_controller.h"
-#include "motor_speed_controller.h"
+#include "vichw/servo_controller.h"
+#include "vichw/motor_speed_controller.h"
 
 int update_navigation(ImageData *img, CarStatus *car){
 	

@@ -1,12 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <wiringPi.h>
 
 #include "car_ctrl.h"
 #include "laneDetect.h"
 #include "carComms.h"
 #include "vic_types.h"
-//#include "blink.h"
 
 
 
@@ -55,6 +55,7 @@ int init () {
 	
 
 	status &= test_camera();
+	status &= wiringPiSetup();
 
 
 	return status;
@@ -67,6 +68,8 @@ int run() {
 		valid = get_lane_status(&img_data);
 		valid = update_navigation(&img_data, &car_stat);
 	}
+
+	return valid;
 
 
 	// printf("Value received from ImageData:\n");
