@@ -1,5 +1,5 @@
-#ifndef VIC_TYPES__H
-#define VIC_TYPES__H
+#ifndef VIC_TYPES_H
+#define VIC_TYPES_H
 
 
 /* structs */
