@@ -32,15 +32,20 @@ file(GLOB car_ctrl_SRC
 	"*.h"
 	"*.c"
 	"*.cpp"
+	"vichw/*.h",
+	"vichw/*.c",
+	"vichw/*.cpp",
+
 )
 
 # Declare the executable target built from your sources
 
+set(CMAKE_CXX_FLAGS "-Wall -I/usr/local/include -L/usr/local/lib -lpigpio -lrt -lpthread")
 add_executable(car_ctrl ${car_ctrl_SRC})
 
 # Link your application with OpenCV libraries
 target_link_libraries(car_ctrl ${OpenCV_LIBS})
 target_link_libraries(car_ctrl ${OpenCV_LIBS})
-target_link_libraries(car_ctrl wiringPi)
+#target_link_libraries(car_ctrl wiringPi)
 target_link_libraries(car_ctrl bluetooth )
 

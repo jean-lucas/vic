@@ -123,33 +123,6 @@ car_ctrl/fast:
 	$(MAKE) -f CMakeFiles/car_ctrl.dir/build.make CMakeFiles/car_ctrl.dir/build
 .PHONY : car_ctrl/fast
 
-blink.o: blink.c.o
-
-.PHONY : blink.o
-
-# target to build an object file
-blink.c.o:
-	$(MAKE) -f CMakeFiles/car_ctrl.dir/build.make CMakeFiles/car_ctrl.dir/blink.c.o
-.PHONY : blink.c.o
-
-blink.i: blink.c.i
-
-.PHONY : blink.i
-
-# target to preprocess a source file
-blink.c.i:
-	$(MAKE) -f CMakeFiles/car_ctrl.dir/build.make CMakeFiles/car_ctrl.dir/blink.c.i
-.PHONY : blink.c.i
-
-blink.s: blink.c.s
-
-.PHONY : blink.s
-
-# target to generate assembly for a file
-blink.c.s:
-	$(MAKE) -f CMakeFiles/car_ctrl.dir/build.make CMakeFiles/car_ctrl.dir/blink.c.s
-.PHONY : blink.c.s
-
 carComms.o: carComms.c.o
 
 .PHONY : carComms.o
@@ -258,6 +231,87 @@ vehicle_navigation.cpp.s:
 	$(MAKE) -f CMakeFiles/car_ctrl.dir/build.make CMakeFiles/car_ctrl.dir/vehicle_navigation.cpp.s
 .PHONY : vehicle_navigation.cpp.s
 
+vichw/motor_speed_controller.o: vichw/motor_speed_controller.cpp.o
+
+.PHONY : vichw/motor_speed_controller.o
+
+# target to build an object file
+vichw/motor_speed_controller.cpp.o:
+	$(MAKE) -f CMakeFiles/car_ctrl.dir/build.make CMakeFiles/car_ctrl.dir/vichw/motor_speed_controller.cpp.o
+.PHONY : vichw/motor_speed_controller.cpp.o
+
+vichw/motor_speed_controller.i: vichw/motor_speed_controller.cpp.i
+
+.PHONY : vichw/motor_speed_controller.i
+
+# target to preprocess a source file
+vichw/motor_speed_controller.cpp.i:
+	$(MAKE) -f CMakeFiles/car_ctrl.dir/build.make CMakeFiles/car_ctrl.dir/vichw/motor_speed_controller.cpp.i
+.PHONY : vichw/motor_speed_controller.cpp.i
+
+vichw/motor_speed_controller.s: vichw/motor_speed_controller.cpp.s
+
+.PHONY : vichw/motor_speed_controller.s
+
+# target to generate assembly for a file
+vichw/motor_speed_controller.cpp.s:
+	$(MAKE) -f CMakeFiles/car_ctrl.dir/build.make CMakeFiles/car_ctrl.dir/vichw/motor_speed_controller.cpp.s
+.PHONY : vichw/motor_speed_controller.cpp.s
+
+vichw/servo_controller.o: vichw/servo_controller.cpp.o
+
+.PHONY : vichw/servo_controller.o
+
+# target to build an object file
+vichw/servo_controller.cpp.o:
+	$(MAKE) -f CMakeFiles/car_ctrl.dir/build.make CMakeFiles/car_ctrl.dir/vichw/servo_controller.cpp.o
+.PHONY : vichw/servo_controller.cpp.o
+
+vichw/servo_controller.i: vichw/servo_controller.cpp.i
+
+.PHONY : vichw/servo_controller.i
+
+# target to preprocess a source file
+vichw/servo_controller.cpp.i:
+	$(MAKE) -f CMakeFiles/car_ctrl.dir/build.make CMakeFiles/car_ctrl.dir/vichw/servo_controller.cpp.i
+.PHONY : vichw/servo_controller.cpp.i
+
+vichw/servo_controller.s: vichw/servo_controller.cpp.s
+
+.PHONY : vichw/servo_controller.s
+
+# target to generate assembly for a file
+vichw/servo_controller.cpp.s:
+	$(MAKE) -f CMakeFiles/car_ctrl.dir/build.make CMakeFiles/car_ctrl.dir/vichw/servo_controller.cpp.s
+.PHONY : vichw/servo_controller.cpp.s
+
+vichw/vic_hardware.o: vichw/vic_hardware.cpp.o
+
+.PHONY : vichw/vic_hardware.o
+
+# target to build an object file
+vichw/vic_hardware.cpp.o:
+	$(MAKE) -f CMakeFiles/car_ctrl.dir/build.make CMakeFiles/car_ctrl.dir/vichw/vic_hardware.cpp.o
+.PHONY : vichw/vic_hardware.cpp.o
+
+vichw/vic_hardware.i: vichw/vic_hardware.cpp.i
+
+.PHONY : vichw/vic_hardware.i
+
+# target to preprocess a source file
+vichw/vic_hardware.cpp.i:
+	$(MAKE) -f CMakeFiles/car_ctrl.dir/build.make CMakeFiles/car_ctrl.dir/vichw/vic_hardware.cpp.i
+.PHONY : vichw/vic_hardware.cpp.i
+
+vichw/vic_hardware.s: vichw/vic_hardware.cpp.s
+
+.PHONY : vichw/vic_hardware.s
+
+# target to generate assembly for a file
+vichw/vic_hardware.cpp.s:
+	$(MAKE) -f CMakeFiles/car_ctrl.dir/build.make CMakeFiles/car_ctrl.dir/vichw/vic_hardware.cpp.s
+.PHONY : vichw/vic_hardware.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -267,9 +321,6 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... car_ctrl"
-	@echo "... blink.o"
-	@echo "... blink.i"
-	@echo "... blink.s"
 	@echo "... carComms.o"
 	@echo "... carComms.i"
 	@echo "... carComms.s"
@@ -282,6 +333,15 @@ help:
 	@echo "... vehicle_navigation.o"
 	@echo "... vehicle_navigation.i"
 	@echo "... vehicle_navigation.s"
+	@echo "... vichw/motor_speed_controller.o"
+	@echo "... vichw/motor_speed_controller.i"
+	@echo "... vichw/motor_speed_controller.s"
+	@echo "... vichw/servo_controller.o"
+	@echo "... vichw/servo_controller.i"
+	@echo "... vichw/servo_controller.s"
+	@echo "... vichw/vic_hardware.o"
+	@echo "... vichw/vic_hardware.i"
+	@echo "... vichw/vic_hardware.s"
 .PHONY : help
 
 

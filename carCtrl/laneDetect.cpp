@@ -38,7 +38,7 @@ int get_lane_status(struct ImageData *img_data) {
 //	const char* imgFile = "straightRoad.jpg";
 //	const char* imgFile = "roadWithStop.jpg";
 //	const char* imgFile = "roadWithInt.jpg";
-//	const char* imgFile = "track1.jpg";
+//	const char* imgFile = "track2.jpg";
 
 //	Mat capMat = imread(imgFile, -1);
 
@@ -57,7 +57,7 @@ int get_lane_status(struct ImageData *img_data) {
 
 	Mat capMat, cannyMat, houghMat;
 
-	capMat = imread(imgFile, -1);
+//	capMat = imread(imgFile, -1);
 	//retrieve the current frame
 	cap >> capMat;
 
@@ -88,7 +88,7 @@ int get_lane_status(struct ImageData *img_data) {
 	vector<Vec4f> lines;
 	vector<Point> leftLines; //left lines and right lines are based on the center point (CAREFUL!)
 	vector<Point> rightLines;
-	
+
 	//vector<vector<Point> > contours;
 	//vector<Vec4i> contour_hier;
 
@@ -170,8 +170,8 @@ int get_lane_status(struct ImageData *img_data) {
 
 
 	double theta1, theta2;
-	theta1 = calculateAvgAngle(leftLines, centerPoint);
-	theta2 = calculateAvgAngle(rightLines,centerPoint);
+	theta1 = calculateAvgAngle(leftLines, centerPoint)*180.0/CV_PI;
+	theta2 = calculateAvgAngle(rightLines,centerPoint)*180.0/CV_PI;
 
 
 	double avgLeftSize, avgRightSize;

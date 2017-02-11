@@ -166,12 +166,6 @@ CMAKE_STRIP:FILEPATH=/usr/bin/strip
 CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
 
 //Value Computed by CMake
-carCtrl_BINARY_DIR:STATIC=/home/pi/homescripts/carCtrl/build
-
-//Value Computed by CMake
-carCtrl_SOURCE_DIR:STATIC=/home/pi/homescripts/carCtrl
-
-//Value Computed by CMake
 car_ctrl_BINARY_DIR:STATIC=/home/pi/homescripts/carCtrl/build
 
 //Value Computed by CMake
