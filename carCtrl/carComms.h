@@ -2,14 +2,15 @@
 #define CARCOMMS_H
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-int sendToIC(char* msg);
-#ifdef __cplusplus
+/* Constants */
+const char[18] IC_ADDR = "AC:2B:6E:04:BF:27";
+const char[18] VC_ADDR = "XX:XX:XX:XX:XX:XX";
 
-}
-#endif
+const int IC_PORT = 1337;
+
+/* function declarations */
+int sendToIC(char* msg);
+int recvFromIC();
 
 
 #endif
