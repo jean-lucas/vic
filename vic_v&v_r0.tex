@@ -85,7 +85,7 @@ linkcolor=black,}  %choose some color if you want links to stand out
 \pagestyle{fancy}
 
 % Header
-\lhead{Draft Hazard Analysis }
+\lhead{Verification and Validation }
 \rhead{Revision: 0}
 \fancyhead[LE,CO]{VIC - Group 6}
 
@@ -228,7 +228,7 @@ linkcolor=black,}  %choose some color if you want links to stand out
 
 \vspace{1 cm}
 {\Large\textbf{\textsc{McMaster University}}\\}  \vspace {1cm}
-{\Large Hazard Analysis\\ \vspace {0.4 cm} SE 4G06}  \vspace {1cm}
+{\Large Verification and Validation\\ \vspace {0.4 cm} SE 4G06}  \vspace {1cm}
 
 {\large \textsc{Group 6} \\} \vspace{1cm}
 
@@ -273,7 +273,7 @@ Zachary Bazen &-& 1200979
 \multicolumn{1}{|c}{\textbf {Authors}} & 
 \multicolumn{1}{|c|}{\textbf {Comments}} \\ \hline
 
-\multirow{4}{*}{\centering January 9, 2017}  & 
+\multirow{4}{*}{\centering February 27, 2017}  & 
 \multirow{4}{*}{Revision 0}& 
 {Alex Jackson \newline
 Jean Lucas Ferreira \newline
@@ -295,53 +295,18 @@ Zachary Bazen}
 
 % -------------- START INTRODUCTION ---------------- %
 \section {Introduction}
+\lipsum[3]
 
-%\begin{landscape}
-%\section{Test}
-%Insert Text Here
-%
-%\end{landscape}
-% Begin landscape page
-When multiple autonomous cars arrive at an intersection simultaneously, due to the lack of a decision making protocol, the cars have no way of determining in which order to proceed. The purpose of this project will be create a system that allows autonomous cars to navigate through  intersections. This will be accomplished by providing an appropriate order for the vehicles to proceed through the intersection.  \newline
+\section {Validation}
+\lipsum[1]
 
 
-Vehicle Intersection Control (also known as VIC) will allow autonomous vehicles to make navigation decisions at intersections. In addition, VIC will be able to dynamically handle changing scenarios at an intersection without running into deadlock or stalemate situations. To ensure safety, VIC will allow cars to navigate through the intersection only after the scheduling algorithm determines the order in which they should proceed. \newline
-
-The following document will outline the hazards that VIC poses to humans, as well hazards to the system. Causes and effect of failures, as well as detection, control and recommended action for failures will also be discussed. 
-
+\section {Verification}
+\lipsum[2]
 
 
-\section{Component Descriptions} 
-
-\subsection{Image Processing}
-This component allows the vehicle to follow lanes and detect obstacles. It makes use of a WebCam, Raspberry Pi, and algorithms to allow the vehicle to interpret the track environment. 
-\subsection{Steering Controller}
-The steering controller works with the image processing component to steer the vehicle. Further more, the steering controller must make adjustments to ensure the vehicle stays within the track lanes. 
-\subsection{Speed Controller} 
-The speed controller uses a hall effect sensor to determine the speed of the car. This controller will make adjustments to the vehicle's speed according to the track environment.  
-\subsection{Communication} 
-The communication component will consist of the blue-tooth signals between the vehicles and intersection controller. The blue-tooth communication will be utilized by the system to make scheduling decisions. 
-\subsection{Intersection Sensors}
-The intersection sensors will be used to provide additional feedback to the intersection controller. The sensors will be placed at each lane of the intersection and will signal the intersection controller when a vehicle has arrived or departed from the intersection. 
-%\subsection{Scheduling Algorithm}
-
-%\section{Safety Considerations}
-
-
-
-
-
-\section{FMEA Worksheet}
-
-
-%\begin{landscape}
-%\section{Test}
-%Insert Text Here
-%
-%\end{landscape}
-
-
-
+% -------------- Begin Landscape Page  ---------------- %
+% landscape page (for extra wide tables if needed)
 
 \newpage
 \pagestyle{fancy}
@@ -363,22 +328,39 @@ The intersection sensors will be used to provide additional feedback to the inte
 
 \break
 
-\begin {figure}[h!]
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% add text between percents for landscape page
+% need to manually add page breaks if exceeds the page size 
 
-%[scale = .5, trim={.4cm 0 .8cm 0},clip] 
-\vspace{-1.6cm}
-\hspace{-2.3cm}\includegraphics {figures/vic_haz.pdf}
+\begin{longtable}{ |p{0.5\textwidth }  | p{0.2\textwidth } |  p{0.3\textwidth } |  p{0.3\textwidth } |}  \caption {Example Table} \\ \hline
+    
+    \textbf{-} & \textbf{-} &  \textbf{-} & \textbf{-} \\ \hline 
+    
+    % Break where table where necessary in landscape mode
+    
+    
+    \cellcolor{tableCell}-  & \cellcolor{tableCell}- & \cellcolor{tableCell}- & \cellcolor{tableCell}-  \\ \hline
+    \pagebreak \hline
+    - & -r & - & - \\ \hline
+    
+    \cellcolor{tableCell}-  & - & - & 
+    -\\ \hline
+    
+    
+    
+    
+\end{longtable}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\end {figure}
-
-
-% This adds the pagenumber to the rotated page
+% This adds the page number to the rotated page
 \begin{landscape}
 \end{landscape}
 \endgroup
 
+% -------------- END Landscape Page  ---------------- %
 
-% This resets geometry after the landscape page
+% -------------- Reset Page  ---------------- %
+
 \newpage
 \paperwidth=\pdfpageheight
 \paperheight=\pdfpagewidth
@@ -386,31 +368,29 @@ The intersection sensors will be used to provide additional feedback to the inte
 \pdfpagewidth=\paperwidth
 \headwidth=\textwidth
 
+\section {Section}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+\lipsum[1-2]
 
 
 
 
 \end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
