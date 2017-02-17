@@ -14,6 +14,7 @@
 % Table cell color package and highlighting
 \usepackage[table]{xcolor}
 \usepackage{color,soul}
+\usepackage{colortbl}
 
 % VIC title package
 \usepackage{cabin}
@@ -132,7 +133,12 @@ linkcolor=black,}  %choose some color if you want links to stand out
 
 % Makes a background color
 \newcommand{\colorsection}[1]{%
-  \colorbox{sectionC}{\parbox{\dimexpr\textwidth-1\fboxsep}{\color{white}\Large\thesection\ \hspace{1mm} #1}}}
+  \colorbox{sectionC}{\parbox{\dimexpr\textwidth -1\fboxsep}{\color{white}\Large\thesection\ \hspace{1mm} #1}}}
+
+%%%%%%%%
+
+  
+%%%%%%%%%%%%%%%%%%%
 
 % Makes a background color
 \titleformat{\subsection} % Subsection
@@ -146,8 +152,10 @@ linkcolor=black,}  %choose some color if you want links to stand out
 \titleformat{\subsubsection} % Subsubsection
 {\normalfont \fontsize{12}{12} \bfseries}{}{0em}{\colorsubsubsection}
 
+
+
 \newcommand{\colorsubsubsection}[1]{%
-  \colorbox{subsubsectionC}{\parbox{\dimexpr\textwidth-1\fboxsep}{\thesubsubsection\ #1}}}
+  \colorbox{subsubsectionC}{\parbox{\dimexpr \textwidth-1\fboxsep}{\thesubsubsection\ #1}}}
 
 % -------- SECTION AND SUBSECTION FORMATING END -------- % 
 \usepackage{lipsum}
@@ -254,7 +262,7 @@ Zachary Bazen &-& 1200979
 
 \tableofcontents
 \listoftables
-\listoffigures
+%\listoffigures
 
 
 
@@ -294,15 +302,39 @@ Zachary Bazen}
 % heading in document
 
 % -------------- START INTRODUCTION ---------------- %
-\section {Introduction}
-\lipsum[3]
+
+
+
+%\hl{\textbf{\Large Suggested Content from Wassyng }}
+%
+%\includegraphics [scale = .8, trim={0in 0in 0in 0in},clip] {figures/SVandV.pdf}
+
+\section {Purpose}
+<Text Here>
+
+
 
 \section {Validation}
-\lipsum[1]
+\subsection{Project Goals}
+
+<Text Here>
+
+
+\subsection{Functional Validation}
+<Text Here>
+
+\subsection{Behaviour Validation}
+
+<Text Here>
 
 
 \section {Verification}
-\lipsum[2]
+
+
+
+
+
+
 
 
 % -------------- Begin Landscape Page  ---------------- %
@@ -318,6 +350,7 @@ Zachary Bazen}
 \headwidth=\textheight
 
 
+
 \begingroup
 
 %% 
@@ -331,25 +364,223 @@ Zachary Bazen}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % add text between percents for landscape page
 % need to manually add page breaks if exceeds the page size 
+% many only have to test the hardware on the cars
+\subsection{Hardware Verification}
+\subsubsection{Individual Vehicle Hardware Component Verification}
+ 
+ 
+ \textbf{4.1.1.1 Component 1 Verification} \vspace{2mm}
+ \begin{longtable}{ |p{0.08\textwidth }  | p{0.18\textwidth } |  p{0.2\textwidth } |  p{0.22\textwidth } | p{0.22\textwidth } | p{0.22\textwidth } |  p{0.1\textwidth } |}  \hline
 
-\begin{longtable}{ |p{0.5\textwidth }  | p{0.2\textwidth } |  p{0.3\textwidth } |  p{0.3\textwidth } |}  \caption {Example Table} \\ \hline
+    % Row 1
+    \rowcolor{subsectionC}\textbf{Test ID} 
+    & \textbf{Requirement ID} 
+    & \multicolumn{1}{c|}{\textbf{Description} }
+    & \multicolumn{1}{c|}{\textbf{Input} }
+    & \textbf{Expected Behaviour} 
+    & \multicolumn{1}{c|}{\textbf{Actual Behaviour} }
+    & \textbf{Pass/Fail} \\  
     
-    \textbf{-} & \textbf{-} &  \textbf{-} & \textbf{-} \\ \hline 
+    % Row 2
+    \multicolumn{1}{|c|}{HC1.1} 
+    & \cellcolor{white}
+    & - Description
+    & - input 1 \newline - input 2 etc.
+    & - Behaviour stuff goes here. Some more stuff
+    & - Actual stuff goes here. Some more stuff
+    & \multicolumn{1}{c|}{Pass}\\ 
     
-    % Break where table where necessary in landscape mode
+    % Row 2 (with color)
+    \rowcolor{tableCell}\multicolumn{1}{|c|}{HC1.2} 
+    & \cellcolor{white}
+    & <Text Here>
+    & <Text Here>
+    & <Text Here>
+    & <Text Here>
+    & \multicolumn{1}{c|}{-}\\ 
+    
+    % Row 3 (without color)
+    \multicolumn{1}{|c|}{HC1.3} 
+    & \cellcolor{white}
+    & 
+    & 
+    & 
+    & 
+    & \multicolumn{1}{c|}{-}\\ 
+    
+     % Row 4
+    \rowcolor{tableCell}\multicolumn{1}{|c|}{HC1.4} 
+    & \multicolumn{1}{c|}{\multirow{-5}{*}{\#} \cellcolor{white}}
+    & 
+    & 
+    & 
+    & 
+    & \multicolumn{1}{c|}{-}\\ \hline
+     
+    \end{longtable}
     
     
-    \cellcolor{tableCell}-  & \cellcolor{tableCell}- & \cellcolor{tableCell}- & \cellcolor{tableCell}-  \\ \hline
-    \pagebreak \hline
-    - & -r & - & - \\ \hline
+    \textbf{4.1.1.2 Component 2 Verification} \vspace{2mm}
+ \begin{longtable}{ |p{0.08\textwidth }  | p{0.18\textwidth } |  p{0.2\textwidth } |  p{0.22\textwidth } | p{0.22\textwidth } | p{0.22\textwidth } |  p{0.1\textwidth } |}  \hline
+
+    % Row 1
+    \rowcolor{subsectionC}\textbf{Test ID} 
+    & \textbf{Requirement ID} 
+    & \multicolumn{1}{c|}{\textbf{Description} }
+    & \multicolumn{1}{c|}{\textbf{Input} }
+    & \textbf{Expected Behaviour} 
+    & \multicolumn{1}{c|}{\textbf{Actual Behaviour} }
+    & \textbf{Pass/Fail} \\  
     
-    \cellcolor{tableCell}-  & - & - & 
-    -\\ \hline
+    % Row 2
+    \multicolumn{1}{|c|}{HC2.1} 
+    & \cellcolor{white}
+    & - Description
+    & - input 1 \newline - input 2 etc.
+    & - Behaviour stuff goes here. Some more stuff
+    & - Actual stuff goes here. Some more stuff
+    & \multicolumn{1}{c|}{Pass}\\ 
+    
+    % Row 2 (with color)
+    \rowcolor{tableCell}\multicolumn{1}{|c|}{HC2.2} 
+    & \cellcolor{white}
+    & <Text Here>
+    & <Text Here>
+    & <Text Here>
+    & <Text Here>
+    & \multicolumn{1}{c|}{-}\\ 
+    
+    % Row 3 (without color)
+    \multicolumn{1}{|c|}{HC2.3} 
+    & \cellcolor{white}
+    & 
+    & 
+    & 
+    & 
+    & \multicolumn{1}{c|}{-}\\ 
+    
+     % Row 4
+    \rowcolor{tableCell}\multicolumn{1}{|c|}{HC2.4} 
+    & \multicolumn{1}{c|}{\multirow{-5}{*}{\#} \cellcolor{white}}
+    & 
+    & 
+    & 
+    & 
+    & \multicolumn{1}{c|}{-}\\ \hline
+     
+    \end{longtable}
+    
+    \textbf{4.1.1.3 Component 1 Verification} \vspace{2mm}
+ \begin{longtable}{ |p{0.08\textwidth }  | p{0.18\textwidth } |  p{0.2\textwidth } |  p{0.22\textwidth } | p{0.22\textwidth } | p{0.22\textwidth } |  p{0.1\textwidth } |}  \hline
+
+    % Row 1
+    \rowcolor{subsectionC}\textbf{Test ID} 
+    & \textbf{Requirement ID} 
+    & \multicolumn{1}{c|}{\textbf{Description} }
+    & \multicolumn{1}{c|}{\textbf{Input} }
+    & \textbf{Expected Behaviour} 
+    & \multicolumn{1}{c|}{\textbf{Actual Behaviour} }
+    & \textbf{Pass/Fail} \\  
+    
+    % Row 2
+    \multicolumn{1}{|c|}{HC3.1} 
+    & \cellcolor{white}
+    & - Description
+    & - input 1 \newline - input 2 etc.
+    & - Behaviour stuff goes here. Some more stuff
+    & - Actual stuff goes here. Some more stuff
+    & \multicolumn{1}{c|}{Pass}\\ 
+    
+    % Row 2 (with color)
+    \rowcolor{tableCell}\multicolumn{1}{|c|}{HC3.2} 
+    & \cellcolor{white}
+    & <Text Here>
+    & <Text Here>
+    & <Text Here>
+    & <Text Here>
+    & \multicolumn{1}{c|}{-}\\ 
+    
+    % Row 3 (without color)
+    \multicolumn{1}{|c|}{HC3.3} 
+    & \cellcolor{white}
+    & 
+    & 
+    & 
+    & 
+    & \multicolumn{1}{c|}{-}\\ 
+    
+     % Row 4
+    \rowcolor{tableCell}\multicolumn{1}{|c|}{HC3.4} 
+    & \multicolumn{1}{c|}{\multirow{-5}{*}{\#} \cellcolor{white}}
+    & 
+    & 
+    & 
+    & 
+    & \multicolumn{1}{c|}{-}\\ \hline
+     
+    \end{longtable}
+
+
+\subsubsection{Integrated Vehicle Hardware Component Verification}
+
+\pagebreak 
+\textbf{4.1.2.1 Integrated Verification} \vspace{2mm}
+ \begin{longtable}{ |p{0.08\textwidth }  | p{0.18\textwidth } |  p{0.2\textwidth } |  p{0.22\textwidth } | p{0.22\textwidth } | p{0.22\textwidth } |  p{0.1\textwidth } |}  \hline
+
+    % Row 1
+    \rowcolor{subsectionC}\textbf{Test ID} 
+    & \textbf{Requirement ID} 
+    & \multicolumn{1}{c|}{\textbf{Description} }
+    & \multicolumn{1}{c|}{\textbf{Input} }
+    & \textbf{Expected Behaviour} 
+    & \multicolumn{1}{c|}{\textbf{Actual Behaviour} }
+    & \textbf{Pass/Fail} \\  
+    
+    % Row 2
+    \multicolumn{1}{|c|}{IHC1.1} 
+    & \cellcolor{white}
+    & - Description
+    & - input 1 \newline - input 2 etc.
+    & - Behaviour stuff goes here. Some more stuff
+    & - Actual stuff goes here. Some more stuff
+    & \multicolumn{1}{c|}{Pass}\\ 
+    
+     
+     
+    % Row 2 (with color)
+    \rowcolor{tableCell}\multicolumn{1}{|c|}{IHC1.2} 
+    & \cellcolor{white}
+    & <Text Here>
+    & <Text Here>
+    & <Text Here>
+    & <Text Here>
+    & \multicolumn{1}{c|}{-}\\  
+    
+    % Row 3 (without color)
+    \multicolumn{1}{|c|}{IHC1.3} 
+    & \cellcolor{white}
+    & 
+    & 
+    & 
+    & 
+    & \multicolumn{1}{c|}{-}\\ 
     
     
-    
-    
-\end{longtable}
+     % Row 4
+    \rowcolor{tableCell}\multicolumn{1}{|c|}{IHC1.4} 
+    & \multicolumn{1}{c|}{\multirow{-5}{*}{\#} \cellcolor{white}}
+    & 
+    & 
+    & 
+    & 
+    & \multicolumn{1}{c|}{-}\\ \hline
+     
+    \end{longtable}
+
+
+
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % This adds the page number to the rotated page
@@ -368,9 +599,174 @@ Zachary Bazen}
 \pdfpagewidth=\paperwidth
 \headwidth=\textwidth
 
-\section {Section}
+\subsection {Software Verification}  
+\subsubsection{Vehicle Software Verification}
 
-\lipsum[1-2]
+
+\textbf{4.2.1.1 <Module Name>} \vspace{2mm}
+ \begin{longtable}{ |p{0.08\textwidth }  |   p{0.22\textwidth } | p{0.22\textwidth } | p{0.22\textwidth } |  p{0.122\textwidth } |}  \hline
+
+    % Row 1
+    \rowcolor{subsectionC}\textbf{Test ID}
+    & \multicolumn{1}{c|}{\textbf{Input} }
+    & \textbf{Expected Behaviour} 
+    & \multicolumn{1}{c|}{\textbf{Actual Behaviour} }
+    & \multicolumn{1}{c|}{\textbf{Pass/Fail}} \\  
+    
+    % Row 2
+    \multicolumn{1}{|c|}{VSC1.1} 
+    & - input 1 \newline - input 2 etc.
+    & - Behaviour stuff goes here. Some more stuff
+    & - Actual stuff goes here. Some more stuff
+    & \multicolumn{1}{c|}{Pass}\\ 
+    
+    % Row 2 (with color)
+    \rowcolor{tableCell}\multicolumn{1}{|c|}{VSC1.2} 
+    & <Text Here>
+    & <Text Here>
+    & <Text Here>
+    & \multicolumn{1}{c|}{-}\\ 
+    
+    % Row 3 (without color)
+    \multicolumn{1}{|c|}{VSC1.3} 
+    & 
+    & 
+    & 
+    & \multicolumn{1}{c|}{-}\\ 
+    
+     % Row 4
+    \rowcolor{tableCell}\multicolumn{1}{|c|}{VSC1.4} 
+    & 
+    & 
+    & 
+    & \multicolumn{1}{c|}{-}\\ \hline
+     
+    \end{longtable}
+    
+    
+    \textbf{4.2.1.2 <Module Name>} \vspace{2mm}
+ \begin{longtable}{ |p{0.08\textwidth }  |   p{0.22\textwidth } | p{0.22\textwidth } | p{0.22\textwidth } |  p{0.122\textwidth } |}  \hline
+
+    % Row 1
+    \rowcolor{subsectionC}\textbf{Test ID}
+    & \multicolumn{1}{c|}{\textbf{Input} }
+    & \textbf{Expected Behaviour} 
+    & \multicolumn{1}{c|}{\textbf{Actual Behaviour} }
+    & \multicolumn{1}{c|}{\textbf{Pass/Fail}} \\  
+    
+    % Row 2
+    \multicolumn{1}{|c|}{VSC2.1} 
+    & - input 1 \newline - input 2 etc.
+    & - Behaviour stuff goes here. Some more stuff
+    & - Actual stuff goes here. Some more stuff
+    & \multicolumn{1}{c|}{Pass}\\ 
+    
+    % Row 2 (with color)
+    \rowcolor{tableCell}\multicolumn{1}{|c|}{VSC2.2} 
+    & <Text Here>
+    & <Text Here>
+    & <Text Here>
+    & \multicolumn{1}{c|}{-}\\ 
+    
+    % Row 3 (without color)
+    \multicolumn{1}{|c|}{VSC2.3} 
+    & 
+    & 
+    & 
+    & \multicolumn{1}{c|}{-}\\ 
+    
+     % Row 4
+    \rowcolor{tableCell}\multicolumn{1}{|c|}{VSC2.4} 
+    & 
+    & 
+    & 
+    & \multicolumn{1}{c|}{-}\\ \hline
+     
+    \end{longtable}
+
+\subsubsection{Intersection Controller Software Verification}
+\textbf{4.2.2.1 <Module Name>} \vspace{2mm}
+ \begin{longtable}{ |p{0.08\textwidth }  |   p{0.22\textwidth } | p{0.22\textwidth } | p{0.22\textwidth } |  p{0.122\textwidth } |}  \hline
+
+    % Row 1
+    \rowcolor{subsectionC}\textbf{Test ID}
+    & \multicolumn{1}{c|}{\textbf{Input} }
+    & \textbf{Expected Behaviour} 
+    & \multicolumn{1}{c|}{\textbf{Actual Behaviour} }
+    & \multicolumn{1}{c|}{\textbf{Pass/Fail}} \\  
+    
+    % Row 2
+    \multicolumn{1}{|c|}{IC1.1} 
+    & - input 1 \newline - input 2 etc.
+    & - Behaviour stuff goes here. Some more stuff
+    & - Actual stuff goes here. Some more stuff
+    & \multicolumn{1}{c|}{Pass}\\ 
+    
+    % Row 2 (with color)
+    \rowcolor{tableCell}\multicolumn{1}{|c|}{IC1.2} 
+    & <Text Here>
+    & <Text Here>
+    & <Text Here>
+    & \multicolumn{1}{c|}{-}\\ 
+    
+    % Row 3 (without color)
+    \multicolumn{1}{|c|}{IC1.3} 
+    & 
+    & 
+    & 
+    & \multicolumn{1}{c|}{-}\\ 
+    
+     % Row 4
+    \rowcolor{tableCell}\multicolumn{1}{|c|}{IC1.4} 
+    & 
+    & 
+    & 
+    & \multicolumn{1}{c|}{-}\\ \hline
+     
+    \end{longtable}
+
+
+\subsubsection{Integrated Vehicle Intersection Software Verification}
+\textbf{4.2.3.1 } \vspace{2mm}
+ \begin{longtable}{ |p{0.08\textwidth }  |   p{0.22\textwidth } | p{0.22\textwidth } | p{0.22\textwidth } |  p{0.122\textwidth } |}  \hline
+
+    % Row 1
+    \rowcolor{subsectionC}\textbf{Test ID}
+    & \multicolumn{1}{c|}{\textbf{Input} }
+    & \textbf{Expected Behaviour} 
+    & \multicolumn{1}{c|}{\textbf{Actual Behaviour} }
+    & \multicolumn{1}{c|}{\textbf{Pass/Fail}} \\  
+    
+    % Row 2
+    \multicolumn{1}{|c|}{VIC.1} 
+    & - input 1 \newline - input 2 etc.
+    & - Behaviour stuff goes here. Some more stuff
+    & - Actual stuff goes here. Some more stuff
+    & \multicolumn{1}{c|}{Pass}\\ 
+    
+    % Row 2 (with color)
+    \rowcolor{tableCell}\multicolumn{1}{|c|}{VIC.2} 
+    & <Text Here>
+    & <Text Here>
+    & <Text Here>
+    & \multicolumn{1}{c|}{-}\\ 
+    
+    % Row 3 (without color)
+    \multicolumn{1}{|c|}{VIC.3} 
+    & 
+    & 
+    & 
+    & \multicolumn{1}{c|}{-}\\ 
+    
+     % Row 4
+    \rowcolor{tableCell}\multicolumn{1}{|c|}{VIC.4} 
+    & 
+    & 
+    & 
+    & \multicolumn{1}{c|}{-}\\ \hline
+     
+    \end{longtable}
+
 
 
 
