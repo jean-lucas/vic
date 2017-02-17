@@ -11,17 +11,17 @@ using namespace cv;
 using namespace std;
 
 
-Point getMidpoint(Point a, Point b);
-double calculateAvgAngle(vector<Point> vec, Point center);
-double calculateAvgLineSize(vector<Point> vec, Point center);
-double lineLength(Point a, Point b);
-double getDistanceToLine(Point a, Point b);
+Point2d getMidpoint(Point2d a, Point2d b);
+double calculateAvgAngle(vector<Point2d> vec, Point2d center);
+double calculateAvgLineSize(vector<Point2d> vec, Point2d center);
+double lineLength(Point2d a, Point2d b);
+double getDistanceToLine(Point2d a, Point2d b);
 
 
 /* 
 	Test if camera can capture images/videos 
-	If successful return pointer to VideoCapture object
-	Else return null pointer
+	If successful return Point2der to VideoCapture object
+	Else return null Point2der
 */
 VideoCapture test_camera() {
 
@@ -33,6 +33,8 @@ VideoCapture test_camera() {
 	}
 	return cap;
 }
+
+
 
 
 int get_lane_status(struct ImageData *img_data, VideoCapture *cap) {
@@ -77,13 +79,13 @@ int get_lane_status(struct ImageData *img_data, VideoCapture *cap) {
 	Size size = houghMat.size();
 	int imgHeight = size.height;
 	int imgWidth  = size.width;
-	Point centerPoint = Point(imgWidth/2.0, imgHeight);
+	Point2d centerPoint = Point2d(imgWidth/2.0, imgHeight);
 	circle(houghMat,centerPoint,5,Scalar(255,150,50),2,LINE_8,0);
 
 
 	vector<Vec4f> lines;
-	vector<Point> leftLines; //left lines and right lines are based on the center point (CAREFUL!)
-	vector<Point> rightLines;
+	vector<Point2d> leftLines; //left lines and right lines are based on the center point (CAREFUL!)
+	vector<Point2d> rightLines;
 
 	//vector<vector<Point> > contours;
 	//vector<Vec4i> contour_hier;
@@ -107,9 +109,9 @@ int get_lane_status(struct ImageData *img_data, VideoCapture *cap) {
 
 	//draw detected lines
 	for (size_t i = 0; i < lines.size(); i++) {
-		Point a = Point(lines[i][0],lines[i][1]);
-		Point b = Point(lines[i][2],lines[i][3]);
-		Point mid = getMidpoint(a,b);
+		Point2d a = Point2d(lines[i][0],lines[i][1]);
+		Point2d b = Point2d(lines[i][2],lines[i][3]);
+		Point2d mid = getMidpoint(a,b);
 
 		//if we have already detected an intersection in the current frame
 		//no point of continuing to check
@@ -162,6 +164,7 @@ int get_lane_status(struct ImageData *img_data, VideoCapture *cap) {
 // 			printf("position (%d , %d)\n", contours[i][0].x, contours[i][0].y);
 // 			circle(houghMat,Point(contours[i][0].x, contours[i][0].y),15,Scalar(255,200,0));
 // //		}
+
 // 	}
 
 
@@ -174,7 +177,7 @@ int get_lane_status(struct ImageData *img_data, VideoCapture *cap) {
 	avgLeftSize = calculateAvgLineSize(leftLines, centerPoint);
 	avgRightSize = calculateAvgLineSize(rightLines, centerPoint);
 
-	//printf("Theta1: %f \nTheta2: %f \n", theta1, theta2);
+//	printf("Theta1: %f \tTheta2: %f \n", theta1, theta2);
 	//printf("leftLine: %f \trightLine: %f \n",avgLeftSize, avgRightSize);
 
 	img_data->avg_left_angle 	= theta1;
@@ -197,7 +200,7 @@ int get_lane_status(struct ImageData *img_data, VideoCapture *cap) {
 
 
 
-double calculateAvgLineSize(vector<Point> vec, Point center) {
+double calculateAvgLineSize(vector<Point2d> vec, Point2d center) {
 	double current;
 	int n = vec.size();
 
@@ -209,7 +212,7 @@ double calculateAvgLineSize(vector<Point> vec, Point center) {
 	return current/(double)n;
 }
 
-double calculateAvgAngle(vector<Point> vec, Point center) {
+double calculateAvgAngle(vector<Point2d> vec, Point2d center) {
 	double currAngle, top, bot;
 	int n = vec.size();
 
@@ -226,13 +229,139 @@ double calculateAvgAngle(vector<Point> vec, Point center) {
 }
 
 
-Point getMidpoint(Point a, Point b) {
+Point2d getMidpoint(Point2d a, Point2d b) {
 	double midX = (a.x + b.x)/2.0;
 	double midY = (a.y + b.y)/2.0;
-	return Point(midX, midY);
+	return Point2d(midX, midY);
 }
 
-double getDistanceToLine(Point a, Point b) {
-	double distance = sqrt(pow( (double) a.x - b.x, 2) + pow( (double) a.y - b.y, 2));
+double getDistanceToLine(Point2d a, Point2d b) {
+	double distance = sqrt(pow(  a.x - b.x, 2) + pow(  a.y - b.y, 2));
 	return distance;
+}
+
+
+
+
+/**
+	For testing purposes.
+	It will take an image of the track, and show all the lines it has captured
+	Image will be saved into lanecap.png
+*/
+void capture_lane(VideoCapture *cap) {
+
+		if (!(cap->isOpened())) {
+			printf("failed to open capture\n");
+			cap->release();
+			
+		}
+
+
+		Mat capMat, cannyMat, houghMat;
+		cap->read(capMat);
+
+
+
+		//finds edges in the capMatMath  via the Canny Edge detection algorithm, and puts 
+		//result in cannyMat
+		//Canny(inputMay, outputMat, threshold_1, threshold_2, apertureSize, L2Gradient )
+	//	Canny(capMat, cannyMat, 50, 200, 3);
+		Canny(capMat, cannyMat, 55, 110, 3);
+
+		//converts img in cannyMat to another colour space and puts it in houghMat
+		cvtColor(cannyMat, houghMat, CV_GRAY2BGR);
+
+
+
+		//basic information of the image
+		Size size = houghMat.size();
+		int imgHeight = size.height;
+		int imgWidth  = size.width;
+		Point2d centerPoint = Point2d( imgWidth/2.0, imgHeight);
+		circle(houghMat,centerPoint,5,Scalar(255,150,50),2,LINE_8,0);
+
+
+		vector<Vec4f> lines;
+		vector<Point2d> leftLines; //left lines and right lines are based on the center point (CAREFUL!)
+		vector<Point2d> rightLines;
+
+
+
+		//(inputMat, output vector N x 4, distance resolution of accumulator, angle of accumulator, threshold, minLineLength, maxLineGap )
+		HoughLinesP(cannyMat, lines, 1, CV_PI/180,50,5,1);
+
+
+		//to  detect an intersection, we can look for the horizontal lines across the lane.
+		//for  this we can just compare the y values between two points of a line.
+		bool intersectionDetected = false;
+		double estimatedIntersectionDistance = 0;
+
+		//to detect an obstacle, we can try to find a countour  within our image, find the area of the given contour
+		//and thus determnine if an obstacle  is ahead or not.
+		//Instead of  using contours we can follow a similar approach to the intersection detection above
+		bool  obstacleDetected = false;
+
+		//draw detected lines
+		for (size_t i = 0; i < lines.size(); i++) {
+			Point2d a = Point2d( lines[i][0], lines[i][1]);
+			Point2d b = Point2d( lines[i][2], lines[i][3]);
+			Point2d mid = getMidpoint(a,b);
+
+			//if we have already detected an intersection in the current frame
+			//no point of continuing to check
+			if (!intersectionDetected) {
+				if ( fabs(a.y-b.y) <= STRAIGHT_LINE_THRESHOLD) {
+					//printf("found intersection at points (%d %d) to (%d %d)\n", a.x,a.y,b.x,b.y);
+					circle(houghMat,a,10,Scalar(255,60,200));
+					circle(houghMat,b,10,Scalar(255,60,200));
+					intersectionDetected = true;
+				}
+			}
+
+			else if (estimatedIntersectionDistance <= 0) {
+				estimatedIntersectionDistance = getDistanceToLine(mid, centerPoint) * PIXEL_TO_METER_FACTOR;
+				printf("estimatedDistance to intersection = %f meters or %f pixels\n", estimatedIntersectionDistance, getDistanceToLine(mid, centerPoint));
+			} 
+
+
+			//if an end-point of a line plus the midpoint are to one side of the img center,
+			// than consider which side it is on,
+			//else IGNORE THE LINE (may need to fix this)
+			if (mid.x <= centerPoint.x && (a.x <= centerPoint.x || b.x <= centerPoint.x)) {
+				leftLines.push_back(mid);
+			}
+
+			else if (mid.x >= centerPoint.x && (a.x >= centerPoint.x || b.x >= centerPoint.x)) {
+				rightLines.push_back(mid);
+			}
+			else {
+				printf("ignoring a line...\n");
+			}
+
+
+			circle(houghMat,mid,5,Scalar(255,100,0));
+
+			line(houghMat, mid, centerPoint, Scalar(0,255,0),1,8);
+			line(houghMat, a, b, Scalar(0,0,255),3,8);
+
+
+		}
+
+		for (int i = 0; i < leftLines.size(); i++) {
+			Point2d a = Point2d(lines[i][0], lines[i][1]);
+			printf("%lf %lf \n", a.x, a.y);
+		}
+
+		double theta1, theta2;
+        	theta1 = calculateAvgAngle(leftLines, centerPoint);
+        	theta2 = calculateAvgAngle(rightLines,centerPoint);
+
+		printf("the1 %f \t the2 %f \n", theta1, theta2);
+		theta1 = theta1*180.0/CV_PI;
+		theta2 = theta2*180.0/CV_PI;
+		printf("the1 %f \t the2 %f \n", theta1, theta2);
+
+
+		imwrite("../../lanecap_canny.png", cannyMat);
+		imwrite("../../lanecap.png", houghMat);
 }

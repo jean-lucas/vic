@@ -19,8 +19,7 @@ int update_navigation(ImageData *img, CarStatus *car){
 	if(angle_diff_abs >= ANGLE_THRESHOLD){
 
 		double angle_diff =  img->avg_left_angle - img->avg_right_angle;
-		new_angle = angle_diff/2;
-
+		new_angle = angle_diff/3;
 	}
 	else if(angle_diff_abs < ANGLE_THRESHOLD && car->current_wheel_angle > 0) {
 		new_angle = 0;
@@ -30,13 +29,15 @@ int update_navigation(ImageData *img, CarStatus *car){
 		new_angle = car->current_wheel_angle;
 	}
 
+	printf("setting angle= %f \n", new_angle);
+
+
 	if(new_angle > MAX_ANGLE){
 		new_angle = MAX_ANGLE;
 	}else if(new_angle < -1*MAX_ANGLE){
 		new_angle = -1*MAX_ANGLE;
 	}
 
-	printf("setting angle= %f \n", new_angle);
 
 	car->current_wheel_angle = new_angle;
 	vichw_set_angle(new_angle);

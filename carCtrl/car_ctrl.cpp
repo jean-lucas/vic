@@ -20,7 +20,12 @@ cv::VideoCapture cap;
 
 
 int main(int argc, char** argv) {
-
+	if (argc > 1) {
+		cap = test_camera();
+		capture_lane(&cap);
+		cap.release();
+		return 0;
+	}
 	if (!init()) {
 		printf("failed to init\n");
 		exit(0);
@@ -57,13 +62,16 @@ int init () {
 	cap = test_camera(); 
 	status &= vichw_init();
 
-
 	return status;
 }
 
 int run() {
 
 	int valid = 1;
+
+	//for testing
+	//capture_lane(&cap);
+
 	while (valid) {
 		valid &= get_lane_status(&img_data, &cap);
 		valid &= update_navigation(&img_data, &car_stat);
@@ -73,10 +81,10 @@ int run() {
 		img_data.left_line_length, img_data.right_line_length, img_data.intersection_distance, img_data.intersection_detected, \
 		img_data.obstacle_detected);
 */
+
 	cap.release();
 	vichw_deinit();
 
 	return valid;
 
 }
-
