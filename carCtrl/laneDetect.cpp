@@ -18,20 +18,24 @@ double lineLength(Point a, Point b);
 double getDistanceToLine(Point a, Point b);
 
 
-/* Test if camera can capture images/videos */
-int test_camera() {
+/* 
+	Test if camera can capture images/videos 
+	If successful return pointer to VideoCapture object
+	Else return null pointer
+*/
+VideoCapture test_camera() {
 
 	VideoCapture cap(DEFAULT_CAMERA_ID);
 
 	if (!cap.isOpened()) {
 		printf("failed to open capture\n");
-		return 0;
+		exit(0);
 	}
-	return 1;
+	return cap;
 }
 
 
-int get_lane_status(struct ImageData *img_data) {
+int get_lane_status(struct ImageData *img_data, VideoCapture *cap) {
 
 //	const char* imgFile = pathName;
 //	const char* imgFile = "road.jpg";
@@ -40,17 +44,11 @@ int get_lane_status(struct ImageData *img_data) {
 //	const char* imgFile = "roadWithInt.jpg";
 //	const char* imgFile = "track2.jpg";
 
-//	Mat capMat = imread(imgFile, -1);
 
-//	if (capMat.empty()) {
-//		printf("could not load img \n");
-//		return 0;
-//	}
 
-	VideoCapture cap(DEFAULT_CAMERA_ID);
-
-	if (!cap.isOpened()) {
+	if (!(cap->isOpened())) {
 		printf("failed to open capture\n");
+		cap->release();
 		return 0;
 	}
 
@@ -59,10 +57,8 @@ int get_lane_status(struct ImageData *img_data) {
 
 //	capMat = imread(imgFile, -1);
 	//retrieve the current frame
-	cap >> capMat;
+	cap->read(capMat);
 
-	//close camera
-	cap.release();
 
 
 

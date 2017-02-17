@@ -2,6 +2,7 @@
 #define LANEDETECT_H
 
 #include "vic_types.h"
+#include "opencv2/highgui/highgui.hpp"
 
 //constants
 const int DEFAULT_CAMERA_ID = 0;
@@ -12,8 +13,8 @@ const float STRAIGHT_LINE_THRESHOLD = 50;
 const float PIXEL_TO_METER_FACTOR = 0.5;
 
 
-int get_lane_status(struct ImageData *img_data);
-int test_camera();
+int get_lane_status(struct ImageData *img_data,  cv::VideoCapture *cap);
+cv::VideoCapture test_camera();
 
 
 
