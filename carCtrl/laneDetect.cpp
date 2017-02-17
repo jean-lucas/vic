@@ -39,11 +39,6 @@ VideoCapture test_camera() {
 
 int get_lane_status(struct ImageData *img_data, VideoCapture *cap) {
 
-//	const char* imgFile = pathName;
-//	const char* imgFile = "road.jpg";
-//	const char* imgFile = "straightRoad.jpg";
-//	const char* imgFile = "roadWithStop.jpg";
-//	const char* imgFile = "roadWithInt.jpg";
 //	const char* imgFile = "track2.jpg";
 
 
@@ -87,14 +82,9 @@ int get_lane_status(struct ImageData *img_data, VideoCapture *cap) {
 	vector<Point2d> leftLines; //left lines and right lines are based on the center point (CAREFUL!)
 	vector<Point2d> rightLines;
 
-	//vector<vector<Point> > contours;
-	//vector<Vec4i> contour_hier;
 
 	//(inputMat, output vector N x 4, distance resolution of accumulator, angle of accumulator, threshold, minLineLength, maxLineGap )
 	HoughLinesP(cannyMat, lines, 1, CV_PI/180,50,5,1);
-
-	//
-	//findContours(cannyMat, contours, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE);
 
 	//to  detect an intersection, we can look for the horizontal lines across the lane.
 	//for  this we can just compare the y values between two points of a line.
@@ -145,27 +135,8 @@ int get_lane_status(struct ImageData *img_data, VideoCapture *cap) {
 		}
 
 
-		//circle(houghMat,mid,5,Scalar(255,100,0));
-
-		//necessary lines
-		//line(houghMat, mid, centerPoint, Scalar(0,255,0),1,8);
-		//line(houghMat, a, b, Scalar(0,0,255),3,8);
-
-
 	}
 
-
-	//detected contours
-// 	for (size_t i = 0; i < contours.size(); i++) {
-
-// //		if (isContourConvex(contours[i])) {
-// 			double area = contourArea(contours[i]);
-// 			printf("area = %f\t", area);
-// 			printf("position (%d , %d)\n", contours[i][0].x, contours[i][0].y);
-// 			circle(houghMat,Point(contours[i][0].x, contours[i][0].y),15,Scalar(255,200,0));
-// //		}
-
-// 	}
 
 
 	double theta1, theta2;
@@ -257,7 +228,7 @@ void capture_lane(VideoCapture *cap) {
 		}
 
 
-		Mat capMat, cannyMat, houghMat;
+		Mat capMat, cannyMat, houghMat, transCap, transMat;
 		cap->read(capMat);
 
 
@@ -265,8 +236,8 @@ void capture_lane(VideoCapture *cap) {
 		//finds edges in the capMatMath  via the Canny Edge detection algorithm, and puts 
 		//result in cannyMat
 		//Canny(inputMay, outputMat, threshold_1, threshold_2, apertureSize, L2Gradient )
-	//	Canny(capMat, cannyMat, 50, 200, 3);
-		Canny(capMat, cannyMat, 55, 110, 3);
+		Canny(capMat, cannyMat, 80, 200, 3);
+	//	Canny(capMat, cannyMat, 55, 110, 3);
 
 		//converts img in cannyMat to another colour space and puts it in houghMat
 		cvtColor(cannyMat, houghMat, CV_GRAY2BGR);
@@ -280,6 +251,7 @@ void capture_lane(VideoCapture *cap) {
 		Point2d centerPoint = Point2d( imgWidth/2.0, imgHeight);
 		circle(houghMat,centerPoint,5,Scalar(255,150,50),2,LINE_8,0);
 
+		Point2d topCenterPoint = Point2d(imgWidth/2.0, 0);
 
 		vector<Vec4f> lines;
 		vector<Point2d> leftLines; //left lines and right lines are based on the center point (CAREFUL!)
@@ -300,6 +272,8 @@ void capture_lane(VideoCapture *cap) {
 		//and thus determnine if an obstacle  is ahead or not.
 		//Instead of  using contours we can follow a similar approach to the intersection detection above
 		bool  obstacleDetected = false;
+
+		Point2d topLeft(imgWidth,0), topRight(0,0);
 
 		//draw detected lines
 		for (size_t i = 0; i < lines.size(); i++) {
@@ -329,10 +303,18 @@ void capture_lane(VideoCapture *cap) {
 			//else IGNORE THE LINE (may need to fix this)
 			if (mid.x <= centerPoint.x && (a.x <= centerPoint.x || b.x <= centerPoint.x)) {
 				leftLines.push_back(mid);
+				if (mid.x < topLeft.x) {
+					topLeft.x = mid.x;
+					topLeft.y = mid.y;
+				}
 			}
 
 			else if (mid.x >= centerPoint.x && (a.x >= centerPoint.x || b.x >= centerPoint.x)) {
 				rightLines.push_back(mid);
+				if (mid.x > topRight.x) {
+                                        topRight.x = mid.x;
+                                        topRight.y = mid.y;
+                                }
 			}
 			else {
 				printf("ignoring a line...\n");
@@ -347,21 +329,24 @@ void capture_lane(VideoCapture *cap) {
 
 		}
 
-		for (int i = 0; i < leftLines.size(); i++) {
-			Point2d a = Point2d(lines[i][0], lines[i][1]);
-			printf("%lf %lf \n", a.x, a.y);
-		}
-
-		double theta1, theta2;
-        	theta1 = calculateAvgAngle(leftLines, centerPoint);
-        	theta2 = calculateAvgAngle(rightLines,centerPoint);
-
-		printf("the1 %f \t the2 %f \n", theta1, theta2);
-		theta1 = theta1*180.0/CV_PI;
-		theta2 = theta2*180.0/CV_PI;
-		printf("the1 %f \t the2 %f \n", theta1, theta2);
+		Point2f  preTrans[4];
+		preTrans[0] = Point2f(topLeft.x, topLeft.y);
+		preTrans[1] = Point2f(topRight.x,topRight.y);
+		preTrans[2] = Point2f(0,imgHeight);
+		preTrans[3] = Point2f(imgWidth,imgHeight);
 
 
+		Point2f  postTrans[4];
+                postTrans[0] = Point2f(0,0);
+                postTrans[1] = Point2f(imgWidth,0);
+                postTrans[2] = Point2f(0,imgHeight);
+                postTrans[3] = Point2f(imgWidth,imgHeight);
+
+
+		
+		transCap = getPerspectiveTransform(preTrans,postTrans);
+		warpPerspective(cannyMat, transMat,transCap,size); 
 		imwrite("../../lanecap_canny.png", cannyMat);
 		imwrite("../../lanecap.png", houghMat);
+		imwrite("../../lanecap_transform.png", transMat);
 }
