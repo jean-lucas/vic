@@ -357,23 +357,23 @@ The intersection sensors will be used to provide additional feedback to the inte
 
 
 \break
-\vspace{4mm}
+\vspace{6mm}
 \hspace{-2.1cm}{
     \begin{minipage}{\textwidth}
     
 
 
- \hspace{2.0cm} {\textbf{4.1.1.2 Component 2 Verification}} \vspace{2mm}
+ 
  \begin{longtable}{ |p{0.14\textwidth }  | p{0.20\textwidth } |  p{0.22\textwidth } |  p{0.23\textwidth } | p{0.18\textwidth } | p{0.23\textwidth } |  p{0.24\textwidth }|}  \hline
 
     % ---------------- Block 1------------------- %
     % Row 1
-    \cellcolor{subsectionC}\centering \textbf{Design Component} 
-    & \multicolumn{1}{c|}{\cellcolor{tableCell}\textbf{Failure Modes} }
+    \rowcolor{subsectionC}\centering \textbf{Design Component} 
+    & \multicolumn{1}{c|}{\textbf{Failure Modes} }
     & \multicolumn{1}{c|}{\textbf{Causes of Failure}}
-    & \multicolumn{1}{c|}{\cellcolor{tableCell}\textbf{Effects of Failure}}
+    & \multicolumn{1}{c|}{\textbf{Effects of Failure}}
     & \multicolumn{1}{c|}{\textbf{Detection}} 
-    & \multicolumn{1}{c|}{\cellcolor{tableCell} \textbf{Controls} }
+    & \multicolumn{1}{c|}{\textbf{Controls} }
     & \multicolumn{1}{c|}{\textbf{ Recommended Action}} \\  \hline
     
     
@@ -383,14 +383,14 @@ The intersection sensors will be used to provide additional feedback to the inte
     &  \cellcolor{tableCell}\begin{minipage} {.19\columnwidth}
             \begin{center}Incorrect  Lane Following \end{center}
         \end{minipage} 
-    & \begin{minipage}{.22\textwidth} 
+    & \cellcolor{tableCell}\begin{minipage}{.22\columnwidth} 
                 \begin{enumerate}
                     \item Damaged webcam
                     \item Slow feedback
                     \item Dead battery \vspace {1mm}
                 \end{enumerate}
         \end{minipage}
-    & \cellcolor{tableCell}\begin{minipage}{.22\textwidth} 
+    & \cellcolor{tableCell}\begin{minipage}{.22\columnwidth} 
                 \vspace{2mm}
                 \begin{enumerate}
                     \item Collision with humans or cars
@@ -398,13 +398,13 @@ The intersection sensors will be used to provide additional feedback to the inte
                     \item Image proccesing fails to operate \vspace {1mm}
                 \end{enumerate}
         \end{minipage}
-    & \begin{minipage}{.18\textwidth} 
+    & \cellcolor{tableCell}\begin{minipage}{.18\columnwidth} 
                 \begin{enumerate}
                     \item Visual check
                     \item Signal for dead battery \vspace {1mm}
                 \end{enumerate}
         \end{minipage}
-    & \cellcolor{tableCell}\begin{minipage}{.23\textwidth} 
+    & \cellcolor{tableCell}\begin{minipage}{.23\columnwidth} 
                 \vspace{2mm}
                 \begin{enumerate}
                     \item Image processing algorithm must respond within a required time
@@ -413,7 +413,7 @@ The intersection sensors will be used to provide additional feedback to the inte
         \end{minipage}
     
     
-    & \begin{minipage}{.24 \columnwidth} 
+    & \cellcolor{tableCell}\begin{minipage}{.24 \columnwidth} 
                 \vspace{2mm}
                 \begin{enumerate}
                     \item If too many consecutive deadlines are missed, controller will adjust speed
@@ -424,8 +424,8 @@ The intersection sensors will be used to provide additional feedback to the inte
     % Row 3 
     \multirow{-8}{*}{\begin{minipage} {.12\columnwidth}
     \begin{center}Image \\Processing \end{center}
-    \end{minipage}\cellcolor{subsectionC} }
-    & \cellcolor{tableCell}\begin{minipage} {.19\columnwidth}
+    \end{minipage} \cellcolor{subsectionC} }
+    & \begin{minipage} {.19\columnwidth}
             \begin{center}Incorrect  Obstacle Detection \end{center}
         \end{minipage} 
     & \begin{minipage}{.22\textwidth} 
@@ -436,7 +436,7 @@ The intersection sensors will be used to provide additional feedback to the inte
                     \item Loss of power\vspace {1mm}
                 \end{enumerate}
         \end{minipage}
-    & \cellcolor{tableCell}\begin{minipage}{.22\textwidth} 
+    & \begin{minipage}{.22\textwidth} 
                 \vspace{2mm}
                 \begin{enumerate}
                     \item Collision with humans or vehicles\vspace {1mm}
@@ -448,7 +448,7 @@ The intersection sensors will be used to provide additional feedback to the inte
                     \item Signal for dead battery \vspace {1mm}
                 \end{enumerate}
         \end{minipage}
-    & \cellcolor{tableCell}\begin{minipage}{.23\textwidth} 
+    & \begin{minipage}{.22\columnwidth} 
                 \vspace{2mm}
                 \begin{enumerate}
                     \item Image processing algorithm must respond within a required time
@@ -473,14 +473,14 @@ The intersection sensors will be used to provide additional feedback to the inte
     % row 4
     \multirow{-1}{*}{\begin{minipage} {.12\columnwidth}
     \begin{center}Steering  \\Controller \end{center}
-    \end{minipage}\cellcolor{subsectionC} }
+    \end{minipage}\cellcolor{subsectionC} \cellcolor{subsectionC}}
     & \cellcolor{tableCell}\begin{minipage} {.19\columnwidth}
             \begin{center}Incorrect  Steering \end{center}
         \end{minipage} 
-    & \begin{minipage}{.22\textwidth} 
+    & \cellcolor{tableCell}\begin{minipage}{.22\textwidth} 
                 \vspace {1mm}
                 \begin{enumerate}
-                    \item Software Malfunction
+                    \item Software Miscalculation 
                     \item Damaged Servo
                     \item Disconnected Wires
                     \item Loose steering assembly
@@ -495,7 +495,7 @@ The intersection sensors will be used to provide additional feedback to the inte
                     \item Vehicle fails to make turn \vspace {1mm}
                 \end{enumerate}
         \end{minipage}
-    & \begin{minipage}{.18\textwidth} 
+    & \cellcolor{tableCell}\begin{minipage}{.18\textwidth} 
                 \begin{enumerate}
                     \item Visual check \vspace {1mm}
                 \end{enumerate}
@@ -508,7 +508,7 @@ The intersection sensors will be used to provide additional feedback to the inte
         \end{minipage}
     
     
-    & \begin{minipage}{.24 \columnwidth} 
+    & \cellcolor{tableCell}\begin{minipage}{.24 \columnwidth} 
                 \vspace{2mm}
                 \begin{enumerate}
                     \item Direction corrected with software
@@ -525,8 +525,8 @@ The intersection sensors will be used to provide additional feedback to the inte
     % row 5
     \multirow{-1}{*}{\begin{minipage} {.12\columnwidth}
     \begin{center}Speed \\Controller \end{center}
-    \end{minipage}\cellcolor{subsectionC} }
-    & \cellcolor{tableCell}\begin{minipage} {.19\columnwidth}
+    \end{minipage} \cellcolor{subsectionC} }
+    & \begin{minipage} {.19\columnwidth}
             \begin{center}Incorrect  Speed \end{center}
         \end{minipage} 
     & \begin{minipage}{.22\textwidth} 
@@ -540,7 +540,7 @@ The intersection sensors will be used to provide additional feedback to the inte
                     \item Loss of power\vspace {1mm}
                 \end{enumerate}
         \end{minipage}
-    & \cellcolor{tableCell}\begin{minipage}{.22\textwidth} 
+    & \begin{minipage}{.22\textwidth} 
                 \vspace{2mm}
                 \begin{enumerate}
                     \item Failure to stop at intersection
@@ -556,7 +556,7 @@ The intersection sensors will be used to provide additional feedback to the inte
                     \item Visual check \vspace {1mm}
                 \end{enumerate}
         \end{minipage}
-    & \cellcolor{tableCell}\begin{minipage}{.23\textwidth} 
+    & \begin{minipage}{.23\textwidth} 
                 \vspace{2mm}
                 \begin{enumerate}
                     \item Feedback loop between speed sensor and speed controller \vspace {1mm}
@@ -604,7 +604,7 @@ The intersection sensors will be used to provide additional feedback to the inte
     &  \cellcolor{tableCell}\begin{minipage} {.19\columnwidth}
             \begin{center}Failure to maintain signal \end{center}
         \end{minipage} 
-    & \begin{minipage}{.22\textwidth} 
+    & \cellcolor{tableCell}\begin{minipage}{.22\textwidth} 
                 \begin{enumerate}
                     \item Low signal
                     \item Car distance out of range
@@ -618,15 +618,15 @@ The intersection sensors will be used to provide additional feedback to the inte
                     \item Vehicle goes through intersection at the wrong time \vspace {1mm}
                 \end{enumerate}
         \end{minipage}
-    & \begin{minipage}{.18\textwidth} 
+    & \cellcolor{tableCell}\begin{minipage}{.18\textwidth} 
                 \begin{enumerate}
                     \item Intersection Sensors will detect car at intersection \vspace {1mm}
                 \end{enumerate}
         \end{minipage}
-    & \cellcolor{tableCell}
+    & \cellcolor{tableCell} 
     
     
-    & \begin{minipage}{.24 \columnwidth} 
+    & \cellcolor{tableCell}\begin{minipage}{.24 \columnwidth} 
                 \vspace{2mm}
                 \begin{enumerate}
                     \item Refresh/Reconnect 
@@ -638,7 +638,7 @@ The intersection sensors will be used to provide additional feedback to the inte
     \multirow{-5}{*}{\begin{minipage} {.12\columnwidth}
     \begin{center} \small Communication \end{center}
     \end{minipage}\cellcolor{subsectionC} }
-    & \cellcolor{tableCell}\begin{minipage} {.19\columnwidth}
+    & \begin{minipage} {.19\columnwidth}
             \begin{center} Failure to transmit signal \end{center}
         \end{minipage} 
     & \begin{minipage}{.22\textwidth} 
@@ -648,7 +648,7 @@ The intersection sensors will be used to provide additional feedback to the inte
                     \item Loss of power\vspace {1mm}
                 \end{enumerate}
         \end{minipage}
-    & \cellcolor{tableCell}\begin{minipage}{.22\textwidth} 
+    & \begin{minipage}{.22\textwidth} 
                 \vspace{2mm}
                 \begin{enumerate}
                     \item Vehicle waits too long at intersection
@@ -660,7 +660,7 @@ The intersection sensors will be used to provide additional feedback to the inte
                     \item Intersection Sensors will detect car at intersection \vspace {1mm}
                 \end{enumerate}
         \end{minipage}
-    & \cellcolor{tableCell}
+    & 
     
     
     & \begin{minipage}{.24 \columnwidth} 
@@ -683,10 +683,10 @@ The intersection sensors will be used to provide additional feedback to the inte
     & \cellcolor{tableCell}\begin{minipage} {.19\columnwidth}
             \begin{center} Failure to detect vehicles \end{center}
         \end{minipage} 
-    & \begin{minipage}{.22\textwidth} 
+    & \cellcolor{tableCell}\begin{minipage}{.22\textwidth} 
                 \vspace {1mm}
                 \begin{enumerate}
-                    \item Damaged/disconnected sensors
+                    \item Damaged/ disconnected sensors
                     \item Software Failure\vspace {1mm}
                 \end{enumerate}
         \end{minipage}
@@ -698,7 +698,7 @@ The intersection sensors will be used to provide additional feedback to the inte
                     \item Vehicle collision\vspace {1mm}
                 \end{enumerate}
         \end{minipage}
-    & \begin{minipage}{.18\textwidth} 
+    & \cellcolor{tableCell}\begin{minipage}{.18\textwidth} 
                 \begin{enumerate}
                     \item Lack of feeback
                     \item Check for correct signal when vehicle is at the intersection\vspace {1mm}
@@ -712,7 +712,7 @@ The intersection sensors will be used to provide additional feedback to the inte
         \end{minipage}
     
     
-    & \begin{minipage}{.24 \columnwidth} 
+    & \cellcolor{tableCell}\begin{minipage}{.24 \columnwidth} 
                 \vspace{2mm}
                 \begin{enumerate}
                     \item Reconfigure/Replace Sensor \vspace {1mm}
@@ -734,9 +734,8 @@ The intersection sensors will be used to provide additional feedback to the inte
 % \pagebreak
 
 % \begin {figure}[h!]
-
 % %[scale = .5, trim={.4cm 0 .8cm 0},clip] 
-% \vspace{-1.6cm}
+% \vspace*{-1.6cm}
 % \hspace{-2.3cm}\includegraphics {figures/vic_haz.pdf}
 
 % \end {figure}
