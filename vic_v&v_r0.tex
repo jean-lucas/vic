@@ -40,6 +40,7 @@
 \usepackage{multicol}
 \usepackage{multirow}
 \usepackage{array}
+\usepackage{tabularx}
 \renewcommand{\arraystretch}{1.4}% Spread rows out evenly in table
 \setlength{\LTpre}{0.5pt} % Reduces white space around tables (top)
 %\setlength{\LTpost}{0pt} % Reduces white space around tables (bottom)
@@ -305,30 +306,147 @@ Zachary Bazen}
 
 
 
-%\hl{\textbf{\Large Suggested Content from Wassyng }}
-%
-%\includegraphics [scale = .8, trim={0in 0in 0in 0in},clip] {figures/SVandV.pdf}
 
 \section {Purpose}
-<Text Here>
+The purpose of this document is to examine the previous project goals and requirements, and to see how the end system complies with these requirements.  Through validation, it will determined if the project goals were met. Verification will allow for the detection of errors, and build a level of confidence in the system.\\
+
+This document will include a traceability matrix to map the test cases to the functional requirements. Further more, the test cases will be presented along with a code walk-through, and static analysis.  \\
+
+
+The intended audience for this document consists of Dr. Alan Wassyng and the course's teaching assistants.
 
 
 
 \section {Validation}
-\subsection{Project Goals}
 
-<Text Here>
+\subsection{Project Goals and Functional Validation}
+The system consists of two main components: Vehicle Controller and Intersection Controller. Each component of the system has its own specific goals. By integrating these component-specific goals with our functional requirements, the entire project goals are realized. Therefore, if we can validate that our system components meet our functional requirements, we can assert that they fulfill our project goals.\\
 
 
-\subsection{Functional Validation}
-<Text Here>
 
-\subsection{Behaviour Validation}
+ \begin{longtable}{ |p{0.18\textwidth }  |   p{0.58\textwidth } | p{0.15\textwidth } |} \caption{Vehicle Controller Component Goals}\\ \hline
 
-<Text Here>
+    % Row 1
+     \rowcolor{subsectionC}
+     \multicolumn{1}{|c|}{\textbf{Component Name}} &
+     \multicolumn{1}{c|}{\textbf{Goals}} &
+     \textbf{Functional Requirement} \\ \hline
+    
+    % Row 2
+    Image Processing
+    & - Detect lanes, obstacles, and the intersection & V2, V3, V5, V6 \\ \hline
+    
+    Vehicle Navigation
+    & - Guide the vehicle movements on the track \newline - Stop the vehicle when necessary & V2, V4, V5, V6  \\ \hline
+    
+    Communication
+    & - Send request messages to the Intersection Controller \newline - Receive response messages from the Intersection Controller & V1 \\ \hline
+    
+    Servo Motor
+    & - Set the desired angle of the wheels & V2, V5, V6   \\ \hline
+    
+    Speed Controller
+    & - Set the desired speed of the vehicle & V2, V4, V5, V6 \\ \hline    
+ \end{longtable}
+
+
+
+
+ \begin{longtable}{ |p{0.18\textwidth }  |   p{0.59\textwidth } | p{0.14\textwidth } |} \caption{Intersection Controller Component Goals}\\ \hline
+
+
+    % Row 1
+     \rowcolor{subsectionC}
+     \multicolumn{1}{|c|}{\textbf{Component Name}} &
+     \multicolumn{1}{c|}{\textbf{Goals}} &
+     \textbf{Functional Requirement} \\ \hline
+    
+    % Row 2
+    Vehicle Detection
+    & - Detect location of cars and obstacles present at the intersection & IC1, IC3\\ \hline
+    
+    Communication
+    & - Receive request messages from the Vehicle Controller \newline - Send response messages to the Vehicle Controller & IC5\\ \hline
+    
+    Intersection \newline Management
+    & - Control the traffic flow of the intersection & IC4 \\ \hline
+      
+ \end{longtable}
+
+
+\section{Traceability Matrix}
+\pagebreak
+\begin{center}
+
+\begin{tabularx} {\textwidth} {|c|c|c|c|c|c|c|c|c|c|c|c|c| c|} \hline
+  \textbf{Identifier} & \begin{minipage} {.075\columnwidth} \vspace{1mm} \begin {center}\textbf{Reqs Tested}\vspace{1mm}\end{center}\end{minipage}
+ & \textbf{V1} &\textbf{V2} &\textbf{V3} &\textbf{V4} &\textbf{V5} &\textbf{V6}&\textbf{V7} &\textbf{IC1} &\textbf{IC2} &\textbf{IC3} &\textbf{IC4}&\textbf{IC5}  \\ \hline
+ 
+ 
+ \textbf{Test Cases}& 13 & 4  &\#\# &\#\# &\#\# &\#\# &\#\# &\#\# &\#\# &\#\# &\#\# & 2 & 13 \\ \hline
+
+ 
+ %
+ % Matrix Entries Start Here
+ \textbf{HC1.1}&\# & & & & & & & & & & & & \\ \hline
+ \textbf{HC1.2}&\# & & & & & & & & & & & & \\ \hline
+ \textbf{HC1.N}&\# & & & & & & & & & & & & \\ \hline
+ \textbf{HC2.N}&\# & & & & & & & & & & & & \\ \hline
+ & & & & & & & & & & & & &\\ \hline
+ & & & & & & & & & & & & &\\ \hline 
+ & & & & & & & & & & & & &\\ \hline
+ \textbf{IC1.1}&2 & X & & & & & & & & & & & X \\ \hline
+ \textbf{IC1.2}&3&X && & & & & & & & & X & X  \\ \hline 
+ \textbf{IC1.3}&1& & & & & & & & & & & & X  \\ \hline 
+ \textbf{IC1.4}&2&X & & & & & & & & & & & X  \\ \hline 
+ \textbf{IC1.5}&1&X & & & & & & & & & & &   \\ \hline 
+ \textbf{IC2.1}&1 & & & & & & & & & & & & X \\ \hline
+ \textbf{IC2.2}&2& & & & & & & & & & &X & X  \\ \hline 
+ \textbf{IC2.3}&1& & & & & & & & & & & & X  \\ \hline 
+ \textbf{IC2.4}&1& & & & & & & & & & & & X  \\ \hline 
+ \textbf{IC2.5}&1& & & & & & & & & & & & X  \\ \hline 
+ \textbf{IC3.1}&1 & & & & & & & & & & & & X \\ \hline
+ \textbf{IC3.2}&1& & & & & & & & & & & & X  \\ \hline 
+ \textbf{IC3.3}&1& & & & & & & & & & & & X  \\ \hline 
+ & & & & & & & & & & & & &\\ \hline
+ & & & & & & & & & & & & &\\ \hline
+ & & & & & & & & & & & & &\\ \hline
+ & & & & & & & & & & & & &\\ \hline
+ & & & & & & & & & & & & &\\ \hline
+ & & & & & & & & & & & & &\\ \hline
+ & & & & & & & & & & & & &\\ \hline
+ & & & & & & & & & & & & &\\ \hline
+ & & & & & & & & & & & & &\\ \hline
+ & & & & & & & & & & & & &\\ \hline
+ & & & & & & & & & & & & &\\ \hline
+ & & & & & & & & & & & & &\\ \hline
+ & & & & & & & & & & & & &\\ \hline
+ & & & & & & & & & & & & &\\ \hline
+ & & & & & & & & & & & & &\\ \hline
+
+\end{tabularx}
+
+
+% Tabluarx doesn't split across pages, must manually continue table if need more rows
+\begin{tabularx} {\textwidth} {|c|c|c|c|c|c|c|c|c|c|c|c|c| c|} \hline
+  \hspace {1.9mm} \textbf{Identifier \hspace {1.9mm} } & \begin{minipage} {.075\columnwidth} \vspace{1mm} \begin {center}\textbf{Reqs Tested}\vspace{1mm}\end{center}\end{minipage}
+ & \textbf{V1} &\textbf{V2} &\textbf{V3} &\textbf{V4} &\textbf{V5} &\textbf{V6}&\textbf{V7} &\textbf{IC1} &\textbf{IC2} &\textbf{IC3} &\textbf{IC4}&\textbf{IC5}  \\ \hline
+ 
+  & & & & & & & & & & & & &\\ \hline
+ & & & & & & & & & & & & &\\ \hline
+
+
+\end{tabularx}
+
+\end{center}
+
+
+
 
 
 \section {Verification}
+
+
 
 
 
@@ -369,7 +487,7 @@ Zachary Bazen}
 \subsubsection{Individual Vehicle Hardware Component Verification}
  
  
- \textbf{4.1.1.1 Component 1 Verification} \vspace{2mm}
+ \textbf{4.1.1.1 Servo Verification} \vspace{2mm}
  \begin{longtable}{ |p{0.08\textwidth }  | p{0.18\textwidth } |  p{0.2\textwidth } |  p{0.22\textwidth } | p{0.22\textwidth } | p{0.22\textwidth } |  p{0.1\textwidth } |}  \hline
 
     % Row 1
@@ -410,7 +528,7 @@ Zachary Bazen}
     
      % Row 4
     \rowcolor{tableCell}\multicolumn{1}{|c|}{HC1.4} 
-    & \multicolumn{1}{c|}{\multirow{-5}{*}{\#} \cellcolor{white}}
+    & \multicolumn{1}{c|}{\multirow{-5}{*}{V2, V5, V6} \cellcolor{white}}
     & 
     & 
     & 
@@ -435,7 +553,7 @@ Zachary Bazen}
     % Row 2
     \multicolumn{1}{|c|}{HC2.1} 
     & \cellcolor{white}
-    & - Description
+    & \cellcolor{white}
     & - input 1 \newline - input 2 etc.
     & - Behaviour stuff goes here. Some more stuff
     & - Actual stuff goes here. Some more stuff
@@ -444,7 +562,7 @@ Zachary Bazen}
     % Row 2 (with color)
     \rowcolor{tableCell}\multicolumn{1}{|c|}{HC2.2} 
     & \cellcolor{white}
-    & <Text Here>
+    & \cellcolor{white}
     & <Text Here>
     & <Text Here>
     & <Text Here>
@@ -462,7 +580,9 @@ Zachary Bazen}
      % Row 4
     \rowcolor{tableCell}\multicolumn{1}{|c|}{HC2.4} 
     & \multicolumn{1}{c|}{\multirow{-5}{*}{\#} \cellcolor{white}}
-    & 
+    & \multicolumn{1}{c|}{\multirow{-5}{*}{\begin{minipage} {.2\columnwidth}
+    testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing
+    \end{minipage}} \cellcolor{white}}
     & 
     & 
     & 
@@ -543,9 +663,7 @@ Zachary Bazen}
     & - input 1 \newline - input 2 etc.
     & - Behaviour stuff goes here. Some more stuff
     & - Actual stuff goes here. Some more stuff
-    & \multicolumn{1}{c|}{Pass}\\ 
-    
-     
+    & \multicolumn{1}{c|}{Pass}\\  
      
     % Row 2 (with color)
     \rowcolor{tableCell}\multicolumn{1}{|c|}{IHC1.2} 
@@ -684,8 +802,11 @@ Zachary Bazen}
      
     \end{longtable}
 
+% Intersection Module Stuff
 \subsubsection{Intersection Controller Software Verification}
-\textbf{4.2.2.1 <Module Name>} \vspace{2mm}
+
+    
+    \textbf{5.2.2.1 Communication - Recieve} \vspace{2mm}
  \begin{longtable}{ |p{0.08\textwidth }  |   p{0.22\textwidth } | p{0.22\textwidth } | p{0.22\textwidth } |  p{0.122\textwidth } |}  \hline
 
     % Row 1
@@ -697,27 +818,165 @@ Zachary Bazen}
     
     % Row 2
     \multicolumn{1}{|c|}{IC1.1} 
-    & - input 1 \newline - input 2 etc.
-    & - Behaviour stuff goes here. Some more stuff
-    & - Actual stuff goes here. Some more stuff
-    & \multicolumn{1}{c|}{Pass}\\ 
+    & - Single vehicle intersection request 
+    & - Extract request information and put Car object in arrival queue 
+    & - 
+    & \multicolumn{1}{c|}{-}\\ 
+    
+    % Row 2 
+    \rowcolor{tableCell}\multicolumn{1}{|c|}{IC1.2} 
+    & - More than 1 vehicle intersection request 
+    & - Extract request information and put Car objects in arrival queue in the order that they arrive 
+    & -
+    & \multicolumn{1}{c|}{-}\\ 
+    
+    % Row 3 (without color)
+    \multicolumn{1}{|c|}{IC1.3} 
+    & - Vehicle intersection request that is terminated prior to receive completion
+    & - Timeout/ disconnected receive error is caught and system becomes available for subsequent requests
+    & 
+    & \multicolumn{1}{c|}{-}\\ 
+    
+     % Row 4
+    \rowcolor{tableCell}\multicolumn{1}{|c|}{IC1.4} 
+    & - High volume vehicle requests
+    & - Extract request information and put Car objects in arrival queue in the order that they arrive. There is no limitation of buffer size, all completed sent requests should be in arrival buffer. 
+    &  
+    & \multicolumn{1}{c|}{-}\\ 
+    
+    % Row 4 (without color)
+    \multicolumn{1}{|c|}{IC1.5} 
+    & - Invalid message \newline request
+    & - Car objects should only be produced and added to arrival buffer with protocol accepted message contents
+    & 
+    & \multicolumn{1}{c|}{-}\\ \hline
+
+     
+    \end{longtable}
+    
+    \textbf{5.2.2.2 Communication - Send} \vspace{2mm}
+ \begin{longtable}{ |p{0.08\textwidth }  |   p{0.22\textwidth } | p{0.22\textwidth } | p{0.22\textwidth } |  p{0.122\textwidth } |}  \hline
+
+    % Row 1
+    \rowcolor{subsectionC}\textbf{Test ID}
+    & \multicolumn{1}{c|}{\textbf{Input} }
+    & \textbf{Expected Behaviour} 
+    & \multicolumn{1}{c|}{\textbf{Actual Behaviour} }
+    & \multicolumn{1}{c|}{\textbf{Pass/Fail}} \\  
+    
+    % Row 2
+   
+    \multicolumn{1}{|c|}{IC2.1} 
+    & - Car object  
+    & - Remove vehicle from departure queue and extract proceed destination address and port number. Send proceed message 
+    & - 
+    & \multicolumn{1}{c|}{-}\\ 
+    
+    % Row 2 
+  
+    \rowcolor{tableCell}\multicolumn{1}{|c|}{IC2.2} 
+    & - More than 1 car objects 
+    & - Remove vehicles from departure queue in FIFO order. Extract individual proceed destination addresses and port numbers. Send proceed messages. 
+    & -
+    & \multicolumn{1}{c|}{-}\\ 
+    
+    
+    % Row 3
+    \multicolumn{1}{|c|}{IC2.3} 
+    & - High volume vehicle requests
+    & - Should behave as IC3.2 expected behaviour
+    &  
+    & \multicolumn{1}{c|}{-}\\
+   
+    % Row 4 
+    \rowcolor{tableCell}\multicolumn{1}{|c|}{IC2.4} 
+    & - Send to inactive connection
+    & - Inactive connection error should be caught. The system should then attempt to send the message again (up to the maximum attempt limit)
+    & 
+    & \multicolumn{1}{c|}{-}\\ 
+    
+    % Row 5 (without color)
+    \multicolumn{1}{|c|}{IC2.5} 
+    & - Connection terminated prior to send completion 
+    & - Timeout/ disconnected send error should be caught.  The system should then attempt to send the message again (up to the maximum attempt limit)
+    & 
+    & \multicolumn{1}{c|}{-}\\ \hline
+
+     
+    \end{longtable}
+    
+     \textbf{5.2.2.3 Communication - Message Extraction} \vspace{2mm}
+ \begin{longtable}{ |p{0.08\textwidth }  |   p{0.22\textwidth } | p{0.22\textwidth } | p{0.22\textwidth } |  p{0.122\textwidth } |}  \hline
+
+    % Row 1
+    \rowcolor{subsectionC}\textbf{Test ID}
+    & \multicolumn{1}{c|}{\textbf{Input} }
+    & \multicolumn{1}{c|}{\textbf{Expected Values} }
+    & \multicolumn{1}{c|}{\textbf{Actual Values} }
+    & \multicolumn{1}{c|}{\textbf{Pass/Fail}} \\  
+    
+    % Row 2
+       \multicolumn{1}{|c|}{IC3.1} 
+    % input is client message with destination port number, arriving from, going to
+    % client address doesn't need to be transmitted in the request as this can be retrieved when
+    % the connection is made
+    & 2, 'Red', 'Blue'
+    % expected output is a car object with destination bluetooth id, port number, arriving from, and going to
+    & Car(bluetooth Address, 1, 'Red', 'Blue') 
+    &  
+    & \multicolumn{1}{c|}{-}\\
+    
+    
+    % Row 3
+    \rowcolor{tableCell}\multicolumn{1}{|c|}{IC3.2} 
+    & 2, 'Red', 'Red'
+    & Incorrect Message contents
+    &  
+    & \multicolumn{1}{c|}{-}\\ 
+    
+    % Row 4
+    \multicolumn{1}{|c|}{IC3.3} 
+    & -, 'Yellow', 'Green'
+    & Incorrect Message contents
+    &  
+    & \multicolumn{1}{c|}{-}\\ \hline
+    
+    \end{longtable}
+    
+    
+    \textbf{5.2.2.4 ImageProcessing} \vspace{2mm}
+ \begin{longtable}{ |p{0.08\textwidth }  |   p{0.22\textwidth } | p{0.22\textwidth } | p{0.22\textwidth } |  p{0.122\textwidth } |}  \hline
+
+    % Row 1
+    \rowcolor{subsectionC}\textbf{Test ID}
+    & \multicolumn{1}{c|}{\textbf{Input} }
+    & \textbf{Expected Behaviour} 
+    & \multicolumn{1}{c|}{\textbf{Actual Behaviour} }
+    & \multicolumn{1}{c|}{\textbf{Pass/Fail}} \\  
+    
+    % Row 2
+    \multicolumn{1}{|c|}{IC4.1} 
+    & - 
+    & - 
+    & - 
+    & \multicolumn{1}{c|}{-}\\ 
     
     % Row 2 (with color)
-    \rowcolor{tableCell}\multicolumn{1}{|c|}{IC1.2} 
+    \rowcolor{tableCell}\multicolumn{1}{|c|}{IC4.2} 
     & <Text Here>
     & <Text Here>
     & <Text Here>
     & \multicolumn{1}{c|}{-}\\ 
     
     % Row 3 (without color)
-    \multicolumn{1}{|c|}{IC1.3} 
+    \multicolumn{1}{|c|}{IC4.3} 
     & 
     & 
     & 
     & \multicolumn{1}{c|}{-}\\ 
     
      % Row 4
-    \rowcolor{tableCell}\multicolumn{1}{|c|}{IC1.4} 
+    \rowcolor{tableCell}\multicolumn{1}{|c|}{IC4.4} 
     & 
     & 
     & 
@@ -727,7 +986,7 @@ Zachary Bazen}
 
 
 \subsubsection{Integrated Vehicle Intersection Software Verification}
-\textbf{4.2.3.1 } \vspace{2mm}
+\textbf{5.2.3.1 } \vspace{2mm}
  \begin{longtable}{ |p{0.08\textwidth }  |   p{0.22\textwidth } | p{0.22\textwidth } | p{0.22\textwidth } |  p{0.122\textwidth } |}  \hline
 
     % Row 1
@@ -739,22 +998,22 @@ Zachary Bazen}
     
     % Row 2
     \multicolumn{1}{|c|}{VIC.1} 
-    & - input 1 \newline - input 2 etc.
-    & - Behaviour stuff goes here. Some more stuff
-    & - Actual stuff goes here. Some more stuff
-    & \multicolumn{1}{c|}{Pass}\\ 
+    & - Single vehicle, clear intersection
+    & - Vehicle proceeds directly through the intersection
+    & - 
+    & \multicolumn{1}{c|}{-}\\ 
     
     % Row 2 (with color)
     \rowcolor{tableCell}\multicolumn{1}{|c|}{VIC.2} 
-    & <Text Here>
-    & <Text Here>
-    & <Text Here>
+    & - Single vehicle, obstacle in intersection
+    & - Vehicle should stop at the intersection
+    & 
     & \multicolumn{1}{c|}{-}\\ 
     
     % Row 3 (without color)
     \multicolumn{1}{|c|}{VIC.3} 
-    & 
-    & 
+    & - Single vehicle, intersection controller system not working
+    & - Vehicle should stop at the intersection and wait
     & 
     & \multicolumn{1}{c|}{-}\\ 
     
@@ -763,7 +1022,50 @@ Zachary Bazen}
     & 
     & 
     & 
-    & \multicolumn{1}{c|}{-}\\ \hline
+    & \multicolumn{1}{c|}{-}\\ 
+    
+        % Row 5 (without color)
+    \multicolumn{1}{|c|}{VIC.5} 
+    & - Multiple vehicles, parallel directions, clear intersection
+    & - Vehicles proceed directly through the intersection
+    & 
+    & \multicolumn{1}{c|}{-}\\ 
+    
+     % Row 6
+    \rowcolor{tableCell}\multicolumn{1}{|c|}{VIC.6} 
+    & - Vehicle A and Vehicle B, crossing directions, clear intersection, Vehicle A is first
+    & - Vehicles A proceeds directly through the intersection, Vehicle B stops at the intersection 
+    & 
+    & \multicolumn{1}{c|}{-}\\ 
+    
+    % Row 7 (without color)
+    \multicolumn{1}{|c|}{VIC.7} 
+    & - Multiple vehicles, obstacle in intersection
+    & - Vehicles should stop at the intersection 
+    & 
+    & \multicolumn{1}{c|}{-}\\ 
+    
+     % Row 8
+    \rowcolor{tableCell}\multicolumn{1}{|c|}{VIC.8} 
+    & - Multiple vehicles, intersection controller not working
+    & - Vehicles should stop at the intersection and wait
+    & 
+    & \\
+    
+    
+    % Row 9 (without color)
+    \multicolumn{1}{|c|}{VIC.9} 
+    & - 
+    & -  
+    & 
+    & \multicolumn{1}{c|}{-}\\ 
+    
+     % Row 10
+    \rowcolor{tableCell}\multicolumn{1}{|c|}{VIC.10} 
+    & - 
+    & - 
+    & 
+    & \\\hline
      
     \end{longtable}
 
