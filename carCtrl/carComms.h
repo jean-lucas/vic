@@ -9,6 +9,7 @@ const char* VC_ADDR = "XX:XX:XX:XX:XX:XX";
 const int IC_PORT = 1337;
 
 /* function declarations */
+char* serializeMessage();
 int sendToIC(char* msg);
 int recvFromIC();
 

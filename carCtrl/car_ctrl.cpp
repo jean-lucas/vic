@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <pthread.h>
 
 #include "opencv2/highgui/highgui.hpp"
 
@@ -42,7 +43,7 @@ int init () {
 
 	unsigned int status = 1;
 
-	car_stat.current_speed 		 = 0.55;
+	car_stat.current_speed 		 = 0.5;
 	car_stat.current_wheel_angle     = 0;
 	car_stat.car_id 		 = CAR_ID;
 	car_stat.intersection_stop 	 = 0;
@@ -69,8 +70,6 @@ int run() {
 
 	int valid = 1;
 
-	//for testing
-	//capture_lane(&cap);
 
 	while (valid) {
 		valid &= get_lane_status(&img_data, &cap);

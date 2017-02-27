@@ -1,4 +1,4 @@
-/*
+`/*
 	http://people.csail.mit.edu/albert/bluez-intro
 */
 
@@ -50,6 +50,8 @@ int sendToIC(char* msg) {
     Input: ??
     Output: result from IC (negative for error, 0 for stop @ intersection, 1 to proceed)
 */
+
+/*
 int recvFromIC() {
 
     struct sockaddr_rc loc_addr = { 0 }, rem_addr = { 0 };
@@ -89,3 +91,4 @@ int recvFromIC() {
     return 0;
 
 }
+*/
