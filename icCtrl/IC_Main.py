@@ -19,7 +19,7 @@ import random
 class Communication (object):
 
     bt_port_receive = 1
-    departures = deque()
+    proceeds = deque()
     
     def __init__(self):
         # receiveing thread
@@ -80,12 +80,12 @@ class Communication (object):
 
         while True:
 
-            if (len(self.departures) > 0):
+            if (len(self.proceeds) > 0):
                 
-##                print "Departure length, %d" % len(self.departures)
+##                print "Departure length, %d" % len(self.proceeds)
 ##                print
                 
-                car = self.departures.pop()
+                car = self.proceeds.pop()
                 port = getattr(car, 'port')
                 address = getattr(car, 'client_bluetooth_ID')
                 message_to_car = getattr(car, 'message_to_car')
@@ -117,8 +117,8 @@ class Communication (object):
 
         return Car(my_content[0], client_bluetooth_ID[0], my_content[1], my_content[2], '')
 
-    def add_departure_queue(self, car):
-        self.departures.appendleft(car)
+    def add_proceed_queue(self, car):
+        self.proceeds.appendleft(car)
         
 
 
@@ -133,6 +133,7 @@ class IC_Main(object):
     traffic = TrafficController()
     detect = VehicleDetection()
     arrivals = deque()
+    intersection_cars = [0 for i in range(10)]
 
     
     
@@ -165,6 +166,18 @@ class IC_Main(object):
             if (len(self.arrivals) > 0):
                 #print "Arrival length, %d" % len(self.arrivals)
                 car = self.arrivals.pop()
+
+                current_car_index = 0
+
+                for i in range(10):
+                    if(intersection_cars[i]==0):
+                        intersection_cars[i] = car
+                        current_car_index = i
+
+                while (getattr(intersection_cars[current_car_index], 'proceed_now') == False):
+                    #dostuff: get indexes of cars leaving intersection
+                    #remove those cars from intersection_cars array
+                    #check if current car is able to safely proceed
                 #time.sleep(.2)
                 test=test+1
                 print "Message counter %d: " % test
@@ -189,9 +202,9 @@ class IC_Main(object):
 ##        # gets the object method you wish call and its parameters
 ##        getattr(car_response, 'mysend')("Message from server: Go")
 
-    def add_depart_queue(self, car):
-        # departure queue in communications
-        communication.add_departure_queue(car)
+    def add_proceed_queue(self, car):
+        # proceed queue in communications
+        communication.add_proceed_queue(car)
 
     def add_arrival_queue(self,car):
         # arrival queue in IC_Main
