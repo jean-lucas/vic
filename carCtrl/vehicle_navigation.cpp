@@ -13,19 +13,21 @@ int update_navigation(ImageData *img, CarStatus *car){
 	double angle_ok = 0;
 
 	//Update steering angle
-	double angle_diff_abs = abs(img->avg_left_angle - img->avg_right_angle);
+	double angle_diff = img->avg_left_angle - img->avg_right_angle;
+	double length_diff = img->left_line_length - img->right_line_length;
 	double new_angle;
 
-	if(angle_diff_abs >= ANGLE_THRESHOLD){
-
-		double angle_diff =  img->avg_left_angle - img->avg_right_angle;
+	if(fabs(angle_diff) >= ANGLE_THRESHOLD){
+		angle_diff =  img->avg_left_angle - img->avg_right_angle;
 		new_angle = angle_diff/3;
 	}
-	else if(angle_diff_abs < ANGLE_THRESHOLD && car->current_wheel_angle > 0) {
+
+	else if( fabs(angle_diff) < ANGLE_THRESHOLD && car->current_wheel_angle > 0) {
 		new_angle = 0;
 	}
 
 	else{
+
 		new_angle = car->current_wheel_angle;
 	}
 
