@@ -10,6 +10,11 @@
 
 #include "carComms.h"
 
+
+
+
+
+const char* IC_BT_ADDR = "AC:2B:6E:04:BF:27";
 /* 
     Send a message over Bluetooth to the Intersection Controller
     Input:  msg to send
@@ -26,7 +31,7 @@ int sendToIC(char* msg) {
     // set the connection parameters (who to connect to)
     addr.rc_family = AF_BLUETOOTH;
     addr.rc_channel = (uint8_t) 1;
-    str2ba( IC_ADDR, &addr.rc_bdaddr );
+    str2ba( IC_BT_ADDR, &addr.rc_bdaddr );
 
     // connect to server
     status = connect(s, (struct sockaddr *)&addr, sizeof(addr));
@@ -51,8 +56,8 @@ int sendToIC(char* msg) {
     Output: result from IC (negative for error, 0 for stop @ intersection, 1 to proceed)
 */
 
-/*
-int recvFromIC() {
+
+void* recvFromIC(void* c) {
 
     struct sockaddr_rc loc_addr = { 0 }, rem_addr = { 0 };
     char buf[1024] = { 0 };
@@ -65,24 +70,37 @@ int recvFromIC() {
     // bind socket to port 1 of the first available 
     // local bluetooth adapter
     loc_addr.rc_family = AF_BLUETOOTH;
-    loc_addr.rc_bdaddr = *BDADDR_ANY;
+//    loc_addr.rc_bdaddr = (&(bdaddr_t) {{0, 0, 0, 0, 0, 0}});
     loc_addr.rc_channel = (uint8_t) 1;
     bind(s, (struct sockaddr *)&loc_addr, sizeof(loc_addr));
 
     //listen with a backlog of 1
     listen(s, 1);
+	
+    int val = -1;
+    while (1) {
+        // accept one connection
+        client = accept(s, (struct sockaddr *)&rem_addr, &opt);
 
-    // accept one connection
-    client = accept(s, (struct sockaddr *)&rem_addr, &opt);
+        ba2str( &rem_addr.rc_bdaddr, buf );
+        fprintf(stderr, "accepted connection from %s\n", buf);
+        memset(buf, 0, sizeof(buf));
 
-    ba2str( &rem_addr.rc_bdaddr, buf );
-    fprintf(stderr, "accepted connection from %s\n", buf);
-    memset(buf, 0, sizeof(buf));
+        // read data from the client
+        bytes_read = read(client, buf, sizeof(buf));
+        if( bytes_read > 0 ) {
+            printf("received [%s]\n", buf);
+        }
 
-    // read data from the client
-    bytes_read = read(client, buf, sizeof(buf));
-    if( bytes_read > 0 ) {
-        printf("received [%s]\n", buf);
+        //response from client
+        val = (int) buf[0] - '0';
+
+        if (val == 0) {
+        	printf("close server\n");
+        	break;
+        }
+        close(client);
+
     }
 
     // close connection
@@ -91,4 +109,4 @@ int recvFromIC() {
     return 0;
 
 }
-*/
+

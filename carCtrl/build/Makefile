@@ -123,32 +123,32 @@ car_ctrl/fast:
 	$(MAKE) -f CMakeFiles/car_ctrl.dir/build.make CMakeFiles/car_ctrl.dir/build
 .PHONY : car_ctrl/fast
 
-carComms.o: carComms.c.o
+carComms.o: carComms.cpp.o
 
 .PHONY : carComms.o
 
 # target to build an object file
-carComms.c.o:
-	$(MAKE) -f CMakeFiles/car_ctrl.dir/build.make CMakeFiles/car_ctrl.dir/carComms.c.o
-.PHONY : carComms.c.o
+carComms.cpp.o:
+	$(MAKE) -f CMakeFiles/car_ctrl.dir/build.make CMakeFiles/car_ctrl.dir/carComms.cpp.o
+.PHONY : carComms.cpp.o
 
-carComms.i: carComms.c.i
+carComms.i: carComms.cpp.i
 
 .PHONY : carComms.i
 
 # target to preprocess a source file
-carComms.c.i:
-	$(MAKE) -f CMakeFiles/car_ctrl.dir/build.make CMakeFiles/car_ctrl.dir/carComms.c.i
-.PHONY : carComms.c.i
+carComms.cpp.i:
+	$(MAKE) -f CMakeFiles/car_ctrl.dir/build.make CMakeFiles/car_ctrl.dir/carComms.cpp.i
+.PHONY : carComms.cpp.i
 
-carComms.s: carComms.c.s
+carComms.s: carComms.cpp.s
 
 .PHONY : carComms.s
 
 # target to generate assembly for a file
-carComms.c.s:
-	$(MAKE) -f CMakeFiles/car_ctrl.dir/build.make CMakeFiles/car_ctrl.dir/carComms.c.s
-.PHONY : carComms.c.s
+carComms.cpp.s:
+	$(MAKE) -f CMakeFiles/car_ctrl.dir/build.make CMakeFiles/car_ctrl.dir/carComms.cpp.s
+.PHONY : carComms.cpp.s
 
 car_ctrl.o: car_ctrl.cpp.o
 

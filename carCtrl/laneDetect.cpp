@@ -54,12 +54,13 @@ int get_lane_status(struct ImageData *img_data, VideoCapture *cap) {
 	//retrieve the current frame
 	cap->read(capMat);
 
+
 	//cropping region
-	Size size_uncropped      = capMat.size();
-	int img_height_uncropped = size.height;
-	int img_width_uncropped  = size.width;
-	Rect cropRect = Rect(0, img_height_uncropped, img_width_uncropped, img_height_uncropped*CUT_OFF_HEIGHT_FACTOR);
-	croppedMat = img(Rect);
+        Size size_uncropped      = capMat.size();
+        int new_height = size_uncropped.height*CUT_OFF_HEIGHT_FACTOR;
+        Rect cropRect = Rect(0,new_height, size_uncropped.width, size_uncropped.height-new_height);
+        croppedMat = capMat(cropRect);
+
 
 
 
@@ -78,11 +79,8 @@ int get_lane_status(struct ImageData *img_data, VideoCapture *cap) {
 	Size size = houghMat.size();
 	int imgHeight = size.height;
 	int imgWidth  = size.width;
-	Point2d centerPoint = Point2d(imgWidth/2.0, imgHeight);
-	circle(houghMat,centerPoint,5,Scalar(255,150,50),2,LINE_8,0);
-
-	//draw the cutoff point, can be removed after.
-//	line(houghMat, Point2d(0,imgHeight*CUT_OFF_HEIGHT_FACTOR), Point2d(imgWidth, imgHeight*CUT_OFF_HEIGHT_FACTOR), Scalar(255,255,0),5,8);
+	Point2d camera_center_point = Point2d(imgWidth/2.0, imgHeight);
+	
 
 
 	vector<Vec4f> lines;
@@ -91,7 +89,7 @@ int get_lane_status(struct ImageData *img_data, VideoCapture *cap) {
 
 
 	//(inputMat, output vector N x 4, distance resolution of accumulator, angle of accumulator, threshold, minLineLength, maxLineGap )
-	HoughLinesP(cannyMat, lines, 1, CV_PI/180,50,2,1);
+	HoughLinesP(cannyMat, lines, 1, CV_PI/180,50,2,0);
 
 	//to  detect an intersection, we can look for the horizontal lines across the lane.
 	//for  this we can just compare the y values between two points of a line.
@@ -130,7 +128,7 @@ int get_lane_status(struct ImageData *img_data, VideoCapture *cap) {
 		}
 
 		else if (estimatedIntersectionDistance <= 0) {
-			estimatedIntersectionDistance = getDistanceToLine(mid, centerPoint);
+			estimatedIntersectionDistance = getDistanceToLine(mid, camera_center_point);
 			printf("estimatedDistance to intersection = %f pixels\n", estimatedIntersectionDistance);
 		} 
 
@@ -138,11 +136,11 @@ int get_lane_status(struct ImageData *img_data, VideoCapture *cap) {
 		//if an end-point of a line plus the midpoint are to one side of the img center,
 		// than consider which side it is on,
 		//else IGNORE THE LINE (may need to fix this)
-		if (mid.x <= centerPoint.x && (a.x <= centerPoint.x || b.x <= centerPoint.x)) {
+		if (mid.x <= camera_center_point.x && (a.x <= camera_center_point.x || b.x <= camera_center_point.x)) {
 			leftLines.push_back(mid);
 		}
 
-		else if (mid.x >= centerPoint.x && (a.x >= centerPoint.x || b.x >= centerPoint.x)) {
+		else if (mid.x >= camera_center_point.x && (a.x >= camera_center_point.x || b.x >= camera_center_point.x)) {
 			rightLines.push_back(mid);
 		}
 
@@ -152,14 +150,14 @@ int get_lane_status(struct ImageData *img_data, VideoCapture *cap) {
 
 
 	double theta1, theta2;
-	theta1 = calculateAvgAngle(leftLines, centerPoint)*(180.0/CV_PI);
-	theta2 = calculateAvgAngle(rightLines,centerPoint)*(180.0/CV_PI);
+	theta1 = calculateAvgAngle(leftLines, camera_center_point)*(180.0/CV_PI);
+	theta2 = calculateAvgAngle(rightLines,camera_center_point)*(180.0/CV_PI);
 
 	double avgLeftSize, avgRightSize;
-	avgLeftSize = calculateAvgLineSize(leftLines, centerPoint);
-	avgRightSize = calculateAvgLineSize(rightLines, centerPoint);
+	avgLeftSize = calculateAvgLineSize(leftLines, camera_center_point);
+	avgRightSize = calculateAvgLineSize(rightLines, camera_center_point);
 
-//	printf("Theta1: %f \tTheta2: %f \n", calculateAvgAngle(leftLines, centerPoint), theta2);
+//	printf("Theta1: %f \tTheta2: %f \n", calculateAvgAngle(leftLines, camera_center_point), theta2);
 	//printf("leftLine: %f \trightLine: %f \n",avgLeftSize, avgRightSize);
 
 	img_data->avg_left_angle 	= theta1;
@@ -240,39 +238,46 @@ double getDistanceToLine(Point2d a, Point2d b) {
 */
 int capture_lane(VideoCapture *cap) {
 
-		if (!(cap->isOpened())) {
-			printf("failed to open capture\n");
-			cap->release();
-			return 0;
-			
-		}
+
+        if (!(cap->isOpened())) {
+                printf("failed to open capture\n");
+                cap->release();
+                return 0;
+        }
 
 
-		Mat capMat, cannyMat, houghMat, transCap, transMat;
-		cap->read(capMat);
+        Mat capMat, croppedMat, cannyMat, houghMat;
 
+        //retrieve the current frame
+       	cap->read(capMat);
 
-
-		//finds edges in the capMatMath  via the Canny Edge detection algorithm, and puts 
-		//result in cannyMat
-		//Canny(inputMay, outputMat, threshold_1, threshold_2, apertureSize, L2Gradient )
-		Canny(capMat, cannyMat, 80, 200, 3);
-	//	Canny(capMat, cannyMat, 55, 110, 3);
-
-		//converts img in cannyMat to another colour space and puts it in houghMat
-		cvtColor(cannyMat, houghMat, CV_GRAY2BGR);
+       	//cropping region
+       	Size size_uncropped      = capMat.size();
+	int new_height = size_uncropped.height*CUT_OFF_HEIGHT_FACTOR;
+       	Rect cropRect = Rect(0,new_height, size_uncropped.width, size_uncropped.height-new_height);
+       	croppedMat = capMat(cropRect);
 
 
 
-		//basic information of the image
-		Size size = houghMat.size();
-		int imgHeight = size.height;
-		int imgWidth  = size.width;
-		Point2d centerPoint = Point2d( imgWidth/2.0, imgHeight);
-		circle(houghMat,centerPoint,5,Scalar(255,150,50),2,LINE_8,0);
+       	//finds edges in the capMatMath  via the Canny Edge detection algorithm, and puts 
+       	//result in cannyMat
+       	//Canny(inputMay, outputMat, threshold_1, threshold_2, apertureSize, L2Gradient )
+       	Canny(croppedMat, cannyMat, 50, 200, 3);
+//      Canny(capMat, cannyMat, 55, 110, 3);
 
-		//draw the cutoff point, can be removed after.
-		line(houghMat, Point2d(0,imgHeight*CUT_OFF_HEIGHT_FACTOR), Point2d(imgWidth,imgHeight*CUT_OFF_HEIGHT_FACTOR), Scalar(255,155,0),5,8);
+	//converts img in cannyMat to another colour space and puts it in houghMat
+       	cvtColor(cannyMat, houghMat, CV_GRAY2BGR);
+
+
+
+        //basic information of the image
+        Size size = houghMat.size();
+        int imgHeight = size.height;
+        int imgWidth  = size.width;
+	Point2d camera_center_point = Point2d(imgWidth/2.0, imgHeight);
+
+
+
 
 		vector<Vec4f> lines;
 		vector<Point2d> leftLines; //left lines and right lines are based on the center point (CAREFUL!)
@@ -281,7 +286,7 @@ int capture_lane(VideoCapture *cap) {
 
 
 		//(inputMat, output vector N x 4, distance resolution of accumulator, angle of accumulator, threshold, minLineLength, maxLineGap )
-		HoughLinesP(cannyMat, lines, 1, CV_PI/180,50,3,5);
+		HoughLinesP(cannyMat, lines, 1, CV_PI/180,50,2,0);
 
 
 		//to  detect an intersection, we can look for the horizontal lines across the lane.
@@ -301,11 +306,6 @@ int capture_lane(VideoCapture *cap) {
 			Point2d b = Point2d( lines[i][2], lines[i][3]);
 
 
-			//if either Point A or Point B lie above the cutoff section we can ignore it.
-                	if (a.y <= imgHeight*CUT_OFF_HEIGHT_FACTOR || b.y <= imgHeight*CUT_OFF_HEIGHT_FACTOR) {
-                 		continue;
-                	}
-
 			Point2d mid = getMidpoint(a,b);
 
 			//if we have already detected an intersection in the current frame
@@ -321,7 +321,7 @@ int capture_lane(VideoCapture *cap) {
 			}
 
 			else if (estimatedIntersectionDistance <= 0) {
-				estimatedIntersectionDistance = getDistanceToLine(mid, centerPoint);
+				estimatedIntersectionDistance = getDistanceToLine(mid, camera_center_point);
 				printf("estimatedDistance to intersection = %f pixels\n", estimatedIntersectionDistance);
 			} 
 
@@ -329,11 +329,11 @@ int capture_lane(VideoCapture *cap) {
 			//if an end-point of a line plus the midpoint are to one side of the img center,
 			// than consider which side it is on,
 			//else IGNORE THE LINE (may need to fix this)
-			if (mid.x <= centerPoint.x && (a.x <= centerPoint.x || b.x <= centerPoint.x)) {
+			if (mid.x <= camera_center_point.x && (a.x <= camera_center_point.x || b.x <= camera_center_point.x)) {
 				leftLines.push_back(mid);
 			}
 
-			else if (mid.x >= centerPoint.x && (a.x >= centerPoint.x || b.x >= centerPoint.x)) {
+			else if (mid.x >= camera_center_point.x && (a.x >= camera_center_point.x || b.x >= camera_center_point.x)) {
 				rightLines.push_back(mid);
 			}
 			else {
@@ -343,31 +343,13 @@ int capture_lane(VideoCapture *cap) {
 
 			circle(houghMat,mid,5,Scalar(255,100,0));
 
-			line(houghMat, mid, centerPoint, Scalar(0,255,0),1,8);
+			line(houghMat, mid, camera_center_point, Scalar(0,255,0),1,8);
 			line(houghMat, a, b, Scalar(0,0,255),3,8);
 
 
 		}
 
-		// Point2f  preTrans[4];
-		// preTrans[0] = Point2f(topLeft.x, topLeft.y);
-		// preTrans[1] = Point2f(topRight.x,topRight.y);
-		// preTrans[2] = Point2f(0,imgHeight);
-		// preTrans[3] = Point2f(imgWidth,imgHeight);
-
-
-		// Point2f  postTrans[4];
-  //       postTrans[0] = Point2f(0,0);
-  //       postTrans[1] = Point2f(imgWidth,0);
-  //       postTrans[2] = Point2f(0,imgHeight);
-  //       postTrans[3] = Point2f(imgWidth,imgHeight);
-
-
-		
-		// transCap = getPerspectiveTransform(preTrans,postTrans);
-//		warpPerspective(cannyMat, transMat,transCap,size); 
 		imwrite("../../lanecap_canny.png", cannyMat);
 		imwrite("../../lanecap.png", houghMat);
-		// imwrite("../../lanecap_transform.png", transMat);
 		return 0;
 }

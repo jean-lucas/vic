@@ -7,28 +7,35 @@
 #include "vichw/servo_controller.h"
 #include "vichw/motor_speed_controller.h"
 
-int update_navigation(ImageData *img, CarStatus *car){
+int update_navigation(struct ImageData *img, struct ImageData *img_prev, struct CarStatus *car){
 
 	double speed_ok = 0;
 	double angle_ok = 0;
 
 	//Update steering angle
-	double angle_diff = img->avg_left_angle - img->avg_right_angle;
-	double new_angle;
+	double angle_diff  = img->avg_left_angle - img->avg_right_angle;
+	double length_diff = img->left_line_length - img->right_line_length;
+	double new_angle   = 0;
 
-	if(abs(angle_diff) >= ANGLE_THRESHOLD){
+
+	if( abs(angle_diff) >= ANGLE_THRESHOLD) {
 		new_angle = angle_diff/3.0;
 	}
+
 	else if( abs(angle_diff) < ANGLE_THRESHOLD && car->current_wheel_angle > 0) {
 		new_angle = 0;
 	}
 
 	else{
-		new_angle = car->current_wheel_angle;
+		if (length_diff > LENGTH_THRESHOLD) {
+			new_angle = CENTER_ADJUST_ANGLE;
+		}
+		else {
+			new_angle = car->current_wheel_angle;
+		}
 	}
 
-//	printf("setting angle= %f \t anglevals (%f, %f)\n", new_angle,img->avg_left_angle,img->avg_right_angle);
-	printf("setting angle= %f\n", new_angle);
+//	printf("setting angle= %f\n", new_angle);
 
 
 	if(new_angle > MAX_ANGLE){
@@ -43,17 +50,18 @@ int update_navigation(ImageData *img, CarStatus *car){
 	angle_ok = 1;
 
 	//TODO: Update vehicle speed
-	double new_speed;
+	double new_speed = 0;
 
 	new_speed = car->current_speed;
 	if(new_speed > MAX_SPEED){
 		new_speed = MAX_SPEED;
 	}
 
-	printf("setting speed = %f \n\n", new_speed);
+//	printf("setting speed = %f \n\n", new_speed);
 	car->current_speed = new_speed;
 	vichw_set_speed(new_speed);
 	speed_ok = 1;
 	
 	return speed_ok*angle_ok;
 }
+
