@@ -42,10 +42,6 @@ VideoCapture test_camera() {
 
 int get_lane_status(struct ImageData *img_data, VideoCapture *cap) {
 
-//	const char* imgFile = "track2.jpg";
-
-
-
 	if (!(cap->isOpened())) {
 		printf("failed to open capture\n");
 		cap->release();
@@ -53,19 +49,24 @@ int get_lane_status(struct ImageData *img_data, VideoCapture *cap) {
 	}
 
 
-	Mat capMat, cannyMat, houghMat;
+	Mat capMat, croppedMat, cannyMat, houghMat;
 
-//	capMat = imread(imgFile, -1);
 	//retrieve the current frame
 	cap->read(capMat);
 
+	//cropping region
+	Size size_uncropped      = capMat.size();
+	int img_height_uncropped = size.height;
+	int img_width_uncropped  = size.width;
+	Rect cropRect = Rect(0, img_height_uncropped, img_width_uncropped, img_height_uncropped*CUT_OFF_HEIGHT_FACTOR);
+	croppedMat = img(Rect);
 
 
 
 	//finds edges in the capMatMath  via the Canny Edge detection algorithm, and puts 
 	//result in cannyMat
 	//Canny(inputMay, outputMat, threshold_1, threshold_2, apertureSize, L2Gradient )
-	Canny(capMat, cannyMat, 50, 200, 3);
+	Canny(croppedMat, cannyMat, 50, 200, 3);
 //	Canny(capMat, cannyMat, 55, 110, 3);
 
 	//converts img in cannyMat to another colour space and puts it in houghMat
@@ -108,10 +109,10 @@ int get_lane_status(struct ImageData *img_data, VideoCapture *cap) {
 		Point2d a = Point2d(lines[i][0],lines[i][1]);
 		Point2d b = Point2d(lines[i][2],lines[i][3]);
 
-		//if either Point A or Point B lie above the cutoff section we can ignore it.
-		if (a.y <= imgHeight*CUT_OFF_HEIGHT_FACTOR || b.y <= imgHeight*CUT_OFF_HEIGHT_FACTOR) {
-			continue;
-		}
+		// //if either Point A or Point B lie above the cutoff section we can ignore it.
+		// if (a.y <= imgHeight*CUT_OFF_HEIGHT_FACTOR || b.y <= imgHeight*CUT_OFF_HEIGHT_FACTOR) {
+		// 	continue;
+		// }
 
 
 		Point2d mid = getMidpoint(a,b);
