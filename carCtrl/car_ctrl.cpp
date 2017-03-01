@@ -76,7 +76,7 @@ int run() {
 		valid &= update_navigation(&img_data, &car_stat);
 	}
 
-/*	printf(" %f\n %f\n %f\n %f\n %f\n %d\n %d\n", img_data.avg_left_angle, img_data.avg_right_angle, \
+/*	printf(" left theta: %f\n right theta %f\n left len %f\n right len %f\n int len%f\n inter? %d\n obstacle? %d\n", img_data.avg_left_angle, img_data.avg_right_angle, \
 		img_data.left_line_length, img_data.right_line_length, img_data.intersection_distance, img_data.intersection_detected, \
 		img_data.obstacle_detected);
 */

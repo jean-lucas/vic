@@ -4,14 +4,14 @@
 #include <stdio.h>
 #include <algorithm>
 #include <math.h>
-
+#include <time.h>
 #include "laneDetect.h"
 
 using namespace cv;
 using namespace std;
 
 //this percentage will be cutoff from the top of the image
-const double CUT_OFF_HEIGHT_FACTOR = 0.3;
+const double CUT_OFF_HEIGHT_FACTOR = 0.2;
 
 
 Point2d getMidpoint(Point2d a, Point2d b);
@@ -81,7 +81,7 @@ int get_lane_status(struct ImageData *img_data, VideoCapture *cap) {
 	circle(houghMat,centerPoint,5,Scalar(255,150,50),2,LINE_8,0);
 
 	//draw the cutoff point, can be removed after.
-	line(houghMat, Point2d(0,imgHeight*CUT_OFF_HEIGHT_FACTOR), Point2d(imgWidth,imgHeight*CUT_OFF_HEIGHT_FACTOR), Scalar(255,155,0),5,8);	
+//	line(houghMat, Point2d(0,imgHeight*CUT_OFF_HEIGHT_FACTOR), Point2d(imgWidth, imgHeight*CUT_OFF_HEIGHT_FACTOR), Scalar(255,255,0),5,8);
 
 
 	vector<Vec4f> lines;
@@ -90,7 +90,7 @@ int get_lane_status(struct ImageData *img_data, VideoCapture *cap) {
 
 
 	//(inputMat, output vector N x 4, distance resolution of accumulator, angle of accumulator, threshold, minLineLength, maxLineGap )
-	HoughLinesP(cannyMat, lines, 1, CV_PI/180,50,3,1);
+	HoughLinesP(cannyMat, lines, 1, CV_PI/180,50,2,1);
 
 	//to  detect an intersection, we can look for the horizontal lines across the lane.
 	//for  this we can just compare the y values between two points of a line.
@@ -119,7 +119,7 @@ int get_lane_status(struct ImageData *img_data, VideoCapture *cap) {
 
 		//if we have already detected an intersection in the current frame
 		//no point of continuing to check
-		if (!intersectionDetected) {
+/*		if (!intersectionDetected) {
 			if ( fabs(a.y-b.y) <= STRAIGHT_LINE_THRESHOLD) {
 				printf("found intersection at points (%f %f) to (%f %f)\n", a.x, a.y, b.x, b.y);
 				circle(houghMat,a,10,Scalar(255,60,200));
@@ -133,7 +133,7 @@ int get_lane_status(struct ImageData *img_data, VideoCapture *cap) {
 			printf("estimatedDistance to intersection = %f pixels\n", estimatedIntersectionDistance);
 		} 
 
-
+*/
 		//if an end-point of a line plus the midpoint are to one side of the img center,
 		// than consider which side it is on,
 		//else IGNORE THE LINE (may need to fix this)
@@ -151,15 +151,14 @@ int get_lane_status(struct ImageData *img_data, VideoCapture *cap) {
 
 
 	double theta1, theta2;
-	theta1 = calculateAvgAngle(leftLines, centerPoint)*180.0/CV_PI;
-	theta2 = calculateAvgAngle(rightLines,centerPoint)*180.0/CV_PI;
-
+	theta1 = calculateAvgAngle(leftLines, centerPoint)*(180.0/CV_PI);
+	theta2 = calculateAvgAngle(rightLines,centerPoint)*(180.0/CV_PI);
 
 	double avgLeftSize, avgRightSize;
 	avgLeftSize = calculateAvgLineSize(leftLines, centerPoint);
 	avgRightSize = calculateAvgLineSize(rightLines, centerPoint);
 
-//	printf("Theta1: %f \tTheta2: %f \n", theta1, theta2);
+//	printf("Theta1: %f \tTheta2: %f \n", calculateAvgAngle(leftLines, centerPoint), theta2);
 	//printf("leftLine: %f \trightLine: %f \n",avgLeftSize, avgRightSize);
 
 	img_data->avg_left_angle 	= theta1;
@@ -175,7 +174,6 @@ int get_lane_status(struct ImageData *img_data, VideoCapture *cap) {
 //	imshow("Canny", cannyMat);
 //	imshow("Hough", houghMat);
 //	waitKey();
-
 	return 1;
 }
 
@@ -183,7 +181,7 @@ int get_lane_status(struct ImageData *img_data, VideoCapture *cap) {
 
 
 double calculateAvgLineSize(vector<Point2d> vec, Point2d center) {
-	double current;
+	double current=0;
 	int n = vec.size();
 
 	if (n < 1) return 0;
@@ -195,7 +193,7 @@ double calculateAvgLineSize(vector<Point2d> vec, Point2d center) {
 }
 
 double calculateAvgAngle(vector<Point2d> vec, Point2d center) {
-	double currAngle, top, bot;
+	double currAngle = 0, top = 0, bot = 0, frac = 0, temp = 0;
 	int n = vec.size();
 
 	if (n < 1) return 0;
@@ -203,9 +201,18 @@ double calculateAvgAngle(vector<Point2d> vec, Point2d center) {
 	for (int i = 0; i < n; i++) {
 		top = fabs(vec[i].x - center.x);
 		bot = sqrt( pow(vec[i].x - center.x, 2) + pow(vec[i].y - center.y, 2));
-		currAngle += acos(top/bot);
+		frac = top/bot;
+		if (frac < -1.0) {
+			frac = -1.0;
+		}
+		else if (frac > 1.0) {
+			frac = 1.0;
+		}
+		temp = acos(frac);
+		if (temp <= 3.2) {
+			currAngle = currAngle + temp;
+		}
 	}
-
 	return currAngle/((double) n);
 
 }
@@ -264,7 +271,7 @@ int capture_lane(VideoCapture *cap) {
 		circle(houghMat,centerPoint,5,Scalar(255,150,50),2,LINE_8,0);
 
 		//draw the cutoff point, can be removed after.
-		line(houghMat, Point2d(0,imgHeight*CUT_OFF_HEIGHT_FACTOR), Point2d(imgWidth,imgHeight*CUT_OFF_HEIGHT_FACTOR), Scalar(255,155,0),5,8);	
+		line(houghMat, Point2d(0,imgHeight*CUT_OFF_HEIGHT_FACTOR), Point2d(imgWidth,imgHeight*CUT_OFF_HEIGHT_FACTOR), Scalar(255,155,0),5,8);
 
 		vector<Vec4f> lines;
 		vector<Point2d> leftLines; //left lines and right lines are based on the center point (CAREFUL!)
@@ -273,7 +280,7 @@ int capture_lane(VideoCapture *cap) {
 
 
 		//(inputMat, output vector N x 4, distance resolution of accumulator, angle of accumulator, threshold, minLineLength, maxLineGap )
-		HoughLinesP(cannyMat, lines, 1, CV_PI/180,50,3,1);
+		HoughLinesP(cannyMat, lines, 1, CV_PI/180,50,3,5);
 
 
 		//to  detect an intersection, we can look for the horizontal lines across the lane.
@@ -292,11 +299,11 @@ int capture_lane(VideoCapture *cap) {
 			Point2d a = Point2d( lines[i][0], lines[i][1]);
 			Point2d b = Point2d( lines[i][2], lines[i][3]);
 
-			//if either Point A or Point B lie above the cutoff section we can ignore it.
-			if (a.y <= imgHeight*CUT_OFF_HEIGHT_FACTOR || b.y <= imgHeight*CUT_OFF_HEIGHT_FACTOR) {
-				continue;
-			}
 
+			//if either Point A or Point B lie above the cutoff section we can ignore it.
+                	if (a.y <= imgHeight*CUT_OFF_HEIGHT_FACTOR || b.y <= imgHeight*CUT_OFF_HEIGHT_FACTOR) {
+                 		continue;
+                	}
 
 			Point2d mid = getMidpoint(a,b);
 
@@ -307,6 +314,7 @@ int capture_lane(VideoCapture *cap) {
 					printf("found intersection at points (%f %f) to (%f %f)\n", a.x, a.y, b.x, b.y);
 					circle(houghMat,a,10,Scalar(255,60,200));
 					circle(houghMat,b,10,Scalar(255,60,200));
+					line(houghMat, a,b, Scalar(255,50,215),5,8);
 					intersectionDetected = true;
 				}
 			}
@@ -356,10 +364,9 @@ int capture_lane(VideoCapture *cap) {
 
 		
 		// transCap = getPerspectiveTransform(preTrans,postTrans);
-		warpPerspective(cannyMat, transMat,transCap,size); 
+//		warpPerspective(cannyMat, transMat,transCap,size); 
 		imwrite("../../lanecap_canny.png", cannyMat);
 		imwrite("../../lanecap.png", houghMat);
 		// imwrite("../../lanecap_transform.png", transMat);
-
-		return  1;
+		return 0;
 }

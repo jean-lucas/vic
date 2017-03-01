@@ -4,9 +4,9 @@
 #include "vic_types.h"
 //Constants
 const double MAX_SPEED = 1.4; //metres per second
-const double MAX_ANGLE = 45.0; //degrees
-const double ANGLE_THRESHOLD =  15.0; //degrees
-const double CENTER_ADJUST_ANGLE = 10.0;
+const double MAX_ANGLE = 45; //degrees
+const double ANGLE_THRESHOLD =  12; //degrees
+const double CENTER_ADJUST_ANGLE = 10;
 int update_navigation(struct ImageData *img, struct CarStatus *car);
 
 #endif
