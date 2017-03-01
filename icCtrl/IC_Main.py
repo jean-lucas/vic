@@ -133,7 +133,9 @@ class IC_Main(object):
     traffic = TrafficController()
     detect = VehicleDetection()
     arrivals = deque()
+
     intersection_cars = [0 for i in range(10)]
+    intersection_clear = False
 
     
     
@@ -167,17 +169,28 @@ class IC_Main(object):
                 #print "Arrival length, %d" % len(self.arrivals)
                 car = self.arrivals.pop()
 
-                current_car_index = 0
+                current_car_index = -1
 
-                for i in range(10):
-                    if(intersection_cars[i]==0):
-                        intersection_cars[i] = car
+                for i in range(len(self.intersection_cars)):
+                    if(self.intersection_cars[i]==0):
+                        self.intersection_cars[i] = car
                         current_car_index = i
+                        break
 
-                while (getattr(intersection_cars[current_car_index], 'proceed_now') == False):
-                    #dostuff: get indexes of cars leaving intersection
-                    #remove those cars from intersection_cars array
-                    #check if current car is able to safely proceed
+                while (getattr(self.intersection_cars[current_car_index], 'proceed_now') == False):
+                    check_intersection_state()
+
+                    if(intersection_clear==True):
+                        setattr(self.intersection_cars[current_car_index],'proceed_now',True)
+                    else:
+                        for i in range(len(self.intersection_cars)):
+                            if(self.intersection_cars[i]!=0 and i!=current_car_index):
+                                if(getattr(self.intersection_cars[current_car_index], 'direction_from')==getattr(self.intersection_cars[i], 'direction_from') or getattr(self.intersection_cars[current_car_index], 'direction_from')==getattr(self.intersection_cars[i], 'direction_to')):
+                                    setattr(self.intersection_cars[current_car_index],'proceed_now',True)
+                                    break   #this break only works if we have 2 cars on the track (more efficient)
+
+                #TODO here: if current car's proceed_now is true, then tell communication to send car a 'GO' message
+                
                 #time.sleep(.2)
                 test=test+1
                 print "Message counter %d: " % test
@@ -213,6 +226,7 @@ class IC_Main(object):
 
     def check_intersection_state(self):
         print self.detect.update_intersection()
+        #this function will retrieve state of intersection and update intersection_cars array for any cars leaving intersection
         
 
 
