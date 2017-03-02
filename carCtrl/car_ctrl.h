@@ -12,9 +12,9 @@ const int INNER_LANE = 1;
 //method declarations
 int init();
 int run();
-
-
+void copyStruct(struct ImageData *img1, struct ImageData *img2);
 
 
 
 #endif
+
