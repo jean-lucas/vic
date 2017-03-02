@@ -15,7 +15,11 @@
 \usepackage[table]{xcolor}
 \usepackage{color,soul}
 \usepackage{colortbl}
-
+\usepackage{float}
+\usepackage{wrapfig}
+\usepackage[rightcaption]{sidecap}
+\usepackage{subfigure}
+\usepackage{caption}
 % VIC title package
 \usepackage{cabin}
 \usepackage[T1]{fontenc}
@@ -310,7 +314,7 @@ Zachary Bazen}
 \section {Purpose}
 The purpose of this document is to examine the previous project goals and requirements, and to see how the end system complies with these requirements.  Through validation, it will determined if the project goals were met. Verification will allow for the detection of errors, and build a level of confidence in the system.\\
 
-This document will include a traceability matrix to map the test cases to the functional requirements. Further more, the test cases will be presented along with a code walk-through, and static analysis.  \\
+This document will include a traceability matrix to map the test cases to the functional requirements.   \\
 
 
 The intended audience for this document consists of Dr. Alan Wassyng and the course's teaching assistants.
@@ -378,65 +382,113 @@ The system consists of two main components: Vehicle Controller and Intersection 
 \pagebreak
 \begin{center}
 
-\begin{tabularx} {\textwidth} {|c|c|c|c|c|c|c|c|c|c|c|c|c| c|} \hline
+\begin{tabularx} {.85\textwidth} {|c|c|c|c|c|c|c|c|c|c|c|c|} \hline
   \textbf{Identifier} & \begin{minipage} {.075\columnwidth} \vspace{1mm} \begin {center}\textbf{Reqs Tested}\vspace{1mm}\end{center}\end{minipage}
- & \textbf{V1} &\textbf{V2} &\textbf{V3} &\textbf{V4} &\textbf{V5} &\textbf{V6}&\textbf{V7} &\textbf{IC1} &\textbf{IC2} &\textbf{IC3} &\textbf{IC4}&\textbf{IC5}  \\ \hline
+ & \textbf{V1} &\textbf{V2} &\textbf{V3} &\textbf{V4} &\textbf{V5} &\textbf{V6} &\textbf{IC1}  &\textbf{IC3} &\textbf{IC4}&\textbf{IC5}  \\ \hline
  
  
- \textbf{Test Cases}& 13 & 4  &\#\# &\#\# &\#\# &\#\# &\#\# &\#\# &\#\# &\#\# &\#\# & 2 & 13 \\ \hline
+ \textbf{Test Cases}& 13 & 8  &26 &5 &11 &12 &21&7  &6 & 4 & 20 \\ \hline
 
  
  %
  % Matrix Entries Start Here
- \textbf{HC1.1}&\# & & & & & & & & & & & & \\ \hline
- \textbf{HC1.2}&\# & & & & & & & & & & & & \\ \hline
- \textbf{HC1.N}&\# & & & & & & & & & & & & \\ \hline
- \textbf{HC2.N}&\# & & & & & & & & & & & & \\ \hline
- & & & & & & & & & & & & &\\ \hline
- & & & & & & & & & & & & &\\ \hline 
- & & & & & & & & & & & & &\\ \hline
- \textbf{IC1.1}&2 & X & & & & & & & & & & & X \\ \hline
- \textbf{IC1.2}&3&X && & & & & & & & & X & X  \\ \hline 
- \textbf{IC1.3}&1& & & & & & & & & & & & X  \\ \hline 
- \textbf{IC1.4}&2&X & & & & & & & & & & & X  \\ \hline 
- \textbf{IC1.5}&1&X & & & & & & & & & & &   \\ \hline 
- \textbf{IC2.1}&1 & & & & & & & & & & & & X \\ \hline
- \textbf{IC2.2}&2& & & & & & & & & & &X & X  \\ \hline 
- \textbf{IC2.3}&1& & & & & & & & & & & & X  \\ \hline 
- \textbf{IC2.4}&1& & & & & & & & & & & & X  \\ \hline 
- \textbf{IC2.5}&1& & & & & & & & & & & & X  \\ \hline 
- \textbf{IC3.1}&1 & & & & & & & & & & & & X \\ \hline
- \textbf{IC3.2}&1& & & & & & & & & & & & X  \\ \hline 
- \textbf{IC3.3}&1& & & & & & & & & & & & X  \\ \hline 
- & & & & & & & & & & & & &\\ \hline
- & & & & & & & & & & & & &\\ \hline
- & & & & & & & & & & & & &\\ \hline
- & & & & & & & & & & & & &\\ \hline
- & & & & & & & & & & & & &\\ \hline
- & & & & & & & & & & & & &\\ \hline
- & & & & & & & & & & & & &\\ \hline
- & & & & & & & & & & & & &\\ \hline
- & & & & & & & & & & & & &\\ \hline
- & & & & & & & & & & & & &\\ \hline
- & & & & & & & & & & & & &\\ \hline
- & & & & & & & & & & & & &\\ \hline
- & & & & & & & & & & & & &\\ \hline
- & & & & & & & & & & & & &\\ \hline
- & & & & & & & & & & & & &\\ \hline
+\textbf{HC1.1}&3 & & X & & & X & X& & & &  \\ \hline
+\textbf{HC1.2}&3 & & X & & & X & X& & & &  \\ \hline
+\textbf{HC1.3}&3 & & X & & & X & X& & & &  \\ \hline
+\textbf{HC1.4}&3 & & X & & & X & X& & & &  \\ \hline
+\textbf{HC2.1}&4 & & X & & X & X & X& & & &  \\ \hline
+\textbf{HC2.2}&4 & & X & & X & X & X& & & &  \\ \hline
+\textbf{HC2.3}&4 & & X & & X & X & X& & & &  \\ \hline
+\textbf{HC2.4}&4 & & X & & X & X & X& & & &  \\ \hline
+\textbf{VC1.1}&1&X & & & & & & & & &    \\ \hline
+\textbf{VC1.2}&1&X & & & & & & & & &     \\ \hline
+\textbf{VC1.3}&1&X & & & & & & & & &     \\ \hline
+\textbf{VC1.4}&1&X & & & & & & & & &     \\ \hline
+\textbf{VC2.1}&1& & X& & & & & & & &     \\ \hline
+\textbf{VC2.2}&1& & X& & & & & & & &     \\ \hline
+\textbf{VC2.3}&1& & X& & & & & & & &     \\ \hline
+\textbf{VC2.4}&1& & X& & & & & & & &     \\ \hline
+\textbf{VC2.5}&1& & X& & & & & & & &     \\ \hline
+\textbf{VC2.6}&1& & X& & & & & & & &     \\ \hline
+\textbf{VC2.7}&1& & X& & & & & & & &     \\ \hline
+\textbf{VC2.8}&1& & X& & & & & & & &     \\ \hline
+\textbf{VC2.9}&1& & & & X& & & & & &     \\ \hline
+\textbf{VC2.10}&1& & & & X& & & & & &     \\ \hline
+\textbf{VC2.11}&1& & & & X& & & & & &     \\ \hline
+\textbf{VC2.12}&1& & & & X& & & & & &    \\ \hline
+\textbf{VC2.13}&1& & & & & & X & & & &     \\ \hline
+\textbf{VC2.14}&1& & & & & & X & & & &    \\ \hline
+\textbf{VC2.15}&1& & & & & & X & & & &     \\ \hline
+\textbf{VC2.16}&1& & & & & & X & & & &     \\ \hline
+\textbf{VC2.17}&1& & & & & & X & & & &     \\ \hline
+\textbf{VC2.18}&1& & & & & & X & & & &     \\ \hline
+\textbf{VC2.19}&1& & & & & & X & & & &    \\ \hline
+\textbf{VC2.10}&1& & & & & & X & & & &     \\ \hline
+\textbf{VC3.1}&1& &X & & & &  & & & &     \\ \hline
+\textbf{VC3.2}&1& &X & & & &  & & & &     \\ \hline
+\textbf{VC3.3}&1& &X & & & &  & & & &     \\ \hline
+\textbf{VC3.4}&2& &X & X& & &  & & & &     \\ \hline
+
+
 
 \end{tabularx}
 
 
 % Tabluarx doesn't split across pages, must manually continue table if need more rows
-\begin{tabularx} {\textwidth} {|c|c|c|c|c|c|c|c|c|c|c|c|c| c|} \hline
+\begin{tabularx} {.88\textwidth} {|c|c|c|c|c|c|c|c|c|c|c|c|} \hline
   \hspace {1.9mm} \textbf{Identifier \hspace {1.9mm} } & \begin{minipage} {.075\columnwidth} \vspace{1mm} \begin {center}\textbf{Reqs Tested}\vspace{1mm}\end{center}\end{minipage}
- & \textbf{V1} &\textbf{V2} &\textbf{V3} &\textbf{V4} &\textbf{V5} &\textbf{V6}&\textbf{V7} &\textbf{IC1} &\textbf{IC2} &\textbf{IC3} &\textbf{IC4}&\textbf{IC5}  \\ \hline
- 
-  & & & & & & & & & & & & &\\ \hline
- & & & & & & & & & & & & &\\ \hline
+ & \textbf{V1} &\textbf{V2} &\textbf{V3} &\textbf{V4} &\textbf{V5} &\textbf{V6} &\textbf{IC1}  &\textbf{IC3} &\textbf{IC4}&\textbf{IC5}  \\ \hline
+ \textbf{VSC3.5} &2& &X & & &X &  & & & &     \\ \hline
+ \textbf{VC3.6}  &1& & & & & & X & & & &     \\ \hline
+ \textbf{VC3.7}  &1& & & & & & X & & & &     \\ \hline
+ \textbf{VC3.8}  &2& & & & &X & X & & & &     \\ \hline
+ \textbf{VC3.9}  &2& & & & &X & X & & & &     \\ \hline
+ \textbf{VC3.10} &1& & X& & & &  & & & &     \\ \hline
+ \textbf{VC3.11} &1& & X& & & &  & & & &    \\ \hline
+ \textbf{VC3.12} &1& & X& & & &  & & & &     \\ \hline
+ \textbf{VC3.13} &1& & X& & & &  & & & &     \\ \hline
+ \textbf{VC3.14} &2& & X& X& X& &  & & & &     \\ \hline
+ \textbf{VC3.15} &2& & X& & & &  X& & & &     \\ \hline
+ \textbf{IC1.1}  &2 & & & & & & &  X  & & & X \\ \hline
+ \textbf{IC1.2}  &2& && & & & &  X& &  & X  \\ \hline 
+ \textbf{IC1.3}  &2& & & & & & &  X & & & X  \\ \hline 
+ \textbf{IC1.4}  &2& & & & & & &  X & & & X  \\ \hline 
+ \textbf{IC1.5}  &1& & & & & & &  X & & &   \\ \hline 
+ \textbf{IC2.1}  &1 & & & & & & &  & & & X \\ \hline
+ \textbf{IC2.2}  &3& X& & & & & &  & &X & X  \\ \hline 
+ \textbf{IC2.3}  &1& & & & & & & &  & & X  \\ \hline 
+ \textbf{IC2.4}  &1& & & & & & & &  & & X  \\ \hline 
+ \textbf{IC2.5}  &1& & & & & & & &  & & X  \\ \hline 
+ \textbf{IC3.1}  &1 & & & & & & &  & & & X \\ \hline
+ \textbf{IC3.2}  &1& & & & & &  & & & & X  \\ \hline 
+ \textbf{IC3.3}  &1& & & & &  & & & & & X  \\ \hline
+  \textbf{IC4.1} &1& & & & &  & & & & & X  \\ \hline
+ \textbf{IC4.2}  &2& & & & &  & & & X & & X  \\ \hline
+ \textbf{IC4.3}  &2& & & & &  & & & X & & X  \\ \hline
+ \textbf{IC4.4}  &1& & & & &  & & & & & X  \\ \hline
+ \textbf{IC4.5}  &1& & & & &  & & & X & & \\  \hline
+ \textbf{IC4.6}  &1& & & & &  & & & X & &   \\ \hline
+ \textbf{IC4.7}  &1& & & & &  & & & X & &   \\ \hline
+ \textbf{IC4.8}  &1& & & & &  & & & X & &   \\ \hline
+ \textbf{VIC.1}  &2& & & & &  & X& & & & X  \\ \hline
+ \textbf{VIC.2}  &3& & & &  & & X& & & X& X  \\ \hline
+ \textbf{VIC.3}  &1& X& & &  & & & & & &   \\ \hline
+ \textbf{VIC.4}  &3& & & X& & & & &  & X& X  \\ \hline
+ \textbf{VIC.5}  &5& & & X& X& X& &  & & X& X  \\ \hline
+
 
 
 \end{tabularx}
+
+\begin{tabularx} {.88\textwidth} {|c|c|c|c|c|c|c|c|c|c|c|c|} \hline
+  \hspace {1.9mm} \textbf{Identifier \hspace {1.9mm} } & \begin{minipage} {.075\columnwidth} \vspace{1mm} \begin {center}\textbf{Reqs Tested}\vspace{1mm}\end{center}\end{minipage}
+ & \textbf{V1} &\textbf{V2} &\textbf{V3} &\textbf{V4} &\textbf{V5} &\textbf{V6} &\textbf{IC1}  &\textbf{IC3} &\textbf{IC4}&\textbf{IC5}  \\ \hline
+  \textbf{VIC.6}&3& X& & X& X& & & & & &    \\ \hline
+ \textbf{VIC.7}&1& X& & & & & & & & &   \\ \hline
+
+ 
+ \end{tabularx}
+
 
 \end{center}
 
@@ -500,7 +552,7 @@ The system consists of two main components: Vehicle Controller and Intersection 
     & \textbf{Pass/Fail} \\  
     
     % Row 2
-    \multicolumn{1}{|c|}{HC2.1} 
+    \multicolumn{1}{|c|}{HC1.1} 
     & \cellcolor{white}
     & \cellcolor{white}
     & Set servo to -45 degrees
@@ -509,7 +561,7 @@ The system consists of two main components: Vehicle Controller and Intersection 
     & \multicolumn{1}{c|}{N/A}\\ 
     
     % Row 2 (with color)
-    \rowcolor{tableCell}\multicolumn{1}{|c|}{HC2.2} 
+    \rowcolor{tableCell}\multicolumn{1}{|c|}{HC1.2} 
     & \cellcolor{white}
     & \cellcolor{white}
     & Set servo to -30 degrees
@@ -518,7 +570,7 @@ The system consists of two main components: Vehicle Controller and Intersection 
     & \multicolumn{1}{c|}{N/A}\\ 
     
     % Row 3 (without color)
-    \multicolumn{1}{|c|}{HC2.3} 
+    \multicolumn{1}{|c|}{HC1.3} 
     & \cellcolor{white}
     &
     & Set servo to 0 degrees
@@ -527,7 +579,7 @@ The system consists of two main components: Vehicle Controller and Intersection 
     & \multicolumn{1}{c|}{N/A}\\ 
     
      % Row 4
-    \rowcolor{tableCell}\multicolumn{1}{|c|}{HC2.4} 
+    \rowcolor{tableCell}\multicolumn{1}{|c|}{HC1.4} 
     & \multicolumn{1}{c|}{\multirow{-6}{*}{\cellcolor{white}V2, V5, V6 }} 
     & \multicolumn{1}{c|}{\multirow{-5}{*}{\begin{minipage}{.3\columnwidth}\vspace{-5mm}To test the servo, commands telling the servo to go to a specified angle will be sent to the servo. The actual angle of the servo will be measured using a protractor and the actual angle needs to be within 2 degrees of the desired angle to be considered a pass.
     \end{minipage}} \cellcolor{white}}
@@ -651,50 +703,12 @@ The system consists of two main components: Vehicle Controller and Intersection 
 Some of the modules are not fully implemented, and thus the actual behaviour/output given from the \\
 module can not be determined as of yet. To symbolize this issue, any tests with a value of N/A \\
 in the \textit{Expected Behaviour} and \textit{Pass/Fail} columns represent a module that cannot be tested at the moment. \\
+
 Any necessary variables for describing the inputs/outputs will be defined prior to the respective verification test table. \\
 
 \subsubsection{Vehicle Software Verification}
 
 
-% \textbf{5.2.1.1 <Module Name>} \vspace{2mm}
-%  \begin{longtable}{ |p{0.08\textwidth }  |   p{0.22\textwidth } | p{0.22\textwidth } | p{0.22\textwidth } |  p{0.122\textwidth } |}  \hline
-
-%     % Row 1
-%     \rowcolor{subsectionC}\textbf{Test ID}
-%     & \multicolumn{1}{c|}{\textbf{Input} }
-%     & \textbf{Expected Behaviour} 
-%     & \multicolumn{1}{c|}{\textbf{Actual Behaviour} }
-%     & \multicolumn{1}{c|}{\textbf{Pass/Fail}} \\  
-    
-%     % Row 2
-%     \multicolumn{1}{|c|}{VSC1.1} 
-%     & - input 1 \newline - input 2 etc.
-%     & - Behaviour stuff goes here. Some more stuff
-%     & - Actual stuff goes here. Some more stuff
-%     & \multicolumn{1}{c|}{Pass}\\ 
-    
-%     % Row 2 (with color)
-%     \rowcolor{tableCell}\multicolumn{1}{|c|}{VSC1.2} 
-%     & <Text Here>
-%     & <Text Here>
-%     & <Text Here>
-%     & \multicolumn{1}{c|}{-}\\ 
-    
-%     % Row 3 (without color)
-%     \multicolumn{1}{|c|}{VSC1.3} 
-%     & 
-%     & 
-%     & 
-%     & \multicolumn{1}{c|}{-}\\ 
-    
-%      % Row 4
-%     \rowcolor{tableCell}\multicolumn{1}{|c|}{VSC1.4} 
-%     & 
-%     & 
-%     & 
-%     & \multicolumn{1}{c|}{-}\\ \hline
-     
-%     \end{longtable}
 
     
     
@@ -703,7 +717,8 @@ Any necessary variables for describing the inputs/outputs will be defined prior 
     Note: This module is currently not complete. \\
     Variables used:
     \begin{itemize}[topsep=0pt]
-        \item request\_msg = `1\_N\_S\_3000\_1488233082083' (carId\_comingFrom\_goingTo\_listeningPort\_timestamp)
+        \item string: request\_msg = ``carId\_comingFrom\_goingTo\_listeningPort\_timestamp'' (example: `1\_N\_S\_3000\_1488233082083')
+        \item  integer: response\_msg $\in \big[0, 1, 2\big] $ 
     \end{itemize}
     \vspace{0.5cm}
     
@@ -712,7 +727,7 @@ Any necessary variables for describing the inputs/outputs will be defined prior 
 
     % Row 1
     \rowcolor{subsectionC}\textbf{Test ID}  
-    & \textbf{Requirement ID}
+    & \textbf{Requirement}
     & \multicolumn{1}{c|}{\textbf{Description} }
     & \multicolumn{1}{c|}{\textbf{Input} }
     & \textbf{Expected Behaviour} 
@@ -735,9 +750,9 @@ Any necessary variables for describing the inputs/outputs will be defined prior 
     \rowcolor{tableCell}\multicolumn{1}{|c|}{VSC1.2} 
     & \multicolumn{1}{c|}{V1}
      & An intersection has been detected, a request has already been sent to the Intersection Controller, and another car approaching the intersection
-    & None
-    & - Intersection Controller response message of 0 (zero) \newline
-      - Car stops at intersection
+    & response\_msg
+    & response\_msg = 0\newline
+      car stops at intersection
     & N/A
     & \multicolumn{1}{c|}{N/A}\\  
   
@@ -746,9 +761,9 @@ Any necessary variables for describing the inputs/outputs will be defined prior 
     \multicolumn{1}{|c|}{VSC1.3} 
     & \multicolumn{1}{c|}{V1}
     & An intersection has been detected, a request has already been sent to Intersection Controller, and there is \textbf{no} other car approaching the intersection
-    & None
-    & - Intersection Controller response message of 1 (one) \newline
-      - Car proceeds through intersection without stopping
+    & response\_msg
+    & response\_msg = 1\newline
+      car proceeds through intersection without stopping
     & N/A
     & \multicolumn{1}{c|}{N/A}\\  \hline
     
@@ -758,8 +773,8 @@ Any necessary variables for describing the inputs/outputs will be defined prior 
     \rowcolor{tableCell}\multicolumn{1}{|c|}{VSC1.4} 
     & \multicolumn{1}{c|}{V1}
     & An emergency stop signal brodcasted from the Intersection Controller has been received
-    & None
-    & - Intersection Controller response message of 2 (two)
+    & response\_msg
+    & response\_msg = 2
     & N/A
     & \multicolumn{1}{c|}{N/A}\\  \hline
      
@@ -775,11 +790,11 @@ Any necessary variables for describing the inputs/outputs will be defined prior 
     
     \textbf{5.2.1.2 Vehicle Navigation} \vspace{2mm}\\
     Note: This module is currently not complete. \\
- \begin{longtable}{ | p{0.08\textwidth } | p{0.17\textwidth } |  p{0.2\textwidth } |  p{0.22\textwidth } | p{0.22\textwidth } | p{0.22\textwidth } |  p{0.1\textwidth } |}  \hline
+ \begin{longtable}{ | p{0.08\textwidth } | p{0.15\textwidth } |  p{0.2\textwidth } |  p{0.26\textwidth } | p{0.22\textwidth } | p{0.22\textwidth } |  p{0.1\textwidth } |}  \hline
 
     % Header Row
     \rowcolor{subsectionC}\textbf{Test ID}  
-    & \textbf{Requirement ID}
+    & \textbf{Requirement}
     & \multicolumn{1}{c|}{\textbf{Description} }
     & \multicolumn{1}{c|}{\textbf{Input} }
     & \textbf{Expected Behaviour} 
@@ -790,8 +805,11 @@ Any necessary variables for describing the inputs/outputs will be defined prior 
     \multicolumn{1}{|c|}{VSC2.1} 
     & \multicolumn{1}{c|}{V2}
     & A straight lane has been detected and the vehicle is travelling at a very low speed
-    & - Straight track segment \newline - Speed of 0.5 m/s
-    & - Vehicle travels along middle of lane and stays within lane lines
+    & leftAngle $\approx$ rightAngle \newline
+    intersectionDetect = 0 \newline
+    obstacleDetect = 0 \newline
+    speed = 0.5 m/s
+    & Vehicle travels along middle of lane and stays within lane lines
     & N/A
     & \multicolumn{1}{c|}{N/A}\\ 
     
@@ -799,8 +817,11 @@ Any necessary variables for describing the inputs/outputs will be defined prior 
     \rowcolor{tableCell}\multicolumn{1}{|c|}{VSC2.2} 
     & \multicolumn{1}{c|}{V2}
     & A straight lane has been detected and the vehicle is travelling at a low speed
-    & - Straight track segment \newline - Speed of 0.8 m/s
-    & - Vehicle travels along middle of lane and stays within lane lines
+    & leftAngle $\approx$ rightAngle \newline
+    intersectionDetect = 0 \newline
+    obstacleDetect = 0 \newline
+    speed =  0.8 m/s
+    & Vehicle travels along middle of lane and stays within lane lines
     & N/A 
     & \multicolumn{1}{c|}{N/A}\\ 
     
@@ -808,8 +829,11 @@ Any necessary variables for describing the inputs/outputs will be defined prior 
     \multicolumn{1}{|c|}{VSC2.3}
     & \multicolumn{1}{c|}{V2}
     & A straight lane has been detected and the vehicle is travelling at a moderate speed
-    & - Straight track segment \newline - Speed of 1 m/s
-    & - Vehicle travels along middle of lane and stays within lane lines
+    & leftAngle $\approx$ rightAngle \newline
+    intersectionDetect = 0 \newline
+    obstacleDetect = 0 \newline
+    speed = 1 m/s
+    & Vehicle travels along middle of lane and stays within lane lines
     & N/A
     & \multicolumn{1}{c|}{N/A}\\
     
@@ -817,8 +841,11 @@ Any necessary variables for describing the inputs/outputs will be defined prior 
     \rowcolor{tableCell}\multicolumn{1}{|c|}{VSC2.4} 
     & \multicolumn{1}{c|}{V2}
     & A straight lane has been detected and the vehicle is travelling at a high speed
-    & - Straight track segment \newline - Speed of 1.25 m/s
-    & - Vehicle travels along middle of lane and stays within lane lines
+    & leftAngle $\approx$ rightAngle \newline
+    intersectionDetect = 0 \newline
+    obstacleDetect = 0 \newline
+    speed = 1.25 m/s
+    & Vehicle travels along middle of lane and stays within lane lines
     & N/A 
     & \multicolumn{1}{c|}{N/A}\\ 
     
@@ -826,8 +853,11 @@ Any necessary variables for describing the inputs/outputs will be defined prior 
     \multicolumn{1}{|c|}{VSC2.5} 
     & \multicolumn{1}{c|}{V2}
     & A curved lane has been detected and the vehicle is travelling at a very low speed
-    & - Curved track segment \newline - Speed of 0.5 m/s
-    & - Vehicle follows curve of lane and stays within lane lines
+    & |leftAngle - rightAngle| $\gg$ 0 \newline
+    intersectionDetect = 0 \newline
+    obstacleDetect = 0 \newline
+    speed = 0.5 m/s
+    & Vehicle follows curve of lane and stays within lane lines
     & N/A
     & \multicolumn{1}{c|}{N/A}\\ 
     
@@ -835,8 +865,11 @@ Any necessary variables for describing the inputs/outputs will be defined prior 
     \rowcolor{tableCell}\multicolumn{1}{|c|}{VSC2.6} 
     & \multicolumn{1}{c|}{V2}
     & A curved lane has been detected and the vehicle is travelling at a low speed
-    & - Curved track segment \newline - Speed of 0.8 m/s
-    & - Vehicle follows curve of lane and stays within lane lines
+     & |leftAngle - rightAngle| $\gg$ 0 \newline
+    intersectionDetect = 0 \newline
+    obstacleDetect = 0 \newline
+    speed = 0.8 m/s
+    & Vehicle follows curve of lane and stays within lane lines
     & N/A
     & \multicolumn{1}{c|}{N/A}\\ \hline
     
@@ -847,8 +880,11 @@ Any necessary variables for describing the inputs/outputs will be defined prior 
     \multicolumn{1}{|c|}{VSC2.7} 
     & \multicolumn{1}{c|}{V2}
     & A curved lane has been detected and the vehicle is travelling at a moderate speed
-    & - Curved track segment \newline - Speed of 1 m/s
-    & - Vehicle follows curve of lane and stays within lane lines
+     & |leftAngle - rightAngle| $\gg$ 0 \newline
+    intersectionDetect = 0 \newline
+    obstacleDetect = 0 \newline
+    speed = 1 m/s
+    & Vehicle follows curve of lane and stays within lane lines
     & N/A 
     & \multicolumn{1}{c|}{N/A}\\ 
     
@@ -858,8 +894,11 @@ Any necessary variables for describing the inputs/outputs will be defined prior 
     \rowcolor{tableCell}\multicolumn{1}{|c|}{VSC2.8} 
     & \multicolumn{1}{c|}{V2}
     & A curved lane has been detected and the vehicle is travelling at a high speed
-    & - Curved track segment \newline - Speed of 1.25 m/s
-    & - Vehicle follows curve of lane and stays within lane lines
+     & |leftAngle - rightAngle| $\gg$ 0 \newline
+    intersectionDetect = 0 \newline
+    obstacleDetect = 0 \newline
+    speed = 1.25 m/s
+    & Vehicle follows curve of lane and stays within lane lines
     & N/A
     & \multicolumn{1}{c|}{N/A}\\ 
     
@@ -867,8 +906,11 @@ Any necessary variables for describing the inputs/outputs will be defined prior 
     \multicolumn{1}{|c|}{VSC2.9} 
     & \multicolumn{1}{c|}{V4}
     & An intersection has been detected and the vehicle is travelling at a very low speed
-    & - Straight track segment with intersection \newline - Speed of 0.5 m/s
-    & - Vehicle slows down and stops at intersection line while remaining within lane lines
+    & leftAngle $\approx$ rightAngle \newline
+    intersectionDetect = 1 \newline
+    obstacleDetect = 0 \newline
+    speed = 0.5 m/s
+    & Vehicle slows down and stops at intersection line while remaining within lane lines
     & N/A
     & \multicolumn{1}{c|}{N/A}\\ 
     
@@ -876,8 +918,11 @@ Any necessary variables for describing the inputs/outputs will be defined prior 
     \rowcolor{tableCell}\multicolumn{1}{|c|}{VSC2.10} 
     & \multicolumn{1}{c|}{V4}
     & An intersection has been detected and the vehicle is travelling at a low speed
-    & - Straight track segment with intersection \newline - Speed of 0.8 m/s
-    & - Vehicle slows down and stops at intersection line while remaining within lane lines
+    & leftAngle $\approx$ rightAngle \newline
+    intersectionDetect = 1 \newline
+    obstacleDetect = 0 \newline
+    speed = 0.8 m/s
+    & Vehicle slows down and stops at intersection line while remaining within lane lines
     & N/A
     & \multicolumn{1}{c|}{N/A}\\ 
     
@@ -885,8 +930,11 @@ Any necessary variables for describing the inputs/outputs will be defined prior 
     \multicolumn{1}{|c|}{VSC2.11} 
     & \multicolumn{1}{c|}{V4}
     & An intersection has been detected and the vehicle is travelling at a moderate speed
-    & - Straight track segment with intersection \newline - Speed of 1 m/s
-    & - Vehicle slows down and stops at intersection line while remaining within lane lines
+    & leftAngle $\approx$ rightAngle \newline
+    intersectionDetect = 1 \newline
+    obstacleDetect = 0 \newline
+    speed = 1 m/s
+    & Vehicle slows down and stops at intersection line while remaining within lane lines
     & N/A
     & \multicolumn{1}{c|}{N/A}\\
     
@@ -894,8 +942,11 @@ Any necessary variables for describing the inputs/outputs will be defined prior 
     \rowcolor{tableCell}\multicolumn{1}{|c|}{VSC2.12} 
     & \multicolumn{1}{c|}{V4}
     & An intersection has been detected and the vehicle is travelling at a high speed
-    & - Straight track segment with intersection \newline - Speed of 1.25 m/s
-    & - Vehicle slows down and stops at intersection line while remaining within lane lines
+    & leftAngle $\approx$ rightAngle \newline
+    intersectionDetect = 1 \newline
+    obstacleDetect = 0 \newline
+    speed = 1.25 m/s
+    & Vehicle slows down and stops at intersection line while remaining within lane lines
     & N/A
     & \multicolumn{1}{c|}{N/A}\\
     
@@ -903,8 +954,11 @@ Any necessary variables for describing the inputs/outputs will be defined prior 
     \multicolumn{1}{|c|}{VSC2.13} 
     & \multicolumn{1}{c|}{V6}
     & An obstacle has been detected in a straight lane and the vehicle is travelling at a very low speed
-    & - Straight track segment with obstacle \newline - Speed of 0.5 m/s
-    & - Vehicle stops before making contact with obstacle
+    & leftAngle $\approx$ rightAngle \newline
+    intersectionDetect = 0 \newline
+    obstacleDetect = 1 \newline
+    speed = 0.5 m/s
+    & Vehicle stops before making contact with obstacle
     & N/A
     & \multicolumn{1}{c|}{N/A}\\ 
     
@@ -912,8 +966,11 @@ Any necessary variables for describing the inputs/outputs will be defined prior 
     \rowcolor{tableCell}\multicolumn{1}{|c|}{VSC2.14} 
     & \multicolumn{1}{c|}{V6}
     & An obstacle has been detected in a straight lane and the vehicle is travelling at a low speed
-    & - Straight track segment with obstacle \newline - Speed of 0.8 m/s
-    & - Vehicle stops before making contact with obstacle
+    & leftAngle $\approx$ rightAngle \newline
+    intersectionDetect = 0 \newline
+    obstacleDetect = 1 \newline
+    speed = 0.8 m/s
+    & Vehicle stops before making contact with obstacle
     & N/A
     & \multicolumn{1}{c|}{N/A}\\  \hline
     
@@ -923,8 +980,11 @@ Any necessary variables for describing the inputs/outputs will be defined prior 
     \multicolumn{1}{|c|}{VSC2.15} 
     & \multicolumn{1}{c|}{V6}
     & An obstacle has been detected in a straight lane and the vehicle is travelling at a moderate speed
-    & - Straight track segment with obstacle \newline - Speed of 1 m/s
-    & - Vehicle stops before making contact with obstacle
+    & leftAngle $\approx$ rightAngle \newline
+    intersectionDetect = 0 \newline
+    obstacleDetect = 1 \newline
+    speed = 1 m/s
+    & Vehicle stops before making contact with obstacle
     & N/A
     & \multicolumn{1}{c|}{N/A}\\
     
@@ -932,8 +992,11 @@ Any necessary variables for describing the inputs/outputs will be defined prior 
     \rowcolor{tableCell}\multicolumn{1}{|c|}{VSC2.16} 
     & \multicolumn{1}{c|}{V6}
     & An obstacle has been detected in a straight lane and the vehicle is travelling at a high speed
-    & - Straight track segment with obstacle \newline - Speed of 1.25 m/s
-    & - Vehicle stops before making contact with obstacle
+    & leftAngle $\approx$ rightAngle \newline
+    intersectionDetect = 0 \newline
+    obstacleDetect = 1 \newline
+    speed = 1.25 m/s
+    & Vehicle stops before making contact with obstacle
     & N/A
     & \multicolumn{1}{c|}{N/A}\\
     
@@ -941,8 +1004,11 @@ Any necessary variables for describing the inputs/outputs will be defined prior 
     \multicolumn{1}{|c|}{VSC2.17} 
     & \multicolumn{1}{c|}{V6}
     & An obstacle has been detected in a curved lane and the vehicle is travelling at a very low speed
-    & - Curved track segment with obstacle \newline - Speed of 0.5 m/s
-    & - Vehicle stops before making contact with obstacle
+    & |leftAngle - rightAngle| $\gg$ 0 \newline
+    intersectionDetect = 0 \newline
+    obstacleDetect = 1 \newline
+    speed = 0.5 m/s
+    & Vehicle stops before making contact with obstacle
     & N/A
     & \multicolumn{1}{c|}{N/A}\\ 
     
@@ -950,8 +1016,11 @@ Any necessary variables for describing the inputs/outputs will be defined prior 
     \rowcolor{tableCell}\multicolumn{1}{|c|}{VSC2.18} 
     & \multicolumn{1}{c|}{V6}
     & An obstacle has been detected in a straight lane and the vehicle is travelling at a low speed
-    & - Curved track segment with obstacle \newline - Speed of 0.8 m/s
-    & - Vehicle stops before making contact with obstacle
+    & |leftAngle - rightAngle| $\gg$ 0 \newline
+    intersectionDetect = 0 \newline
+    obstacleDetect = 1 \newline
+    speed = 0.8 m/s
+    & Vehicle stops before making contact with obstacle
     & N/A
     & \multicolumn{1}{c|}{N/A}\\ 
     
@@ -959,8 +1028,11 @@ Any necessary variables for describing the inputs/outputs will be defined prior 
     \multicolumn{1}{|c|}{VSC2.19} 
     & \multicolumn{1}{c|}{V6}
     & An obstacle has been detected in a straight lane and the vehicle is travelling at a moderate speed
-    & - Curved track segment with obstacle \newline - Speed of 1 m/s
-    & - Vehicle stops before making contact with obstacle
+    & |leftAngle - rightAngle| $\gg$ 0 \newline
+    intersectionDetect = 0 \newline
+    obstacleDetect = 1 \newline
+    speed = 1 m/s
+    & Vehicle stops before making contact with obstacle
     & N/A
     & \multicolumn{1}{c|}{N/A}\\
     
@@ -968,8 +1040,11 @@ Any necessary variables for describing the inputs/outputs will be defined prior 
     \rowcolor{tableCell}\multicolumn{1}{|c|}{VSC2.20} 
     & \multicolumn{1}{c|}{V6}
     & An obstacle has been detected in a straight lane and the vehicle is travelling at a high speed
-    & - Curved track segment with obstacle \newline - Speed of 1.25 m/s
-    & - Vehicle stops before making contact with obstacle
+    & |leftAngle - rightAngle| $\gg$ 0 \newline
+    intersectionDetect = 0 \newline
+    obstacleDetect = 1 \newline
+    speed = 1.25 m/s
+    & Vehicle stops before making contact with obstacle
     & N/A
     & \multicolumn{1}{c|}{N/A}\\\hline
      
@@ -978,22 +1053,35 @@ Any necessary variables for describing the inputs/outputs will be defined prior 
     
     
  
-    
+    \newpage
     
 
     % Testing Requirement V3 %
     \textbf{5.2.1.3 Image Processing Verification} \vspace{2mm}\\
     Note: This module is currently not complete. \\
-    The following table are verifications tests for the lane detection and lane extraction from a real-world image scenario ( VC3.1 to VC3.9). As well as the verification of the image processing logic and identification (VC3.10 to VC3.XXX). \\
-    Variable Definitions: \\ \newpage
+    The following table are verifications tests for the lane detection and lane extraction from a real-world image scenario (VC3.1 to VC3.9). As well as the verification of the image processing logic and identification (VC3.10 to VC3.15). \\
+    Variable Definitions: \\ 
     \begin{itemize}[topsep=0pt]
         \item imgData : \\ 
             float leftAngle,  rightAngle,  leftLength, rightLength \\
             boolean intersectionDetect, obstacleDetect
     \end{itemize}
-    \textbf{imgData Reference - FIGURE XXX}
+    
+
+
+    \begin{figure}[h]
+    \caption{imgData Reference Example\newline The white lines are detected through a Canny edge detection.\newline
+            Red lines are created through a Probabilistic Hough Transform. \newline
+            The blue horizontal line symbolizes the cutoff point for the image. \newline
+            The green lines connects the detected red lines to the center of the image, and allows the creation of two sets of lines: the left side lines and the right side lines. \newline
+            Lastly, the intersection is symbolized by the pink coloured line.\newline
+            Using the two sets of green lines, we can calculate the average left angle, average right angle, average left line length, and average right line length.}
+    \includegraphics[width=0.8\textwidth]{figures/houghref.png}
+    \end{figure}
+        
     \vspace{0.5cm}
     
+    \newpage
     
 \begin{longtable}{ | p{0.08\textwidth } | p{0.17\textwidth } |  p{0.2\textwidth } |  p{0.22\textwidth } | p{0.22\textwidth } | p{0.22\textwidth } |  p{0.1\textwidth } |}  \hline
 
@@ -1012,43 +1100,43 @@ Any necessary variables for describing the inputs/outputs will be defined prior 
     & At any point of the track, the lanes must be detected and extracted from the image.
     & Car on straight track segment
     & A straight line detected on each side of the car
-    & Figure XXX
+    & Figure ~\ref{fig:Fig2}
     & \multicolumn{1}{c|}{Pass}\\  \hline
     
     
     \rowcolor{tableCell}\multicolumn{1}{|c|}{VC3.2} 
     & \multicolumn{1}{c|}{V2}
-    & ``''
+    & \multicolumn{1}{c|}{``''}
     & Car on left turn segment
     & A small left turning curve on the left side of the screen. A large left turning curve on the right of the screen 
-    & Figure XXX
+    & Figure ~\ref{fig:Fig3}
     & \multicolumn{1}{c|}{Pass}\\ \hline
     
     
     \multicolumn{1}{|c|}{VC3.3} 
     & \multicolumn{1}{c|}{V2}
-    & ``''
+    & \multicolumn{1}{c|}{``''}
     & Car on right turn segment
     & A small right turning curve on the right side of the screen. A large right turning curve on the left of the screen 
-    & Figure XXX
+    & Figure ~\ref{fig:Fig4}
     & \multicolumn{1}{c|}{Pass}\\ \hline
      
      
     \rowcolor{tableCell}\multicolumn{1}{|c|}{VC3.4} 
     &\multicolumn{1}{c|}{ V2, V3}
-    & ``''
+    & \multicolumn{1}{c|}{``''}
     & Car approaching intersection
     & Two vertical lines, one  on each side of the car, terminating at a horizontal line 
-    & Figure XXX
+    & Figure ~\ref{fig:Fig5}
     & \multicolumn{1}{c|}{Pass}\\ \hline
     
     
     \multicolumn{1}{|c|}{VC3.5} 
     & \multicolumn{1}{c|}{V2, V5}
-    & ``''
+    & \multicolumn{1}{c|}{``''}
     & Car navigating through intersection
-    & ??? 
-    & Figure XXX
+    & Small vertical line segments on each side of the car
+    & Figure ~\ref{fig:Fig6}
     & \multicolumn{1}{c|}{N/A}\\ \hline
     
     
@@ -1063,7 +1151,7 @@ Any necessary variables for describing the inputs/outputs will be defined prior 
     
     \multicolumn{1}{|c|}{VC3.7} 
     & \multicolumn{1}{c|}{V6}
-    & ``''
+    & \multicolumn{1}{c|}{``''}
     & Obstacle ahead of car on a turning segment
     & Contours of obstacle detected
     & N/A
@@ -1072,7 +1160,7 @@ Any necessary variables for describing the inputs/outputs will be defined prior 
     
    \rowcolor{tableCell} \multicolumn{1}{|c|}{VC3.8} 
     & \multicolumn{1}{c|}{V5, V6}
-    & ``''
+    & \multicolumn{1}{c|}{``''}
     & Obstacle ahead of car at the intersection
     & Contours of obstacle detected
     & N/A
@@ -1081,7 +1169,7 @@ Any necessary variables for describing the inputs/outputs will be defined prior 
     
     \multicolumn{1}{|c|}{VC3.9} 
     & \multicolumn{1}{c|}{V5, V6}
-    & ``''
+    & \multicolumn{1}{c|}{``''}
     & Obstacle ahead of car at the intersection
     & Contours of obstacle detected
     & N/A
@@ -1090,7 +1178,7 @@ Any necessary variables for describing the inputs/outputs will be defined prior 
     \end{longtable}
     \newpage
     
-  \begin{longtable}{ | p{0.08\textwidth } | p{0.17\textwidth } |  p{0.2\textwidth } |  p{0.22\textwidth } | p{0.22\textwidth } | p{0.22\textwidth } |  p{0.1\textwidth } |}  \hline
+  \begin{longtable}{ | p{0.08\textwidth } | p{0.17\textwidth } |  p{0.2\textwidth } |  p{0.22\textwidth } | p{0.25\textwidth } | p{0.22\textwidth } |  p{0.1\textwidth } |}  \hline
 
     % Row 1
     \rowcolor{subsectionC}\textbf{Test ID} 
@@ -1104,17 +1192,101 @@ Any necessary variables for describing the inputs/outputs will be defined prior 
     
     \multicolumn{1}{|c|}{VC3.10} 
     & \multicolumn{1}{c|}{V2}
-    & The geometry of the captured image must be valid in order to correctly navigate the vehicle
+    & The geometry of the captured image must be valid in order to correctly deduce logic and navigate the vehicle
     & Car on straight track segment and centered on its lane
-    & leftAngle and rightAngle nearly identical, \newline
-      leftLength and rightLength nearly identical 
-    & leftAngle = XXX \newline
-      rightAngle = XXX \newline
-      leftLength = XXX \newline
-      rightLength = XXX \newline
+    & leftAngle $\approx$ rightAngle \newline
+      leftLength $\approx$ rightLength \newline
+      intersectionDetect = 0 \newline
+      obstacleDetect = 0
+    & leftAngle = 42.81 \newline
+      rightAngle = 40.96 \newline
+      leftLength = 358.31 \newline
+      rightLength = 361.45 \newline
       intersectionDetect = 0 \newline
       obstacleDetect = 0 
     & \multicolumn{1}{c|}{Pass}\\ \hline
+    
+    
+    \rowcolor{tableCell}\multicolumn{1}{|c|}{VC3.11} 
+    & \multicolumn{1}{c|}{V2}
+    & \multicolumn{1}{c|}{``''}
+    & Car on straight track segment and off-centered to the left
+    & leftAngle $\approx$ rightAngle \newline
+      leftLength $\ll$ rightLength \newline
+      intersectionDetect = 0 \newline
+      obstacleDetect = 0
+    & leftAngle = 47.84 \newline
+      rightAngle = 43.62 \newline
+      leftLength = 464.34 \newline
+      rightLength = 279.36 \newline
+      intersectionDetect = 0 \newline
+      obstacleDetect = 0 
+    & \multicolumn{1}{c|}{Pass}\\ \hline
+    
+    
+    \multicolumn{1}{|c|}{VC3.12} 
+    & \multicolumn{1}{c|}{V2}
+    & \multicolumn{1}{c|}{``''}
+    & Car on a left turn and centered on its lane
+    & leftAngle $\ll$ rightAngle \newline
+      leftLength $\ll$ rightLength \newline
+      intersectionDetect = 0 \newline
+      obstacleDetect = 0
+    & leftAngle = 24.50 \newline
+      rightAngle = 51.34 \newline
+      leftLength = 335.14 \newline
+      rightLength = 408.33 \newline
+      intersectionDetect = 0 \newline
+      obstacleDetect = 0 
+    & \multicolumn{1}{c|}{Pass}\\ \hline
+    
+    
+    \rowcolor{tableCell}\multicolumn{1}{|c|}{VC3.13} 
+    & \multicolumn{1}{c|}{V2}
+    & \multicolumn{1}{c|}{``''}
+    & Car on a right turn and centered on its lane
+    & leftAngle $\gg$ rightAngle \newline
+      leftLength $\gg$ rightLength \newline
+      intersectionDetect = 0 \newline
+      obstacleDetect = 0
+    & leftAngle = 64.12 \newline
+      rightAngle = 10.43 \newline
+      leftLength = 377.55 \newline
+      rightLength = 291.06 \newline
+      intersectionDetect = 0 \newline
+      obstacleDetect = 0 
+    & \multicolumn{1}{c|}{Pass}\\ \hline
+    
+    
+    
+    \multicolumn{1}{|c|}{VC3.14} 
+    & \multicolumn{1}{c|}{V2, V3, V4}
+    & \multicolumn{1}{c|}{``''}
+    & Car approaching intersection
+    & leftAngle $\approx$ rightAngle \newline
+      leftLength $\approx$ rightLength \newline
+      intersectionDetect = 1 \newline
+      obstacleDetect = 0
+    & leftAngle = 67.44 \newline
+      rightAngle = 61.23 \newline
+      leftLength = 332.12 \newline
+      rightLength = 396.56 \newline
+      intersectionDetect = 1 \newline
+      obstacleDetect = 0 
+    & \multicolumn{1}{c|}{Pass}\\ \hline
+    
+    
+    
+    \rowcolor{tableCell}\multicolumn{1}{|c|}{VC3.15} 
+    & \multicolumn{1}{c|}{V2, V6}
+    & \multicolumn{1}{c|}{``''}
+    & Car approaching an obstacle on a straight line segment
+    & leftAngle $\approx$ rightAngle \newline
+      leftLength $\approx$ rightLength \newline
+      intersectionDetect = 0 \newline
+      obstacleDetect = 1
+    & N/A
+    & \multicolumn{1}{c|}{N/A}\\ \hline
      
     \end{longtable}
     
@@ -1124,6 +1296,8 @@ Any necessary variables for describing the inputs/outputs will be defined prior 
 % V4: The vehicle must be able to stop at intersections
 % V5: The vehicle must be able to navigate through intersections
 % V6: The vehicle must be able to avoid obstacles
+\newpage
+
 
 
 
@@ -1163,7 +1337,7 @@ Arrival Queue:
     
     % Row 2
     \multicolumn{1}{|c|}{IC1.1} 
-    & \multicolumn{1}{c|}{IC5}
+    & \multicolumn{1}{c|}{IC1, IC5}
     & Intersection request has been sent to the intersection controller from a single vehicle
     & Single vehicle intersection request 
     & Car object containing the request information pushed into the arrival queue
@@ -1171,7 +1345,7 @@ Arrival Queue:
     & \multicolumn{1}{|c|}{N/A}\\ 
     % Row 2 
     \rowcolor{tableCell}\multicolumn{1}{|c|}{IC1.2} 
-    & \multicolumn{1}{c|}{IC5}
+    & \multicolumn{1}{c|}{IC1, IC5}
     & Two vehicles arrive at the intersection at the same time and request to proceed through the intersection. 
     & More than one vehicle intersection request 
     & Car objects containing the request information pushed to the arrival queue in the order that they were received 
@@ -1180,32 +1354,33 @@ Arrival Queue:
     
     % Row 3 (without color)
     \multicolumn{1}{|c|}{IC1.3} 
-    & \multicolumn{1}{c|}{IC5}
+    & \multicolumn{1}{c|}{IC1, IC5}
     & Vehicle intersection requests that are transmitted incompletely should be dropped by it intersection controller
     &  Vehicle intersection request that is terminated prior to receive completion
     & Timeout/ disconnected receive error is caught and system becomes available for subsequent requests
     & N/A
-    & \multicolumn{1}{|c|}{N/A}\\ \hline
+    & \multicolumn{1}{|c|}{N/A}\\ \hline 
     
     
-    \newpage \hline
+    
+  
   
     
      % Row 4
     \rowcolor{tableCell}\multicolumn{1}{|c|}{IC1.4} 
-    & \multicolumn{1}{c|}{IC5}
+    & \multicolumn{1}{c|}{IC1, IC5}
     & The system should be able to handle large request volumes without losing requests. 
     & Many vehicle requests
     &  Car objects containing the request information pushed to the arrival queue in the order that they were received 
     & N/A
     & \multicolumn{1}{|c|}{N/A}\\ \hline
-    
+    \newpage \hline
 
 
     
     % Row 4 (without color)
     \multicolumn{1}{|c|}{IC1.5} 
-    & \multicolumn{1}{c|}{IC5}
+    & \multicolumn{1}{c|}{IC1}
     & Messages that have invalid or corrupt message contents should be dropped
     & Invalid message \newline request
     & Invalid/corrupt message detected and dropped
@@ -1250,7 +1425,7 @@ Arrival Queue:
     % Row 2 
   
     \rowcolor{tableCell}\multicolumn{1}{|c|}{IC2.2} 
-    & \multicolumn{1}{c|}{IC5}
+    & \multicolumn{1}{c|}{V1, IC4, IC5}
     & Multiple vehicle proceed requests have been determined safe and must be communicated to the vehicle
     & More than one car object in the proceed queue
     & Remove vehicles from departure queue and send proceed message to vehicles in FIFO order.  
@@ -1267,7 +1442,7 @@ Arrival Queue:
     & N/A
     & \multicolumn{1}{|c|}{N/A}\\ \hline
     
-    \pagebreak \hline
+    
    
     % Row 4 
     \rowcolor{tableCell}\multicolumn{1}{|c|}{IC2.4} 
@@ -1276,9 +1451,9 @@ Arrival Queue:
     & Car object in the proceed queue
     & Inactive connection error should be caught. The system should then attempt to send the message again (up to the maximum attempt limit)
     & N/A
-    & \multicolumn{1}{|c|}{N/A}\\  
+    & \multicolumn{1}{|c|}{N/A}\\  \hline
     
-    
+    \pagebreak \hline
    
     
     % Row 5 (without color)
@@ -1289,11 +1464,13 @@ Arrival Queue:
     &  Timeout/ disconnected send error should be caught.  The system should then attempt to send the message again (up to the maximum attempt limit)
     & N/A
     & \multicolumn{1}{|c|}{N/A}\\ \hline
-
-     
+    
     \end{longtable}
     
-     \textbf{5.2.2.3 Communication - Message Extraction} \vspace{2mm}
+     \textbf{5.2.2.3 Communication - Message Extraction} 
+     
+     Note: This module is currently not complete.\\
+     
  \begin{longtable}{ | p{0.08\textwidth } | p{0.17\textwidth } |  p{0.2\textwidth } |  p{0.22\textwidth } | p{0.22\textwidth } | p{0.22\textwidth } |  p{0.1\textwidth } |}  \hline
 
     % Row 1
@@ -1307,40 +1484,43 @@ Arrival Queue:
     
     % Row 2
        \multicolumn{1}{|c|}{IC3.1} 
-    & 
-    &
+    & \multicolumn{1}{c|}{IC5}
+    &Vehicle message contents are separated by an agreed upon separator
     % input is client message with destination port number, arriving from, going to
     % client address doesn't need to be transmitted in the request as this can be retrieved when
     % the connection is made
-    & 2, 'Red', 'Blue'
+    & 2\_N\_S\_1\_timestamp
     % expected output is a car object with destination bluetooth id, port number, arriving from, and going to
-    & Car(bluetooth Address, 1, 'Red', 'Blue') 
-    &  
-    & \multicolumn{1}{c|}{-}\\
+    & Car(2, bluetooth Address, 1, 'N', 'S', `', `', 'timestamp') 
+    &  N/A
+    & \multicolumn{1}{c|}{N/A}\\
     
     
     % Row 3
     \rowcolor{tableCell}\multicolumn{1}{|c|}{IC3.2} 
-    & 
-    &
-    & 2, 'Red', 'Red'
-    & Incorrect Message contents
-    &  
-    & \multicolumn{1}{c|}{-}\\ 
+    & \multicolumn{1}{c|}{IC5} 
+    &The intersection communication module should drop incomplete or corrupt message contents
+    & 2\_N\_N\_1\_timestamp
+    & Incorrect Message contents error caught
+    &  N/A
+    & \multicolumn{1}{c|}{N/A}\\ 
     
     % Row 4
     \multicolumn{1}{|c|}{IC3.3} 
-    & 
-    &
-    & -, 'Yellow', 'Green'
-    & Incorrect Message contents
-    &  
-    & \multicolumn{1}{c|}{-}\\ \hline
+    & \multicolumn{1}{c|}{IC5} 
+    & ``''
+    & 2\_N\_N\_1\_
+    & Incorrect Message contents error caught
+    &  N/A
+    & \multicolumn{1}{c|}{N/A}\\ \hline
     
     \end{longtable}
     
     
-    \textbf{5.2.2.4 ImageProcessing} \vspace{2mm}
+    \textbf{5.2.2.4 ImageProcessing} \vspace{2mm}\\
+    Note: This module is not yet completed. 
+    
+    
   \begin{longtable}{ | p{0.08\textwidth } | p{0.17\textwidth } |  p{0.2\textwidth } |  p{0.22\textwidth } | p{0.22\textwidth } | p{0.22\textwidth } |  p{0.1\textwidth } |}  \hline
 
     % Row 1
@@ -1354,45 +1534,86 @@ Arrival Queue:
     
     % Row 2
     \multicolumn{1}{|c|}{IC4.1} 
-        &
-    &
-    & - 
-    & - 
-    & - 
-    & \multicolumn{1}{c|}{-}\\ 
+    &\multicolumn{1}{c|}{IC5}  
+    & The IC must be able to detect when there are the intersection is occupied
+    & Video frame of the intersection with no cars on the track
+    & The module determines that there are no cars in the intersection  
+    & N/A
+    &\multicolumn{1}{c|}{N/A}\\ 
     
     % Row 2 (with color)
     \rowcolor{tableCell}\multicolumn{1}{|c|}{IC4.2} 
-        &
-    &
-    & <Text Here>
-    & <Text Here>
-    & <Text Here>
-    & \multicolumn{1}{c|}{-}\\ 
+    &\multicolumn{1}{c|}{IC3, IC5} 
+    & \multicolumn{1}{c|}{" "} 
+    & Video frame of intersection with a car in the intersection
+    & Module determines the intersection is occupied
+    & N/A
+    & \multicolumn{1}{c|}{N/A}\\ \hline
+    
+    \newpage\hline
     
     % Row 3 (without color)
     \multicolumn{1}{|c|}{IC4.3} 
-        &
-    &
-    & 
-    & 
-    & 
-    & \multicolumn{1}{c|}{-}\\ 
+    &\multicolumn{1}{c|}{IC3, IC5}
+    & \multicolumn{1}{c|}{" "} 
+    & Video frame of car leaving the intersection
+    & The module changes the intersection from occupied to unoccupied
+    & N/A
+    & \multicolumn{1}{c|}{N/A}\\ 
     
      % Row 4
     \rowcolor{tableCell}\multicolumn{1}{|c|}{IC4.4} 
-        &
-    &
-    & 
-    & 
-    & 
-    & \multicolumn{1}{c|}{-}\\ \hline
+        &\multicolumn{1}{c|}{IC5}  
+    &\multicolumn{1}{c|}{" "} 
+    & Video frame of a stationary obstacle in the intersection
+    & The module determines that the intersection is occupied indefinately
+    & N/A
+    & \multicolumn{1}{c|}{N/A}\\ 
+    
+    % Row 5 (without color)
+    \multicolumn{1}{|c|}{IC4.5} 
+    &\multicolumn{1}{c|}{IC3}
+    & The intersection must determine which car has navigated through the intersection using directions
+    & Video clip showing vehicle proceeding from North to South of the intersection
+    & The module records the movement 
+    & N/A
+    & \multicolumn{1}{c|}{N/A} \\
+    
+    % Row 6 (with color)
+    \rowcolor{tableCell}\multicolumn{1}{|c|}{IC4.6} 
+    &\multicolumn{1}{c|}{IC3}
+    & \multicolumn{1}{c|}{" "} 
+    & Video clip showing vehicle proceeding from South to North of the intersection
+    & The module records the movement 
+    & N/A
+    & \multicolumn{1}{c|}{N/A} \\
+    
+    % Row 5 (without color)
+    \multicolumn{1}{|c|}{IC4.7} 
+    &\multicolumn{1}{c|}{IC3}
+     & \multicolumn{1}{c|}{" "} 
+    & Video clip showing vehicle proceeding from East to West of the intersection
+    & The module records the movement 
+    & N/A
+    & \multicolumn{1}{c|}{N/A} \\
+    
+    % Row 6 (with color)
+    \rowcolor{tableCell}\multicolumn{1}{|c|}{IC4.8} 
+    &\multicolumn{1}{c|}{IC3}
+    & \multicolumn{1}{c|}{" "} 
+    & Video clip showing vehicle proceeding from West to East of the intersection
+    & The module records the movement 
+    & N/A
+    & \multicolumn{1}{c|}{N/A} \\ \hline
      
     \end{longtable}
 
 
 \subsubsection{Integrated Vehicle Intersection Software Verification}
 \textbf{5.2.3.1 } \vspace{2mm}
+
+ Note: The VIC system is only partially implemented, integrated system testing will take place in the future.\\
+
  \begin{longtable}{ | p{0.08\textwidth } | p{0.17\textwidth } |  p{0.2\textwidth } |  p{0.22\textwidth } | p{0.22\textwidth } | p{0.22\textwidth } |  p{0.1\textwidth } |}  \hline
 
     % Row 1
@@ -1406,93 +1627,70 @@ Arrival Queue:
     
     % Row 2
     \multicolumn{1}{|c|}{VIC.1} 
-    &
-    &
-    & - Single vehicle, clear intersection
-    & - Vehicle proceeds directly through the intersection
-    & - 
-    & \multicolumn{1}{c|}{-}\\ 
+    & \multicolumn{1}{c|}{IC1, IC5}
+    &Vehicles are allowed to proceed directly through the intersection, without stopping if the intersection is deemed safe and clear
+    & Single vehicle, clear intersection
+    & Vehicle proceeds directly through the intersection
+    & N/A 
+    & \multicolumn{1}{c|}{N/A}\\ \hline
+    
+    \newpage\hline
     
     % Row 2 (with color)
     \rowcolor{tableCell}\multicolumn{1}{|c|}{VIC.2} 
-    &
-    &    
-    & - Single vehicle, obstacle in intersection
-    & - Vehicle should stop at the intersection
-    & 
-    & \multicolumn{1}{c|}{-}\\ 
+    & \multicolumn{1}{c|}{IC1, IC4, IC5}
+    & Vehicles are designed to stop at the intersection until they receive a proceed command from the intersection    
+    & Single vehicle, obstacle in intersection
+    & Vehicle should stop at the intersection
+    & N/A
+    & \multicolumn{1}{c|}{N/A}\\ 
     
     % Row 3 (without color)
-    &
-    &
     \multicolumn{1}{|c|}{VIC.3} 
-    & - Single vehicle, intersection controller system not working
-    & - Vehicle should stop at the intersection and wait
-    & 
-    & \multicolumn{1}{c|}{-}\\ 
+    & \multicolumn{1}{c|}{V1}
+    & ``''
     
-     % Row 4
-    \rowcolor{tableCell}\multicolumn{1}{|c|}{VIC.4} 
-    &
-    &
-    & 
-    & 
-    & 
-    & \multicolumn{1}{c|}{-}\\ 
+    & Single vehicle, intersection controller system not working
+    &  Vehicle should stop at the intersection and wait
+    & N/A
+    & \multicolumn{1}{c|}{N/A}\\ 
     
-        % Row 5 (without color)
+    
+        % Row 4 
+        \rowcolor{tableCell}\multicolumn{1}{|c|}{VIC.4} 
+    & \multicolumn{1}{c|}{V3, IC4, IC5}
+    & Vehicles are allowed to proceed directly through the intersection, without stopping if the intersection is deemed safe and clear and the intended paths are parallel
+    & Multiple vehicles, parallel directions, clear intersection
+    & Vehicles proceed directly through the intersection
+    &  N/A
+    & \multicolumn{1}{c|}{N/A}\\ 
+    
+     % Row 5
     \multicolumn{1}{|c|}{VIC.5} 
-    &
-    &
-    & - Multiple vehicles, parallel directions, clear intersection
-    & - Vehicles proceed directly through the intersection
-    & 
-    & \multicolumn{1}{c|}{-}\\ 
+    & \multicolumn{1}{c|}{V3, V4, V5, IC4, IC5}
+    & Vehicles with crossing directions must stop at the intersection, the vehicle that arrived first proceeds through the intersection first
+    &  Vehicle A and Vehicle B, crossing directions, clear intersection, Vehicle A is first
+    &Vehicles A proceeds directly through the intersection, Vehicle B stops at the intersection 
+    & N/A 
+    & \multicolumn{1}{c|}{N/A}\\ 
     
-     % Row 6
+    % Row 6 (without color)
     \rowcolor{tableCell}\multicolumn{1}{|c|}{VIC.6} 
-    &
-    &
-    & - Vehicle A and Vehicle B, crossing directions, clear intersection, Vehicle A is first
-    & - Vehicles A proceeds directly through the intersection, Vehicle B stops at the intersection 
-    & 
-    & \multicolumn{1}{c|}{-}\\ 
+    & \multicolumn{1}{c|}{V1, V3, V4}
+    & Vehicles are designed to stop at the intersection until they receive a proceed command from the intersection
+    & Multiple vehicles, obstacle in intersection
+    & Vehicles should stop at the intersection 
+    & N/A 
+    & \multicolumn{1}{c|}{N/A}\\  
     
-    % Row 7 (without color)
+     % Row 7
     \multicolumn{1}{|c|}{VIC.7} 
-    &
-    &
-    & - Multiple vehicles, obstacle in intersection
-    & - Vehicles should stop at the intersection 
-    & 
-    & \multicolumn{1}{c|}{-}\\ 
-    
-     % Row 8
-    \rowcolor{tableCell}\multicolumn{1}{|c|}{VIC.8} 
-    &
-    &
-    & - Multiple vehicles, intersection controller not working
-    & - Vehicles should stop at the intersection and wait
-    & 
-    & \\
-    
-    
-    % Row 9 (without color)
-    \multicolumn{1}{|c|}{VIC.9} 
-    &
-    &
-    & - 
-    & -  
-    & 
-    & \multicolumn{1}{c|}{-}\\ 
-    
-     % Row 10
-    \rowcolor{tableCell}\multicolumn{1}{|c|}{VIC.10} 
-    &
-    &
-    & - 
-    & - 
-    & 
+    & \multicolumn{1}{c|}{V1}
+    & ``''
+    & Multiple vehicles, intersection controller not working
+    &  Vehicles should stop at the intersection and wait
+    & N/A 
+    & \multicolumn{1}{c|}{N/A}
     & \\\hline
      
     \end{longtable}
@@ -1513,12 +1711,92 @@ Arrival Queue:
 
     
     
-    \newpage
- \paperwidth=\pdfpageheight
- \paperheight=\pdfpagewidth
- \pdfpageheight=\paperheight
- \pdfpagewidth=\paperwidth
- \headwidth=\textwidth
+\newpage
+\paperwidth=\pdfpageheight
+\paperheight=\pdfpagewidth
+\pdfpageheight=\paperheight
+\pdfpagewidth=\paperwidth
+\headwidth=\textwidth
+
+
+
+ 
+
+\section{Appendix}
+\subsection{Image Processing Verification Results}
+
+ \begin{figure}[h]
+\centering
+\begin{subfig}
+  \centering
+  \includegraphics[width=.4\linewidth]{figures/straight_canny.png}
+\end{subfig}%
+\begin{subfig}
+  \centering
+  \includegraphics[width=.4\linewidth]{figures/straight_h.png}
+\end{subfig}
+\caption{Straight line segment}
+\label{fig:Fig2}
+\end{figure}
+
+
+\begin{figure}[h]
+\centering
+\begin{subfig}
+  \centering
+  \includegraphics[width=.4\linewidth]{figures/left_c.png}
+\end{subfig}%
+\begin{subfig}
+  \centering
+  \includegraphics[width=.4\linewidth]{figures/left_h.png}
+\end{subfig}
+\caption{Left turn segment}
+\label{fig:Fig3}
+\end{figure}
+
+\begin{figure}
+\centering
+\begin{subfig}
+  \centering
+  \includegraphics[width=.4\linewidth]{figures/right_c.png}
+\end{subfig}%
+\begin{subfig}
+  \centering
+  \includegraphics[width=.4\linewidth]{figures/right_h.png}
+\end{subfig}
+\caption{Right turn segment}
+\label{fig:Fig4}
+\end{figure}
+
+\begin{figure}
+\centering
+\begin{subfig}
+  \centering
+  \includegraphics[width=.4\linewidth]{figures/intersection2_c.png}
+\end{subfig}%
+\begin{subfig}
+  \centering
+  \includegraphics[width=.4\linewidth]{figures/intersection2_h.png}
+\end{subfig}
+\caption{Approaching an intersection}
+\label{fig:Fig5}
+\end{figure}
+
+\begin{figure}
+\centering
+\begin{subfig}
+  \centering
+  \includegraphics[width=.4\linewidth]{figures/intersection3_c.png}
+\end{subfig}%
+\begin{subfig}
+  \centering
+  \includegraphics[width=.4\linewidth]{figures/intersection3_h.png}
+\end{subfig}
+\caption{Navigating through an intersection}
+\label{fig:Fig6}
+
+\end{figure}
+
 
 
 
