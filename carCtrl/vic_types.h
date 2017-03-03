@@ -27,7 +27,7 @@ struct SignalRequest {
 };
 
 struct SignalResponse {
-	int port;
+	int val;
 };
 
 

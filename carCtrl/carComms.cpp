@@ -9,6 +9,10 @@
 #include <bluetooth/rfcomm.h>
 
 #include "carComms.h"
+#include "vic_types.h"
+
+
+
 
 
 
@@ -57,7 +61,9 @@ int sendToIC(char* msg) {
 */
 
 
-void* recvFromIC(void* c) {
+void* recvFromIC(void* arg) {
+    struct SignalResponse *resp = (struct SignalResponse *) arg;
+
 
     struct sockaddr_rc loc_addr = { 0 }, rem_addr = { 0 };
     char buf[1024] = { 0 };
@@ -70,14 +76,13 @@ void* recvFromIC(void* c) {
     // bind socket to port 1 of the first available 
     // local bluetooth adapter
     loc_addr.rc_family = AF_BLUETOOTH;
-//    loc_addr.rc_bdaddr = (&(bdaddr_t) {{0, 0, 0, 0, 0, 0}});
+    //loc_addr.rc_bdaddr = (&(bdaddr_t) {{0, 0, 0, 0, 0, 0}});
     loc_addr.rc_channel = (uint8_t) 1;
     bind(s, (struct sockaddr *)&loc_addr, sizeof(loc_addr));
 
     //listen with a backlog of 1
     listen(s, 1);
 	
-    int val = -1;
     while (1) {
         // accept one connection
         client = accept(s, (struct sockaddr *)&rem_addr, &opt);
@@ -93,9 +98,9 @@ void* recvFromIC(void* c) {
         }
 
         //response from client
-        val = (int) buf[0] - '0';
+        resp->val = (int) buf[0] - '0';
 
-        if (val == 0) {
+        if (resp->val == 0) {
         	printf("close server\n");
         	break;
         }
@@ -106,6 +111,8 @@ void* recvFromIC(void* c) {
     // close connection
     close(client);
     close(s);
+
+    free(resp);
     return 0;
 
 }

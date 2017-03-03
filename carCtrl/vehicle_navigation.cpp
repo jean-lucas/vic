@@ -7,7 +7,7 @@
 #include "vichw/servo_controller.h"
 #include "vichw/motor_speed_controller.h"
 
-int update_navigation(struct ImageData *img, struct ImageData *img_prev, struct CarStatus *car){
+int update_navigation(struct ImageData *img,  struct CarStatus *car){
 
 	double speed_ok = 0;
 	double angle_ok = 0;

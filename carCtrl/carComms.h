@@ -8,7 +8,7 @@ const int IC_PORT = 3;
 /* function declarations */
 char* serializeMessage();
 int sendToIC(char* msg);
-void* recvFromIC(void* c);
+void* recvFromIC(void* arg);
 
 
 #endif
