@@ -8,7 +8,7 @@ const double MAX_ANGLE = 45; //degrees
 const double ANGLE_THRESHOLD =  12; //degrees
 const double LENGTH_THRESHOLD =  50; 
 const double CENTER_ADJUST_ANGLE = 10;
-int update_navigation(struct ImageData *img, struct ImageData *img_prev, struct CarStatus *car);
+int update_navigation(struct ImageData *img, struct CarStatus *car);
 
 #endif
 
