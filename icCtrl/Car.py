@@ -6,3 +6,4 @@ class Car(object):
         self.direction_to = direction_to
         self.message_to_car = message_to_car
         self.proceed_now = False
+        self.retransmission_number = 0
