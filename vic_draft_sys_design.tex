@@ -2,7 +2,7 @@
 % 1 in margins
 % Contains a relative path for images
 
-\documentclass [10pt]{article}
+\documentclass [11pt]{article}
 
 % page geometry 
 \usepackage[margin=1in]{geometry}
@@ -10,9 +10,9 @@
 
 % ----------  PACKAGES START ------------ %
 
-% Table cell color package and highlighting
+% Table cell color
 \usepackage[table]{xcolor}
-\usepackage{color,soul}
+
 
 % VIC title package
 \usepackage{cabin}
@@ -38,9 +38,7 @@
 \usepackage{multicol}
 \usepackage{multirow}
 \usepackage{array}
-\renewcommand{\arraystretch}{1.4}% Spread rows out evenly in table
-\setlength{\LTpre}{0.5pt} % Reduces white space around tables (top)
-%\setlength{\LTpost}{0pt} % Reduces white space around tables (bottom)
+\renewcommand{\arraystretch}{1.2}% Spread rows out evenly in table
 
 % Color Packages
 \usepackage{color}   
@@ -53,7 +51,6 @@
 % List package
 \usepackage{enumitem}
 \setenumerate{itemsep=0pt, itemindent=0in,leftmargin=0.5in}
-
 
 % Paragraph parameter
 
@@ -82,8 +79,8 @@ linkcolor=black,}  %choose some color if you want links to stand out
 \pagestyle{fancy}
 
 % Header
-\lhead{Draft System Design }
-\rhead{Revision: 0}
+\lhead{System Requirements }
+\rhead{Revision: 1}
 \fancyhead[LE,CO]{VIC - Group 6}
 
 % Removes line under the header 
@@ -148,8 +145,6 @@ linkcolor=black,}  %choose some color if you want links to stand out
 %------------------------------TOC FORMAT START --------------------------------%
 \usepackage{tocloft}
 
-
-
 % Section indentations
 \cftsetindents{section}{0em}{1.5em}
 \cftsetindents{subsection}{1em}{2em}
@@ -157,7 +152,6 @@ linkcolor=black,}  %choose some color if you want links to stand out
 
 % Toc title size
 \renewcommand\cfttoctitlefont{\Large\bfseries}
-\renewcommand*\contentsname{Table of Contents}
 
 % Removes bold headings from toc
 %\renewcommand{\cftsecfont}{\normalfont}
@@ -191,7 +185,7 @@ linkcolor=black,}  %choose some color if you want links to stand out
 \begin {center} 
 
 \thispagestyle{empty}
-\vspace*{5cm}
+\vspace*{4.5cm}
 
 % Logo Insertion
 \begin {figure}[h!]
@@ -203,10 +197,11 @@ linkcolor=black,}  %choose some color if you want links to stand out
 \Huge{Vehicle Intersection Control} }
 
 \vspace{1 cm}
-{\Large\textbf{\textsc{McMaster University}}\\}  \vspace {1cm}
-{\Large Draft System Design\\ \vspace {0.4 cm} SE 4G06}  \vspace {1cm}
+{\Large \textbf{\textsc{McMaster University}}\\}  \vspace {1cm}
+{\Large System Requirements\\ \vspace {0.4 cm} SE 4G06}  \vspace {1cm}
 
 {\large \textsc{Group 6} \\} \vspace{1cm}
+
 
 \begin{tabular}{ l c  l}
 Alex Jackson &-& 1302526\\
@@ -216,6 +211,10 @@ Mathew Hobers &-& 1228607\\
 Radhika Sharma &-& 1150430\\
 Zachary Bazen &-& 1200979
 \end{tabular}
+
+
+
+
 
 
 
@@ -241,16 +240,50 @@ Zachary Bazen &-& 1200979
 %\section*{Revisions}
 \thispagestyle{empty}
 \section{Revisions}
-\begin{longtable}{| p{.2\textwidth } | p{.23\textwidth } | p{.23\textwidth } | p{.23\textwidth } |} \caption{VIC Table of Revisions}  \\
+\begin{longtable}{| p{.2\textwidth } | p{.21\textwidth } | p{.21\textwidth } | p{.27\textwidth } |}\caption{VIC Table of Revisions} \\\hline 
 
-\hline 
+% Header line
 \centering \textbf{Date} & 
-\multicolumn{1}{c}{\textbf {Revision Number}} &
-\multicolumn{1}{|c}{\textbf {Authors}} & 
-\multicolumn{1}{|c|}{\textbf {Comments}} \\ \hline
+\multicolumn{1}{c|}{\textbf {Revision Number}} &
+\multicolumn{1}{c|}{\textbf {Authors}} & 
+\multicolumn{1}{c|}{\textbf {Comments}} \\ \hline
 
-\multirow{4}{*}{\centering December 21, 2016}  & 
-\multirow{4}{*}{Revision 0}& 
+
+\multicolumn{1}{|c|}{\multirow{1}{*}{\centering March 3, 2017}}  & 
+\multicolumn{1}{c|}{\multirow{1}{*}{Revision 1}} &
+\begin{minipage}{.21\columnwidth}
+    Alex Jackson \newline
+    Jean Lucas Ferreira \newline
+    Justin Kapinski\newline
+    Mathew Hobers\newline
+    Radhika Sharma\newline
+    Zachary Bazen     
+\end{minipage}&
+\begin{minipage} {.27 \columnwidth}
+    \begin{enumerate}[label = - , leftmargin=0.15in]
+        \itemsep -.5em
+        \item Update system\\ requirements
+        \item Added requirement\\ rationale
+        \item Updated system\\ assumptions
+        \item Removed monitored and controlled variables \vspace{1mm}
+    \end{enumerate}
+\end{minipage}\\ \hline 
+
+% Botttom Row
+\multicolumn{1}{|c|}{\multirow{1}{*}{November 29,2016}} &
+\multicolumn{1}{c|}{\multirow{1}{*}{Revision 1}}& 
+\multirow{1}{*}{Zachary Bazen} &
+\begin{minipage} {.27 \columnwidth}
+    \begin{enumerate}[label = - , leftmargin=0.15in]
+        \itemsep -.5em
+        \item Updated  monitored  and controlled variables
+        \item Updated naming  conventions \vspace{1mm}
+    \end{enumerate}
+\end{minipage}\\ \hline 
+
+%
+\multirow{5}{*}{\centering November 14, 2016}  & 
+\multicolumn{1}{c|}{\multirow{5}{*}{Revision 0}}& 
 {Alex Jackson \newline
 Jean Lucas Ferreira \newline
 Justin Kapinski\newline
@@ -258,8 +291,10 @@ Mathew Hobers\newline
 Radhika Sharma\newline
 Zachary Bazen}
 &
- \multirow{4}{*}{N/A} \\ 
+ \multicolumn{1}{c|}{\multirow{5}{*}{N/A}} \\ 
 \hline 
+
+
 
 
 \end{longtable}
@@ -269,544 +304,594 @@ Zachary Bazen}
 %---------------------------- PROJECT DRIVERS ------------------------%
 % heading in document
 
-% -------------- START INTRODUCTION ---------------- %
-\section {Introduction}
-%\begin{center}
-%	\hl{\textbf{\large***BASED ON SUGGESTED CONTENT AND DOCUMENTS FOUND ON AVENUE \\ WE NEED TO FIGURE OUT APPROPRIATE NAMING AND LABELING FOR V\&V STUFF	 ***}}
-%\end{center}
 
-\subsection{Document Purpose}
-The purpose of this document is to provide insight into the system design of VIC (Vehicle Intersection Controller). VIC is a system that allows autonomous cars to proceed through stop sign intersections when the vehicles arrive simultaneously. 
+\section {\textbf{Project Drivers}}
 
-\subsection{System Scope}
-VIC will focus on solving the aforementioned problem on a controlled indoor track. 1/10 scale autonomous vehicles will be used to simulate real world autonomous cars. To prevent damage of hardware, the autonomous vehicles will be able to detect obstacles. VIC will ignore situations involving non-autonomous cars. 
 
-\subsection{Document Overview and Intended Audience}
-This document will outline the module guides, the module interface specification, and the component descriptions. Furthermore, the document will provide a behaviour overview, context diagrams and system component diagrams. The intended audience for this document is Sean Marshall (the engineering team leader at GM) who proposed the problem, Dr. Alan Wassyng and the teaching assistants as supervisors of the project, and ourselves as designers of the system. 
+\subsection{The Purpose of the Project} 
 
+The purpose of this project will be create a system that allows autonomous cars to navigate through  intersections. Currently, when multiple autonomous cars arrive at an intersection simultaneously,the vehicles have no way of determining in which order to proceed. This is due to the lack of a decision making protocol. VIC will strive to solve these problems.  \newline
+
+
+Vehicle Intersection Control (also known as VIC) will allow autonomous vehicles to make navigation decisions at intersections. VIC will accomplish this by receiving signals from vehicles, using a scheduling algorithm to determine the proceed order, and then communicating the order back to the corresponding vehicle. To ensure safety, VIC will only signal a vehicle to proceed after it determines that the intersection is clear. \newline
+
+The following document will outline the functional and nonfunctional requirements of VIC.  Other topics that will be covered pertaining to VIC will include: Scope, Project Drivers, Project Constraints, Likely Changes and Project Issues.
+
+\subsection{Scope}
+To meet the time and budget constraints, VIC will be implemented in a lab setting. The system will assume ideal weather, track, and lighting conditions. To further constraint the project, various real world conditions will be ignored. Some real world conditions that will be ignored include non-autonomous vehicles and turning vehicles. 
+
+\subsection{The Client, the Customer, and Other Stakeholders}
+
+\subsubsection{Client and Customer}
+	The client for this project is Shaun Marshall who is the engineering group manager at General Motors. 
+
+
+\subsubsection{Stakeholders}
  
+ 	The stakeholders consists of:
+ 		\begin{itemize}
+
+ 		\item The developers and system designers of VIC
+ 		\item Dr. Alan Wassyng, the project supervisor
+ 		\item The teaching assistants of the course
+ 		\end{itemize} 
+
+\subsection{Users of the Product} 
+
+This product is expected to be used by researchers in the field of autonomous vehicle control.  VIC will act as a prototype to solve the problem of intersection control for autonomous vehicles.  It is expected that VIC will be used to create a larger system that will accomplish what VIC does, as well as accounting for a real world environment.  VIC is not expected to be used by autonomous cars in a real world environment. 
+
+% heading in document
+\section{\textbf{Project Constraints}}
+
+
+% Mandated Constraints
+\subsection{Mandated Constraints}
+Vehicle intersection control has several mandated constraints tabled below. 
+\begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
+\rowcolor{tableCell}\textbf{MC1} & \textbf{Remote control cars must be 1/10 scale} \\ \hline
+\textbf{Rationale} & The remote control cars must be large enough to mount all the required hardware\\ \hline 
+
+\end{longtable}
+
+\begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
+
+\rowcolor{tableCell}\textbf{MC2}& \textbf{Remote control cars must be electric}\\ \hline 
+\textbf{Rationale} & Cars will be operated indoors, gasoline powered remote control cars are a safety hazard indoors\\ \hline 
+
+\end{longtable}
+
+\begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
+\rowcolor{tableCell}\textbf{MC3} & \textbf{The cost of the project must not exceed \$700 dollars} \\ \hline
+\textbf{Rationale} & This is to ensure an off-the-shelf solution can not be purchased. It also ensures the project remains economically feasible. \\ \hline
+\end{longtable}
+
+\begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
+\rowcolor{tableCell}\textbf{MC4} & \textbf{The cars must not turn at the intersection} \\ \hline
+\textbf{Rationale} & To simplify intersection navigation \\ \hline
+
+
+\end{longtable}
+
+
+\subsection{Naming Conventions and Definitions}
 % Naming Conventions
-
-\subsection{Acronyms}
-
-\begin{longtable}{ |p{.23\textwidth } p{.725\textwidth }|} \caption{Acronyms} \\ \hline
-
-
-\textbf{VIC} & Vehicle Intersection Control \\ 
-
-\cellcolor{tableCell}\textbf{IC}  & \cellcolor{tableCell}Intersection Controller \\
-
-\textbf{VC} &Vehicle Controller\\\hline
-
-
-\end{longtable}
-
-\subsection{Definitions}
-
-\begin{longtable}{ |p{.23\textwidth } p{.725\textwidth }|} \caption{Definitions} \\ \hline
-
-
-\textbf{VIC} & The entire system including the intersection controller, the vehicles, and their corresponding controllers. \\ 
-
-\cellcolor{tableCell}\textbf{IC}  & \cellcolor{tableCell}The Intersection Controller is the system that tracks the arrival and departure of the vehicles, as well as determining the order in which the vehicles must proceed through the intersection.\\
-
-\textbf{VC} & The Vehicle Controller is the system that will allow the 1/10 scale RC car to follow lanes, maintain a desired speed, steer itself, and send requests to the intersection controller. \\\hline
-
-
-\end{longtable}
-
 \subsubsection{Naming Conventions}
-\begin{longtable}{ |p{.23\textwidth } p{.725\textwidth }|} \caption{Naming Conventions} \\ \hline
+Note: The following naming conventions apply to this document specifically. 
+\begin{longtable}{ |p{.24\textwidth }  p{.72\textwidth }|}  \hline
+\textbf{T\#} &  Track requirement identification  and number \\ 
 
-\textbf{m\_ic\_variableName} & Monitored variable for intersection controller \\ 
+\cellcolor{tableCell}\textbf{V\#}  & \cellcolor{tableCell}Remote control vehicle requirement identification  and number \\ 
 
-\cellcolor{tableCell}\textbf{c\_ic\_variableName}  & \cellcolor{tableCell}Control variable for intersection controller \\ 
+\textbf{IC\#} & Intersection control requirement identification  and number \\ 
 
-\textbf{m\_vc\_variableName} & Monitored variable for autonomous vehicle controller \\ 
-
-\cellcolor{tableCell}\textbf{c\_vc\_variableName}  & \cellcolor{tableCell}Control variable for autonomous vehicle controller \\ 
-
-\textbf{ICD\#} & Intersection Controller Design Component ID \\ 
-
-\cellcolor{tableCell}\textbf{ICM\#}  & \cellcolor{tableCell}Intersection Controller Module Guide ID \\
-
-\textbf{VCD\#} & Vehicle Controller Design Component ID\\
-
-\cellcolor{tableCell}\textbf{VCM\#}  & \cellcolor{tableCell}Vehicle Controller Module Guide ID \\\hline
+\cellcolor{tableCell}\textbf{MC\#} &  \cellcolor{tableCell}Mandated project constraints identification and number \\ 
 
 
+
+\textbf{A\#} & Project assumptions identification and number \\ \hline
 
 \end{longtable}
-
-
-% Table Pattern
-%\textbf{-} & - \\
 %
-%\cellcolor{tableCell}\textbf{-}  & \cellcolor{tableCell}- \\ \hline
+%\begin{enumerate}
+%	\itemsep0pt 
+% 	\item \textbf{T\#} - Track requirement identification  and number
+%	\item \textbf{V\#} - Remote control vehicle requirement identification  and number				
+%	\item \textbf{IC\#} - Intersection control requirement identification  and number
+%	\item \textbf{MC\#} - Mandated project constraints identification and number 
+%	\item \textbf{RMC\#} - Rational for mandated project constraints identification and number
+%	\item \textbf{A\#} - Project assumptions identification and number
+%	\item \textbf{RA\#} - Rational for project assumptions identification and number
+%	\item \textbf{VIC} - Vehicle intersection control
+%\end{enumerate}
 
+% Definitions
+\subsubsection{Definitions}
+\begin{enumerate}
+	\itemsep0pt
+	\item \textbf{VIC} - The name given to the overall intersection control system
+	\item \textbf{IC} - Intersection Controller; the portion of the system that will control the intersection and make scheduling decisions. 
+	\item \textbf{VC} - Vehicle Controller, The portion of the system that will facilitate navigation of the track by the car. 
+\end{enumerate}
 
+	
+\subsection{Relevant Facts and Assumptions} 
 
-% -------------- END INTRODUCTION ---------------- %
+\subsubsection{Relevant Facts}
+\begin{itemize}
+	\item N/A
+\end{itemize}
 
-% -------------- START MONITORED VARIABLES ---------------- %
-\section{Monitored Variables}
-
-\subsection{Intersection Controller}
-
-\begin{longtable}{ |p{.33\textwidth }  p{.625\textwidth }|}\caption{Intersection Controller Monitored Variables} \\   \hline
-\textbf{m\_ic\_readSensor} & Boolean [8]  \\
-
-\cellcolor{tableCell}\textbf{m\_ic\_carSignal}  & \cellcolor{tableCell} Byte [4][ ] \\  \hline
+\subsubsection{Assumptions}
+VIC assumptions tabled below. 
+\begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
+\rowcolor{tableCell}\textbf{A1} & Ideal driving conditions on the track \\ \hline
+\textbf{Rationale} & Track is situated indoors \\ \hline 
 \end{longtable}
 
-\subsection{Autonomous Vehicle Controller}
+\begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
+\rowcolor{tableCell}\textbf{A2} & Intersection is a four way stop \\ \hline
+\textbf{Rationale} &  Different intersection arrangements are beyond the scope of this project \\ \hline
+\end{longtable}
 
-\begin{longtable}{ |p{.33\textwidth }  p{.625\textwidth }|}  \hline
-\textbf{m\_vc\_videoCapture} & Byte [ ][ ]  \\ 
+\begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
+\rowcolor{tableCell}\textbf{A3} & Only autonmous car will be present on the track \\ \hline
+\textbf{Rationale} &  This will help simplify the scope of the project\\ \hline
+\end{longtable}
 
-\cellcolor{tableCell}\textbf{m\_vc\_frontDistance}  & \cellcolor{tableCell}Double \\ 
+\begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
+\rowcolor{tableCell}\textbf{A4} & Cars will not have a large variance in size \\ \hline
+\textbf{Rationale} &  The 1/10th model cars will only consists of sedan or coupe styled cars. We will not consider large vehicles such as trucks or buses.\\ \hline
 
 
-\textbf{m\_vc\_speedSignal} & Boolean \\
-
-\cellcolor{tableCell}\textbf{m\_vc\_hallEffect}  & \cellcolor{tableCell}Double \\ 
-
-\textbf{m\_vc\_vehicleOrientation} & Character \\\hline
 \end{longtable}
 
 
-% -------------- END MONITORED VARIABLES  ---------------- %
+\section{Context Diagrams}
 
-
-
-
-% -------------- START CONTROLLED VARIABLES ---------------- %
-
-\section{Controlled Variables}
-
-
-\subsection{Intersection Controller}
-
-\begin{longtable}{ |p{.33\textwidth }  p{.625\textwidth }|}  \hline
-
-\textbf{c\_ic\_carProceedSignal} & Boolean \\ \hline
-\end{longtable}
-
-\subsection{Autonomous Vehicle Controller}
-
-\begin{longtable}{ |p{.33\textwidth }  p{.625\textwidth }|}  \hline
-\textbf{c\_vc\_wheelAngle} & Double  \\
-
-\cellcolor{tableCell}\textbf{c\_vc\_carSpeed}  & \cellcolor{tableCell}Integer \\ 
-
-\textbf{c\_vc\_vehicleBrake} & Boolean \\ 
-
-\cellcolor{tableCell}\textbf{c\_vc\_requestIC}  & \cellcolor{tableCell}Byte[ ]\\ \hline
-\end{longtable}
-
-% -------------- END CONTROLLED VARIABLES  ---------------- %
-
-
-% -------------- START OVERALL DESIGN DESCRIPTION ---------------- %
-\section{System Overview}
-
-
-\subsection{Behavior Overview}
-     
-
-\subsection{Context Diagrams}
 
 \begin{figure} [h!]
-	\caption{Car Controller Context Diagram} \bigskip
-	\centering
-	\includegraphics [scale =0.8] {figures/CarCtrl_ContextDiag.pdf}
-
-\end{figure}
-
-\break
-
-\begin{figure} [h!]
-	\caption{Intersection Controller Context Diagram} \bigskip
 	\centering
 	\includegraphics [scale = 0.8] {figures/IC_ContextDiagram.pdf}
-
+	\caption{Intersection Controller Context Diagram}
+\end{figure}
+\break
+\begin{figure} [h!]
+	\centering
+	\includegraphics [scale =0.8] {figures/CarCtrl_ContextDiag.pdf}
+	\caption{Car Controller Context Diagram}
 \end{figure}
 
-\subsection{System Component Diagrams}
-Insert Text or Image Here. 
-
-% -------------- END OVERALL DESIGN DESCRIPTION  ---------------- %
 
 
 
 
-% -------------- START SYSTEM COMPONENTS ---------------- %
-\section{System Components}
+
+
+
+%---------------------------- Functional Requirements ------------------------%
+
+\section {Functional Requirements} 
+The requirements for this project are separated into the three main components of the system: the track, vehicle, and intersection controller.
+
+
+
+% Track Requirements
+
+% if one requirements gets deleted it will be shown in the requirement likelihood of change as ??
+% with all the other labels numbers updated
+
+ % ------ NOTE ------% 
+% CAN ONLY ADD REQUIREMENTS TO END OF LIST WITH OWN UNIQUE LABEL
+% Which would then have to be put at the end of the requirement group in likelihood of change section
+% If we add requirements in the middle, the likelihood of change will get messed up
+
+\subsection{Track Functional Requirements}
+
+\begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
+\rowcolor{tableCell}\textbf{T1} & The track must have 30 $\pm 1$ cm wide lanes \\ \hline
+\textbf{Rationale} & In order to fit $\frac{1}{10}$ scale vehicles \\ \hline 
+
+\end{longtable}
+
+\begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
+\rowcolor{tableCell}\textbf{T2} & The track must have an intersection \\ \hline
+\textbf{Rationale} &  Provide a testable environment\\ \hline 
+
+\end{longtable}
+
+\begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
+\rowcolor{tableCell}\textbf{T3} &  The track must have objects to indicate stopping at the intersection\\ \hline
+\textbf{Rationale} & To allow the vehicle to identify the intersection \\ \hline 
+\end{longtable}
+
+\begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
+\rowcolor{tableCell}\textbf{T4} & The track must have objects to indicate the direction \\ \hline
+\textbf{Rationale} &  To allow the vehicle to identify direction it is coming from and going to\\ \hline 
+
+
+\end{longtable}
+
+
+
+% Vehicle Requirements
+\subsection{Vehicle Functional Requirements}
+
+
+\begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
+\rowcolor{tableCell}\textbf{V1} & The vehicle must be able to send and receive signals to and from the intersection controller \\ \hline
+\textbf{Rationale} &  Provide a means for the vehicles to pass and receive information to and from the intersection controller\\ \hline 
+\end{longtable}
+
+\begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
+\rowcolor{tableCell}\textbf{V2} & The vehicle must be able to detect lanes and follow them \\ \hline
+\textbf{Rationale} &  To follow an intended path\\ \hline 
+
+\end{longtable}
+
+\begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
+\rowcolor{tableCell}\textbf{V3} & The vehicle must be able to detect intersections \\ \hline
+\textbf{Rationale} &  To be able know where to stop at the intersection\\ \hline 
+
+\end{longtable}
+
+\begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
+\rowcolor{tableCell}\textbf{V4} & The vehicle must be able to stop at intersections \\ \hline
+\textbf{Rationale} & To avoid collisions and follow rules of the road \\ \hline 
+
+\end{longtable}
+
+\begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
+\rowcolor{tableCell}\textbf{V5} & The vehicle must be able to navigate through intersections \\ \hline
+\textbf{Rationale} & To continue following the intended path after arriving at the intersection \\ \hline 
+
+\end{longtable}
+
+\begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
+\rowcolor{tableCell}\textbf{V6} & The vehicle must be able to avoid obstacles \\ \hline
+\textbf{Rationale} &  To prevent collisions and damage to vehicle and surrounding property\\ \hline 
+
+\end{longtable}
+
+
+
+
+
+
+% VI Controller Requirements
+
+\subsection{Intersection Controller Functional Requirements}
+\begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
+\rowcolor{tableCell}\textbf{IC1} & The intersection controller must be able to detect if there is a car at the intersection  \\ \hline
+\textbf{Rationale} &  To make safe and informed decisions \\ \hline 
+\end{longtable}
+
+\begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
+\rowcolor{tableCell}\textbf{IC2} & The intersection controller must be able to detect when a car has exited the intersection \\ \hline
+\textbf{Rationale} &  Confirmation vehicles has left the intersection to allow safe and informed decision \\ \hline 
+\end{longtable}
+
+\begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
+\rowcolor{tableCell}\textbf{IC3} & The intersection controller must be able to determine the order in which the cars should proceed \\ \hline
+\textbf{Rationale} & To ensure a fair and safe scheduling policy \\ \hline 
+\end{longtable}
+
+\begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
+\rowcolor{tableCell}\textbf{IC4} & The intersection controller must be able to receive signals from the vehicles  \\ \hline
+\textbf{Rationale} &  Alter the intersection when the vehicle wishes to proceed through the intersection\\ \hline 
+\end{longtable}
+
+\begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
+\rowcolor{tableCell}\textbf{IC5} & The intersection controller must be able to signal to the vehicle when it is allowed to go through the intersection \\ \hline
+\textbf{Rationale} &  Alert the vehicle when it should proceed\\ \hline 
+\end{longtable}
+
+\begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
+\rowcolor{tableCell}\textbf{IC6} & The system must have two modes of operation, namely: traffic optimization and traditional traffic rules \\ \hline
+\textbf{Rationale} & Fulfill projects constraints outlined by the client \\ \hline 
+\end{longtable}
+
+
+
+\section{Functional Decomposition Diagrams}
+\begin{figure} [h!]
+	\caption{Functional Intersection Controller Decomposition}\bigskip
+	\centering
+	\includegraphics [scale =.8] {figures/function_decomp_IC.pdf}
+	
+\end{figure}
+
+\pagebreak
+
+\begin{figure} [h!]
+	\caption{Functional Track Navigation Decomposition}\bigskip
+	\centering
+	\includegraphics [scale =.8] {figures/function_decomp_track_n.pdf}
+	
+\end{figure}
+
+
+
+
+
+\section{Functional Requirements Likelihood of Change} 
+
+\subsection{Track}
+\begin{longtable}{| p{.15\textwidth } | p{.14\textwidth } |  p{.3\textwidth } | p{.30\textwidth } |}\hline 
+\multicolumn{1}{|c|}{\textbf {Requirement}} & 
+\begin{minipage}{.14 \columnwidth}\begin{center}\vspace{1.5mm}\textbf{Change Likelihood}   \vspace{1.5mm} \end{center}\end{minipage}& 
+\multicolumn{1}{c|}{\textbf {Rationale}} & \multicolumn{1}{c|}{\textbf {Ways to Change}} \\ \hline
+
+\rowcolor{tableCell} \multicolumn{1}{|c|}{T1}& 
+\multicolumn{1}{|c|}{Very Unlikely} & Mandated constraint & N/A \\ \hline
+\multicolumn{1}{|c|}{T2}& 
+\multicolumn{1}{|c|}{Very Unlikely} & Mandated constraint & N/A  \\ \hline
+\rowcolor{tableCell} \multicolumn{1}{|c|}{T3}& 
+\multicolumn{1}{|c|}{Very Unlikely} & Mandated constraint & N/A  \\ \hline
+
+\multicolumn{1}{|c|}{T4}& 
+\multicolumn{1}{|c|}{Likely} & Subject to consent of other groups& Means of direction identification could change  \\ \hline
+
+\end{longtable}
+
+\subsection{Vehicle}
+\begin{longtable}{| p{.15\textwidth } | p{.14\textwidth } |  p{.3\textwidth } | p{.30\textwidth } |}\hline 
+\multicolumn{1}{|c|}{\textbf {Requirement}} & 
+\begin{minipage}{.14 \columnwidth}\begin{center}\vspace{1.5mm}\textbf{Change Likelihood}   \vspace{1.5mm} \end{center}\end{minipage}& 
+\multicolumn{1}{c|}{\textbf {Rationale}} & \multicolumn{1}{c|}{\textbf {Ways to Change}} \\ \hline
+
+ \rowcolor{tableCell}\multicolumn{1}{|c|}{V1}& \multicolumn{1}{|c|}{Very Unlikely}& Key implementation aspect & N/A  \\ \hline
+ \multicolumn{1}{|c|}{V2}& \multicolumn{1}{|c|}{Very Unlikely}& Key implementation aspect & N/A  \\ \hline
+\rowcolor{tableCell} \multicolumn{1}{|c|}{V3}& \multicolumn{1}{|c|}{Very Unlikely}& Key implementation aspect & N/A  \\ \hline
+ \multicolumn{1}{|c|}{V4}& \multicolumn{1}{|c|}{Very Unlikely}& Key implementation aspect & N/A  \\ \hline
+\rowcolor{tableCell} \multicolumn{1}{|c|}{V5}& \multicolumn{1}{|c|}{Very Unlikely}& Key implementation aspect & N/A  \\ \hline
+ \multicolumn{1}{|c|}{V6}& \multicolumn{1}{|c|}{Likely}& This requirement has a lower priority compared to other requirements, and it is subject to time constraints & Requirement may be removed \\ \hline
+\end{longtable}
+
+\subsection{Intersection Controller}
+
+\begin{longtable}{| p{.15\textwidth } | p{.14\textwidth } |  p{.3\textwidth } | p{.30\textwidth } |}\hline 
+\multicolumn{1}{|c|}{\textbf {Requirement}} & 
+\begin{minipage}{.14 \columnwidth}\begin{center}\vspace{1.5mm}\textbf{Change Likelihood}   \vspace{1.5mm} \end{center}\end{minipage}& 
+\multicolumn{1}{c|}{\textbf {Rationale}} & \multicolumn{1}{c|}{\textbf {Ways to Change}} \\ \hline
+
+\rowcolor{tableCell} \multicolumn{1}{|c|}{IC1}& \multicolumn{1}{|c|}{Very Unlikely}& Key implementation aspect & N/A \\ \hline
+\multicolumn{1}{|c|}{IC2}&\multicolumn{1}{|c|}{Likely} & IC may not be able to accurately detect when the vehicle has left the intersection & System can be configured such that the vehicle directly informs the IC when it has left the intersection \\ \hline
+\rowcolor{tableCell} \multicolumn{1}{|c|}{IC3}&\multicolumn{1}{|c|}{Very Unlikely} & Key implementation aspect & N/A \\ \hline
+\multicolumn{1}{|c|}{IC4}&\multicolumn{1}{|c|}{Very Unlikely} & Key implementation aspect & N/A \\ \hline
+\rowcolor{tableCell} \multicolumn{1}{|c|}{IC5}&\multicolumn{1}{|c|}{Very Unlikely} & Key implementation aspect & N/A \\ \hline
+\multicolumn{1}{|c|}{IC6}&\multicolumn{1}{|c|}{Likely} & This requirement has a lower priority compared to other requirements, and it is subject to time constraints & Requirement may be removed \\ \hline
+
+
+\end{longtable}
+
+
+
+
+%---------------------------- Nonfunctional Requirements ------------------------%
+
+\section {Nonfunctional Requirements} 
+
+
+
+\subsection {Look and Feel Requirements}
+\subsubsection{Appearance Requirements}
+	\begin{itemize}
+		\item  N/A
+	\end{itemize}
+	% This is a test section
+
+
+\subsubsection{Style Requirements}
+	\begin{itemize}
+		\item N/A
+	\end{itemize}
+
+\subsection{Usability and Humanity Requirements} 
+\subsubsection{Ease of Use Requirements}
+	\begin{itemize}
+		\item N/A
+	\end{itemize}
+
+\subsubsection{Personalization and Internationalization Requirements}
+	\begin{enumerate}[label=\textbf{\Alph*}:]
+		\item The vehicle must drive on the right side of the lanes
+	\end{enumerate}
+
+\subsubsection{Learning Requirements }
+	\begin{itemize}
+		\item N/A
+	\end{itemize}
+
+\subsubsection{Understandability and Politeness Requirements}
+	\begin{itemize}
+		\item N/A
+	\end{itemize}
+		
+\subsubsection{Accessibility Requirements }
+	\begin{itemize}
+		\item N/A
+	\end{itemize}
  
-\subsection{Intersection Control Component}
+\subsection{Performance Requirements}
+
+\subsubsection{Speed Requirements }
+	\begin{enumerate}[label=\textbf{\Alph*}:]
+		\item The system must be able to determine an order and convey it to the vehicle before a soft deadline
+		\item The system must capture and process intersection information within 0.3 seconds
+		\item The vehicle must process the state of the track in less than 0.3 seconds
+	\end{enumerate}
+
+\subsubsection{Safety-Critical Requirements }
+	\begin{enumerate}[label=\textbf{\Alph*}:]
+		\item The system must only signal a car to proceed when the intersection is clear
+		\item The vehicle must stop within a safe distance of an obstacle
+		\item The system must have an emergency shutdown mode
+	\end{enumerate}	
+
+
+\subsubsection{Precision Requirements}
+	\begin{enumerate}[label=\textbf{\Alph*}:]
+		\item The vehicle must not deviate from the lanes more than 10\%
+	\end{enumerate}
+
+\subsubsection{Reliability or Availability  Requirements}
+	\begin{enumerate}[label=\textbf{\Alph*}:]
+		\item The system must operate without failure 95\% of the time
+		\item The vehicle system must operate as long as the car's internal power supply is charged
+	\end{enumerate}
+
+
+
+\subsubsection{Robustness or Fault-Tolerance Requirements }
+	\begin{enumerate}[label=\textbf{\Alph*}:]
+		\item In the event of a complete vehicle system failure, the vehicle must come to a stop within 10cm
+	\end{enumerate}
+	
+\subsubsection{Capacity Requirements }
+	\begin{enumerate}[label=\textbf{\Alph*}:]
+		\item The intersection controller must be able to manage at least one intersection at a time
+		\item The intersection controller shall be able to communicate with a maximum of four cars at a time
+	\end{enumerate}
+
+\subsubsection{Scalability or Extensibility Requirements }
+	\begin{itemize}
+		\item N/A
+	\end{itemize}
+		
+\subsubsection{Longevity Requirements }
+	\begin{enumerate}[label=\textbf{\Alph*}:]
+		\item Components should be functional for up to one year
+	\end{enumerate}
+
+% Operational and Environmental Requirements
+\subsection{Operational and Environmental Requirements}
+\subsubsection{Expected Physical Environment }
+	\begin{enumerate}[label=\textbf{\Alph*}:]
+		\item The track must be 1/10 scale of a real world intersection
+		\item The vehicle must be able to operate on a track in a lab setting
+	\end{enumerate}
+		
+\subsubsection{Requirements for Interacting with Adjacent Systems}
+	\begin{enumerate}[label=\textbf{\Alph*}:]
+		\item The components must be able to use the API of existing and partner components
+	\end{enumerate}
+
+\subsection{Maintainability and Support Requirements }
+\subsubsection{Maintenance Requirements }
+	\begin{enumerate}[label=\textbf{\Alph*}:]
+		\item  Issues must be resolved within one week of discovering an error in the system
+	\end{enumerate}
+
+\subsubsection{Supportability Requirements }
+	\begin{itemize}
+		\item N/A
+	\end{itemize}
+
+\subsubsection{Adaptability Requirements}
+	\begin{itemize}
+		\item N/A
+	\end{itemize}
+
+\subsection{Security Requirements }
+\subsubsection{Access Requirements }
+	\begin{enumerate}[label=\textbf{\Alph*}:]
+		\item All stated stakeholders have full access to the product
+	\end{enumerate}
+
+\subsubsection{Integrity Requirements }
+	\begin{enumerate}[label=\textbf{\Alph*}:]
+		\item The system will not be altered by external malicious Bluetooth signals
+	\end{enumerate}
+
+\subsubsection{Privacy Requirements }
+	\begin{enumerate}[label=\textbf{\Alph*}:]
+		\item Image data gathered by the vehicle controller will not be stored 
+		\item Image data gathered by the intersection controller will not be stored
+		\item Information passed between the vehicle and the intersection must not include sensitive information
+		\item All message passing between subsystem will be encrypted
+	\end{enumerate}
+
+\subsubsection{Audit  Requirements }
+	\begin{itemize}
+		\item N/A
+	\end{itemize} 
+
+\subsubsection{Immunity Requirements  }
+	\begin{itemize}
+		\item N/A
+	\end{itemize}
+
+\subsection{Cultural and Political Requirements } 
+\subsubsection{Cultural Requirements }
+	\begin{itemize}
+		\item N/A
+	\end{itemize}
+
+\subsubsection{Political Requirements }
+	\begin{itemize}
+		\item N/A
+	\end{itemize}
+
+
+\subsection{Legal Requirements}
+\subsubsection{Compliance Requirements }
+	\begin{itemize}
+		\item N/A
+	\end{itemize}
+	
+\subsubsection{Standards Requirements }
+	\begin{itemize}
+		\item N/A
+	\end{itemize}
+
+
+%---------------------------- Project Issues ------------------------%
+
+\section {Project Issues} 
+
+
+\subsection{Open Issues}
+	\begin{itemize}
+		\item  None
+	\end{itemize}
+
+\subsection{Off-the-Shelf Solutions}
+
+\subsubsection{Ready-Made Products}
+	\begin{enumerate}[label=\textbf{\Alph*}:]
+		\item OpenCV  - existing software used for image processing
+		\item BlueZ - a Bluetooth library
+	\end{enumerate}
+
+
+\subsection{Risks}
+	\begin{enumerate}[label=\textbf{\Alph*}:]
+		\item Component failure - Failure of components can result in damage to the remote control cars.
+		\item Damaged parts - Damaged parts will result in delay of the project and will require more parts to be bought.
+		\item Potential of minor injuries to humans - Humans can be injured if parts malfunction. 
+	\end{enumerate}
+	
+
+	
+\subsection{Costs}	
+		
+		The general budget for the major components are as follow:
+
+		\begin{enumerate}[label=\textbf{\Alph*}:]
+			\item 1/10th model car (x2) \$240.00 each
+			\item Cameras and sensors \$50.00
+			\item Vehicle Battery (x2) and Charger \$90.00
+			\item Raspberry Pi (x2) \$150.00
+		\end{enumerate}
+		
+		Total Cost : \$530.00
+
+
+\subsection{Waiting Room}
+	\begin{enumerate}[label=\textbf{\Alph*}:]
+		\item Having the system work with other autonomous car models
+	    \end{enumerate} 
 
 
-\begin{longtable}{| p{.25\textwidth } | p{.7\textwidth } | }\hline 
-\multicolumn{2}{|c|}{\textbf{IDC1}}  \\ \hline 
-%
-
-\multicolumn{1}{|c|}{\textbf {\multirow{1}{*}{\centering Description}}} 
-					& The Intersection Controller directs traffic at an intersection by communicating with vehicles and determines which order they should proceed\\ \hline
-
-%
-\multicolumn{1}{|c|}{\textbf {\multirow{2}{*}{\centering Inputs}}}  
-					 & m\_ic\_carSignal[4]  \\\cline{2-2}
-                                 &\cellcolor{tableCell}m\_ic\_readSensors[8] \\\hline
-%
-
-
-
-%
-\multicolumn{1}{|c|}{\textbf {\multirow{1}{*}{\centering Outputs}}}  
-					 & c\_ic\_carSignal[4]  \\\hline
-%
-
- 
-
-\multicolumn{1}{|c|}{\textbf {\multirow{3}{*}{\centering Timing Constraints}}} 
-					 & 1 second intersection arrival decision   \\
-                                 &\cellcolor{tableCell}1 second intersection schedule  \\
-                                 & \multicolumn{1}{l |}{0.5 second intersection departure decision} \\ \hline
-
-\multicolumn{1}{|c|}{\textbf {\multirow{1}{*}{\centering Deadline}}} 
-					 & Decisions must be made before the next intersection arrival poll  \\ \hline
-
-
-
-\multicolumn{1}{|c|}{\textbf {\multirow{2}{*}{\centering Initialization}}} & \cellcolor{tableCell}Connect to autonomous vehicles over Bluetooth communication  \\
-                                 &Clear all intersection arrival queues \\ \hline
-\end{longtable}
-
-% Vehicle Component 
-\subsection{Vehicle Controller Component}
-\begin{longtable}{| p{.25\textwidth } | p{.7\textwidth } | }\hline 
-\multicolumn{2}{|c|}{\textbf{VCD1}}  \\ \hline 
-%
-
-\multicolumn{1}{|c|}{\textbf {\multirow{3}{*}{\centering Description}}} & A 1:10 scale RC car will be controlled by the Vehicle Controller. The vehicle will be able to follow lanes and stop at intersections. It will communicate with an Intersection Controller and proceed through the intersection after receiving the appropriate signal from it\\ \hline 
-
-%
-\multicolumn{1}{|c|}{\textbf {\multirow{4}{*}{\centering Inputs}}}  & m\_vc\_videoCapture[x][y]  \\\cline{2-2}
-                                 &\cellcolor{tableCell}m\_vc\_frontDistance \\
-                                 & \multicolumn{1}{l |}{m\_vc\_hallEffect} \\ 
-                                 & \multicolumn{1}{l |}{\cellcolor{tableCell}m\_ic\_carProceedSignal} \\ \hline
-%
-%
-
-%
-%
-\multicolumn{1}{|c|}{\textbf {\multirow{4}{*}{\centering Outputs}}}  & c\_vc\_ wheelAngle \\
-                                 &\cellcolor{tableCell}c\_vc\_carSpeed \\
-                                 & \multicolumn{1}{l |}{c\_vc\_vehicleBreak} \\ 
-                                 &\cellcolor{tableCell}c\_vc\_requestTheIC \\\hline 
-%
-%
-
-
-
-\multicolumn{1}{|c|}{\textbf {\multirow{1}{*}{\centering Timing Constraints}}} 
-					 & Process images within 20 ms  \\ \hline
-
-\multicolumn{1}{|c|}{\textbf {\multirow{3}{*}{\centering Initialization}}} 
-					 & \cellcolor{tableCell}Initialize all speed controls to zero  \\
-                                 &Initialize wheel angle to zero\\
-                                 & \multicolumn{1}{l |}{\cellcolor{tableCell}Connect to intersection over Bluetooth communication} \\ \hline
-\end{longtable}
-
-% -------------- END SYSTEM COMPONENTS  ---------------- %
-
-
-\section{Module Guide}
-
-
-% IC modules - hardware and software
-\subsection{Intersection Controller Modules}
-
-\begin{longtable}{ |p{0.1\textwidth }  | p{0.2\textwidth } |  p{0.3\textwidth } |  p{0.3\textwidth } |}  \hline
-    
-    \textbf{ID} & \textbf{Name} &  \textbf{Responsibilities} & \textbf{Secrets} \\ \hline
-    
-    \cellcolor{tableCell}ICM.1  & \cellcolor{tableCell}DecisionMaker & \cellcolor{tableCell}Determine order of car progression & \cellcolor{tableCell} Scheduling algorithm \\ \hline
-    
-    ICM.2 & VehicleDetection & Know when a car is on top of one of the intersection sensors, and the corresponding sensor & Relationship between magnetic sensor and car \\ \hline
-    
-    \cellcolor{tableCell}ICM.3  & \cellcolor{tableCell}Communication & \cellcolor{tableCell}Interpret receiving car signals and sending signals to a car & \cellcolor{tableCell}Communication protocol \\ \hline
-    
-    
-        ICM.4 & IC\_Main & Control information flow of intersection controller & Manages intersection modules \\ \hline
-
-\end{longtable}
-
-
-
-
-
-
-%  Vehicle Hardware modules
-\subsection{Vehicle Controller Hardware Modules}
-
-\begin{longtable}{ |p{0.1\textwidth }  | p{0.2\textwidth } |  p{0.3\textwidth } |  p{0.3\textwidth } |}  \hline
-    
-    \textbf{ID} & \textbf{Name} &  \textbf{Responsibilities} & \textbf{Secrets} \\ \hline 
-    
-    
-    \cellcolor{tableCell}VCM.1  & \cellcolor{tableCell}SignalConverter & \cellcolor{tableCell}Convert a software signals to a physical signal, and vice versa & \cellcolor{tableCell}How to convert signal  \\ \hline
-    
-    VCM.2 & SpeedConverter & Convert wheel rotation count to a speed value & Speed calculation algorithm \\ \hline
-    
-    \cellcolor{tableCell}VCM.3  & \cellcolor{tableCell}ServoController & \cellcolor{tableCell}Set a physical wheel angle & 
-    \cellcolor{tableCell}How to convert a software value to a PWM (Pulse Width Modulation) signal \\ \hline
-    
-    VCM.4 & MotorSpeedController & Control PWM signal & How to convert speed into a PWM signal \\ \hline\hline
-    
-    \cellcolor{tableCell}VCM.5  & \cellcolor{tableCell}MotorHBridge \newline Controller & \cellcolor{tableCell}Setting H bridge gates & \cellcolor{tableCell}Which gates correspond to which action of the motor  \\ \hline
-    
-    
-\end{longtable}
-
-
-%  Vehicle Software modules
-\subsection{Vehicle Controller Software Modules}
-
-\begin{longtable}{ |p{0.1\textwidth }  | p{0.2\textwidth } |  p{0.3\textwidth } |  p{0.3\textwidth } |}  \hline
-    
-    \textbf{ID} & \textbf{Name} &  \textbf{Responsibilities} & \textbf{Secrets} \\ \hline
-    
-    \cellcolor{tableCell}VCM.6  &\cellcolor{tableCell}ImageProcessing &\cellcolor{tableCell}Interpret image into environment state &\cellcolor{tableCell}Image processing algorithm  \\ \hline
-    
-    VCM.7 & VehicleNavigaton & Control the navigation of the car & How the car navigates on the track \\ \hline
-    % \cellcolor{tableCell}VCM.7.1 & \cellcolor{tableCell}VehicleNavigaton\_\newline Speed  & \cellcolor{tableCell}Ensure car speed is maintained at desired speed range & \cellcolor{tableCell}Speed control algorithm \\ \hline
-    % VCM.7.2 & VehicleNavigaton\_\newline LanePositioning  & Car position with respect to lane & How to stay in lane \\ \hline
-    
-    \cellcolor{tableCell}VCM.8  & \cellcolor{tableCell}Communication & \cellcolor{tableCell}Interpret signal from Intersection Controller. Prepare and send signal to the Intersection Controller & \cellcolor{tableCell}Communication Protocol \\ \hline
-
-    VCM.9 & VC\_Main & Control information flow of the car & Manage car modules \\ \hline
-    
-\end{longtable}
-
-
-
-% % -------------- START SUBSYSTEM COMPONENTS ---------------- %
-% \section{Subsystem Components}
-
-% \subsection{Hardware}
-
-% \subsubsection{The First Hardware Component}
-% \begin{longtable}{| p{.25\textwidth } | p{.7\textwidth } | }\hline 
-% \textbf{Identification} & - \\ \hline
-% \textbf{Inputs} & - \\ \hline
-% \textbf{Outputs} & - \\ \hline
-% \textbf{Description} & Insert Description Here\\ \hline 
-% \textbf{Timing Constraints} & Insert Timing Constraints Here\\ \hline 
-% \textbf{Initialization} & Insert Initialization Stuff Here\\ \hline 
-% \end{longtable}
-
-% \subsubsection{The Second Hardware Component}
-% \begin{longtable}{| p{.25\textwidth } | p{.7\textwidth } | }\hline 
-% \textbf{Identification} & - \\ \hline
-% \textbf{Inputs} & - \\ \hline
-% \textbf{Outputs} & - \\ \hline
-% \textbf{Description} & Insert Description Here\\ \hline 
-% \textbf{Timing Constraints} & Insert Timing Constraints Here\\ \hline 
-% \textbf{Initialization} & Insert Initialization Stuff Here\\ \hline 
-% \end{longtable}
-
-% \subsection{Software}
-% \subsubsection{The First Software Component (MIS)}
-% \begin{longtable}{| p{.25\textwidth } | p{.7\textwidth } | }\hline 
-% \textbf{Identification} & - \\ \hline
-% \textbf{Inputs} & - \\ \hline
-% \textbf{Outputs} & - \\ \hline
-% \textbf{Description} & Insert Description Here\\ \hline 
-% \textbf{Timing Constraints} & Insert Timing Constraints Here\\ \hline 
-% \textbf{Initialization} & Insert Initialization Stuff Here\\ \hline 
-% \end{longtable}
-
-% \subsubsection{The Second Software Component (MIS)}
-% \begin{longtable}{| p{.25\textwidth } | p{.7\textwidth } | }\hline 
-% \textbf{Identification} & - \\ \hline
-% \textbf{Inputs} & - \\ \hline
-% \textbf{Outputs} & - \\ \hline
-% \textbf{Description} & Insert Description Here\\ \hline 
-% \textbf{Timing Constraints} & Insert Timing Constraints Here\\ \hline 
-% \textbf{Initialization} & Insert Initialization Stuff Here\\ \hline 
-% \end{longtable}
-
-
-% % -------------- END SUBSYSTEM COMPONENTS  ---------------- %
-
-
-% -------------- START MIS---------------- %
-\section{Module Interface Specification}
-
-
-
-
-\begin{longtable}{| p{.35\textwidth } | p{.6\textwidth } | }\caption{ICM.1 DecisionMaker} \\\hline  
- \multicolumn{2}{|l|}{\textbf {ICM.1 DecisionMaker}}\\ \hline
- 
-\cellcolor{tableCell}DecisionMaker()& \cellcolor{tableCell}Constructor to initialize the scheduling algorithm \\ \hline 
-
-getSchedule(cars[ ]) : carQueue & When function is called, it will return a queue of cars in the order which they should proceed. Expects an array of car objects when called\\ \hline 
-
-%\cellcolor{tableCell}Constructor/Method 3 & \cellcolor{tableCell}- Description \newline - Description  
-%\\ \hline
-
-
-%Constructor/Method 2 & - Description 4 \newline - Description 4  \\ \hline
-\end{longtable}
-
-\begin{longtable}{| p{.35\textwidth } | p{.6\textwidth } | }\caption{ICM.2 VehicleDetection} \\\hline  
- \multicolumn{2}{|l|}{\textbf {ICM.2 VehicleDetection}}\\ \hline
- 
-\cellcolor{tableCell}VehicleDet()& \cellcolor{tableCell}Constructor to initialize the detection of vehicles at the intersection. \\ \hline 
-
-getSignalsState( ) : bool[ ] & Returns the state of the sensors at the intersection when the function is called. Returns an array of boolean values signifying if the sensors have been tripped or not. \\ \hline 
-
-%\cellcolor{tableCell}Constructor/Method 3 & \cellcolor{tableCell}- Description \newline - Description  
-%\\ \hline
-
-
-%Constructor/Method 2 & - Description 4 \newline - Description 4  \\ \hline
-\end{longtable}
-
-\begin{longtable}{| p{.35\textwidth } | p{.6\textwidth } | }\caption{ICM.3 Communication} \\\hline  
- \multicolumn{2}{|l|}{\textbf {ICM.3 Communication}}\\ \hline
- 
-\cellcolor{tableCell}RecieveRequest() : Request& \cellcolor{tableCell}Function to allow the controller recieve a request to be scheduled from the car.\\ \hline 
-
-
-\cellcolor{tableCell}SendResponse(car c) : void & \cellcolor{tableCell}Function that allows the intersectrion to send a car the response to proceed through the intersection. \\ \hline
-
-
-
-
-%Constructor/Method 2 & - Description 4 \newline - Description 4  \\ \hline
-\end{longtable}
-
-\begin{longtable}{| p{.35\textwidth } | p{.6\textwidth } | }\caption{ICM.4 IC\_Main} \\\hline  
- \multicolumn{2}{|l|}{\textbf {ICM.4 IC\_Main}}\\ \hline
- 
-\cellcolor{tableCell}Main( ) & \cellcolor{tableCell}Main Function for VIC. \\ \hline 
-
-
-%\cellcolor{tableCell}Constructor/Method 3 & \cellcolor{tableCell}- Description \newline - Description  
-%\\ \hline
-
-
-%Constructor/Method 2 & - Description 4 \newline - Description 4  \\ \hline
-\end{longtable}
-
-
-\begin{longtable}{| p{.35\textwidth } | p{.6\textwidth } | }\caption{VCM.6 ImageProcessing} \\\hline  
- \multicolumn{2}{|l|}{\textbf {VCM.6 ImageProcessing}}\\ \hline
-\cellcolor{tableCell}ImageProcessing( ) & \cellcolor{tableCell}Function to capture images of the track environment from a webcam and process it into information that can be analysed by software.  \\ \hline 
-
-getImageInfo( ) : ADT & Function to relay image information when called.  \\ \hline 
-
-
-\end{longtable}
-
-\begin{longtable}{| p{.35\textwidth } | p{.6\textwidth } | }\caption{VCM.7 VehicleNavigation} \\\hline  
- \multicolumn{2}{|l|}{\textbf {VCM.7 VehicleNavigation}}\\ \hline
-\cellcolor{tableCell}VehicleNav( ) & \cellcolor{tableCell}Function to signal to the vehicle if there is a change in the navigation, and if so, what changes should be made. \\ \hline 
-
-GetCarState( ) : enum &Function to relay the car state. Will return the states as an enum. Exact states will be determined later. \\ \hline 
-
-\cellcolor{tableCell}driveThroughIntersection( ) : void & \cellcolor{tableCell}Function to signal the car to proceed through the intersection. 
-\\ \hline
-
-\end{longtable}
-
-\begin{longtable}{| p{.35\textwidth } | p{.6\textwidth } | }\caption{VCM.8 Communication} \\\hline  
- \multicolumn{2}{|l|}{\textbf {VCM.8 Communication}}\\ \hline
-\cellcolor{tableCell}SendRequest(Request r) : void & \cellcolor{tableCell}Function to allow the car to send a request to the interection controller. \\ \hline 
-
-Recieve Response( ) : Car &Function to allow the vehicle to revice a response to proceed from the intersection controller. \\ \hline 
-
-\end{longtable}
-
-\begin{longtable}{| p{.35\textwidth } | p{.6\textwidth } | }\caption{VCM.9 VC\_Main} \\\hline  
- \multicolumn{2}{|l|}{\textbf {VCM.9 VC\_Main}}\\ \hline
-\cellcolor{tableCell}VC\_Main& \cellcolor{tableCell}Function to control all software aspects of the vehicle control.  \\ \hline 
-
-\end{longtable}
-% -------------- END MIS---------------- 
-
-
-
-
-
-
-
-% % -------------- START MID---------------- %
-% \section{Module Interface Design}
-% \subsection {MID 1}
-
-
-
-% \begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
-% \textbf{Insert Text Here} & \textbf{Insert Text Here} \\ \hline
-% \textbf{Insert Text Here} & -\\ \hline 
-% \end{longtable}
-
-
-% \subsection {MID 2 }
-
-% \begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
-% \textbf{Insert Text Here} & \textbf{Insert Text Here} \\ \hline
-% \textbf{Insert Text Here} & -\\ \hline 
-% \end{longtable}
-
-
-% \subsection {MID ETC}
-
-% \begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
-% \textbf{Insert Text Here} & \textbf{Insert Text Here} \\ \hline
-% \textbf{Insert Text Here} & -\\ \hline 
-% \end{longtable}
-
-% -------------- END MID ---------------- %
-
-%% -------------- START FUNCTION TABLES---------------- %
-%\section{Function Tables}
-%\subsection {Table 1}
-%
-%\hl{***NEED TO LOOK UP FUNCTION TABLE STYLES AND IF WE NEED THEM***}
-%
-%\begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
-%\textbf{Insert Text Here} & \textbf{Insert Text Here} \\ \hline
-%\textbf{Insert Text Here} & -\\ \hline 
-%\end{longtable}
-%
-%
-%\subsection {Table 2 }
-%
-%\begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
-%\textbf{Insert Text Here} & \textbf{Insert Text Here} \\ \hline
-%\textbf{Insert Text Here} & -\\ \hline 
-%\end{longtable}
-%
-%
-%\subsection {Table 3}
-%
-%\begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
-%\textbf{Insert Text Here} & \textbf{Insert Text Here} \\ \hline
-%\textbf{Insert Text Here} & -\\ \hline 
-%\end{longtable}
-%
-%% -------------- END FUNCTION TABLES ---------------- %
-
-
-% -------------- START REFERENCES ---------------- %
-\section{References}
-\textbf{Possible References Here}
-
-% -------------- END REFERENCES ---------------- %
 
 \end{document}
