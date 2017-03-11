@@ -39,7 +39,7 @@
 \usepackage{multicol}
 \usepackage{multirow}
 \usepackage{array}
-\renewcommand{\arraystretch}{1.4}% Spread rows out evenly in table
+\renewcommand{\arraystretch}{1.2}% Spread rows out evenly in table
 \setlength{\LTpre}{0.5pt} % Reduces white space around tables (top)
 %\setlength{\LTpost}{0pt} % Reduces white space around tables (bottom)
 
@@ -86,7 +86,7 @@ linkcolor=black,}  %choose some color if you want links to stand out
 
 % Header
 \lhead{Draft Hazard Analysis }
-\rhead{Revision: 0}
+\rhead{Revision: 1}
 \fancyhead[LE,CO]{VIC - Group 6}
 
 % Removes line under the header 
@@ -254,7 +254,7 @@ Zachary Bazen &-& 1200979
 
 \tableofcontents
 \listoftables
-\listoffigures
+%\listoffigures
 
 
 
@@ -265,7 +265,7 @@ Zachary Bazen &-& 1200979
 %\section*{Revisions}
 %\thispagestyle{empty}
 \section{Revisions}
-\begin{longtable}{| p{.2\textwidth } | p{.23\textwidth } | p{.23\textwidth } | p{.23\textwidth } |} \caption{VIC Table of Revisions}  \\
+\begin{longtable}{| p{.2\textwidth } | p{.23\textwidth } | p{.21\textwidth } | p{.31\textwidth } |} \caption{VIC Table of Revisions}  \\
 
 \hline 
 \centering \textbf{Date} & 
@@ -273,16 +273,36 @@ Zachary Bazen &-& 1200979
 \multicolumn{1}{|c}{\textbf {Authors}} & 
 \multicolumn{1}{|c|}{\textbf {Comments}} \\ \hline
 
-\multirow{4}{*}{\centering January 9, 2017}  & 
-\multirow{4}{*}{Revision 0}& 
-{Alex Jackson \newline
-Jean Lucas Ferreira \newline
-Justin Kapinski\newline
-Mathew Hobers\newline
-Radhika Sharma\newline
-Zachary Bazen}
+
+\multicolumn{1}{|c|}{\multirow{1}{*}{\centering March 11, 2017}}  & 
+\multicolumn{1}{c|}{\multirow{1}{*}{Revision 1}} &
+\begin{minipage}{.21\columnwidth} \vspace {1mm}
+    Zachary Bazen      \vspace{1mm}
+\end{minipage}&
+\begin{minipage} {.31\columnwidth}
+    \vspace{1mm}\begin{enumerate}[label = - , leftmargin=0.15in]
+        \itemsep -.1em
+        \item Included acronym, assumptions and safety consideration section
+        \item Updated component descriptions 
+        \item Updated/improved  information in FMEA worksheet
+        \item Added additional details to FMEA worksheet\vspace{1mm}
+    \end{enumerate}
+\end{minipage}\\ \hline 
+
+
+
+\multicolumn{1}{|c|}{\multirow{1}{*}{\centering January 9, 2017}}  & 
+\multicolumn{1}{c|}{\multirow{1}{*}{Revision 0}} & 
+\begin{minipage}{.21\columnwidth} \vspace {1mm}
+    Alex Jackson \newline
+    Jean Lucas Ferreira \newline
+    Justin Kapinski\newline
+    Mathew Hobers\newline
+    Radhika Sharma\newline
+    Zachary Bazen      \vspace{1mm}
+\end{minipage}
 &
- \multirow{4}{*}{N/A} \\ 
+ \multirow{1}{*}{N/A} \\ 
 \hline 
 
 
@@ -300,30 +320,121 @@ Zachary Bazen}
 When multiple autonomous cars arrive at an intersection simultaneously, due to the lack of a decision making protocol, the cars have no way of determining in which order to proceed. The purpose of this project will be create a system that allows autonomous cars to navigate through  intersections. This will be accomplished by providing an appropriate order for the vehicles to proceed through the intersection.  \newline
 
 
-Vehicle Intersection Control (also known as VIC) will allow autonomous vehicles to make navigation decisions at intersections. In addition, VIC will be able to dynamically handle changing scenarios at an intersection without running into deadlock or stalemate situations. To ensure safety, VIC will allow cars to navigate through the intersection only after the scheduling algorithm determines the order in which they should proceed. \newline
+Vehicle Intersection Control will allow autonomous vehicles to make navigation decisions at intersections. In addition, VIC will be able to dynamically handle changing scenarios at an intersection without running into deadlock or stalemate situations. To ensure safety, VIC will allow cars to navigate through the intersection only after the scheduling algorithm determines the order in which they should proceed. \newline
 
 The following document will outline the hazards that VIC poses to humans, as well hazards to the system. Causes and effect of failures, as well as detection, control and recommended action for failures will also be discussed. 
+
+\section{Acronyms}
+\begin{longtable}{|p{.1\textwidth}|p{.3\textwidth}|p{.525\textwidth}|}  \caption{Acronym Definitions and Descriptions } \\ \hline
+\rowcolor{subsectionC}\multicolumn{1}{|c|}{\textbf{Acronym}} & \multicolumn{1}{c}{\textbf{Definition}}& \multicolumn{1}{|c|}{\textbf{Description}} \\ \hline
+\rowcolor{tableCell}VIC &Vehicle Intersection Control & The name given to the intersection management system\\ \hline
+MARC & McMaster Automotive Resource Center & Location of the laboratory used for the project\\ \hline
+
+\end{longtable}
+
+
+
+\section{Assumptions}
+
+\begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
+\rowcolor{tableCell}\textbf{HA1} & The risks outlined in the document are poised only to the project stakeholders \\ \hline
+\textbf{Rationale} & The project is operating in a restricted access laboratory where only stakeholders are able to gain access  \\ \hline 
+\end{longtable}
+
+\begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
+\rowcolor{tableCell}\textbf{HA2} & VIC group members are aware of the risks associated with the VIC system  \\ \hline
+\textbf{Rationale} & Ensures the safety of the group members when operating and developing the VIC system  \\ \hline 
+\end{longtable}
+
+
+\begin{longtable}{| p{.2\textwidth } | p{.75\textwidth } | }\hline 
+\rowcolor{tableCell}\textbf{HA3} & The risks to humans are low  \\ \hline
+\textbf{Rationale} & The VIC system equipment is small and doesn't contain moving parts that could cause significant damage to a human   \\ \hline 
+\end{longtable}
+
 
 
 
 \section{Component Descriptions} 
+The components can be divided into three parts: vehicle components,  intersection components and communication. The communication component provides means of transferring information between the vehicle components and the intersection components.
 
-\subsection{Image Processing}
+\subsection{Vehicle Components}
+\subsubsection{Image Processing}
 This component allows the vehicle to follow lanes and detect obstacles. It makes use of a WebCam, Raspberry Pi, and algorithms to allow the vehicle to interpret the track environment. 
-\subsection{Steering Controller}
+
+\subsubsection{Steering Controller}
 The steering controller works with the image processing component to steer the vehicle. Further more, the steering controller must make adjustments to ensure the vehicle stays within the track lanes. 
-\subsection{Speed Controller} 
+
+\subsubsection{Speed Controller} 
 The speed controller uses a hall effect sensor to determine the speed of the car. This controller will make adjustments to the vehicle's speed according to the track environment.  
-\subsection{Communication} 
-The communication component will consist of the blue-tooth signals between the vehicles and intersection controller. The blue-tooth communication will be utilized by the system to make scheduling decisions. 
-\subsection{Intersection Sensors}
-The intersection sensors will be used to provide additional feedback to the intersection controller. The sensors will be placed at each lane of the intersection and will signal the intersection controller when a vehicle has arrived or departed from the intersection. 
+
+
+\subsection{Intersection Controller}
+The intersection camera provides feedback to the intersection controller about approaching vehicles, obstacles in the intersection and departing vehicles. The camera is placed above the intersection and will allow the intersection controller to determine when it is safe for vehicles to proceed through the intersection. 
+
+\subsection{Communication }
+The communication component uses Bluetooth communication to facilitate interaction between the vehicle and intersection controller. Vehicles send a request to the intersection controller to proceed through the intersection. When it is safe to proceed the intersection sends back a proceed command. In addition to the proceed command the intersection controller also sends out an emergency stop signal when needed. 
+
+
+
+
+
+
+
+
+
 %\subsection{Scheduling Algorithm}
 
-%\section{Safety Considerations}
+\section{Safety Considerations}
+
+The safety of group and their respective within the MARC laboratory is paramount. Special consideration was taken to determine the risk and failure modes that would impact the those operating within the MARC laboratory. Risks beyond the MARC laboratory are considered outside the scope of the project. Members of the team agree to the hazards associated with the development and operation of the VIC system. Listed bellow are the hazards of the VIC system. 
+
+
+\subsection{Moving Parts Hazard}
+
+\textbf{Problem}
+\begin{enumerate}[label = - , leftmargin=.3in]
+        \item Loose/long hair could be caught in moving parts during testing causing a pinching or tearing injury
+        \item  Loose clothing could be caught in moving parts during testing\vspace{1mm}
+    \end{enumerate}
+
+\textbf{Solution}
+
+\begin{enumerate}[label = - , leftmargin=.3in]
+        \item Enclose moving parts where possible
+    \end{enumerate}
 
 
 
+
+\subsection{Collision Hazard}
+\textbf{Problem}
+\begin{enumerate}[label = - , leftmargin=.3in]
+        \item Vehicle may leave track and collide with individuals 
+        \item Vehicle may leave track and collide with over vehicles 
+    \end{enumerate}
+
+\textbf{Solution}
+
+\begin{enumerate}[label = - , leftmargin=.3in]
+        \item Ensure individuals stay a safe distance from operating vehicles 
+        \item Notify individuals when vehicle operation is about to get underway
+        \item Include object detection to prevent collisions
+        
+    \end{enumerate}
+
+
+\subsection{Burn Hazard}
+\textbf{Problem}
+\begin{enumerate}[label = - , leftmargin=.3in]
+        \item Vehicle speed controller becomes hot during operation 
+    \end{enumerate}
+
+\textbf{Solution}
+\begin{enumerate}[label = - , leftmargin=.3in]
+        \item Ensure individuals are aware of what the speed controller looks like to prevent accidental contact
+        
+    \end{enumerate}
 
 
 \section{FMEA Worksheet}
@@ -357,7 +468,7 @@ The intersection sensors will be used to provide additional feedback to the inte
 
 
 \break
-\vspace{6mm}
+\vspace*{-8.5mm}{
 \hspace{-2.1cm}{
     \begin{minipage}{\textwidth}
     
@@ -378,132 +489,41 @@ The intersection sensors will be used to provide additional feedback to the inte
     
     
     
-    % Row 2
-    \cellcolor{subsectionC}
-    &  \cellcolor{tableCell}\begin{minipage} {.19\columnwidth}
-            \begin{center}Incorrect  Lane Following \end{center}
-        \end{minipage} 
-    & \cellcolor{tableCell}\begin{minipage}{.22\columnwidth} 
-                \begin{enumerate}
-                    \item Damaged webcam
-                    \item Slow feedback
-                    \item Dead battery \vspace {1mm}
-                \end{enumerate}
-        \end{minipage}
-    & \cellcolor{tableCell}\begin{minipage}{.22\columnwidth} 
-                \vspace{2mm}
-                \begin{enumerate}
-                    \item Collision with humans or cars
-                    \item Vehicle exits track
-                    \item Image proccesing fails to operate \vspace {1mm}
-                \end{enumerate}
-        \end{minipage}
-    & \cellcolor{tableCell}\begin{minipage}{.18\columnwidth} 
-                \begin{enumerate}
-                    \item Visual check
-                    \item Signal for dead battery \vspace {1mm}
-                \end{enumerate}
-        \end{minipage}
-    & \cellcolor{tableCell}\begin{minipage}{.23\columnwidth} 
-                \vspace{2mm}
-                \begin{enumerate}
-                    \item Image processing algorithm must respond within a required time
-                    \item Ensure track is clear and no undesired objects are present\vspace {1mm}
-                \end{enumerate}
-        \end{minipage}
-    
-    
-    & \cellcolor{tableCell}\begin{minipage}{.24 \columnwidth} 
-                \vspace{2mm}
-                \begin{enumerate}
-                    \item If too many consecutive deadlines are missed, controller will adjust speed
-                    \item EIf RasberryPi battery dies alert the car controller to go in emergency shutdown mode\vspace {1mm}
-                \end{enumerate}
-        \end{minipage} \\ \cline{2-7}
-    
-    % Row 3 
-    \multirow{-8}{*}{\begin{minipage} {.12\columnwidth}
-    \begin{center}Image \\Processing \end{center}
-    \end{minipage} \cellcolor{subsectionC} }
-    & \begin{minipage} {.19\columnwidth}
-            \begin{center}Incorrect  Obstacle Detection \end{center}
-        \end{minipage} 
-    & \begin{minipage}{.22\textwidth} 
-                \begin{enumerate}
-                    \item Damaged webcam
-                    \item Software error
-                    \item Slow feedback 
-                    \item Loss of power\vspace {1mm}
-                \end{enumerate}
-        \end{minipage}
-    & \begin{minipage}{.22\textwidth} 
-                \vspace{2mm}
-                \begin{enumerate}
-                    \item Collision with humans or vehicles\vspace {1mm}
-                \end{enumerate}
-        \end{minipage}
-    & \begin{minipage}{.18\textwidth} 
-                \begin{enumerate}
-                    \item Visual check
-                    \item Signal for dead battery \vspace {1mm}
-                \end{enumerate}
-        \end{minipage}
-    & \begin{minipage}{.22\columnwidth} 
-                \vspace{2mm}
-                \begin{enumerate}
-                    \item Image processing algorithm must respond within a required time
-                    \item Ensure track is clear and no undesired objects are present\vspace {1mm}
-                \end{enumerate}
-        \end{minipage}
-    
-    
-    & \begin{minipage}{.24 \columnwidth} 
-                \vspace{2mm}
-                \begin{enumerate}
-                    \item If too many consecutive deadlines are missed, controller will adjust speed
-                    \item EIf RasberryPi battery dies alert the car controller to go in emergency shutdown mode\vspace {1mm}
-                \end{enumerate}
-        \end{minipage} \\ \hline
-    
-   
-    
-    
-    
-    % ---------------- Block 2------------------- %
-    % row 4
+  
+        
+         % row 8
     \multirow{-1}{*}{\begin{minipage} {.12\columnwidth}
-    \begin{center}Steering  \\Controller \end{center}
-    \end{minipage}\cellcolor{subsectionC} \cellcolor{subsectionC}}
+    \begin{center}Intersection \\Camera \end{center}
+    \end{minipage}\cellcolor{subsectionC} }
     & \cellcolor{tableCell}\begin{minipage} {.19\columnwidth}
-            \begin{center}Incorrect  Steering \end{center}
+            \begin{center} Failure to detect vehicles \end{center}
         \end{minipage} 
     & \cellcolor{tableCell}\begin{minipage}{.22\textwidth} 
                 \vspace {1mm}
                 \begin{enumerate}
-                    \item Software Miscalculation 
-                    \item Damaged Servo
-                    \item Disconnected Wires
-                    \item Loose steering assembly
-                    \item Loss of power\vspace {1mm}
+                    \item Damaged/ disconnected webcam
+                    \item Error in software processing image
+                    \item Images contain to much noise \vspace {1mm}
                 \end{enumerate}
         \end{minipage}
     & \cellcolor{tableCell}\begin{minipage}{.22\textwidth} 
                 \vspace{2mm}
                 \begin{enumerate}
-                    \item Collision with humans or vehicles
-                    \item Vehicle Exits Track 
-                    \item Vehicle fails to make turn \vspace {1mm}
+                    \item Vehicle stalled at intersection
+                    \item System deadlock if intersection controller does not detect vehicle leaving 
+                    \item Vehicle collision\vspace {1mm}
                 \end{enumerate}
         \end{minipage}
     & \cellcolor{tableCell}\begin{minipage}{.18\textwidth} 
                 \begin{enumerate}
-                    \item Visual check \vspace {1mm}
+                    \item Visual inspection of webcam
+                    \item Vehicles waiting longer than requirement targets\vspace {1mm}
                 \end{enumerate}
         \end{minipage}
-    & \cellcolor{tableCell}\begin{minipage}{.23\textwidth} 
+    & \cellcolor{tableCell}\begin{minipage}{.22\textwidth} 
                 \vspace{2mm}
                 \begin{enumerate}
-                    \item Image processing \vspace {1mm}
+                    \item Bluetooth communication between vehicle and IC \vspace {1mm}
                 \end{enumerate}
         \end{minipage}
     
@@ -511,102 +531,58 @@ The intersection sensors will be used to provide additional feedback to the inte
     & \cellcolor{tableCell}\begin{minipage}{.24 \columnwidth} 
                 \vspace{2mm}
                 \begin{enumerate}
-                    \item Direction corrected with software
-                    \item Vehicle shutdown 
-                    \item Recalibrate/Repair/ Replace Servo \vspace {1mm}
+                    \item Reconfigure/Replace camera \vspace {1mm}
                 \end{enumerate}
         \end{minipage} \\ \hline
-    
-   
-    
-    
-    % ---------------- Block 3------------------- %
-    
-    % row 5
-    \multirow{-1}{*}{\begin{minipage} {.12\columnwidth}
-    \begin{center}Speed \\Controller \end{center}
-    \end{minipage} \cellcolor{subsectionC} }
-    & \begin{minipage} {.19\columnwidth}
-            \begin{center}Incorrect  Speed \end{center}
+        
+        
+        % Row 6
+    \cellcolor{subsectionC}
+    &  \begin{minipage} {.19\columnwidth}
+            \begin{center} Failure to transmit signal \end{center}
         \end{minipage} 
     & \begin{minipage}{.22\textwidth} 
-                \vspace {1mm}
+    
+    \vspace {1mm}
                 \begin{enumerate}
-                    \item Overheated speed controller
-                    \item Incorrect speed calculation 
-                    \item Hall Effect sensor not working
-                    \item Motor failure
-                    \item Disconnect wires
+                    \item Software controlling bluetooth transmitter incorrect
+                    \item Damaged transmitter or receiver 
                     \item Loss of power\vspace {1mm}
                 \end{enumerate}
         \end{minipage}
     & \begin{minipage}{.22\textwidth} 
                 \vspace{2mm}
                 \begin{enumerate}
-                    \item Failure to stop at intersection
-                    \item Overshooting lanes when turning
-                    \item Damaged hardware
-                    \item Vehicle instability 
-                    \item Collision with vehicle or cars\vspace {1mm}
+                    \item Vehicle waits too long at intersection
+                    \item Vehicle goes through intersection at the wrong time\vspace {1mm}
                 \end{enumerate}
         \end{minipage}
     & \begin{minipage}{.18\textwidth} 
                 \begin{enumerate}
-                    \item Hall Effect sensor
-                    \item Visual check \vspace {1mm}
+                    \item Intersection camera will detect car at intersection \vspace {1mm}
                 \end{enumerate}
         \end{minipage}
-    & \begin{minipage}{.23\textwidth} 
-                \vspace{2mm}
-                \begin{enumerate}
-                    \item Feedback loop between speed sensor and speed controller \vspace {1mm}
-                \end{enumerate}
-        \end{minipage}
+    & 
     
     
     & \begin{minipage}{.24 \columnwidth} 
                 \vspace{2mm}
                 \begin{enumerate}
-                    \item Speed corrected with software
-                    \item Vehicle shutdown 
-                    \item Recalibrate/Repair/ Replace Speed sensors and/or speed controller \vspace {1mm}
+                    \item Refresh/Restart communication software
+                    \item Vehicle shut down and repair/replace device\vspace {1mm}
                 \end{enumerate}
-        \end{minipage} \\ \hline
-   
+        \end{minipage} \\ \cline{2-7}
     
-    
-   
-    
-     
-    \end{longtable}
-    
-    
-    
-    \end{minipage}}
-    
-    
-    \break
-\vspace{6mm}
-\hspace{-2.15cm}{
-    \begin{minipage}{\textwidth}
-    
-
-
- 
- \begin{longtable}{ |p{0.14\textwidth }  | p{0.20\textwidth } |  p{0.22\textwidth } |  p{0.23\textwidth } | p{0.18\textwidth } | p{0.22\textwidth } |  p{0.24\textwidth }|}  \hline
- 
- 
-  % ---------------- Block 4------------------- %
-  
-  
-  % Row 6
-    \cellcolor{subsectionC}
-    &  \cellcolor{tableCell}\begin{minipage} {.19\columnwidth}
+    % Row 7 
+    \multirow{-5}{*}{\begin{minipage} {.12\columnwidth}
+    \begin{center} \small Communication \end{center}
+    \end{minipage}\cellcolor{subsectionC} }
+    & \cellcolor{tableCell}\begin{minipage} {.19\columnwidth}
             \begin{center}Failure to maintain signal \end{center}
         \end{minipage} 
     & \cellcolor{tableCell}\begin{minipage}{.22\textwidth} 
                 \begin{enumerate}
-                    \item Low signal
+                    \item Low signal due to reduced battery power
                     \item Car distance out of range
                     \item Loss of power \vspace {1mm}
                 \end{enumerate}
@@ -632,82 +608,171 @@ The intersection sensors will be used to provide additional feedback to the inte
                     \item Refresh/Reconnect 
                     \item Vehicle Shut down and repair/replace device\vspace {1mm}
                 \end{enumerate}
-        \end{minipage} \\ \cline{2-7}
-    
-    % Row 7 
-    \multirow{-5}{*}{\begin{minipage} {.12\columnwidth}
-    \begin{center} \small Communication \end{center}
-    \end{minipage}\cellcolor{subsectionC} }
-    & \begin{minipage} {.19\columnwidth}
-            \begin{center} Failure to transmit signal \end{center}
-        \end{minipage} 
-    & \begin{minipage}{.22\textwidth} 
-                \begin{enumerate}
-                    \item Software Failure
-                    \item Damaged transmitter or receiver 
-                    \item Loss of power\vspace {1mm}
-                \end{enumerate}
-        \end{minipage}
-    & \begin{minipage}{.22\textwidth} 
-                \vspace{2mm}
-                \begin{enumerate}
-                    \item Vehicle waits too long at intersection
-                    \item Vehicle goes through intersection at the wrong time\vspace {1mm}
-                \end{enumerate}
-        \end{minipage}
-    & \begin{minipage}{.18\textwidth} 
-                \begin{enumerate}
-                    \item Intersection Sensors will detect car at intersection \vspace {1mm}
-                \end{enumerate}
-        \end{minipage}
-    & 
-    
-    
-    & \begin{minipage}{.24 \columnwidth} 
-                \vspace{2mm}
-                \begin{enumerate}
-                    \item Refresh/Reconnect
-                    \item Vehicle Shut down and repair/replace device\vspace {1mm}
-                \end{enumerate}
         \end{minipage} \\ \hline
     
    
     
     
     
-    % ---------------- Block 5------------------- %
-    % row 8
-    \multirow{-1}{*}{\begin{minipage} {.12\columnwidth}
-    \begin{center}Intersection \\Sensors \end{center}
-    \end{minipage}\cellcolor{subsectionC} }
+      % Row 2
+    \cellcolor{subsectionC}
+    &  \begin{minipage} {.19\columnwidth}
+            \begin{center}Incorrect  Obstacle Detection \end{center}
+        \end{minipage} 
+    & \begin{minipage}{.22\textwidth} 
+        \vspace{1mm}
+                \begin{enumerate}
+                    \item Webcam physically damage
+                    \item Error in software processing image
+                    \item Slow feedback due to processing time targets being missed
+                    \item Low power or loss of power
+                    \item Images contain to much noise\vspace {1mm}
+                \end{enumerate}
+        \end{minipage}
+    & \begin{minipage}{.22\textwidth} 
+                \vspace{2mm}
+                \begin{enumerate}
+                    \item Collision with humans resulting in injury
+                    \item Collision with cars and other objects resulting in property damage
+                \end{enumerate}
+        \end{minipage}
+    & \begin{minipage}{.18\textwidth} 
+                \begin{enumerate}
+                    \item Visual inspection of webcam
+                    \item Low battery alert \vspace {1mm}
+                \end{enumerate}
+        \end{minipage}
+    & \begin{minipage}{.22\columnwidth} 
+                \vspace{2mm}
+                \begin{enumerate}
+                    \item Image processing algorithm must respond within a required time
+                    \item Ensure track is clear and no undesired objects are present\vspace {1mm}
+                \end{enumerate}
+        \end{minipage}
+    
+    
+    & \begin{minipage}{.24 \columnwidth} 
+                \vspace{2mm}
+                \begin{enumerate}
+                    \item If too many consecutive deadlines are missed, controller will adjust speed
+                    \item EIf RasberryPi battery dies alert the car controller to go in emergency shutdown mode\vspace {1mm}
+                \end{enumerate}
+        \end{minipage} \\ \cline{2-7}
+    
+    % Row 3 
+    \multirow{-8}{*}{\begin{minipage} {.12\columnwidth}
+    \begin{center}Image \\Processing \end{center}
+    \end{minipage} \cellcolor{subsectionC} }
     & \cellcolor{tableCell}\begin{minipage} {.19\columnwidth}
-            \begin{center} Failure to detect vehicles \end{center}
+            \begin{center}Incorrect  Lane Following \end{center}
+        \end{minipage} 
+    & \cellcolor{tableCell}\begin{minipage}{.22\columnwidth} 
+                \vspace{1mm}
+                \begin{enumerate}
+                    \item Webcam physically damage
+                    \item Images contain to much noise
+                    \item Slow feedback due to processing time targets being missed
+                    \item Dead battery degrades RasberryPi performance \vspace {1mm}
+                \end{enumerate}
+        \end{minipage}
+    & \cellcolor{tableCell}\begin{minipage}{.22\columnwidth} 
+                \vspace{1mm}
+                \begin{enumerate}
+                    \item Collision with humans resulting in injury
+                    \item Collision with cars and other objects resulting in property damage
+                    \item Vehicle exits intended lane
+                    \item Image proccesing degrades or fails to operate \vspace {1mm}
+                \end{enumerate}
+        \end{minipage}
+    & \cellcolor{tableCell}\begin{minipage}{.18\columnwidth} 
+                \begin{enumerate}
+                    \item Visual inspection of webcam
+                    \item Low battery alert \vspace {1mm}
+                \end{enumerate}
+        \end{minipage}
+    & \cellcolor{tableCell}\begin{minipage}{.23\columnwidth} 
+                \vspace{1mm}
+                \begin{enumerate}
+                    \item Image processing algorithm must respond within a required time
+                    \item Ensure track and surrounding area is clear and no undesired objects are present\vspace {1mm}
+                \end{enumerate}
+        \end{minipage}
+    
+    
+    & \cellcolor{tableCell}\begin{minipage}{.24 \columnwidth} 
+                \vspace{1mm}
+                \begin{enumerate}
+                    \item If too many consecutive deadlines are missed, controller will adjust speed
+                    \item EIf RasberryPi battery becomes low alert the car controller to go in emergency shutdown mode\vspace {1mm}
+                \end{enumerate}
+        \end{minipage} \\ \hline
+   
+    
+   
+    
+ 
+    
+    
+   
+    
+     
+    \end{longtable}
+    
+    
+    
+    \end{minipage}}}
+    
+    
+    \break
+\vspace{6mm}
+\hspace{-2.15cm}{
+    \begin{minipage}{\textwidth}
+    
+
+
+ 
+ \begin{longtable}{ |p{0.14\textwidth }  | p{0.20\textwidth } |  p{0.22\textwidth } |  p{0.23\textwidth } | p{0.18\textwidth } | p{0.22\textwidth } |  p{0.24\textwidth }|}  \hline
+ 
+    
+    % ---------------- Block 3------------------- %
+    
+    % row 5
+    \multirow{-1}{*}{\begin{minipage} {.12\columnwidth}
+    \begin{center}Speed \\Controller \end{center}
+    \end{minipage} \cellcolor{subsectionC} }
+    & \cellcolor{tableCell}\begin{minipage} {.19\columnwidth}
+            \begin{center}Incorrect  Speed \end{center}
         \end{minipage} 
     & \cellcolor{tableCell}\begin{minipage}{.22\textwidth} 
                 \vspace {1mm}
                 \begin{enumerate}
-                    \item Damaged/ disconnected sensors
-                    \item Software Failure\vspace {1mm}
+                    \item Overheated speed controller degrades performance
+                    \item Incorrect speed calculation 
+                    \item Hall Effect sensor not working/inaccurate
+                    \item Motor failure
+                    \item Disconnect wires
+                    \item Low power or loss of power\vspace {1mm}
                 \end{enumerate}
         \end{minipage}
     & \cellcolor{tableCell}\begin{minipage}{.22\textwidth} 
                 \vspace{2mm}
                 \begin{enumerate}
-                    \item Vehicle stalled at intersection
-                    \item System deadlock if intersection controller does not detect vehicle leaving 
-                    \item Vehicle collision\vspace {1mm}
+                    \item Failure to stop at intersection
+                    \item Overshooting lanes when turning
+                    \item Vehicle instability 
+                    \item Collision with vehicle or cars\vspace {1mm}
                 \end{enumerate}
         \end{minipage}
     & \cellcolor{tableCell}\begin{minipage}{.18\textwidth} 
                 \begin{enumerate}
-                    \item Lack of feeback
-                    \item Check for correct signal when vehicle is at the intersection\vspace {1mm}
+                    \item Hall Effect sensor
+                    \item Visual check \vspace {1mm}
                 \end{enumerate}
         \end{minipage}
     & \cellcolor{tableCell}\begin{minipage}{.22\textwidth} 
                 \vspace{2mm}
                 \begin{enumerate}
-                    \item Bluetooth communication between vehicle and IC \vspace {1mm}
+                    \item Feedback loop between speed sensor and speed controller \vspace {1mm}
                 \end{enumerate}
         \end{minipage}
     
@@ -715,9 +780,69 @@ The intersection sensors will be used to provide additional feedback to the inte
     & \cellcolor{tableCell}\begin{minipage}{.24 \columnwidth} 
                 \vspace{2mm}
                 \begin{enumerate}
-                    \item Reconfigure/Replace Sensor \vspace {1mm}
+                    \item Speed corrected with software
+                    \item Vehicle shutdown 
+                    \item Recalibrate/Repair/ Replace Speed sensors and/or speed controller \vspace {1mm}
                 \end{enumerate}
         \end{minipage} \\ \hline
+   
+  % ---------------- Block 4------------------- %
+  
+  
+  
+     % row 4
+    \multirow{-1}{*}{\begin{minipage} {.12\columnwidth}
+    \begin{center}Steering  \\Controller \end{center}
+    \end{minipage}\cellcolor{subsectionC} \cellcolor{subsectionC}}
+    & \begin{minipage} {.19\columnwidth}
+            \begin{center}Incorrect  Steering \end{center}
+        \end{minipage} 
+    & \begin{minipage}{.22\textwidth} 
+                \vspace {1mm}
+                \begin{enumerate}
+                    \item Error is software processing speed 
+                    \item Damaged servo operates in unintended fashion
+                    \item Disconnected Wires
+                    \item Loose steering assembly
+                    \item Low power or loss of power\vspace {1mm}
+                \end{enumerate}
+        \end{minipage}
+    & \begin{minipage}{.22\textwidth} 
+                \vspace{2mm}
+                \begin{enumerate}
+                   \item Collision with humans resulting in injury
+                    \item Collision with cars and other objects resulting in property damage
+                    \item Vehicle Exits Track 
+                    \item Vehicle fails to make turn \vspace {1mm}
+                \end{enumerate}
+        \end{minipage}
+    & \begin{minipage}{.18\textwidth} 
+                \begin{enumerate}
+                    \item Visual inspection of vehicle \vspace {1mm}
+                \end{enumerate}
+        \end{minipage}
+    & \begin{minipage}{.22\textwidth} 
+                \vspace{2mm}
+                \begin{enumerate}
+                    \item Software processing track images \vspace {1mm}
+                \end{enumerate}
+        \end{minipage}
+    
+    
+    & \begin{minipage}{.24 \columnwidth} 
+                \vspace{2mm}
+                \begin{enumerate}
+                    \item Direction corrected with software
+                    \item Shutdown vehicle if servo performance degrades
+                    \item Recalibrate/Repair/ Replace Servo \vspace {1mm}
+                \end{enumerate}
+        \end{minipage} \\ \hline
+   
+    
+    
+    
+    % ---------------- Block 5------------------- %
+   
  
     
     
