@@ -27,12 +27,14 @@ int update_navigation(struct ImageData *img,  struct CarStatus *car){
 	}
 
 	else{
-		if (length_diff > LENGTH_THRESHOLD) {
-			new_angle = CENTER_ADJUST_ANGLE;
-		}
-		else {
-			new_angle = car->current_wheel_angle;
-		}
+		 if (length_diff > LENGTH_THRESHOLD) {
+		 	new_angle = CENTER_ADJUST_ANGLE;
+		 }
+		 else {
+		 	new_angle = car->current_wheel_angle;
+		 }
+
+		//new_angle = car->current_wheel_angle;
 	}
 
 //	printf("setting angle= %f\n", new_angle);
@@ -64,4 +66,5 @@ int update_navigation(struct ImageData *img,  struct CarStatus *car){
 	
 	return speed_ok*angle_ok;
 }
+
 

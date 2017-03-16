@@ -17,7 +17,7 @@
 
 CarStatus car_stat;
 ImageData img_data, img_data_msa;
-SignalResponse sig_resp;
+SignalResponse *sig_resp;
 cv::VideoCapture cap;
 
 const int MSA_MAX_STEP = 3;
@@ -28,8 +28,9 @@ int msa_curr_step = 1;
 int main(int argc, char** argv) {
     if (argc > 1) {
             cap = test_camera();
-            capture_lane(&cap);
-            cap.release();
+           // capture_lane(&cap);
+	    get_lane_statusv2(&cap);
+	    cap.release();
             return 0;
     }
     if (!init()) {
@@ -38,7 +39,7 @@ int main(int argc, char** argv) {
     }
 
     run();
-
+    cleanup();
     return 0;
 }
 
@@ -48,7 +49,7 @@ int init () {
 
     unsigned int status = 1;
 
-    car_stat.current_speed           = 0.5;
+    car_stat.current_speed           = 0.53;
     car_stat.current_wheel_angle     = 0;
     car_stat.car_id                  = CAR_ID;
     car_stat.intersection_stop       = 0;
@@ -64,15 +65,17 @@ int init () {
     img_data.intersection_detected     = 0;
     img_data.obstacle_detected         = 0;
 
-    sig_resp.val = -1;
 
-    memcpy(&img_data_msa, &img_data, sizeof(img_data));
+    sig_resp = (struct SignalResponse*) calloc(1, sizeof(*sig_resp));
+    sig_resp->val = DEFAULT_RESP;
+
+    // memcpy(&img_data_msa, &img_data, sizeof(img_data));
 
     cap = test_camera();
     status &= vichw_init();
 
     pthread_t  server_thread;
-    pthread_create(&server_thread, NULL, recvFromIC, (void*) &sig_resp);
+    pthread_create(&server_thread, NULL, recvFromIC, (void*) sig_resp);
 
 
     return status;
@@ -120,26 +123,37 @@ int run() {
     int step = 1;
 	while (valid) {
 
-        update_msa(&img_data, &img_data_msa, step);
+        //update_msa(&img_data, &img_data_msa, step);
         valid &= get_lane_status(&img_data, &cap);
-        valid &= update_navigation(&img_data_msa, &car_stat);
-        if (step > MSA_MAX_STEP) {
-            step = 0;
-        }
-        step += 1;
+        valid &= update_navigation(&img_data, &car_stat);
+        // if (step > MSA_MAX_STEP) {
+        //     step = 0;
+        // }
+        // step += 1;
 
+
+        // printf("sig  response = %d \n", sig_resp->val);
+         if (sig_resp->val == EMERGENCY_STOP_RESP) {
+             valid = 0;
+             break;
+         }
 	}
 
 	      // printf(" left theta: %f\n right theta %f\n left len %f\n right len %f\n int len%f\n inter? %d\n obstacle? %d\n\n", img_data_msa.avg_left_angle, img_data_msa.avg_right_angle, \
 	      //   img_data_msa.left_line_length, img_data_msa.right_line_length, img_data_msa.intersection_distance, img_data_msa.intersection_detected, \
 	      //   img_data_msa.obstacle_detected);
-	
-
-	cap.release();
-	vichw_deinit();
 
 	return valid;
 
+}
+
+
+
+void cleanup() {
+    printf("Cleaning up services\n");
+    cap.release();
+    vichw_deinit();
+    free(sig_resp);
 }
 
 

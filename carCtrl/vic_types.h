@@ -1,6 +1,15 @@
 #ifndef VIC_TYPES_H
 #define VIC_TYPES_H
 
+/* Constants */ 
+
+//response signals from bluetooth
+const int DEFAULT_RESP = -1;
+const int PROCEED_RESP = 0;
+const int STOP_RESP = 1;
+const int EMERGENCY_STOP_RESP = 2;
+
+
 
 /* structs */
 struct ImageData {

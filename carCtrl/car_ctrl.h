@@ -12,8 +12,10 @@ const int INNER_LANE = 1;
 //method declarations
 int init();
 int run();
+void cleanup();
 
 
 
 #endif
+
 

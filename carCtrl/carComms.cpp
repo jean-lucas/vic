@@ -57,7 +57,7 @@ int sendToIC(char* msg) {
 /*
     Try to receive a message from the Intersection Controller via Bluetooth
     Input: ??
-    Output: result from IC (negative for error, 0 for stop @ intersection, 1 to proceed)
+    Output: result from IC (2 for error, 1 for stop @ intersection, 0 to proceed)
 */
 
 
@@ -100,7 +100,7 @@ void* recvFromIC(void* arg) {
         //response from client
         resp->val = (int) buf[0] - '0';
 
-        if (resp->val == 0) {
+        if (resp->val == EMERGENCY_STOP_RESP) {
         	printf("close server\n");
         	break;
         }
@@ -112,8 +112,8 @@ void* recvFromIC(void* arg) {
     close(client);
     close(s);
 
-    free(resp);
     return 0;
 
 }
+
 
