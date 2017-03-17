@@ -16,26 +16,44 @@
 
 
 CarStatus car_stat;
-ImageData img_data, img_data_msa;
+ImageData img_data;
 SignalResponse *sig_resp;
 cv::VideoCapture cap;
 
-const int MSA_MAX_STEP = 3;
-int msa_curr_step = 1;
+
+
 
 
 
 int main(int argc, char** argv) {
-    if (argc > 1) {
-            cap = test_camera();
-           // capture_lane(&cap);
-	    get_lane_statusv2(&cap);
-	    cap.release();
-            return 0;
+
+    int start_on_bt_cmd =  0;
+
+
+    if (argc < 1) {
+        printf("invalid arg\n");
+        return 0;
     }
-    if (!init()) {
-            printf("failed to init\n");
-            exit(0);
+
+    int argval = atoi(argv[1]):
+
+    //test lane detect only
+    if (argval == 1) {
+        cap = test_camera();
+	    get_lane_statusv2(&img_data, &cap);
+	    cap.release();
+        return 0;
+    }
+
+    //start operating only from BT commands
+    else if (argval == 2 ) {
+        start_on_bt_cmd = 1;
+    }
+
+    if (!init(start_on_bt_cmd)) {
+        printf("failed to init\n");
+        exit(0);
+    
     }
 
     run();
@@ -45,18 +63,18 @@ int main(int argc, char** argv) {
 
 
 /* Initialize necessary modules, and test their are working */
-int init () {
+int init (int quickstart_mode) {
 
     unsigned int status = 1;
 
-    car_stat.current_speed           = 0.53;
+    car_stat.current_speed           = 0.5;
     car_stat.current_wheel_angle     = 0;
     car_stat.car_id                  = CAR_ID;
     car_stat.intersection_stop       = 0;
     car_stat.obstacle_stop           = 0;
     car_stat.current_lane            = OUTER_LANE;
 
-
+    img_data.fix                       = 0;
     img_data.avg_left_angle            = 0;
     img_data.avg_right_angle           = 0;
     img_data.left_line_length          = 0;
@@ -67,9 +85,16 @@ int init () {
 
 
     sig_resp = (struct SignalResponse*) calloc(1, sizeof(*sig_resp));
-    sig_resp->val = DEFAULT_RESP;
+    //make sure car does not start driving until we want it to
+    if (quickstart_mode) {
+        sig_resp->val = PROCEED_RESP;
+    }
+    else {
+        sig_resp->val = STOP_RESP;
 
-    // memcpy(&img_data_msa, &img_data, sizeof(img_data));
+    }
+    
+     
 
     cap = test_camera();
     status &= vichw_init();
@@ -95,59 +120,39 @@ double getMsTime() {
 }
 
 
-//Moving sum average - resets when step is one
-void update_msa(struct ImageData *img, struct ImageData *img_msa, int step) {
-
-    //if step is 1 (first step) use the current data
-    if (step == 1) {
-        memcpy(&img_msa, &img, sizeof(img));
-    }
-
-    else {
-        img_msa->avg_left_angle            = (img->avg_left_angle    + (step*img_msa->avg_left_angle))    / (step + 1);
-        img_msa->avg_right_angle           = (img->avg_right_angle   + (step*img_msa->avg_right_angle))   / (step + 1);
-        img_msa->left_line_length          = (img->left_line_length  + (step*img_msa->left_line_length))  / (step + 1);
-        img_msa->right_line_length         = (img->right_line_length + (step*img_msa->right_line_length)) / (step + 1);
-        img_msa->intersection_distance     = img->intersection_distance;
-        img_msa->intersection_detected     = img->intersection_detected;
-        img_msa->obstacle_detected         = img->obstacle_detected;
-    }
-}
-
-
 
 int run() {
 
 	int valid = 1;
-
-    int step = 1;
 	while (valid) {
 
-        //update_msa(&img_data, &img_data_msa, step);
-        valid &= get_lane_status(&img_data, &cap);
+        if (sig_resp->val != PROCEED_RESP) {
+            if (sig_resp->val == EMERGENCY_STOP_RESP) {
+                printf("EMERGENCY_STOP_RESP\n");
+                valid = 0;
+                break;
+            }
+            //otherwise a stop signal has been called
+            pause();
+        }
+
+        valid &= get_lane_statusv2(&img_data, &cap);
         valid &= update_navigation(&img_data, &car_stat);
-        // if (step > MSA_MAX_STEP) {
-        //     step = 0;
-        // }
-        // step += 1;
-
-
-        // printf("sig  response = %d \n", sig_resp->val);
-         if (sig_resp->val == EMERGENCY_STOP_RESP) {
-             valid = 0;
-             break;
-         }
+           
 	}
-
-	      // printf(" left theta: %f\n right theta %f\n left len %f\n right len %f\n int len%f\n inter? %d\n obstacle? %d\n\n", img_data_msa.avg_left_angle, img_data_msa.avg_right_angle, \
-	      //   img_data_msa.left_line_length, img_data_msa.right_line_length, img_data_msa.intersection_distance, img_data_msa.intersection_detected, \
-	      //   img_data_msa.obstacle_detected);
 
 	return valid;
 
 }
 
 
+//when called, program will remain paused until necessary BT responses are received
+void pause() {
+    printf("Entering pause state\n");
+    while (sig_resp->val != PROCEED_RESP);
+    printf("Leaving pause state\n");
+    run();
+}
 
 void cleanup() {
     printf("Cleaning up services\n");

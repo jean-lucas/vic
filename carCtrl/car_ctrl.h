@@ -13,6 +13,7 @@ const int INNER_LANE = 1;
 int init();
 int run();
 void cleanup();
+void pause();
 
 
 

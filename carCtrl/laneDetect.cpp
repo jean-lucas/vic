@@ -12,8 +12,8 @@ using namespace cv;
 using namespace std;
 
 //this percentage will be cutoff from the top of the image
-const double CUT_OFF_HEIGHT_FACTOR = 0.40;
-const double CUT_OFF_HEIGHT_FACTOR_BOTTOM = 0.03;
+const double CUT_OFF_HEIGHT_FACTOR = 0.50;
+const double LANE_WIDTH = 400.0;
 
 Point2d getMidpoint(Point2d a, Point2d b);
 double calculateAvgAngle(vector<Point2d> vec, Point2d center);
@@ -67,7 +67,7 @@ string type2str(int type) {
   return r;
 }
 
-int get_lane_statusv2( VideoCapture *cap) {
+int get_lane_statusv2(struct ImageData *img_data, VideoCapture *cap) {
 
     if (!(cap->isOpened())) {
             printf("failed to open capture\n");
@@ -82,7 +82,7 @@ int get_lane_statusv2( VideoCapture *cap) {
     cap->read(capMat);
 
 
-        //cropping region
+    //cropping region
 	Size size_uncropped = capMat.size();
 	int new_height = size_uncropped.height*CUT_OFF_HEIGHT_FACTOR;
 	Rect cropRect = Rect(0,new_height, size_uncropped.width, size_uncropped.height-new_height);
@@ -106,42 +106,57 @@ int get_lane_statusv2( VideoCapture *cap) {
     circle(cannyMat,Point(0,0),10,Scalar(240,0,0));
     circle(cannyMat,Point(xx.width,xx.height),10,Scalar(2,0,250));
     
-    int i = 0;
-    int j = 0;
+    int y = 0;
+    int x = 0;
 
     int numRows = xx.height;
     int num_segs = numRows/20;
     printf("num_segs = %d\n", num_segs );
+    printf("num_rows = %d\n", numRows );
     Vec3f colour;
 
-    vector<Point2d> detectedPts
+    vector<Point2d> detectedPts;
     //the value of j can start halfway of the width
-    for ( i = 0; i < xx.height; i += num_segs) {
-        printf(" On row %d\n", i );
-        for ( j = 0; j < xx.width; j++) {
-
-            colour = cannyMat.at<Vec3f>(Point(i,j));
+    for ( y = 0; y < xx.height; y += num_segs) {
+        printf(" On row %d\n", y );
+        for ( x = 0; x < xx.width; x++) {
+            printf(" On col %d\n", x );
+            colour = cannyMat.at<Vec3f>(Point(x,y));
 
             if (colour.val[0] + colour.val[1] + colour.val[2] >= 350) {
-            	printf("detected at ( %d , %d )\n",i,j);
-				circle(cannyMat,Point(i,j),5,Scalar(240,0,100));
-				detectedPts.push_back(Point2d(i,j));
+            	printf("detected at ( %d , %d )\n",x,y);
+				circle(cannyMat,Point(x,y),5,Scalar(240,0,100));
+				detectedPts.push_back(Point2d(x,y));
             }
         }
     }
 
     double tot = 0;
-    double avg = 0;
-    //get avg distance from center img to detected pts
+    double avgDistToLaneEdge = 0;
+    //get avg distance from center lane to detected pts
     for (size_t k = 0; k < detectedPts.size(); k++) {
     	tot += abs(detectedPts[k].x - xx.width/2.0);
     }
 
-    avg = tot/detectedPts.size();
-    printf("avg distance is %f\n", avg);
+    avgDistToLaneEdge = tot/detectedPts.size();
+    printf("avg distance is %f\n", avgDistToLaneEdge);
 
+    //how much we want to move in order to center the car
+    double desired_change = 0;
+    desired_change = abs(avgDistToLaneEdge - LANE_WIDTH/2.0);
+    printf("desired change is  %f\n", desired_change);
 
 	imwrite("../../lanecap_canny.png", cannyMat);
+
+
+    img_data->fix                   = desired_change;
+    img_data->avg_left_angle        = 0;
+    img_data->avg_right_angle       = 0;
+    img_data->left_line_length      = 0;
+    img_data->right_line_length     = 0;
+    img_data->intersection_distance = 0;
+    img_data->intersection_detected = 0;
+    img_data->obstacle_detected     = 0;
 
     return 0;
 }

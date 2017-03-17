@@ -4,7 +4,6 @@
 /* Constants */ 
 
 //response signals from bluetooth
-const int DEFAULT_RESP = -1;
 const int PROCEED_RESP = 0;
 const int STOP_RESP = 1;
 const int EMERGENCY_STOP_RESP = 2;
@@ -13,6 +12,7 @@ const int EMERGENCY_STOP_RESP = 2;
 
 /* structs */
 struct ImageData {
+	double fix;
 	double avg_left_angle;
 	double avg_right_angle;
 	double left_line_length;

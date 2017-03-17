@@ -13,31 +13,14 @@ int update_navigation(struct ImageData *img,  struct CarStatus *car){
 	double angle_ok = 0;
 
 	//Update steering angle
-	double angle_diff  = img->avg_left_angle - img->avg_right_angle;
-	double length_diff = img->left_line_length - img->right_line_length;
-	double new_angle   = 0;
+	double fix_value = img->fix;
+	double new_angle = 0;
 
-
-	if( abs(angle_diff) >= ANGLE_THRESHOLD) {
-		new_angle = angle_diff/3.0;
+	if (fix_value >= 20) {
+		new_angle = fix_value/5;
 	}
 
-	else if( abs(angle_diff) < ANGLE_THRESHOLD && car->current_wheel_angle > 0) {
-		new_angle = 0;
-	}
-
-	else{
-		 if (length_diff > LENGTH_THRESHOLD) {
-		 	new_angle = CENTER_ADJUST_ANGLE;
-		 }
-		 else {
-		 	new_angle = car->current_wheel_angle;
-		 }
-
-		//new_angle = car->current_wheel_angle;
-	}
-
-//	printf("setting angle= %f\n", new_angle);
+	printf("setting new angle %f \n",new_angle);
 
 
 	if(new_angle > MAX_ANGLE){
