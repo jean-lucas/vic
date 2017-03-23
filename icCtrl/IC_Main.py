@@ -203,6 +203,8 @@ class IC_Main(object):
                 #print "Arrival length, %d" % len(self.arrivals)
                 #car = self.arrivals.pop()
 
+            car = communication.arrival_dequeue
+            if (car != -1)
                 current_car_index = -1
 
                 for i in range(len(self.intersection_cars)):
@@ -224,7 +226,7 @@ class IC_Main(object):
                                      break   #this break only works if we have 2 cars on the track (more efficient)
 
                 #TODO here: if current car's proceed_now is true, then tell communication to send car a 'GO' message
-                self.proceed_enqueue(car)
+                communication.proceed_enqueue(car)
 
 
                 
@@ -237,10 +239,6 @@ class IC_Main(object):
              
                 
         
-        
-    def proceed_enqueue(self, car):
-        # proceed queue in communications
-        self.communication.proceed_enqueue(car)
 
     #def arrival_enqueue(self,car):
         # arrival queue in IC_Main
