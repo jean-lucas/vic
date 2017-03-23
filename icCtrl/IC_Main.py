@@ -41,6 +41,7 @@ class Communication (object):
 
     # proceed message queues
     proceeds = deque()
+    arrivals = deque()
     
     def __init__(self):
 
@@ -67,8 +68,8 @@ class Communication (object):
         # internal bluetooth buffer size
         server_sock.listen(5)
 
-        # instantiate arrival queue 
-        vehicle_arrivals = IC_Main()
+        # instantiate arrival queue --------------------------------------------------
+        #vehicle_arrivals = IC_Main()
         
         while True:
 
@@ -87,7 +88,9 @@ class Communication (object):
             current_car = self.message_extraction(client_message, client_bluetooth_ID)
                 
             # enqueue arrival buffer    
-            vehicle_arrivals.arrival_enqueue(current_car)
+            #vehicle_arrivals.arrival_enqueue(current_car)
+            # --------------------------------------------------------------------------------------
+            self.arrivals.appendleft(current_car)
 
             client_socket.close()
             
@@ -142,8 +145,20 @@ class Communication (object):
 
         return Car(my_content[0], client_bluetooth_ID[0], my_content[1], my_content[2], '')
 
+    
+    # called from IC main
     def proceed_enqueue(self, car):
         self.proceeds.appendleft(car)
+
+    # 
+    def arrival_deque(self):
+
+        if (len(self.arrivals)>0):
+            return self.arrivals.pop()
+        else:
+            return -1
+        
+        
         
 
 
@@ -154,7 +169,7 @@ class IC_Main(object):
 
     traffic = TrafficController()
     detect = VehicleDetection()
-    arrivals = deque()
+    
 
     intersection_cars = [0 for i in range(10)]
     intersection_clear = False
@@ -182,10 +197,11 @@ class IC_Main(object):
             #self.check_intersection_state()
             #self.traffic.test()
             
-
-            if (len(self.arrivals) > 0):
-                print "Arrival length, %d" % len(self.arrivals)
-                car = self.arrivals.pop()
+            # MATT IF STATEMENT
+            #        x  = commuication.arrival_dequeue 
+            #if (len(self.arrivals) > 0):
+                #print "Arrival length, %d" % len(self.arrivals)
+                #car = self.arrivals.pop()
 
                 current_car_index = -1
 
@@ -226,9 +242,9 @@ class IC_Main(object):
         # proceed queue in communications
         self.communication.proceed_enqueue(car)
 
-    def arrival_enqueue(self,car):
+    #def arrival_enqueue(self,car):
         # arrival queue in IC_Main
-        self.arrivals.appendleft(car)
+        #self.arrivals.appendleft(car)
 
 
     def check_intersection_state(self):
