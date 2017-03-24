@@ -192,6 +192,13 @@ printf(" fix \t\t %f \n",desired_change );
 	// imwrite(filename, cannyMat);
     // printf("%s\n",filename );
     // imwrite("../../lanecap_canny.png", cannyMat);
+	
+	//colour detection for detecting stop sign
+	Mat HSV;
+	Mat colorThreshold;
+	cvtColor(capMat,HSV,CV_BGR2HSV);
+	inRange(HSV,Scalar(100,15,15),Scalar(300,45,45),colorThreshold);
+	imwrite("../../colour_threshold_mask",colorThreshold);
 
 
     img_data->fix                   = desired_change;
