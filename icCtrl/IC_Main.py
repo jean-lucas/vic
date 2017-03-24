@@ -2,179 +2,18 @@
 from TrafficController import TrafficController
 from VehicleDetection import VehicleDetection
 from Car import Car
+from Communication import Communication 
 
-# module depenencies 
-from collections import deque
-import threading
 
-# pyBluez Bluetooth library 
-import bluetooth
+
 
 # Dependancies for debugging
 import time
 import random
 
-
-
-class Communication (object):
-   
-    '''
-        Communication module for VIC's intersction controller. The communication medium
-        is Bluetooth. This module requires pyBluez Bluetooth library to be installed on
-        the host machine. 
-
-        The module contains two main parts, a thread to listen for vehicle requests, 
-        and a thread to send vehicle requests. Car objects are created for each vehicle 
-        request and enqueued to an arrival queue in the IC_Main class. Proceed commands are 
-        extracted from Car objects dequeued from a proceed queue located within the 
-        Communication class. 
-
-        The listening port for the bluetooth recieve server is port 1.
-
-        The destination Bluetooth address and ports are retrieved from vehicle requests. 
-
-    ''' 
-
-
-    # bluetooth recieve listening port
-    RECIEVE_PORT = 1
-
-    # proceed message queues
-    proceeds = deque()
-    arrivals = deque()
-    
-    def __init__(self):
-
-        # receiving thread 
-        recieve_requests = threading.Thread(target=self.recieve, args=())
-        recieve_requests.start()
-
-        # sending thread 
-        send_commands = threading.Thread(target=self.send, args=())
-        send_commands.start()
-    
-    def recieve(self):
-        time.sleep(0.2)
-        
-        print "Bluetooth server waiting for connections on RFCOMM channel %d." % self.RECIEVE_PORT
-        print
-        
-        # Bluetooth socket using RFCOMM communication protocol 
-        server_sock = bluetooth.BluetoothSocket(bluetooth.RFCOMM )
-
-        # bind the host address to a particular port
-        server_sock.bind(('', self.RECIEVE_PORT))
-
-        # internal bluetooth buffer size
-        server_sock.listen(5)
-
-        # instantiate arrival queue --------------------------------------------------
-        #vehicle_arrivals = IC_Main()
-        
-        while True:
-
-            # accept a connecting socket
-            client_socket, client_bluetooth_ID = server_sock.accept()
-
-            # particulars to help in the debugging
-            print "Connection recieved from: ", client_bluetooth_ID[0],": connection accepted @", time.ctime()
-            print
-
-            # recieve vehicle request
-            client_message = client_socket.recv(1024)
-            client_socket.close()
-
-            # extract vehicle request contents
-            current_car = self.message_extraction(client_message, client_bluetooth_ID)
-                
-            # enqueue arrival buffer    
-            #vehicle_arrivals.arrival_enqueue(current_car)
-            # --------------------------------------------------------------------------------------
-            self.arrivals.appendleft(current_car)
-
-            client_socket.close()
-            
-
-
-    def send(self):
-        time.sleep(0.3)
-        print "Bluetooth client has started."
-
-        while True:
-
-            if (len(self.proceeds) > 0):
-                
-            
-                car = self.proceeds.pop()
-                port = getattr(car, 'port')
-                address = getattr(car, 'client_bluetooth_ID')
-                #print "Preparing to send to %s" % address
-                message_to_car = getattr(car, 'message_to_car')
-
-                try:
-                    #for testing purposes
-                    #time.sleep(1)
-                    send_socket = bluetooth.BluetoothSocket(bluetooth.RFCOMM)            
-                    send_socket.connect((address, int(port)))
-
-                    send_socket.send(message_to_car)
-                    send_socket.close()
-
-                except IOError:
-                    if (getattr(car, 'retransmission_number') < 3):
-                        test = getattr(car, 'retransmission_number')
-                        setattr(car, 'retransmission_number', test + 1)
-                        self.proceeds.append(car)
-                        print "Connection Failed, retransmission being attempted."
-                    else:
-                        print "Connection Failed, message dropped."
-                        print
-
-                        
-                
-            
-         
-    def message_extraction(self, client_message, client_bluetooth_ID ):
-
-        # assuming a string for now, elements separated by a comma
-        my_content = client_message.split(',')
-
-        
-        # message content check (to be implemented)
-        
-
-        return Car(my_content[0], client_bluetooth_ID[0], my_content[1], my_content[2], '')
-
-    
-    # called from IC main
-    def proceed_enqueue(self, car):
-        self.proceeds.appendleft(car)
-
-    # 
-    def arrival_deque(self):
-
-        if (len(self.arrivals)>0):
-            return self.arrivals.pop()
-        else:
-            return -1
-        
-        
-        
-
-
-
-
 # Main class
 class IC_Main(object):
 
-    traffic = TrafficController()
-    detect = VehicleDetection()
-    
-
-    intersection_cars = [0 for i in range(10)]
-    intersection_clear = False
-
-    #communication = Communication()
     
     
 
@@ -182,13 +21,32 @@ class IC_Main(object):
     # method to 
     def run(self):
 
+
+        traffic = TrafficController()
+        detect = VehicleDetection()
+    
+
+        intersection_cars = [0 for i in range(10)]
+        intersection_clear = False
+
+        # for testing purposes
+        test = 0
+        communication = Communication()
+
         
-        
-        test = 1
-        
-       
+        car = -1
+
+
+
         print "Welcome! VIC system has started."
         print
+        
+      
+        
+        #car = communication.arrival_deque()
+
+        
+        
 
         # main while loop in the IC controller
 
@@ -198,42 +56,51 @@ class IC_Main(object):
             #self.traffic.test()
             
             # MATT IF STATEMENT
-            #        x  = commuication.arrival_dequeue 
-            #if (len(self.arrivals) > 0):
+            
+            #if (self.arrivals) != -1):
                 #print "Arrival length, %d" % len(self.arrivals)
                 #car = self.arrivals.pop()
 
-            car = communication.arrival_dequeue
-            if (car != -1)
+            
+            
+            message_check = communication.arrival_check()
+            
+            if ((message_check == 1)):
+                
+                car = communication.arrival_deque()
+               
+                #print "Message count: %d. " % test
+                test+=1
+                #setattr(car, 'message_to_car',"GO %d" % test)
+                time.sleep(1)
+                start = 0
                 current_car_index = -1
 
-                for i in range(len(self.intersection_cars)):
-                     if(self.intersection_cars[i]==0):
-                         self.intersection_cars[i] = car
-                         current_car_index = i
-                         break
+                 for i in range(len(self.intersection_cars)):
+                      if(self.intersection_cars[i]==0):
+                          self.intersection_cars[i] = car
+                          current_car_index = i
+                          break
 
-                while (getattr(self.intersection_cars[current_car_index], 'proceed_now') == False):
-                     check_intersection_state()
+                 while (getattr(self.intersection_cars[current_car_index], 'proceed_now') == False):
+                      check_intersection_state()
 
-                     if(intersection_clear==True):
-                         setattr(self.intersection_cars[current_car_index],'proceed_now',True)
-                     else:
-                         for i in range(len(self.intersection_cars)):
-                             if(self.intersection_cars[i]!=0 and i!=current_car_index):
-                                 if(getattr(self.intersection_cars[current_car_index], 'direction_from')==getattr(self.intersection_cars[i], 'direction_from') or getattr(self.intersection_cars[current_car_index], 'direction_from')==getattr(self.intersection_cars[i], 'direction_to')):
-                                     setattr(self.intersection_cars[current_car_index],'proceed_now',True)
-                                     break   #this break only works if we have 2 cars on the track (more efficient)
+                      if(intersection_clear==True):
+                          setattr(self.intersection_cars[current_car_index],'proceed_now',True)
+                      else:
+                          for i in range(len(self.intersection_cars)):
+                              if(self.intersection_cars[i]!=0 and i!=current_car_index):
+                                  if(getattr(self.intersection_cars[current_car_index], 'direction_from')==getattr(self.intersection_cars[i], 'direction_from') or getattr(self.intersection_cars[current_car_index], 'direction_from')==getattr(self.intersection_cars[i], 'direction_to')):
+                                      setattr(self.intersection_cars[current_car_index],'proceed_now',True)
+                                      break   #this break only works if we have 2 cars on the track (more efficient)
 
                 #TODO here: if current car's proceed_now is true, then tell communication to send car a 'GO' message
                 communication.proceed_enqueue(car)
+               
 
 
                 
-##                test=test+1
-##                print "Message count: %d. " % test
-##                setattr(car, 'message_to_car',"GO %d" % test)
-##                #time.sleep(.01)
+               
                 
 
              
