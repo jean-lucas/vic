@@ -2,7 +2,9 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <pthread.h>
+#include <time.h>
 #include <sys/time.h>
+#include "pid.h"
 #include "opencv2/highgui/highgui.hpp"
 
 #include "car_ctrl.h"
@@ -11,7 +13,6 @@
 #include "vic_types.h"
 #include "vehicle_navigation.h"
 #include "vichw/vic_hardware.h"
-
 
 
 
@@ -25,9 +26,17 @@ cv::VideoCapture cap;
 
 
 
+double getMsTime() {
+    struct timeval t;
+    gettimeofday(&t, NULL);
+    double ms = (t.tv_sec)*1000 + (t.tv_usec)/1000;
+    return ms;
+}
+
+
 int main(int argc, char** argv) {
 
-    int start_on_bt_cmd =  0;
+    int quickstart_mode =  1;
 
 
     if (argc < 1) {
@@ -35,22 +44,27 @@ int main(int argc, char** argv) {
         return 0;
     }
 
-    int argval = atoi(argv[1]):
+    int argval = atoi(argv[1]);
 
     //test lane detect only
     if (argval == 1) {
         cap = test_camera();
+        printf("got cap\n");
+        double t1 = getMsTime();
 	    get_lane_statusv2(&img_data, &cap);
+        double t2 = getMsTime();
+        printf("time diff = %f\n\n", t2-t1);
 	    cap.release();
+        // init_navigation(0.150);
         return 0;
     }
 
     //start operating only from BT commands
-    else if (argval == 2 ) {
-        start_on_bt_cmd = 1;
+    if (argval == 2 ) {
+        quickstart_mode = 0;
     }
 
-    if (!init(start_on_bt_cmd)) {
+    if (!init(quickstart_mode)) {
         printf("failed to init\n");
         exit(0);
     
@@ -67,7 +81,7 @@ int init (int quickstart_mode) {
 
     unsigned int status = 1;
 
-    car_stat.current_speed           = 0.5;
+    car_stat.current_speed           = 0.52;
     car_stat.current_wheel_angle     = 0;
     car_stat.car_id                  = CAR_ID;
     car_stat.intersection_stop       = 0;
@@ -102,6 +116,7 @@ int init (int quickstart_mode) {
     pthread_t  server_thread;
     pthread_create(&server_thread, NULL, recvFromIC, (void*) sig_resp);
 
+    init_navigation(0.220);
 
     return status;
 }
@@ -112,20 +127,20 @@ int init (int quickstart_mode) {
 
 
 
-double getMsTime() {
-    struct timeval t;
-    gettimeofday(&t, NULL);
-    double ms = (t.tv_sec)*1000 + (t.tv_usec)/1000;
-    return ms;
-}
-
-
 
 int run() {
 
 	int valid = 1;
+    double t1 =0;
+    double last = 0;
+
+    struct timespec sleepTime;
+    sleepTime.tv_sec = 0;
+
+
 	while (valid) {
 
+        
         if (sig_resp->val != PROCEED_RESP) {
             if (sig_resp->val == EMERGENCY_STOP_RESP) {
                 printf("EMERGENCY_STOP_RESP\n");
@@ -133,12 +148,29 @@ int run() {
                 break;
             }
             //otherwise a stop signal has been called
-            pause();
+            pause_sys();
         }
 
         valid &= get_lane_statusv2(&img_data, &cap);
-        valid &= update_navigation(&img_data, &car_stat);
-           
+        //valid &= update_navigation(&img_data, &car_stat);
+
+
+        
+        t1 = getMsTime();
+        printf("updated nav @ t = %f \t time since last update = %f\n", t1, (t1-last));
+        if (t1 - last > 220) {
+            valid &= update_navigation(&img_data, &car_stat);
+        }
+        else {
+
+            sleepTime.tv_nsec =(t1 - last)*1000000 ;
+            printf("sleeping for %f\n", (t1 - last)*1000000 );
+            nanosleep(&sleepTime, NULL);
+            valid &= update_navigation(&img_data, &car_stat);
+        }
+
+        last = t1;
+        
 	}
 
 	return valid;
@@ -147,7 +179,7 @@ int run() {
 
 
 //when called, program will remain paused until necessary BT responses are received
-void pause() {
+void pause_sys() {
     printf("Entering pause state\n");
     while (sig_resp->val != PROCEED_RESP);
     printf("Leaving pause state\n");

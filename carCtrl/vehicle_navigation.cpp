@@ -6,33 +6,67 @@
 #include "vic_types.h"
 #include "vichw/servo_controller.h"
 #include "vichw/motor_speed_controller.h"
+#include "vichw/vic_hardware.h"
+#include "pid.h"
+
+struct pid_context pid;
+
+void init_navigation(double time_period) {
+	pid_tune(&pid, 2, 1, 0, DEFAULT_PWM, time_period);
+	pid_set_clipping(&pid, MAX_SERVO_PWN, MIN_SERVO_PWM);
+	pid_set(&pid, 0);
+}
 
 int update_navigation(struct ImageData *img,  struct CarStatus *car){
 
-	double speed_ok = 0;
-	double angle_ok = 0;
-
-	//Update steering angle
-	double fix_value = img->fix;
-	double new_angle = 0;
-
-	if (fix_value >= 20) {
-		new_angle = fix_value/5;
-	}
-
-	printf("setting new angle %f \n",new_angle);
+	// //Update steering angle
+	// double angle_diff  = img->avg_left_angle - img->avg_right_angle;
+	// double length_diff = img->left_line_length - img->right_line_length;
+	// double new_angle   = 0;
 
 
-	if(new_angle > MAX_ANGLE){
-		new_angle = MAX_ANGLE;
-	}else if(new_angle < -1*MAX_ANGLE){
-		new_angle = -1*MAX_ANGLE;
-	}
+	// if( abs(angle_diff) >= ANGLE_THRESHOLD) {
+	// 	new_angle = angle_diff;
+	// }
+
+	// else if( abs(angle_diff) < ANGLE_THRESHOLD && car->current_wheel_angle > 0) {
+	// 	new_angle = 0;
+	// }
+
+	// else{
+	// 	if (length_diff > LENGTH_THRESHOLD) {
+	// 		new_angle = CENTER_ADJUST_ANGLE;
+	// 	}
+	// 	else {
+	// 		new_angle = car->current_wheel_angle;
+	// 	}
+	// }
 
 
-	car->current_wheel_angle = new_angle;
-	vichw_set_angle(new_angle);
-	angle_ok = 1;
+	// if (new_angle > MAX_ANGLE) {
+	// 	new_angle = MAX_ANGLE;
+	// }
+	// else if (new_angle < -1*MAX_ANGLE) {
+	// 	new_angle = -1*MAX_ANGLE;
+	// }
+
+ // 	// 1100 max left
+ // 	// 1800 max right
+ // 	printf("angle diff \t\t %f\n", new_angle );
+
+ // 	//after calc
+
+ // 	new_angle = 1500 + 4*new_angle;
+ // 	printf("setting angle \t\t %f\n\n", new_angle );
+	// car->current_wheel_angle = new_angle;
+	// vichw_set_angle(new_angle);
+	
+
+
+	double angle_ok = 1;
+	double pwm = pid_update(&pid, img->fix);
+	vichw_set_angle(pwm);
+
 
 	//TODO: Update vehicle speed
 	double new_speed = 0;
@@ -42,10 +76,9 @@ int update_navigation(struct ImageData *img,  struct CarStatus *car){
 		new_speed = MAX_SPEED;
 	}
 
-//	printf("setting speed = %f \n\n", new_speed);
 	car->current_speed = new_speed;
 	vichw_set_speed(new_speed);
-	speed_ok = 1;
+	double speed_ok = 1;
 	
 	return speed_ok*angle_ok;
 }

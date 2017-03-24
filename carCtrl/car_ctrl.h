@@ -10,10 +10,10 @@ const int INNER_LANE = 1;
 
 
 //method declarations
-int init();
+int init(int quickstart_mode);
 int run();
 void cleanup();
-void pause();
+void pause_sys();
 
 
 

@@ -8,12 +8,19 @@
 #include <time.h>
 #include "laneDetect.h"
 
+
+#include <stdlib.h>
+#include <unistd.h>
+#include <pthread.h>
+#include <sys/time.h>
+
 using namespace cv;
 using namespace std;
 
 //this percentage will be cutoff from the top of the image
 const double CUT_OFF_HEIGHT_FACTOR = 0.50;
-const double LANE_WIDTH = 400.0;
+const double LANE_WIDTH = 550.0;
+const int DETECTED_PTS_MIN = 3;
 
 Point2d getMidpoint(Point2d a, Point2d b);
 double calculateAvgAngle(vector<Point2d> vec, Point2d center);
@@ -38,6 +45,12 @@ VideoCapture test_camera() {
         return cap;
 }
 
+double getMS() {
+    struct timeval t;
+    gettimeofday(&t, NULL);
+    double ms = (t.tv_sec)*1000 + (t.tv_usec)/1000;
+    return ms;
+}
 
 /*
 usage:
@@ -76,7 +89,7 @@ int get_lane_statusv2(struct ImageData *img_data, VideoCapture *cap) {
     }
 
 
-    Mat capMat, croppedMat, cannyMat, blurMat;
+    Mat capMat, croppedMat, cannyMat;
 
     //retrieve the current frame
     cap->read(capMat);
@@ -87,66 +100,95 @@ int get_lane_statusv2(struct ImageData *img_data, VideoCapture *cap) {
 	int new_height = size_uncropped.height*CUT_OFF_HEIGHT_FACTOR;
 	Rect cropRect = Rect(0,new_height, size_uncropped.width, size_uncropped.height-new_height);
 	croppedMat = capMat(cropRect);
-	blur(croppedMat,blurMat,Size(3,3));
+	blur(croppedMat,croppedMat,Size(3,3));
 
 
 
-    imwrite("../../lanecap_blur.png", blurMat);
+    // imwrite("../../lanecap_blur.png", croppedMat);  
 
-    Canny(blurMat, cannyMat, 50, 200, 3);
+    Canny(croppedMat, cannyMat, 150, 240, 3);
 
-        
-    cvtColor(cannyMat, cannyMat, CV_GRAY2BGR);
-    cannyMat.convertTo(cannyMat, CV_32F);
-    Size xx = cannyMat.size();
+    Size sz = cannyMat.size();
+    int half_wid = sz.width/2;
 
-    printf(" CannyMat Size (%d %d) \n", xx.width, xx.height);
-
-    //check positions - can rm after
-    circle(cannyMat,Point(0,0),10,Scalar(240,0,0));
-    circle(cannyMat,Point(xx.width,xx.height),10,Scalar(2,0,250));
-    
     int y = 0;
     int x = 0;
 
-    int numRows = xx.height;
+    int numRows = sz.height;
     int num_segs = numRows/20;
-    printf("num_segs = %d\n", num_segs );
-    printf("num_rows = %d\n", numRows );
-    Vec3f colour;
+    
+    unsigned char colour;
+    vector<Point2d> detected_pts_left;
+    vector<Point2d> detected_pts_right;
 
-    vector<Point2d> detectedPts;
-    //the value of j can start halfway of the width
-    for ( y = 0; y < xx.height; y += num_segs) {
-        printf(" On row %d\n", y );
-        for ( x = 0; x < xx.width; x++) {
-            printf(" On col %d\n", x );
-            colour = cannyMat.at<Vec3f>(Point(x,y));
+    // Only check the bottom 4/5ths of the image. This can be changed
+    for ( y = 3*sz.height/5; y < 4*sz.height/5; y+=2) {
 
-            if (colour.val[0] + colour.val[1] + colour.val[2] >= 350) {
-            	printf("detected at ( %d , %d )\n",x,y);
-				circle(cannyMat,Point(x,y),5,Scalar(240,0,100));
-				detectedPts.push_back(Point2d(x,y));
+        //get points on the right side
+        for ( x = half_wid; x < sz.width; x++) {
+            colour = cannyMat.at<unsigned char>(Point(x,y));
+            if (colour > 200) {
+				circle(cannyMat,Point(x,y),5,Scalar(100,0,90));
+				detected_pts_right.push_back(Point2d(x,y));
+                break;
+            }
+        }
+
+        //get points on the left side
+        for ( x = half_wid; x > 0; x--) {
+            colour = cannyMat.at<unsigned char>(Point(x,y));
+            if (colour > 200) {
+                circle(cannyMat,Point(x,y),5,Scalar(100,0,90));
+                detected_pts_left.push_back(Point2d(x,y));
+                break;
             }
         }
     }
 
-    double tot = 0;
-    double avgDistToLaneEdge = 0;
-    //get avg distance from center lane to detected pts
-    for (size_t k = 0; k < detectedPts.size(); k++) {
-    	tot += abs(detectedPts[k].x - xx.width/2.0);
+
+    double distLeft = 0, distRight = 0;
+    int left_count = detected_pts_left.size();
+    int right_count = detected_pts_right.size();
+
+
+    //if the # of detected pts on a given side is less than three
+    //consider an alternative approach.
+
+    int i = 0;
+    for (i = left_count-1; i >= 0; i--) {
+        distLeft += abs(detected_pts_left[i].x - half_wid);
+    }
+    for (i = right_count-1; i >= 0; i--) {
+        distRight += abs(detected_pts_right[i].x - half_wid);
     }
 
-    avgDistToLaneEdge = tot/detectedPts.size();
-    printf("avg distance is %f\n", avgDistToLaneEdge);
+    //get avg distances
+    distLeft = distLeft/left_count;
+    distRight = distRight/right_count;
 
-    //how much we want to move in order to center the car
     double desired_change = 0;
-    desired_change = abs(avgDistToLaneEdge - LANE_WIDTH/2.0);
-    printf("desired change is  %f\n", desired_change);
+    printf("desired left %f (%d)\t desired right %f (%d) \n",distLeft, left_count, distRight,right_count );
 
-	imwrite("../../lanecap_canny.png", cannyMat);
+    if (left_count > DETECTED_PTS_MIN && right_count > DETECTED_PTS_MIN ) {
+        desired_change = distRight - distLeft;
+    }
+    else if (left_count <= DETECTED_PTS_MIN) { //likely due to not seeing the left lane
+        desired_change = distRight - LANE_WIDTH/2.0;
+    }
+    else if (right_count <= DETECTED_PTS_MIN) {
+        desired_change = LANE_WIDTH/2.0 - distLeft;
+    }
+    else {
+        // weird? keep ongoing straight
+        desired_change = 0;
+    }
+
+   
+    // printf("desired change is  %f\n", desired_change);
+    char* filename = (char*)malloc(sizeof(char)*100);
+    sprintf(filename,"%s-%f%s","../../caps/lanecap_canny",getMS(),".png");
+	imwrite(filename, cannyMat);
+    // printf("%s\n",filename );
 
 
     img_data->fix                   = desired_change;
@@ -158,7 +200,7 @@ int get_lane_statusv2(struct ImageData *img_data, VideoCapture *cap) {
     img_data->intersection_detected = 0;
     img_data->obstacle_detected     = 0;
 
-    return 0;
+    return 1;
 }
 
 
@@ -173,190 +215,190 @@ int get_lane_statusv2(struct ImageData *img_data, VideoCapture *cap) {
 
 int get_lane_status(struct ImageData *img_data, VideoCapture *cap) {
 
-        if (!(cap->isOpened())) {
-                printf("failed to open capture\n");
-                cap->release();
-                return 0;
+    if (!(cap->isOpened())) {
+        printf("failed to open capture\n");
+        cap->release();
+        return 0;
+    }
+
+
+    Mat capMat, croppedMat, cannyMat, houghMat;
+
+    //retrieve the current frame
+    cap->read(capMat);
+
+
+    //cropping region
+    Size size_uncropped      = capMat.size();
+    int new_height = size_uncropped.height*CUT_OFF_HEIGHT_FACTOR;
+    Rect cropRect = Rect(0,new_height, size_uncropped.width, size_uncropped.height-new_height);
+    croppedMat = capMat(cropRect);
+
+
+
+
+    //finds edges in the capMatMath  via the Canny Edge detection algorithm, and puts
+    //result in cannyMat
+    //Canny(inputMay, outputMat, threshold_1, threshold_2, apertureSize, L2Gradient )
+    Canny(croppedMat, cannyMat, 50, 200, 3);
+//  Canny(capMat, cannyMat, 55, 110, 3);
+
+    //converts img in cannyMat to another colour space and puts it in houghMat
+    cvtColor(cannyMat, houghMat, CV_GRAY2BGR);
+
+
+
+    //basic information of the image
+    Size size = houghMat.size();
+    int imgHeight = size.height;
+    int imgWidth  = size.width;
+    Point2d camera_center_point = Point2d(imgWidth/2.0, imgHeight);
+
+
+
+    vector<Vec4f> lines;
+    vector<Point2d> leftLines; //left lines and right lines are based on the center point (CAREFUL!)
+    vector<Point2d> rightLines;
+
+
+    //(inputMat, output vector N x 4, distance resolution of accumulator, angle of accumulator, threshold, minLineLength, maxLineGap )
+    HoughLinesP(cannyMat, lines, 1, CV_PI/180,50,2,0);
+
+    //to  detect an intersection, we can look for the horizontal lines across the lane.
+    //for  this we can just compare the y values between two points of a line.
+    bool intersectionDetected = false;
+    double estimatedIntersectionDistance = 0;
+
+
+    //to detect an obstacle, we can try to find a countour  within our image, find the area of the given contour
+    //and thus determnine if an obstacle  is ahead or not.
+    //Instead of  using contours we can follow a similar approach to the intersection detection above
+    bool  obstacleDetected = false;
+
+    //draw detected lines
+    for (size_t i = 0; i < lines.size(); i++) {
+        Point2d a = Point2d(lines[i][0],lines[i][1]);
+        Point2d b = Point2d(lines[i][2],lines[i][3]);
+
+        // //if either Point A or Point B lie above the cutoff section we can ignore it.
+        // if (a.y <= imgHeight*CUT_OFF_HEIGHT_FACTOR || b.y <= imgHeight*CUT_OFF_HEIGHT_FACTOR) {
+        //      continue;
+        // }
+
+
+        Point2d mid = getMidpoint(a,b);
+
+
+        //if we have already detected an intersection in the current frame
+        //no point of continuing to check
+/*              if (!intersectionDetected) {
+                if ( fabs(a.y-b.y) <= STRAIGHT_LINE_THRESHOLD) {
+                        printf("found intersection at points (%f %f) to (%f %f)\n", a.x, a.y, b.x, b.y);
+                        circle(houghMat,a,10,Scalar(255,60,200));
+                        circle(houghMat,b,10,Scalar(255,60,200));
+                        intersectionDetected = true;
+                }
         }
 
-
-        Mat capMat, croppedMat, cannyMat, houghMat;
-
-        //retrieve the current frame
-        cap->read(capMat);
-
-
-        //cropping region
-        Size size_uncropped      = capMat.size();
-        int new_height = size_uncropped.height*CUT_OFF_HEIGHT_FACTOR;
-        Rect cropRect = Rect(0,new_height, size_uncropped.width, size_uncropped.height-new_height);
-        croppedMat = capMat(cropRect);
-
-
-
-
-        //finds edges in the capMatMath  via the Canny Edge detection algorithm, and puts
-        //result in cannyMat
-        //Canny(inputMay, outputMat, threshold_1, threshold_2, apertureSize, L2Gradient )
-        Canny(croppedMat, cannyMat, 50, 200, 3);
-//      Canny(capMat, cannyMat, 55, 110, 3);
-
-        //converts img in cannyMat to another colour space and puts it in houghMat
-        cvtColor(cannyMat, houghMat, CV_GRAY2BGR);
-
-
-
-        //basic information of the image
-        Size size = houghMat.size();
-        int imgHeight = size.height;
-        int imgWidth  = size.width;
-        Point2d camera_center_point = Point2d(imgWidth/2.0, imgHeight);
-
-
-
-        vector<Vec4f> lines;
-        vector<Point2d> leftLines; //left lines and right lines are based on the center point (CAREFUL!)
-        vector<Point2d> rightLines;
-
-
-        //(inputMat, output vector N x 4, distance resolution of accumulator, angle of accumulator, threshold, minLineLength, maxLineGap )
-        HoughLinesP(cannyMat, lines, 1, CV_PI/180,50,2,0);
-
-        //to  detect an intersection, we can look for the horizontal lines across the lane.
-        //for  this we can just compare the y values between two points of a line.
-        bool intersectionDetected = false;
-        double estimatedIntersectionDistance = 0;
-
-
-        //to detect an obstacle, we can try to find a countour  within our image, find the area of the given contour
-        //and thus determnine if an obstacle  is ahead or not.
-        //Instead of  using contours we can follow a similar approach to the intersection detection above
-        bool  obstacleDetected = false;
-
-        //draw detected lines
-        for (size_t i = 0; i < lines.size(); i++) {
-                Point2d a = Point2d(lines[i][0],lines[i][1]);
-                Point2d b = Point2d(lines[i][2],lines[i][3]);
-
-                // //if either Point A or Point B lie above the cutoff section we can ignore it.
-                // if (a.y <= imgHeight*CUT_OFF_HEIGHT_FACTOR || b.y <= imgHeight*CUT_OFF_HEIGHT_FACTOR) {
-                //      continue;
-                // }
-
-
-                Point2d mid = getMidpoint(a,b);
-
-
-                //if we have already detected an intersection in the current frame
-                //no point of continuing to check
-/*              if (!intersectionDetected) {
-                        if ( fabs(a.y-b.y) <= STRAIGHT_LINE_THRESHOLD) {
-                                printf("found intersection at points (%f %f) to (%f %f)\n", a.x, a.y, b.x, b.y);
-                                circle(houghMat,a,10,Scalar(255,60,200));
-                                circle(houghMat,b,10,Scalar(255,60,200));
-                                intersectionDetected = true;
-                        }
-                }
-
-                else if (estimatedIntersectionDistance <= 0) {
-                        estimatedIntersectionDistance = getDistanceToLine(mid, camera_center_point);
-                        printf("estimatedDistance to intersection = %f pixels\n", estimatedIntersectionDistance);
-                }
+        else if (estimatedIntersectionDistance <= 0) {
+                estimatedIntersectionDistance = getDistanceToLine(mid, camera_center_point);
+                printf("estimatedDistance to intersection = %f pixels\n", estimatedIntersectionDistance);
+        }
 
 */
-                //if an end-point of a line plus the midpoint are to one side of the img center,
-                // than consider which side it is on,
-                //else IGNORE THE LINE (may need to fix this)
-                if (mid.x <= camera_center_point.x && (a.x <= camera_center_point.x || b.x <= camera_center_point.x)) {
-                        leftLines.push_back(mid);
-                }
+        //if an end-point of a line plus the midpoint are to one side of the img center,
+        // than consider which side it is on,
+        //else IGNORE THE LINE (may need to fix this)
+        if (mid.x <= camera_center_point.x && (a.x <= camera_center_point.x || b.x <= camera_center_point.x)) {
+            leftLines.push_back(mid);
+        }
 
-                else if (mid.x >= camera_center_point.x && (a.x >= camera_center_point.x || b.x >= camera_center_point.x)) {
-                        rightLines.push_back(mid);
-                }
-
-
+        else if (mid.x >= camera_center_point.x && (a.x >= camera_center_point.x || b.x >= camera_center_point.x)) {
+            rightLines.push_back(mid);
         }
 
 
+    }
 
-        double theta1, theta2;
-        theta1 = calculateAvgAngle(leftLines, camera_center_point)*(180.0/CV_PI);
-        theta2 = calculateAvgAngle(rightLines,camera_center_point)*(180.0/CV_PI);
 
-        double avgLeftSize, avgRightSize;
-        avgLeftSize = calculateAvgLineSize(leftLines, camera_center_point);
-        avgRightSize = calculateAvgLineSize(rightLines, camera_center_point);
+
+    double theta1, theta2;
+    theta1 = calculateAvgAngle(leftLines, camera_center_point)*(180.0/CV_PI);
+    theta2 = calculateAvgAngle(rightLines,camera_center_point)*(180.0/CV_PI);
+
+    double avgLeftSize, avgRightSize;
+    avgLeftSize = calculateAvgLineSize(leftLines, camera_center_point);
+    avgRightSize = calculateAvgLineSize(rightLines, camera_center_point);
 
 //      printf("Theta1: %f \tTheta2: %f \n", calculateAvgAngle(leftLines, camera_center_point), theta2);
-        //printf("leftLine: %f \trightLine: %f \n",avgLeftSize, avgRightSize);
+    //printf("leftLine: %f \trightLine: %f \n",avgLeftSize, avgRightSize);
 
-        img_data->avg_left_angle        = theta1;
-        img_data->avg_right_angle       = theta2;
-        img_data->left_line_length      = avgLeftSize;
-        img_data->right_line_length     = avgRightSize;
-        img_data->intersection_distance = estimatedIntersectionDistance;
-        img_data->intersection_detected = intersectionDetected;
-        img_data->obstacle_detected     = obstacleDetected;
+    img_data->avg_left_angle        = theta1;
+    img_data->avg_right_angle       = theta2;
+    img_data->left_line_length      = avgLeftSize;
+    img_data->right_line_length     = avgRightSize;
+    img_data->intersection_distance = estimatedIntersectionDistance;
+    img_data->intersection_detected = intersectionDetected;
+    img_data->obstacle_detected     = obstacleDetected;
 
 
 //      imshow("capMat", capMat);
 //      imshow("Canny", cannyMat);
 //      imshow("Hough", houghMat);
 //      waitKey();
-        return 1;
+    return 1;
 }
 
 
 
 
 double calculateAvgLineSize(vector<Point2d> vec, Point2d center) {
-        double current=0;
-        int n = vec.size();
+    double current=0;
+    int n = vec.size();
 
-        if (n < 1) return 0;
+    if (n < 1) return 0;
 
-        for (int i = 0; i < n; i++) {
-                current += sqrt(pow(vec[i].x - center.x, 2) + pow(vec[i].y - center.y, 2));
-        }
-        return current/(double)n;
+    for (int i = 0; i < n; i++) {
+        current += sqrt(pow(vec[i].x - center.x, 2) + pow(vec[i].y - center.y, 2));
+    }
+    return current/(double)n;
 }
 
 double calculateAvgAngle(vector<Point2d> vec, Point2d center) {
-        double currAngle = 0, top = 0, bot = 0, frac = 0, temp = 0;
-        int n = vec.size();
+    double currAngle = 0, top = 0, bot = 0, frac = 0, temp = 0;
+    int n = vec.size();
 
-        if (n < 1) return 0;
+    if (n < 1) return 0;
 
-        for (int i = 0; i < n; i++) {
-                top = fabs(vec[i].x - center.x);
-                bot = sqrt( pow(vec[i].x - center.x, 2) + pow(vec[i].y - center.y, 2));
-                frac = top/bot;
-                if (frac < -1.0) {
-                        frac = -1.0;
-                }
-                else if (frac > 1.0) {
-                        frac = 1.0;
-                }
-                temp = acos(frac);
-                if (temp <= 3.2) {
-                        currAngle = currAngle + temp;
-                }
+    for (int i = 0; i < n; i++) {
+        top = fabs(vec[i].x - center.x);
+        bot = sqrt( pow(vec[i].x - center.x, 2) + pow(vec[i].y - center.y, 2));
+        frac = top/bot;
+        if (frac < -1.0) {
+            frac = -1.0;
         }
-        return currAngle/((double) n);
+        else if (frac > 1.0) {
+            frac = 1.0;
+        }
+        temp = acos(frac);
+        if (temp <= 3.2) {
+            currAngle = currAngle + temp;
+        }
+}
+    return currAngle/((double) n);
 
 }
 
 
 Point2d getMidpoint(Point2d a, Point2d b) {
-        double midX = (a.x + b.x)/2.0;
-        double midY = (a.y + b.y)/2.0;
-        return Point2d(midX, midY);
+    double midX = (a.x + b.x)/2.0;
+    double midY = (a.y + b.y)/2.0;
+    return Point2d(midX, midY); 
 }
 
 double getDistanceToLine(Point2d a, Point2d b) {
-        double distance = sqrt(pow(  a.x - b.x, 2) + pow(  a.y - b.y, 2));
-        return distance;
+    double distance = sqrt(pow(  a.x - b.x, 2) + pow(  a.y - b.y, 2));
+    return distance;
 }
 
 
@@ -370,117 +412,117 @@ double getDistanceToLine(Point2d a, Point2d b) {
 int capture_lane(VideoCapture *cap) {
 
 
-        if (!(cap->isOpened())) {
-                printf("failed to open capture\n");
-                cap->release();
-                return 0;
+    if (!(cap->isOpened())) {
+        printf("failed to open capture\n");
+        cap->release();
+        return 0;
+    }
+
+
+    Mat capMat, croppedMat, cannyMat, houghMat;
+
+    //retrieve the current frame
+    cap->read(capMat);
+
+    //cropping region
+    Size size_uncropped      = capMat.size();
+    int new_height = size_uncropped.height*CUT_OFF_HEIGHT_FACTOR;
+    Rect cropRect = Rect(0,new_height, size_uncropped.width, size_uncropped.height-new_height);
+    croppedMat = capMat(cropRect);
+
+
+
+    //finds edges in the capMatMath  via the Canny Edge detection algorithm, and puts
+    //result in cannyMat
+    //Canny(inputMay, outputMat, threshold_1, threshold_2, apertureSize, L2Gradient )
+    Canny(croppedMat, cannyMat, 50, 200, 3);
+//  Canny(capMat, cannyMat, 55, 110, 3);
+
+    //converts img in cannyMat to another colour space and puts it in houghMat
+    cvtColor(cannyMat, houghMat, CV_GRAY2BGR);
+
+
+
+    //basic information of the image
+    Size size = houghMat.size();
+    int imgHeight = size.height;
+    int imgWidth  = size.width;
+    Point2d camera_center_point = Point2d(imgWidth/2.0, imgHeight);
+
+
+
+
+    vector<Vec4f> lines;
+    vector<Point2d> leftLines; //left lines and right lines are based on the center point (CAREFUL!)
+    vector<Point2d> rightLines;
+
+
+
+    //(inputMat, output vector N x 4, distance resolution of accumulator, angle of accumulator, threshold, minLineLength, maxLineGap )
+    HoughLinesP(cannyMat, lines, 1, CV_PI/180,50,2,0);
+
+
+    //to  detect an intersection, we can look for the horizontal lines across the lane.
+    //for  this we can just compare the y values between two points of a line.
+    bool intersectionDetected = false;
+    double estimatedIntersectionDistance = 0;
+
+    //to detect an obstacle, we can try to find a countour  within our image, find the area of the given contour
+    //and thus determnine if an obstacle  is ahead or not.
+    //Instead of  using contours we can follow a similar approach to the intersection detection above
+    bool  obstacleDetected = false;
+
+
+    //draw detected lines
+    for (size_t i = 0; i < lines.size(); i++) {
+        Point2d a = Point2d( lines[i][0], lines[i][1]);
+        Point2d b = Point2d( lines[i][2], lines[i][3]);
+
+
+        Point2d mid = getMidpoint(a,b);
+
+        //if we have already detected an intersection in the current frame
+        //no point of continuing to check
+        if (!intersectionDetected) {
+            if ( fabs(a.y-b.y) <= STRAIGHT_LINE_THRESHOLD) {
+                printf("found intersection at points (%f %f) to (%f %f)\n", a.x, a.y, b.x, b.y);
+                circle(houghMat,a,10,Scalar(255,60,200));
+                circle(houghMat,b,10,Scalar(255,60,200));
+                line(houghMat, a,b, Scalar(255,50,215),5,8);
+                intersectionDetected = true;
+            }
+        }
+
+        else if (estimatedIntersectionDistance <= 0) {
+                estimatedIntersectionDistance = getDistanceToLine(mid, camera_center_point);
+                printf("estimatedDistance to intersection = %f pixels\n", estimatedIntersectionDistance);
         }
 
 
-        Mat capMat, croppedMat, cannyMat, houghMat;
+        //if an end-point of a line plus the midpoint are to one side of the img center,
+        // than consider which side it is on,
+        //else IGNORE THE LINE (may need to fix this)
+        if (mid.x <= camera_center_point.x && (a.x <= camera_center_point.x || b.x <= camera_center_point.x)) {
+                leftLines.push_back(mid);
+        }
 
-        //retrieve the current frame
-        cap->read(capMat);
-
-        //cropping region
-        Size size_uncropped      = capMat.size();
-        int new_height = size_uncropped.height*CUT_OFF_HEIGHT_FACTOR;
-        Rect cropRect = Rect(0,new_height, size_uncropped.width, size_uncropped.height-new_height);
-        croppedMat = capMat(cropRect);
-
-
-
-        //finds edges in the capMatMath  via the Canny Edge detection algorithm, and puts
-        //result in cannyMat
-        //Canny(inputMay, outputMat, threshold_1, threshold_2, apertureSize, L2Gradient )
-        Canny(croppedMat, cannyMat, 50, 200, 3);
-//      Canny(capMat, cannyMat, 55, 110, 3);
-
-        //converts img in cannyMat to another colour space and puts it in houghMat
-        cvtColor(cannyMat, houghMat, CV_GRAY2BGR);
+        else if (mid.x >= camera_center_point.x && (a.x >= camera_center_point.x || b.x >= camera_center_point.x)) {
+                rightLines.push_back(mid);
+        }
+        else {
+                printf("ignoring a line...\n");
+        }
 
 
+        circle(houghMat,mid,5,Scalar(255,100,0));
 
-        //basic information of the image
-        Size size = houghMat.size();
-        int imgHeight = size.height;
-        int imgWidth  = size.width;
-        Point2d camera_center_point = Point2d(imgWidth/2.0, imgHeight);
+        line(houghMat, mid, camera_center_point, Scalar(0,255,0),1,8);
+        line(houghMat, a, b, Scalar(0,0,255),3,8);
 
 
+    }
 
-
-                vector<Vec4f> lines;
-                vector<Point2d> leftLines; //left lines and right lines are based on the center point (CAREFUL!)
-                vector<Point2d> rightLines;
-
-
-
-                //(inputMat, output vector N x 4, distance resolution of accumulator, angle of accumulator, threshold, minLineLength, maxLineGap )
-                HoughLinesP(cannyMat, lines, 1, CV_PI/180,50,2,0);
-
-
-                //to  detect an intersection, we can look for the horizontal lines across the lane.
-                //for  this we can just compare the y values between two points of a line.
-                bool intersectionDetected = false;
-                double estimatedIntersectionDistance = 0;
-
-                //to detect an obstacle, we can try to find a countour  within our image, find the area of the given contour
-                //and thus determnine if an obstacle  is ahead or not.
-                //Instead of  using contours we can follow a similar approach to the intersection detection above
-                bool  obstacleDetected = false;
-
-
-                //draw detected lines
-                for (size_t i = 0; i < lines.size(); i++) {
-                        Point2d a = Point2d( lines[i][0], lines[i][1]);
-                        Point2d b = Point2d( lines[i][2], lines[i][3]);
-
-
-                        Point2d mid = getMidpoint(a,b);
-
-                        //if we have already detected an intersection in the current frame
-                        //no point of continuing to check
-                        if (!intersectionDetected) {
-                                if ( fabs(a.y-b.y) <= STRAIGHT_LINE_THRESHOLD) {
-                                        printf("found intersection at points (%f %f) to (%f %f)\n", a.x, a.y, b.x, b.y);
-                                        circle(houghMat,a,10,Scalar(255,60,200));
-                                        circle(houghMat,b,10,Scalar(255,60,200));
-                                        line(houghMat, a,b, Scalar(255,50,215),5,8);
-                                        intersectionDetected = true;
-                                }
-                        }
-
-                        else if (estimatedIntersectionDistance <= 0) {
-                                estimatedIntersectionDistance = getDistanceToLine(mid, camera_center_point);
-                                printf("estimatedDistance to intersection = %f pixels\n", estimatedIntersectionDistance);
-                        }
-
-
-                        //if an end-point of a line plus the midpoint are to one side of the img center,
-                        // than consider which side it is on,
-                        //else IGNORE THE LINE (may need to fix this)
-                        if (mid.x <= camera_center_point.x && (a.x <= camera_center_point.x || b.x <= camera_center_point.x)) {
-                                leftLines.push_back(mid);
-                        }
-
-                        else if (mid.x >= camera_center_point.x && (a.x >= camera_center_point.x || b.x >= camera_center_point.x)) {
-                                rightLines.push_back(mid);
-                        }
-                        else {
-                                printf("ignoring a line...\n");
-                        }
-
-
-                        circle(houghMat,mid,5,Scalar(255,100,0));
-
-                        line(houghMat, mid, camera_center_point, Scalar(0,255,0),1,8);
-                        line(houghMat, a, b, Scalar(0,0,255),3,8);
-
-
-                }
-
-                imwrite("../../lanecap_canny.png", cannyMat);
-                imwrite("../../lanecap.png", houghMat);
-                return 0;
+    imwrite("../../lanecap_canny.png", cannyMat);
+    imwrite("../../lanecap.png", houghMat);
+    return 0;
 }
