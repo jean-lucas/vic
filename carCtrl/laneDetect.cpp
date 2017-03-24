@@ -189,6 +189,13 @@ int get_lane_statusv2(struct ImageData *img_data, VideoCapture *cap) {
     sprintf(filename,"%s-%f%s","../../caps/lanecap_canny",getMS(),".png");
 	imwrite(filename, cannyMat);
     // printf("%s\n",filename );
+	
+	//colour detection for detecting stop sign
+	Mat HSV;
+	Mat colorThreshold;
+	cvtColor(capMat,HSV,CV_BGR2HSV);
+	inRange(HSV,Scalar(100,15,15),Scalar(300,45,45),colorThreshold);
+	imshow("colour threshold mask",colorThreshold);
 
 
     img_data->fix                   = desired_change;
