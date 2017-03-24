@@ -12,61 +12,57 @@
 struct pid_context pid;
 
 void init_navigation(double time_period) {
-	pid_tune(&pid, 2, 10000, 0, DEFAULT_PWM, time_period);
+	pid_tune(&pid, 2, 10, 0, DEFAULT_PWM, time_period);
 	pid_set_clipping(&pid, MAX_SERVO_PWN, MIN_SERVO_PWM);
 	pid_set(&pid, 0);
 }
 
 int update_navigation(struct ImageData *img,  struct CarStatus *car){
 
-	// //Update steering angle
-	// double angle_diff  = img->avg_left_angle - img->avg_right_angle;
-	// double length_diff = img->left_line_length - img->right_line_length;
-	// double new_angle   = 0;
+	double angle_diff  = img->avg_left_angle - img->avg_right_angle;
+	double length_diff = img->left_line_length - img->right_line_length;
+	double new_angle   = 0;
 
 
-	// if( abs(angle_diff) >= ANGLE_THRESHOLD) {
-	// 	new_angle = angle_diff;
-	// }
+	if( abs(angle_diff) >= ANGLE_THRESHOLD) {
+		new_angle = angle_diff/3.0;
+	}
 
-	// else if( abs(angle_diff) < ANGLE_THRESHOLD && car->current_wheel_angle > 0) {
-	// 	new_angle = 0;
-	// }
+	else if( abs(angle_diff) < ANGLE_THRESHOLD && car->current_wheel_angle > 0) {
+		new_angle = 0;
+	}
+	
+	else{
+		if (length_diff > LENGTH_THRESHOLD) {
+			new_angle = CENTER_ADJUST_ANGLE;
+		}
+		else {
+			new_angle = car->current_wheel_angle;
+		}
+	}
 
-	// else{
-	// 	if (length_diff > LENGTH_THRESHOLD) {
-	// 		new_angle = CENTER_ADJUST_ANGLE;
-	// 	}
-	// 	else {
-	// 		new_angle = car->current_wheel_angle;
-	// 	}
-	// }
+	if ( abs(new_angle - car->current_wheel_angle) > 35) {
+		printf("\t\t\t\t\thmm\n");
+		new_angle = car->current_wheel_angle;
+	}
 
-
-	// if (new_angle > MAX_ANGLE) {
-	// 	new_angle = MAX_ANGLE;
-	// }
-	// else if (new_angle < -1*MAX_ANGLE) {
-	// 	new_angle = -1*MAX_ANGLE;
-	// }
-
- // 	// 1100 max left
- // 	// 1800 max right
- // 	printf("angle diff \t\t %f\n", new_angle );
-
- // 	//after calc
-
- // 	new_angle = 1500 + 4*new_angle;
- // 	printf("setting angle \t\t %f\n\n", new_angle );
-	// car->current_wheel_angle = new_angle;
-	// vichw_set_angle(new_angle);
 	
 
+	printf("setting angle= \t\t%f\n", new_angle);
+	car->current_wheel_angle = new_angle;
+
+	if(new_angle > MAX_ANGLE){
+		new_angle = MAX_ANGLE;
+	}else if(new_angle < -1*MAX_ANGLE){
+		new_angle = -1*MAX_ANGLE;
+	}
+
+	vichw_set_angle(new_angle);
 
 	double angle_ok = 1;
-	double pwm = pid_update(&pid, img->fix);
-	printf("setting pwm \t\t %f\n\n", pwm );
-	vichw_set_angle(pwm);
+	// double pwm = pid_update(&pid, -1*new_angle);
+	// printf("setting pwm \t\t %f\n\n", pwm );
+	// vichw_set_angle2(pwm);
 
 
 	//TODO: Update vehicle speed

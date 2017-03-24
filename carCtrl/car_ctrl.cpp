@@ -21,7 +21,6 @@ CarStatus car_stat;
 ImageData img_data;
 SignalResponse *sig_resp;
 cv::VideoCapture cap;
-int make_time = 220;
 
 
 
@@ -50,13 +49,8 @@ int main(int argc, char** argv) {
     //test lane detect only
     if (argval == 1) {
         cap = test_camera();
-        printf("got cap\n");
-        double t1 = getMsTime();
-	    get_lane_statusv2(&img_data, &cap);
-        double t2 = getMsTime();
-        printf("time diff = %f\n\n", t2-t1);
+	    capture_lane(&cap);
 	    cap.release();
-        // init_navigation(0.150);
         return 0;
     }
 
@@ -86,7 +80,7 @@ int init (int quickstart_mode) {
 
     unsigned int status = 1;
 
-    car_stat.current_speed           = 0.51;
+    car_stat.current_speed           = 0.52;
     car_stat.current_wheel_angle     = 0;
     car_stat.car_id                  = CAR_ID;
     car_stat.intersection_stop       = 0;
@@ -136,26 +130,20 @@ int init (int quickstart_mode) {
 void* do_stuff() {
 
 	int valid = 1;
-    double t1 =0;
-    double last = 0;
-
-    struct timespec sleepTime;
-    sleepTime.tv_sec = 0;
-
-    valid = get_lane_statusv2(&img_data, &cap);
+    valid = get_lane_status(&img_data, &cap);
     valid = update_navigation(&img_data, &car_stat);
 }
 
 void* run () {
     
-    gpioSetTimerFunc(0,make_time, (gpioTimerFunc_t) do_stuff);
+    gpioSetTimerFunc(0, 260, (gpioTimerFunc_t) do_stuff);
 
     while (sig_resp->val == PROCEED_RESP);
 
     if (sig_resp->val != PROCEED_RESP) {
         if (sig_resp->val == EMERGENCY_STOP_RESP) {
             printf("EMERGENCY_STOP_RESP\n");
-            gpioSetTimerFunc(0,make_time, (gpioTimerFunc_t) NULL);
+            gpioSetTimerFunc(0, 200, (gpioTimerFunc_t) NULL);
             
         }
         else {
