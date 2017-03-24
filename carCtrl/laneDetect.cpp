@@ -195,7 +195,7 @@ printf(" fix \t\t %f \n",desired_change );
 	
 	//colour detection for detecting stop sign
 	Mat maskMat
-	inRange(capMat,Scalar(15,100,15),Scalar(45,255,45),maskMat);
+	inRange(capMat,Scalar(15,15,100),Scalar(45,45,255),maskMat);
 	imshow("colour threshold mask",maskMat);
 
 
