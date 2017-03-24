@@ -191,11 +191,9 @@ int get_lane_statusv2(struct ImageData *img_data, VideoCapture *cap) {
     // printf("%s\n",filename );
 	
 	//colour detection for detecting stop sign
-	Mat HSV;
-	Mat colorThreshold;
-	cvtColor(capMat,HSV,CV_BGR2HSV);
-	inRange(HSV,Scalar(100,15,15),Scalar(300,45,45),colorThreshold);
-	imshow("colour threshold mask",colorThreshold);
+	Mat maskMat
+	inRange(capMat,Scalar(15,100,15),Scalar(45,255,45),maskMat);
+	imshow("colour threshold mask",maskMat);
 
 
     img_data->fix                   = desired_change;
