@@ -20,6 +20,7 @@ struct ImageData {
 	double intersection_distance;
 	int intersection_detected;
 	int obstacle_detected;
+	int go_slow;
 };
 
 struct CarStatus {

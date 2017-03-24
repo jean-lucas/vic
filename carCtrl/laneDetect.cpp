@@ -88,6 +88,7 @@ int get_lane_statusv2(struct ImageData *img_data, VideoCapture *cap) {
             return 0;
     }
 
+    int go_slow = 0;
 
     Mat capMat, croppedMat, cannyMat;
 
@@ -122,7 +123,7 @@ int get_lane_statusv2(struct ImageData *img_data, VideoCapture *cap) {
     vector<Point2d> detected_pts_right;
 
     // Only check the bottom 4/5ths of the image. This can be changed
-    for ( y = 3*sz.height/5; y < 4*sz.height/5; y+=2) {
+    for ( y = 2*sz.height/5; y < 3*sz.height/5; y+=1) {
 
         //get points on the right side
         for ( x = half_wid; x < sz.width; x++) {
@@ -172,23 +173,25 @@ int get_lane_statusv2(struct ImageData *img_data, VideoCapture *cap) {
     if (left_count > DETECTED_PTS_MIN && right_count > DETECTED_PTS_MIN ) {
         desired_change = distRight - distLeft;
     }
-    else if (left_count <= DETECTED_PTS_MIN) { //likely due to not seeing the left lane
+    else if (left_count <= DETECTED_PTS_MIN && right_count > DETECTED_PTS_MIN) { //likely due to not seeing the left lane
         desired_change = distRight - LANE_WIDTH/2.0;
     }
-    else if (right_count <= DETECTED_PTS_MIN) {
+    else if (right_count <= DETECTED_PTS_MIN && left_count > DETECTED_PTS_MIN) {
         desired_change = LANE_WIDTH/2.0 - distLeft;
     }
     else {
-        // weird? keep ongoing straight
+        // weird? keep ongoing straight and slow down
         desired_change = 0;
+        go_slow = 1;
     }
-
+printf(" fix \t\t %f \n",desired_change );
    
     // printf("desired change is  %f\n", desired_change);
-    char* filename = (char*)malloc(sizeof(char)*100);
-    sprintf(filename,"%s-%f%s","../../caps/lanecap_canny",getMS(),".png");
-	imwrite(filename, cannyMat);
+    // char* filename = (char*)malloc(sizeof(char)*100);
+    // sprintf(filename,"%s-%f%s","../../caps/lanecap_canny",getMS(),".png");
+	// imwrite(filename, cannyMat);
     // printf("%s\n",filename );
+    // imwrite("../../lanecap_canny.png", cannyMat);
 	
 	//colour detection for detecting stop sign
 	Mat maskMat
@@ -204,6 +207,7 @@ int get_lane_statusv2(struct ImageData *img_data, VideoCapture *cap) {
     img_data->intersection_distance = 0;
     img_data->intersection_detected = 0;
     img_data->obstacle_detected     = 0;
+    img_data->go_slow             = go_slow;
 
     return 1;
 }

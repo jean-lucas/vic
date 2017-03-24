@@ -12,7 +12,7 @@
 struct pid_context pid;
 
 void init_navigation(double time_period) {
-	pid_tune(&pid, 2, 1, 0, DEFAULT_PWM, time_period);
+	pid_tune(&pid, 2, 10000, 0, DEFAULT_PWM, time_period);
 	pid_set_clipping(&pid, MAX_SERVO_PWN, MIN_SERVO_PWM);
 	pid_set(&pid, 0);
 }
@@ -65,12 +65,20 @@ int update_navigation(struct ImageData *img,  struct CarStatus *car){
 
 	double angle_ok = 1;
 	double pwm = pid_update(&pid, img->fix);
+	printf("setting pwm \t\t %f\n\n", pwm );
 	vichw_set_angle(pwm);
 
 
 	//TODO: Update vehicle speed
 	double new_speed = 0;
 
+	if (img->go_slow) {
+		new_speed = car->current_speed/1.2;
+	}
+	else {
+		new_speed = 0.5;
+	}
+	
 	new_speed = car->current_speed;
 	if(new_speed > MAX_SPEED){
 		new_speed = MAX_SPEED;

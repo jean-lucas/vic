@@ -81,7 +81,7 @@ int init (int quickstart_mode) {
 
     unsigned int status = 1;
 
-    car_stat.current_speed           = 0.52;
+    car_stat.current_speed           = 0.51;
     car_stat.current_wheel_angle     = 0;
     car_stat.car_id                  = CAR_ID;
     car_stat.intersection_stop       = 0;
@@ -152,9 +152,9 @@ int run() {
         }
 
         valid &= get_lane_statusv2(&img_data, &cap);
-        //valid &= update_navigation(&img_data, &car_stat);
+        valid &= update_navigation(&img_data, &car_stat);
 
-
+/*
         
         t1 = getMsTime();
         printf("updated nav @ t = %f \t time since last update = %f\n", t1, (t1-last));
@@ -170,7 +170,7 @@ int run() {
         }
 
         last = t1;
-        
+  */      
 	}
 
 	return valid;
