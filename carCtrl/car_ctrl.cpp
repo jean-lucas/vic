@@ -4,9 +4,10 @@
 #include <pthread.h>
 #include <time.h>
 #include <sys/time.h>
-#include "pid.h"
+#include <pigpio.h>
 #include "opencv2/highgui/highgui.hpp"
 
+#include "pid.h"
 #include "car_ctrl.h"
 #include "laneDetect.h"
 #include "carComms.h"
@@ -20,7 +21,7 @@ CarStatus car_stat;
 ImageData img_data;
 SignalResponse *sig_resp;
 cv::VideoCapture cap;
-
+int make_time = 220;
 
 
 
@@ -71,6 +72,10 @@ int main(int argc, char** argv) {
     }
 
     run();
+
+    
+
+
     cleanup();
     return 0;
 }
@@ -128,7 +133,7 @@ int init (int quickstart_mode) {
 
 
 
-int run() {
+void* do_stuff() {
 
 	int valid = 1;
     double t1 =0;
@@ -137,45 +142,36 @@ int run() {
     struct timespec sleepTime;
     sleepTime.tv_sec = 0;
 
+    valid = get_lane_statusv2(&img_data, &cap);
+    valid = update_navigation(&img_data, &car_stat);
+}
 
-	while (valid) {
+void* run () {
+    
+    gpioSetTimerFunc(0,make_time, (gpioTimerFunc_t) do_stuff);
 
-        
-        if (sig_resp->val != PROCEED_RESP) {
-            if (sig_resp->val == EMERGENCY_STOP_RESP) {
-                printf("EMERGENCY_STOP_RESP\n");
-                valid = 0;
-                break;
-            }
+    while (sig_resp->val == PROCEED_RESP);
+
+    if (sig_resp->val != PROCEED_RESP) {
+        if (sig_resp->val == EMERGENCY_STOP_RESP) {
+            printf("EMERGENCY_STOP_RESP\n");
+            gpioSetTimerFunc(0,make_time, (gpioTimerFunc_t) NULL);
+            
+        }
+        else {
             //otherwise a stop signal has been called
             pause_sys();
         }
+    }   
 
-        valid &= get_lane_statusv2(&img_data, &cap);
-        valid &= update_navigation(&img_data, &car_stat);
 
-/*
-        
-        t1 = getMsTime();
-        printf("updated nav @ t = %f \t time since last update = %f\n", t1, (t1-last));
-        if (t1 - last > 220) {
-            valid &= update_navigation(&img_data, &car_stat);
-        }
-        else {
-
-            sleepTime.tv_nsec =(t1 - last)*1000000 ;
-            printf("sleeping for %f\n", (t1 - last)*1000000 );
-            nanosleep(&sleepTime, NULL);
-            valid &= update_navigation(&img_data, &car_stat);
-        }
-
-        last = t1;
-  */      
-	}
-
-	return valid;
 
 }
+
+
+
+
+
 
 
 //when called, program will remain paused until necessary BT responses are received

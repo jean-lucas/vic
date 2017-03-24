@@ -96,6 +96,7 @@ int get_lane_statusv2(struct ImageData *img_data, VideoCapture *cap) {
     cap->read(capMat);
 
 
+    // imwrite("../../cap.png", capMat);  
     //cropping region
 	Size size_uncropped = capMat.size();
 	int new_height = size_uncropped.height*CUT_OFF_HEIGHT_FACTOR;
@@ -105,7 +106,6 @@ int get_lane_statusv2(struct ImageData *img_data, VideoCapture *cap) {
 
 
 
-    // imwrite("../../lanecap_blur.png", croppedMat);  
 
     Canny(croppedMat, cannyMat, 150, 240, 3);
 
@@ -184,7 +184,7 @@ int get_lane_statusv2(struct ImageData *img_data, VideoCapture *cap) {
         desired_change = 0;
         go_slow = 1;
     }
-printf(" fix \t\t %f \n",desired_change );
+    printf(" fix \t\t %f \n",desired_change );
    
     // printf("desired change is  %f\n", desired_change);
     // char* filename = (char*)malloc(sizeof(char)*100);
@@ -194,11 +194,11 @@ printf(" fix \t\t %f \n",desired_change );
     // imwrite("../../lanecap_canny.png", cannyMat);
 	
 	//colour detection for detecting stop sign
-	Mat HSV;
-	Mat colorThreshold;
-	cvtColor(capMat,HSV,CV_BGR2HSV);
-	inRange(HSV,Scalar(100,15,15),Scalar(300,45,45),colorThreshold);
-	imwrite("../../colour_threshold_mask",colorThreshold);
+	// Mat HSV;
+	// Mat colorThreshold;
+	// cvtColor(capMat,HSV,CV_BGR2HSV);
+	// inRange(HSV,Scalar(15,15,100),Scalar(145,145,250),colorThreshold);
+	// imwrite("../../colour_threshold_mask.png",colorThreshold);
 
 
     img_data->fix                   = desired_change;

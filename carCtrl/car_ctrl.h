@@ -11,7 +11,7 @@ const int INNER_LANE = 1;
 
 //method declarations
 int init(int quickstart_mode);
-int run();
+void* run();
 void cleanup();
 void pause_sys();
 
