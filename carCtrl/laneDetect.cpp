@@ -18,7 +18,7 @@ using namespace cv;
 using namespace std;
 
 //this percentage will be cutoff from the top of the image
-const double CUT_OFF_HEIGHT_FACTOR = 0.50;
+const double CUT_OFF_HEIGHT_FACTOR = 0.30;
 const double LANE_WIDTH = 550.0;
 const int DETECTED_PTS_MIN = 3;
 
@@ -96,6 +96,7 @@ int get_lane_statusv2(struct ImageData *img_data, VideoCapture *cap) {
     cap->read(capMat);
 
 
+    // imwrite("../../cap.png", capMat);  
     //cropping region
 	Size size_uncropped = capMat.size();
 	int new_height = size_uncropped.height*CUT_OFF_HEIGHT_FACTOR;
@@ -105,7 +106,6 @@ int get_lane_statusv2(struct ImageData *img_data, VideoCapture *cap) {
 
 
 
-    // imwrite("../../lanecap_blur.png", croppedMat);  
 
     Canny(croppedMat, cannyMat, 150, 240, 3);
 
@@ -184,7 +184,7 @@ int get_lane_statusv2(struct ImageData *img_data, VideoCapture *cap) {
         desired_change = 0;
         go_slow = 1;
     }
-printf(" fix \t\t %f \n",desired_change );
+    printf(" fix \t\t %f \n",desired_change );
    
     // printf("desired change is  %f\n", desired_change);
     // char* filename = (char*)malloc(sizeof(char)*100);
@@ -194,9 +194,14 @@ printf(" fix \t\t %f \n",desired_change );
     // imwrite("../../lanecap_canny.png", cannyMat);
 	
 	//colour detection for detecting stop sign
-	Mat maskMat
-	inRange(capMat,Scalar(15,100,15),Scalar(45,255,45),maskMat);
-	imshow("colour threshold mask",maskMat);
+	// Mat HSV;
+	// Mat colorThreshold;
+	// cvtColor(capMat,HSV,CV_BGR2HSV);
+	// inRange(HSV,Scalar(15,15,100),Scalar(145,145,250),colorThreshold);
+	// imwrite("../../colour_threshold_mask.png",colorThreshold);
+	Mat maskMat;
+	inRange(capMat,Scalar(15,15,100),Scalar(45,45,255),maskMat);
+	imwrite("../../colour_threshold_mask.png",maskMat);
 
 
     img_data->fix                   = desired_change;
@@ -271,8 +276,8 @@ int get_lane_status(struct ImageData *img_data, VideoCapture *cap) {
 
 
     //(inputMat, output vector N x 4, distance resolution of accumulator, angle of accumulator, threshold, minLineLength, maxLineGap )
-    HoughLinesP(cannyMat, lines, 1, CV_PI/180,50,2,0);
-
+    HoughLinesP(cannyMat, lines, 1, CV_PI/180,30,5,10);
+    
     //to  detect an intersection, we can look for the horizontal lines across the lane.
     //for  this we can just compare the y values between two points of a line.
     bool intersectionDetected = false;
@@ -289,32 +294,8 @@ int get_lane_status(struct ImageData *img_data, VideoCapture *cap) {
         Point2d a = Point2d(lines[i][0],lines[i][1]);
         Point2d b = Point2d(lines[i][2],lines[i][3]);
 
-        // //if either Point A or Point B lie above the cutoff section we can ignore it.
-        // if (a.y <= imgHeight*CUT_OFF_HEIGHT_FACTOR || b.y <= imgHeight*CUT_OFF_HEIGHT_FACTOR) {
-        //      continue;
-        // }
-
-
         Point2d mid = getMidpoint(a,b);
 
-
-        //if we have already detected an intersection in the current frame
-        //no point of continuing to check
-/*              if (!intersectionDetected) {
-                if ( fabs(a.y-b.y) <= STRAIGHT_LINE_THRESHOLD) {
-                        printf("found intersection at points (%f %f) to (%f %f)\n", a.x, a.y, b.x, b.y);
-                        circle(houghMat,a,10,Scalar(255,60,200));
-                        circle(houghMat,b,10,Scalar(255,60,200));
-                        intersectionDetected = true;
-                }
-        }
-
-        else if (estimatedIntersectionDistance <= 0) {
-                estimatedIntersectionDistance = getDistanceToLine(mid, camera_center_point);
-                printf("estimatedDistance to intersection = %f pixels\n", estimatedIntersectionDistance);
-        }
-
-*/
         //if an end-point of a line plus the midpoint are to one side of the img center,
         // than consider which side it is on,
         //else IGNORE THE LINE (may need to fix this)
@@ -339,8 +320,8 @@ int get_lane_status(struct ImageData *img_data, VideoCapture *cap) {
     avgLeftSize = calculateAvgLineSize(leftLines, camera_center_point);
     avgRightSize = calculateAvgLineSize(rightLines, camera_center_point);
 
-//      printf("Theta1: %f \tTheta2: %f \n", calculateAvgAngle(leftLines, camera_center_point), theta2);
-    //printf("leftLine: %f \trightLine: %f \n",avgLeftSize, avgRightSize);
+     printf("Theta1: %f \tTheta2: %f \n", theta1, theta2);
+      //printf("leftLine: %f \trightLine: %f \n",avgLeftSize, avgRightSize);
 
     img_data->avg_left_angle        = theta1;
     img_data->avg_right_angle       = theta2;
@@ -433,6 +414,8 @@ int capture_lane(VideoCapture *cap) {
     //retrieve the current frame
     cap->read(capMat);
 
+    imwrite("../../cap.png", capMat);
+
     //cropping region
     Size size_uncropped      = capMat.size();
     int new_height = size_uncropped.height*CUT_OFF_HEIGHT_FACTOR;
@@ -444,8 +427,8 @@ int capture_lane(VideoCapture *cap) {
     //finds edges in the capMatMath  via the Canny Edge detection algorithm, and puts
     //result in cannyMat
     //Canny(inputMay, outputMat, threshold_1, threshold_2, apertureSize, L2Gradient )
-    Canny(croppedMat, cannyMat, 50, 200, 3);
-//  Canny(capMat, cannyMat, 55, 110, 3);
+    Canny(croppedMat, cannyMat, 80, 250, 3);
+    //Canny(capMat, cannyMat, 55, 110, 3);
 
     //converts img in cannyMat to another colour space and puts it in houghMat
     cvtColor(cannyMat, houghMat, CV_GRAY2BGR);
@@ -468,7 +451,7 @@ int capture_lane(VideoCapture *cap) {
 
 
     //(inputMat, output vector N x 4, distance resolution of accumulator, angle of accumulator, threshold, minLineLength, maxLineGap )
-    HoughLinesP(cannyMat, lines, 1, CV_PI/180,50,2,0);
+    HoughLinesP(cannyMat, lines, 1, CV_PI/180,30,5,10);
 
 
     //to  detect an intersection, we can look for the horizontal lines across the lane.
@@ -530,6 +513,19 @@ int capture_lane(VideoCapture *cap) {
 
 
     }
+
+    double theta1, theta2;
+    theta1 = calculateAvgAngle(leftLines, camera_center_point)*(180.0/CV_PI);
+    theta2 = calculateAvgAngle(rightLines,camera_center_point)*(180.0/CV_PI);
+
+    double avgLeftSize, avgRightSize;
+    avgLeftSize = calculateAvgLineSize(leftLines, camera_center_point);
+    avgRightSize = calculateAvgLineSize(rightLines, camera_center_point);
+
+    printf("Theta1: %f \tTheta2: %f \n", theta1, theta2);
+    printf("leftLine: %f \trightLine: %f \n",avgLeftSize, avgRightSize);
+
+
 
     imwrite("../../lanecap_canny.png", cannyMat);
     imwrite("../../lanecap.png", houghMat);

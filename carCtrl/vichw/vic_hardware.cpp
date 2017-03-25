@@ -25,7 +25,8 @@ int vichw_init()
 	return 1;
 }
 
-void vichw_deinit(void)
-{
+void vichw_deinit(void) {
+		vichw_set_speed(-1);
+		vichw_set_angle(1500);
         gpioTerminate();
 }
