@@ -23,35 +23,35 @@ void init_navigation(double time_period) {
 int sign(double val) {
 	if (val > 0) return 1;
 	if (val < 0) return -1;
-	return 0;
+	return 1;
 }
 
 
-
+int reduce_speed = 0;
 
 
 int update_navigation(struct ImageData *img,  struct CarStatus *car, double p, double d){
 
 	
 	//holy long line batman!
-	double ang = calculate_angle(img->avg_left_angle, img->avg_left_right, img->trajectory_angle,  \
-								car->current_wheel_angle, img->left_line_length, img->right_line_length);
+	double ang = calculate_angle(img->avg_left_angle, img->avg_right_angle, img->trajectory_angle,  \
+								car->current_wheel_angle, img->left_line_length, img->right_line_length, p ,d);
 
 
-	printf("setting angle= \t\t%f\n\n",, ang);
+	printf("setting angle= \t\t%f\n\n", ang);
 	car->current_wheel_angle = ang;
-	vichw_set_angle(new_angle);
+	vichw_set_angle(ang);
 
 
 	//TODO: Update vehicle speed
 	double new_speed = 0;
 
 	if (reduce_speed) {
-		new_speed = 0.49;
+		new_speed = 0.48;
 		reduce_speed = 0;
 	}
 	else {
-		new_speed = 0.51;
+		new_speed = 0.50;
 	}
 	
 	if(new_speed > MAX_SPEED){
@@ -72,13 +72,13 @@ void set_speed(double speed) {
 
 //given the angles and line lengths calculate a new desired angle to follow.
 //under certain conditions, this method may advise the car should slow down.
-double calculate_angle(double theta1, double theta2, double theta3, double current_angle, double left_len, double right_len) {
+double calculate_angle(double theta1, double theta2, double theta3, double current_angle, double left_len, double right_len, double p, double d) {
 
 	double new_angle = 0;
 	double angle_diff = theta1 - theta2;
 
 	if (sign(angle_diff) == sign(theta3)) { // take their avg
-		new_angle = ((angle_diff)/p + theta3/d)/2;
+		new_angle = ((angle_diff)/p + theta3/d)/1;
 	}
 
 	else if (theta3 != 0 && theta1*theta2 == 0) {
@@ -100,7 +100,7 @@ double calculate_angle(double theta1, double theta2, double theta3, double curre
 	}
 
 	//should we check for first offense?
-	if (sign(new_angle) != sign(current_angle) && abs(abs(new_angle) - abs(current_angle)) > 20) {
+	if (sign(new_angle) != sign(current_angle) && abs(new_angle - current_angle) > 20) {
 		new_angle = new_angle/3;
 		printf(" ===== angle  reduction =====\n");
 	}

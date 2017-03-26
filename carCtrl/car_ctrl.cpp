@@ -86,7 +86,7 @@ int init(int quickstart_mode) {
 
     int status = 1;
 
-    car_stat.current_speed           = 0.51;
+    car_stat.current_speed           = 0.50;
     car_stat.current_wheel_angle     = 0;
     car_stat.car_id                  = CAR_ID;
     car_stat.intersection_stop       = 0;

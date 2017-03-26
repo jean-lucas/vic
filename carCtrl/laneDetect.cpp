@@ -76,7 +76,7 @@ string type2str(int type) {
 
 
 
-Point2d get_left_intersection(double height, int x0, int xf) {
+Point2d get_left_intersection(double height, int x0, int xf, Mat cannyMat) {
     unsigned char colour = 0;
     int x;
     Point2d detected_left_point;
@@ -91,7 +91,7 @@ Point2d get_left_intersection(double height, int x0, int xf) {
 }
 
 
-Point2d get_right_intersection(double height, int x0, int xf) {
+Point2d get_right_intersection(double height, int x0, int xf, Mat cannyMat) {
     unsigned char colour = 0;
     int x;
     Point2d detected_right_point;
@@ -125,7 +125,6 @@ int get_lane_statusv3(struct ImageData *img_data, VideoCapture *cap) {
     }
 
     // imwrite("../../cap.png", capMat);
-
     //cropping region
     Size size_uncropped      = capMat.size();
     int new_height = size_uncropped.height*CUT_OFF_HEIGHT_FACTOR;
@@ -159,13 +158,13 @@ int get_lane_statusv3(struct ImageData *img_data, VideoCapture *cap) {
     Point2d detected_right_point;
 
     //try 2 attempts to get a trajectory point. At each failed instance drop height by 1/5
-    detected_left_point  = get_left_intersection(height_check, imgWidth/2, 0);
-    detected_right_point = get_right_intersection(height_check, imgWidth/2, imgWidth);
+    detected_left_point  = get_left_intersection(height_check, imgWidth/2, 0, cannyMat);
+    detected_right_point = get_right_intersection(height_check, imgWidth/2, imgWidth, cannyMat);
 
     if (detected_left_point.y != detected_right_point.y) {
         height_check = 2*imgHeight/5;
-        detected_left_point  = get_left_intersection(height_check, imgWidth/2, 0);
-        detected_right_point = get_right_intersection(height_check, imgWidth/2, imgWidth);
+        detected_left_point  = get_left_intersection(height_check, imgWidth/2, 0, cannyMat);
+        detected_right_point = get_right_intersection(height_check, imgWidth/2, imgWidth, cannyMat);
     }
 
     // //get points on the right side
@@ -207,22 +206,22 @@ int get_lane_statusv3(struct ImageData *img_data, VideoCapture *cap) {
             offset = distLeft - lane_width/2.0;
             theta3 = atan(offset/(imgHeight- height_check))*(-180.0/CV_PI);
             //trajectory
-            // line(houghMat,Point2d(detected_left_point.x+ distLeft - offset, height_check), Point2d(imgWidth/2, imgHeight), Scalar(55,150,115),5,8);
-            // circle(houghMat,Point2d(detected_left_point.x+ distLeft - offset, height_check) ,10,Scalar(20,60,200));
+            line(houghMat,Point2d(detected_left_point.x+ distLeft - offset, height_check), Point2d(imgWidth/2, imgHeight), Scalar(55,150,115),5,8);
+            circle(houghMat,Point2d(detected_left_point.x+ distLeft - offset, height_check) ,10,Scalar(20,60,200));
         }
         else {
             offset = distRight - lane_width/2.0;
             theta3 = atan(offset/(imgHeight- height_check))*(180.0/CV_PI);
             //trajectory
-            // line(houghMat,Point2d(detected_left_point.x+ distLeft + offset, height_check), Point2d(imgWidth/2, imgHeight), Scalar(55,150,115),5,8);
-            // circle(houghMat,Point2d(detected_left_point.x+ distLeft + offset, height_check) ,10,Scalar(20,60,200));
+            line(houghMat,Point2d(detected_left_point.x+ distLeft + offset, height_check), Point2d(imgWidth/2, imgHeight), Scalar(55,150,115),5,8);
+            circle(houghMat,Point2d(detected_left_point.x+ distLeft + offset, height_check) ,10,Scalar(20,60,200));
         }
         
 
        
 
-        // printf("left point (%f %f) \t rgiht point (%f  %f)\t width %f\n", detected_left_point.x, detected_left_point.y, detected_right_point.x, detected_right_point.y, LANE_WIDTH );
-        // printf("offset %f \t theta3 %f\ndistLeft %f \t distRight %f\n", offset, theta3, distLeft, distRight);
+        printf("left point (%f %f) \t rgiht point (%f  %f)\t width %f\n", detected_left_point.x, detected_left_point.y, detected_right_point.x, detected_right_point.y, lane_width );
+        printf("offset %f \t theta3 %f\ndistLeft %f \t distRight %f\n", offset, theta3, distLeft, distRight);
 
         
         // imwrite("../../cannyv3.png",houghMat);
@@ -268,8 +267,8 @@ int get_lane_statusv3(struct ImageData *img_data, VideoCapture *cap) {
 
         // circle(houghMat,mid,5,Scalar(255,100,0));
 
-        // line(houghMat, mid, camera_center_point, Scalar(0,255,0),1,8);
-        // line(houghMat, a, b, Scalar(0,0,255),3,8);  
+        line(houghMat, mid, camera_center_point, Scalar(0,255,0),1,8);
+        line(houghMat, a, b, Scalar(0,0,255),3,8);  
 
     }
 

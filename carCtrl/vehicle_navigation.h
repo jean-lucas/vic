@@ -11,7 +11,7 @@ const double CENTER_ADJUST_ANGLE = 8;
 
 void init_navigation(double time_period);
 int update_navigation(struct ImageData *img, struct CarStatus *car, double p, double d);
-double calculate_angle(double theta1, double theta2, double theta3, double current_angle, double left_len, double right_len);
+double calculate_angle(double theta1, double theta2, double theta3, double current_angle, double left_len, double right_len,double p, double d);
 void set_speed(double speed);
 
 #endif
