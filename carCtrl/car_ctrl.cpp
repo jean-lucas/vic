@@ -23,7 +23,8 @@ SignalResponse *sig_resp;
 cv::VideoCapture cap;
 
 
-
+double p = 3;
+double d = 1.5;    
 
 
 double getMsTime() {
@@ -37,6 +38,7 @@ double getMsTime() {
 int main(int argc, char** argv) {
 
     int quickstart_mode =  1;
+    
 
 
     if (argc < 1) {
@@ -49,7 +51,7 @@ int main(int argc, char** argv) {
     //test lane detect only
     if (argval == 1) {
         cap = test_camera();
-	    capture_lane(&cap);
+        get_lane_statusv3(&img_data,&cap);
 	    cap.release();
         return 0;
     }
@@ -59,35 +61,39 @@ int main(int argc, char** argv) {
         quickstart_mode = 0;
     }
 
+    if (argc > 2) {
+        p = atoi(argv[2]);
+        d = atoi(argv[3]);
+        printf("p = %d \t d= %d\n",p,d );
+    }
+
     if (!init(quickstart_mode)) {
         printf("failed to init\n");
-        exit(0);
+        return 0;
     
     }
 
     run();
 
-    
-
-
     cleanup();
+    
     return 0;
 }
 
 
 /* Initialize necessary modules, and test their are working */
-int init (int quickstart_mode) {
+int init(int quickstart_mode) {
 
-    unsigned int status = 1;
+    int status = 1;
 
-    car_stat.current_speed           = 0.52;
+    car_stat.current_speed           = 0.51;
     car_stat.current_wheel_angle     = 0;
     car_stat.car_id                  = CAR_ID;
     car_stat.intersection_stop       = 0;
     car_stat.obstacle_stop           = 0;
     car_stat.current_lane            = OUTER_LANE;
 
-    img_data.fix                       = 0;
+    img_data.trajectory_angle          = 0;
     img_data.avg_left_angle            = 0;
     img_data.avg_right_angle           = 0;
     img_data.left_line_length          = 0;
@@ -97,7 +103,9 @@ int init (int quickstart_mode) {
     img_data.obstacle_detected         = 0;
 
 
+
     sig_resp = (struct SignalResponse*) calloc(1, sizeof(*sig_resp));
+
     //make sure car does not start driving until we want it to
     if (quickstart_mode) {
         sig_resp->val = PROCEED_RESP;
@@ -115,8 +123,6 @@ int init (int quickstart_mode) {
     pthread_t  server_thread;
     pthread_create(&server_thread, NULL, recvFromIC, (void*) sig_resp);
 
-    init_navigation(0.220);
-
     return status;
 }
 
@@ -126,33 +132,36 @@ int init (int quickstart_mode) {
 
 
 
+int run() {
 
-void* do_stuff() {
+	int status = 1;
 
-	int valid = 1;
-    valid = get_lane_status(&img_data, &cap);
-    valid = update_navigation(&img_data, &car_stat);
-}
+    while (status != HALT_SYSTEM) {
 
-void* run () {
-    
-    gpioSetTimerFunc(0, 260, (gpioTimerFunc_t) do_stuff);
+        //check for IC response
+        if (sig_resp->val != PROCEED_RESP) {
+            if (sig_resp->val == EMERGENCY_STOP_RESP) {
+                printf("EMERGENCY_STOP_RESP\n");
+                status = HALT_SYSTEM;
+                break;                
+            }
+            else {
+                //otherwise a pause signal has been called
+                pause_sys();
+            }
+        } 
 
-    while (sig_resp->val == PROCEED_RESP);
 
-    if (sig_resp->val != PROCEED_RESP) {
-        if (sig_resp->val == EMERGENCY_STOP_RESP) {
-            printf("EMERGENCY_STOP_RESP\n");
-            gpioSetTimerFunc(0, 200, (gpioTimerFunc_t) NULL);
-            
+        status = get_lane_statusv3(&img_data, &cap);
+
+        if (status == CORRUPT_IMAGE) {
+            continue;
         }
-        else {
-            //otherwise a stop signal has been called
-            pause_sys();
-        }
-    }   
+        status = update_navigation(&img_data, &car_stat,p,d);
+       
+    }
 
-
+    printf("ending with status %d\n", status);
 
 }
 
@@ -165,8 +174,10 @@ void* run () {
 //when called, program will remain paused until necessary BT responses are received
 void pause_sys() {
     printf("Entering pause state\n");
+    set_speed(0);
     while (sig_resp->val != PROCEED_RESP);
     printf("Leaving pause state\n");
+    set_speed(0.51);
     run();
 }
 

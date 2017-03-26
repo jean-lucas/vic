@@ -8,11 +8,15 @@ const int PROCEED_RESP = 0;
 const int STOP_RESP = 1;
 const int EMERGENCY_STOP_RESP = 2;
 
+//constant error messages
+const int NO_ERROR = 1;
+const int HALT_SYSTEM = 0;
+const int CORRUPT_IMAGE = -1;
 
 
 /* structs */
 struct ImageData {
-	double fix;
+	double trajectory_angle;
 	double avg_left_angle;
 	double avg_right_angle;
 	double left_line_length;
@@ -20,7 +24,7 @@ struct ImageData {
 	double intersection_distance;
 	int intersection_detected;
 	int obstacle_detected;
-	int go_slow;
+	
 };
 
 struct CarStatus {

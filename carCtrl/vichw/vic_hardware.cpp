@@ -20,13 +20,13 @@ const int MIN_SERVO_PWM = 1100;
 int vichw_init()
 {
 	gpioInitialise();
-        vichw_init_speed();
-        vichw_init_servo();
+    vichw_init_speed();
+    vichw_init_servo();
 	return 1;
 }
 
 void vichw_deinit(void) {
-		vichw_set_speed(-1);
-		vichw_set_angle(1500);
-        gpioTerminate();
+	vichw_set_speed(-1);
+	vichw_set_angle(1500);
+    gpioTerminate();
 }
