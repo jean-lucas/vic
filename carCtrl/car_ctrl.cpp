@@ -25,6 +25,7 @@ cv::VideoCapture cap;
 
 double p = 3;
 double d = 1.5;    
+double q = 2;
 
 
 double getMsTime() {
@@ -64,7 +65,8 @@ int main(int argc, char** argv) {
     if (argc > 2) {
         p = atoi(argv[2]);
         d = atoi(argv[3]);
-        printf("p = %d \t d= %d\n",p,d );
+        q = atoi(argv[4]);
+        printf("p = %f \t d= %f\t q= %f\n",p,d,q );
     }
 
     if (!init(quickstart_mode)) {
@@ -95,7 +97,9 @@ int init(int quickstart_mode) {
 
     img_data.trajectory_angle          = 0;
     img_data.avg_left_angle            = 0;
-    img_data.avg_right_angle           = 0;
+    img_data.avg_right_angle           = 0; 
+    img_data.avg_slope                 = 0;
+    img_data.old_slope                 = 0;
     img_data.left_line_length          = 0;
     img_data.right_line_length         = 0;
     img_data.intersection_distance     = -1;
@@ -157,7 +161,7 @@ int run() {
         if (status == CORRUPT_IMAGE) {
             continue;
         }
-        status = update_navigation(&img_data, &car_stat,p,d);
+        status = update_navigation(&img_data, &car_stat,p,d,q);
        
     }
 

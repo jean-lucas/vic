@@ -19,6 +19,8 @@ struct ImageData {
 	double trajectory_angle;
 	double avg_left_angle;
 	double avg_right_angle;
+	double avg_slope;
+	double old_slope;
 	double left_line_length;
 	double right_line_length;
 	double intersection_distance;
