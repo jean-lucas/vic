@@ -1,47 +1,54 @@
 
+#include "laneDetect.h"
 #include "opencv2/core/core.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
 #include "opencv2/highgui/highgui.hpp"
 #include <stdio.h>
 #include <algorithm>
 #include <math.h>
-#include <time.h>
-#include "laneDetect.h"
-
-
 #include <stdlib.h>
 #include <unistd.h>
-#include <pthread.h>
-#include <sys/time.h>
 
 using namespace cv;
 using namespace std;
 
-//this percentage will be cutoff from the top of the image
-const double CUT_OFF_HEIGHT_FACTOR = 0.30;
-const int DETECTED_PTS_MIN = 3;
 
-Point2d getMidpoint(Point2d a, Point2d b);
+
+/* Function declarations */
+Point2d get_midpoint(Point2d a, Point2d b);
 double calculateAvgAngle(vector<Point2d> vec, Point2d center);
 double calculateAvgLineSize(vector<Point2d> vec, Point2d center);
 double lineLength(Point2d a, Point2d b);
 double getDistanceToLine(Point2d a, Point2d b);
+double get_slope(Point2d a, Point2d b);
+dounle get_line_length(Point2d a, Point2d b);
+
+
+
+/* Constants */
+
+//this percentage will be cutoff from the top of the image
+const double CUT_OFF_HEIGHT_FACTOR = 0.45;
+const double MIN_LINE_LENGTH = 10;
+const double HORIZONTAL_SLOPE_VAL = 0.5;
+
+
 
 
 /*
-        Test if camera can capture images/videos
-        If successful return Point2der to VideoCapture object
-        Else return null Point2der
+    Test if camera can capture images/videos
+    If successful return pointer to VideoCapture object
+    Else return null pointer
 */
 VideoCapture test_camera() {
 
-        VideoCapture cap(DEFAULT_CAMERA_ID);
+    VideoCapture cap(DEFAULT_CAMERA_ID);
 
-        if (!cap.isOpened()) {
-                printf("failed to open capture\n");
-                return HALT_SYSTEM;
-        }
-        return cap;
+    if (!cap.isOpened()) {
+            printf("failed to open capture\n");
+            return HALT_SYSTEM;
+    }
+    return cap;
 }
 
 
@@ -111,7 +118,7 @@ int get_lane_statusv3(struct ImageData *img_data, VideoCapture *cap) {
     if (!(cap->isOpened())) {
         printf("failed to open capture\n");
         cap->release();
-        return 0;
+        return HALT_SYSTEM;
     }
 
 
@@ -124,11 +131,10 @@ int get_lane_statusv3(struct ImageData *img_data, VideoCapture *cap) {
         return CORRUPT_IMAGE;
     }
 
-    // imwrite("../../cap.png", capMat);
-    //cropping region
-    Size size_uncropped      = capMat.size();
+    //cropping image
+    Size size_uncropped = capMat.size();
     int new_height = size_uncropped.height*CUT_OFF_HEIGHT_FACTOR;
-    Rect cropRect = Rect(0,new_height, size_uncropped.width, size_uncropped.height-new_height);
+    Rect cropRect = Rect(0, new_height, size_uncropped.width, size_uncropped.height-new_height);
     croppedMat = capMat(cropRect);
 
 
@@ -150,10 +156,8 @@ int get_lane_statusv3(struct ImageData *img_data, VideoCapture *cap) {
 
 
 
-    int y = 0;
-    int x = 0;
-    int height_check = imgHeight/5; // where should we place the trajectory point
-    unsigned char colour;
+
+    int height_check = imgHeight/6; // where should we place the trajectory point
     Point2d detected_left_point;
     Point2d detected_right_point;
 
@@ -161,29 +165,15 @@ int get_lane_statusv3(struct ImageData *img_data, VideoCapture *cap) {
     detected_left_point  = get_left_intersection(height_check, imgWidth/2, 0, cannyMat);
     detected_right_point = get_right_intersection(height_check, imgWidth/2, imgWidth, cannyMat);
 
-    if (detected_left_point.y != detected_right_point.y) {
-        height_check = 2*imgHeight/5;
+    int num_tries = 0;
+    while (detected_left_point.y != detected_right_point.y && num_tries < 4) {
+        printf("num_tries = %d\n",num_tries );
+        height_check = height_check + imgHeight/6;
         detected_left_point  = get_left_intersection(height_check, imgWidth/2, 0, cannyMat);
         detected_right_point = get_right_intersection(height_check, imgWidth/2, imgWidth, cannyMat);
+        num_tries++;
     }
 
-    // //get points on the right side
-    // for ( x = imgWidth/2; x < imgWidth; x++) {
-    //     colour = cannyMat.at<unsigned char>(Point(x,height_check));
-    //     if (colour > 200) {
-    //         detected_right_point = Point2d(x,height_check);
-    //         break;
-    //     }
-    // }
-
-    // //get points on the left side
-    // for ( x = imgWidth/2; x > 0; x--) {
-    //     colour = cannyMat.at<unsigned char>(Point(x,height_check));
-    //     if (colour > 200) {
-    //         detected_left_point = Point2d(x,height_check);
-    //         break;
-    //     }
-    // }   
     
 
 
@@ -217,18 +207,13 @@ int get_lane_statusv3(struct ImageData *img_data, VideoCapture *cap) {
             circle(houghMat,Point2d(detected_left_point.x+ distLeft + offset, height_check) ,10,Scalar(20,60,200));
         }
         
-
-       
-
         printf("left point (%f %f) \t rgiht point (%f  %f)\t width %f\n", detected_left_point.x, detected_left_point.y, detected_right_point.x, detected_right_point.y, lane_width );
         printf("offset %f \t theta3 %f\ndistLeft %f \t distRight %f\n", offset, theta3, distLeft, distRight);
 
-        
-        // imwrite("../../cannyv3.png",houghMat);
 
     }
     else {
-        //everything failed. Should we assume the same trajectory as the last image?? hmmm
+        //everything failed. set 0, and fix it later based on theta1 and theta2
         theta3 = 0;
     }
 
@@ -238,24 +223,35 @@ int get_lane_statusv3(struct ImageData *img_data, VideoCapture *cap) {
 
 
     //(inputMat, output vector N x 4, distance resolution of accumulator, angle of accumulator, threshold, minLineLength, maxLineGap )
-    HoughLinesP(cannyMat, lines, 1, CV_PI/180,30,5,10);
-    
+    HoughLinesP(cannyMat, lines, 1, CV_PI/180,38,10,1);
+    // HoughLinesP(cannyMat, lines, 1, CV_PI/180,30,5,10);
 
     //TODO: calculate these values
     bool intersectionDetected = false;
     double estimatedIntersectionDistance = 0;
     bool  obstacleDetected = false;
 
+    Point2d a,b,mid;
+
+    double line_length = 0;
+    double slope_tot = 0;
+    int slope_count = 0;
+
     //draw detected lines
     for (size_t i = 0; i < lines.size(); i++) {
-        Point2d a = Point2d(lines[i][0],lines[i][1]);
-        Point2d b = Point2d(lines[i][2],lines[i][3]);
+        a = Point2d(lines[i][0],lines[i][1]);
+        b = Point2d(lines[i][2],lines[i][3]);
+        mid = get_midpoint(a,b);
 
-        Point2d mid = getMidpoint(a,b);
+        line_length = get_line_length(a,b);
+        if (line_length > MIN_LINE_LENGTH) {
+            printf("Point (%f %f) to Point (%f %f) gave slope degree of %f\n", a.x,a.y,b.x,b.y, get_slope(a,b));
+            slope_tot += get_slope(a,b);
+            slope_count++;
+        }
 
         //if an end-point of a line plus the midpoint are to one side of the img center,
-        // than consider which side it is on,
-        //else IGNORE THE LINE (may need to fix this)
+        // than consider which side it is on
         if (mid.x <= camera_center_point.x && (a.x <= camera_center_point.x || b.x <= camera_center_point.x)) {
             leftLines.push_back(mid);
         }
@@ -264,11 +260,8 @@ int get_lane_statusv3(struct ImageData *img_data, VideoCapture *cap) {
             rightLines.push_back(mid);
         }
 
-
-        // circle(houghMat,mid,5,Scalar(255,100,0));
-
         line(houghMat, mid, camera_center_point, Scalar(0,255,0),1,8);
-        line(houghMat, a, b, Scalar(0,0,255),3,8);  
+        line(houghMat, a, b, Scalar(0,0,255),3,8);
 
     }
 
@@ -282,25 +275,25 @@ int get_lane_statusv3(struct ImageData *img_data, VideoCapture *cap) {
     avgLeftSize = calculateAvgLineSize(leftLines, camera_center_point);
     avgRightSize = calculateAvgLineSize(rightLines, camera_center_point);
 
-    printf("Theta1: %f \tTheta2: %f \n", theta1, theta2);
-    //printf("leftLine: %f \trightLine: %f \n",avgLeftSize, avgRightSize);
+    double avgSlope;
+    avgSlope = slope_tot/slope_count;
 
-    if (theta1 == 0) {
-        theta1 = theta2/3.0;
-    }
-    else if (theta2 == 0) {
-        theta2 = theta1/3.0;
-    }
+    
+    
+
+    printf("Theta1: %f \tTheta2: %f\tTheta3: %f\t Slope: %f\n", theta1, theta2, theta3, avgSlope);
 
     img_data->avg_left_angle        = theta1;
     img_data->avg_right_angle       = theta2;
     img_data->trajectory_angle      = theta3;
+    img_data->old_slope             = img_data->avg_slope;
+    img_data->avg_slope             = avgSlope;
     img_data->left_line_length      = avgLeftSize;
     img_data->right_line_length     = avgRightSize;
     img_data->intersection_distance = estimatedIntersectionDistance;
     img_data->intersection_detected = intersectionDetected;
     img_data->obstacle_detected     = obstacleDetected;
-    // imwrite("../../hough.png",houghMat);
+   imwrite("../../hough.png",houghMat);
 
     return NO_ERROR;
 }
@@ -308,6 +301,20 @@ int get_lane_statusv3(struct ImageData *img_data, VideoCapture *cap) {
 
 
 
+double get_slope(Point2d a, Point2d b) {
+    double hor_dist = (b.x - a.x);
+    double ver_dist = (b.y - a.y);
+    if (ver_dist == 0 && hor_dist == 0) {
+        printf("HOLY MOLY!\n");
+        exit(0);
+    }
+    return atan2(hor_dist/ver_dist); 
+}
+
+//get line length between two points
+double get_line_length(Point2d a, Point2d b) {
+    return sqrt(pow(a.x - b.x, 2) + pow(a.y - b.y, 2));
+}
 
 double calculateAvgLineSize(vector<Point2d> vec, Point2d center) {
     double current=0;
@@ -347,7 +354,7 @@ double calculateAvgAngle(vector<Point2d> vec, Point2d center) {
 }
 
 
-Point2d getMidpoint(Point2d a, Point2d b) {
+Point2d get_midpoint(Point2d a, Point2d b) {
     double midX = (a.x + b.x)/2.0;
     double midY = (a.y + b.y)/2.0;
     return Point2d(midX, midY); 
@@ -438,7 +445,7 @@ int capture_lane(VideoCapture *cap) {
         Point2d b = Point2d( lines[i][2], lines[i][3]);
 
 
-        Point2d mid = getMidpoint(a,b);
+        Point2d mid = get_midpoint(a,b);
 
         //if we have already detected an intersection in the current frame
         //no point of continuing to check
