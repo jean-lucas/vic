@@ -80,15 +80,20 @@ class Communication (object):
             # accept a connecting socket
             client_socket, client_bluetooth_ID = server_sock.accept()
 
-            # particulars to help in the debugging
+            # particulars to help in the debugging ---------------------------------
             print "Connection recieved from: ", client_bluetooth_ID[0],": connection accepted @", time.ctime()
+            client_message = client_socket.recv(1024)
+            #print client_message
+
             print "Message number %d" % counter
             counter +=1
             print
+            # ----------------------------------------------------------------------
 
             # recieve vehicle request
-            client_message = client_socket.recv(1024)
-            client_socket.close()
+            
+            
+            #print "The client message: " + client_message
 
             # extract vehicle request contents (by calling extract method)
             current_car = self.message_extraction(client_message, client_bluetooth_ID)
@@ -102,7 +107,7 @@ class Communication (object):
             
 
 
-            #client_socket.close()
+            client_socket.close()
             
 
     '''
@@ -123,16 +128,18 @@ class Communication (object):
             # only attempt to send messages if they are available 
             if (len(self.proceeds) > 0):
                 
-                
-                
                 car = self.proceeds.pop() # retrive the car object 
                 port = getattr(car, 'port') # retrive the port number
                 address = getattr(car, 'client_bluetooth_ID') # retrive the destination address
                 # print "Preparing to send to %s" % address
-                # message_to_car = getattr(car, 'message_to_car')
+                vehicle_command = getattr(car, 'vehicle_command')
                 
-                message_to_car = str(counter); # check this is correct
+                # for testing purposes 
+                ''''
+                vehicle_command = str(counter); # check this is correct
                 counter += 1;
+                '''
+
 
                 try:
                     #for testing purposes
@@ -140,7 +147,7 @@ class Communication (object):
                     send_socket = bluetooth.BluetoothSocket(bluetooth.RFCOMM)            
                     send_socket.connect((address, int(port)))
 
-                    send_socket.send(message_to_car)
+                    send_socket.send(str(vehicle_command))
                     send_socket.close()
 
                 except IOError:
@@ -151,7 +158,7 @@ class Communication (object):
                         print "Connection Failed, retransmission being attempted."
                         print
 
-                        time.sleep(0.3) # try again in half a second
+                        time.sleep(0.5) # try again in 0.3 seconds
                         
                     else:
                         print "Connection Failed, message dropped."
@@ -163,14 +170,37 @@ class Communication (object):
          
     def message_extraction(self, client_message, client_bluetooth_ID ):
 
-        # assuming a string for now, elements separated by a comma
-        my_content = client_message.split(',')
+        '''
+        Colour to integer mapping:
+        Coming from: >> Going to
+            R --> 0  >>  B --> 4
+            B --> 1  >>  G --> 5
+            G --> 2  >>  Y --> 6
+            Y --> 3  >>  R --> 7
+        '''
 
         
-        # message content check (to be implemented)
-        
+        # message deliminator "_"
+        # "carID_comingFrom_listenPort_timestamp"
+        try:
+            my_content = client_message.split('_')
+            #print my_content
+    
+            # can map to characters to if need be
+            if (my_content[1] == 0):
+                direction_to = 4
+            elif (my_content[1] == 1):
+                direction_to = 5
+            elif (my_content[1] == 2):
+                direction_to = 6
+            else:
+                direction_to = 7
+            
+            # Car(self, car_ID, port, client_bluetooth_ID, direction_from, direction_to, time_stamp)
+            return Car(my_content[0], my_content[2], client_bluetooth_ID[0], my_content[1], direction_to, my_content[3])
+        except:
+            pass
 
-        return Car(my_content[0], client_bluetooth_ID[0], my_content[1], my_content[2])
 
     def arrival_check(self):
         if (len(self.arrivals)>0):
@@ -178,7 +208,7 @@ class Communication (object):
         else:
             return -1
 
-    # called from IC_Main (retrieves arriving car requests)
+    # called from IC_Main (retrieves arriving car request)
     def arrival_deque(self):
 
         if (len(self.arrivals)>0):
