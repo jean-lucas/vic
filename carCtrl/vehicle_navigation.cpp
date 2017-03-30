@@ -18,12 +18,12 @@ int right_votes    = 0;
 int straight_votes = 0;
 int large_delta_count = 0;
 
-int p = 0;
-int d = 0;
-
+double pp = 0;
+double dd = 0;
+double qq = 0;
 int sign(double val);
 
-double calculate_angle(double theta1, double theta2, double theta3, double current_angle, double left_len, double right_len, double p, double d);
+double calculate_angle(double theta1, double theta2, double theta3, double current_angle, double left_len, double right_len, double p1, double d2, double q3);
 
 double slopeExpert(double prev_slope, double curr_slope);
 double lengthExpert(double avg_left, double avg_right);
@@ -41,6 +41,15 @@ void init_navigation(double time_period) {
 }
 
 
+void vote(double val) {
+	if (sign(val) > 0) 
+		right_votes++;
+	else if (sign(val) < 0)
+		left_votes++;
+	else 
+		straight_votes++;
+}
+
 
 
 
@@ -49,17 +58,32 @@ void init_navigation(double time_period) {
 
 int update_navigation(struct ImageData *img,  struct CarStatus *car, double p1, double d2, double q3){
 
-	p = p1;
-	d = d2;
-	q = q3;
+	pp = p1;
+	dd = d2;
+	qq = q3;
 	left_votes = 0;
 	right_votes = 0;
 	straight_votes = 0;
-
+	double ang1 = 0,  ang2 = 0, ang3 = 0;
 	double current_angle = car->current_wheel_angle;
-	double ang1 = angleExpert(img->avg_left_angle, img->avg_right_angle, img->trajectory_angle, current_angle);
-	double ang2 = slopeExpert(img_data->old_slope, img_data->avg_slope);
-	double ang3 = lengthExpert(img_data->left_line_length, img_data->right_line_length); 
+
+
+	if (img->left_line_length < 150 && img->left_line_length > 10) {
+		ang1 = 45;
+		vote(1);
+	}
+	else if  (img->right_line_length < 150 && img->right_line_length > 10) {
+		ang1 = -45;
+		vote(-1);
+	}
+	else if (img->left_line_length > 160 && img->right_line_length > 160	) {
+		// ang1 = angleExpert(img->avg_left_angle, img->avg_right_angle, img->trajectory_angle, current_angle);
+	}
+
+
+
+	ang2 = slopeExpert(img->old_slope, img->avg_slope);
+	// ang3 = lengthExpert(img->left_line_length, img->right_line_length); 
 
 	printf("ang1: %f\t ang2: %f\t ang3: %f\n",ang1,ang2,ang3);
 	printf("voteL: %d\t voteC: %d\t voteR: %d\n",left_votes, straight_votes, right_votes);
@@ -109,27 +133,20 @@ void set_speed(double speed) {
 }
 
 
-void vote(double val) {
-	if (sign(val) > 0) 
-		right_votes++;
-	else if (sign(val) < 0)
-		left_votes++;
-	else 
-		straight_votes++;
-}
 
 
 
 double slopeExpert(double prev_slope, double curr_slope) {
 
+	printf("curr_slope %f\n", curr_slope);
 	double new_angle = 0;
 	if (sign(prev_slope) == sign(curr_slope)) {
-		new_angle = curr_slope/q;
+		new_angle = curr_slope/qq;
 	}
 	else {
 		//average out the slopes
 		printf("=========== TAKING AVERAGE (2) =========\n");
-		new_angle = (curr_slope + old_slope)/(q*2.0);
+		new_angle = (curr_slope + prev_slope)/(qq*2.0);
 	}
 
 	vote(new_angle);
@@ -140,8 +157,8 @@ double slopeExpert(double prev_slope, double curr_slope) {
 
 double lengthExpert(double avg_left, double avg_right) {
 
-	double new_angle = 0;
-
+	double new_angle = 0;	
+	printf("left-len: %f \t right-len: %f\n", avg_left, avg_right);
 	if (avg_left < avg_right/1.5)
 		vote(-1);
 	if (avg_right < avg_left/1.5)
@@ -149,7 +166,7 @@ double lengthExpert(double avg_left, double avg_right) {
 	else
 		vote(0);
 
-	if (avg_left - avg_right > -1*LENGTH_THRESHOLD) {
+	if (avg_left - avg_right < -1*LENGTH_THRESHOLD) {
 		new_angle = CENTER_ADJUST_ANGLE;
 	}
 	else if (avg_left - avg_right > LENGTH_THRESHOLD) {
@@ -158,7 +175,7 @@ double lengthExpert(double avg_left, double avg_right) {
 	vote(new_angle);
 }
 
-double angleExpert(double theta1, double theta2, double theta3, double current_angle, double curr_theta3) {
+double angleExpert(double theta1, double theta2, double theta3, double current_angle) {
 
 
 	//first clean up the angles
@@ -174,7 +191,8 @@ double angleExpert(double theta1, double theta2, double theta3, double current_a
     }
     else if (theta1 != 0 && theta2 != 0 && theta3 == 0) { //cant find trajectory point, use average of sides
         printf("############\n");
-        theta3 = (theta1 -theta2)/2.0;
+        theta3 = 0;
+        // theta3 = (theta1 -theta2)/2.0;
     }
 
     if (theta1 == 0) 
@@ -188,6 +206,7 @@ double angleExpert(double theta1, double theta2, double theta3, double current_a
     
 
 
+    printf("Theta1: %f \tTheta2: %f\tTheta3: %f\t\n", theta1, theta2, theta3);
 
 	double new_angle = 0;
 	double angle_diff = theta1 - theta2;
@@ -195,14 +214,14 @@ double angleExpert(double theta1, double theta2, double theta3, double current_a
 	
 	//both going the same direction
 	if (sign(angle_diff) == sign(theta3) && abs(angle_diff) > ANGLE_THRESHOLD) { 
-		new_angle = angle_diff/p + theta3/d;
+		new_angle = angle_diff/pp + theta3/dd;
 	}
 	else if (sign(angle_diff) == sign(theta3)) {
-		new_angle =  theta3/d;
+		new_angle =  theta3/dd;
 	}
 	else {
 		printf("=========== TAKING AVERAGE (1) =========\n");
-		new_angle = (angle_diff/p + theta3/d)/2.0;
+		new_angle = (angle_diff/pp + theta3/dd)/2.0;
 	}
 
 	//vote
@@ -228,12 +247,12 @@ int sign(double val) {
 
 
 	// double ang = calculate_angle(img->avg_left_angle, img->avg_right_angle, img->trajectory_angle,  \
-	// 							car->current_wheel_angle, img->left_line_length, img->right_line_length, p ,d);
+	// 							car->current_wheel_angle, img->left_line_length, img->right_line_length, pp ,dd);
 
 
 // //given the angles and line lengths calculate a new desired angle to follow.
 // //under certain conditions, this method may advise the car should slow down.
-// double calculate_angle(double theta1, double theta2, double theta3, double current_angle, double left_len, double right_len, double p, double d) {
+// double calculate_angle(double theta1, double theta2, double theta3, double current_angle, double left_len, double right_len, double pp, double dd) {
 
 // 	double new_angle = 0;
 // 	double angle_diff = theta1 - theta2;
@@ -241,16 +260,16 @@ int sign(double val) {
 	
 
 // 	if (sign(angle_diff) == sign(theta3)) { 
-// 		new_angle = angle_diff/p + theta3/d;
+// 		new_angle = angle_diff/pp + theta3/dd;
 // 	}
 
 // 	else if (theta3 != 0 && theta1*theta2 == 0) {
-// 		new_angle = theta3/d;
+// 		new_angle = theta3/dd;
 // 	} 
 
 // 	else if (theta3 == 0 && theta1*theta2 != 0) {
 // 		if (angle_diff > ANGLE_THRESHOLD) {
-// 			new_angle = angle_diff/p;
+// 			new_angle = angle_diff/pp;
 // 		}
 // 		else {
 // 			new_angle = current_angle;
