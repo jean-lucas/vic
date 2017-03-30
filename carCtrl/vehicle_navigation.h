@@ -10,7 +10,7 @@ const double LENGTH_THRESHOLD =  80;
 const double CENTER_ADJUST_ANGLE = 8;
 
 void init_navigation(double time_period);
-int update_navigation(struct ImageData *img, struct CarStatus *car, double p, double d);
+int update_navigation(struct ImageData *img, struct CarStatus *car, double p1, double d2, double q3);
 void set_speed(double speed);
 
 #endif

@@ -63,9 +63,9 @@ int main(int argc, char** argv) {
     }
 
     if (argc > 2) {
-        p = atoi(argv[2]);
-        d = atoi(argv[3]);
-        q = atoi(argv[4]);
+        p = atof(argv[2]);
+        d = atof(argv[3]);
+        q = atof(argv[4]);
         printf("p = %f \t d= %f\t q= %f\n",p,d,q );
     }
 
@@ -88,7 +88,7 @@ int init(int quickstart_mode) {
 
     int status = 1;
 
-    car_stat.current_speed           = 0.50;
+    car_stat.current_speed           = 0.51;
     car_stat.current_wheel_angle     = 0;
     car_stat.car_id                  = CAR_ID;
     car_stat.intersection_stop       = 0;
@@ -179,16 +179,20 @@ int run() {
 void pause_sys() {
     printf("Entering pause state\n");
     set_speed(0);
-    while (sig_resp->val != PROCEED_RESP);
+    while (sig_resp->val == STOP_RESP);
+    if (sig_resp->val == EMERGENCY_STOP_RESP) {
+        cleanup();
+        exit(0);
+    }
     printf("Leaving pause state\n");
-    set_speed(0.51);
+    car_stat.current_speed  = 0.50;
     run();
 }
 
 void cleanup() {
     printf("Cleaning up services\n");
-    cap.release();
     vichw_deinit();
+    cap.release();
     free(sig_resp);
 }
 

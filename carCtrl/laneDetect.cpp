@@ -21,7 +21,7 @@ double calculateAvgLineSize(vector<Point2d> vec, Point2d center);
 double lineLength(Point2d a, Point2d b);
 double getDistanceToLine(Point2d a, Point2d b);
 double get_slope(Point2d a, Point2d b);
-dounle get_line_length(Point2d a, Point2d b);
+double get_line_length(Point2d a, Point2d b);
 
 
 
@@ -196,15 +196,15 @@ int get_lane_statusv3(struct ImageData *img_data, VideoCapture *cap) {
             offset = distLeft - lane_width/2.0;
             theta3 = atan(offset/(imgHeight- height_check))*(-180.0/CV_PI);
             //trajectory
-            line(houghMat,Point2d(detected_left_point.x+ distLeft - offset, height_check), Point2d(imgWidth/2, imgHeight), Scalar(55,150,115),5,8);
-            circle(houghMat,Point2d(detected_left_point.x+ distLeft - offset, height_check) ,10,Scalar(20,60,200));
+            // line(houghMat,Point2d(detected_left_point.x+ distLeft - offset, height_check), Point2d(imgWidth/2, imgHeight), Scalar(55,150,115),5,8);
+            // circle(houghMat,Point2d(detected_left_point.x+ distLeft - offset, height_check) ,10,Scalar(20,60,200));
         }
         else {
             offset = distRight - lane_width/2.0;
             theta3 = atan(offset/(imgHeight- height_check))*(180.0/CV_PI);
             //trajectory
-            line(houghMat,Point2d(detected_left_point.x+ distLeft + offset, height_check), Point2d(imgWidth/2, imgHeight), Scalar(55,150,115),5,8);
-            circle(houghMat,Point2d(detected_left_point.x+ distLeft + offset, height_check) ,10,Scalar(20,60,200));
+            // line(houghMat,Point2d(detected_left_point.x+ distLeft + offset, height_check), Point2d(imgWidth/2, imgHeight), Scalar(55,150,115),5,8);
+            // circle(houghMat,Point2d(detected_left_point.x+ distLeft + offset, height_check) ,10,Scalar(20,60,200));
         }
         
         printf("left point (%f %f) \t rgiht point (%f  %f)\t width %f\n", detected_left_point.x, detected_left_point.y, detected_right_point.x, detected_right_point.y, lane_width );
@@ -236,18 +236,28 @@ int get_lane_statusv3(struct ImageData *img_data, VideoCapture *cap) {
     double line_length = 0;
     double slope_tot = 0;
     int slope_count = 0;
+    double slope_ang = 0;
 
+    // int col = 255;
     //draw detected lines
     for (size_t i = 0; i < lines.size(); i++) {
         a = Point2d(lines[i][0],lines[i][1]);
         b = Point2d(lines[i][2],lines[i][3]);
-        mid = get_midpoint(a,b);
+        mid = get_midpoint(a,b);   
+
+        col = 255;
 
         line_length = get_line_length(a,b);
         if (line_length > MIN_LINE_LENGTH) {
-            printf("Point (%f %f) to Point (%f %f) gave slope degree of %f\n", a.x,a.y,b.x,b.y, get_slope(a,b));
-            slope_tot += get_slope(a,b);
-            slope_count++;
+            slope_ang = get_slope(a,b);
+            if (slope_ang != 1.23) {
+                printf("Point (%f %f) to Point (%f %f) gave slope degree of %f\n", a.x,a.y,b.x,b.y,slope_ang);
+                slope_tot += slope_ang;
+                slope_count++;
+            }
+            else {
+                col = 150;
+            }
         }
 
         //if an end-point of a line plus the midpoint are to one side of the img center,
@@ -261,7 +271,7 @@ int get_lane_statusv3(struct ImageData *img_data, VideoCapture *cap) {
         }
 
         line(houghMat, mid, camera_center_point, Scalar(0,255,0),1,8);
-        line(houghMat, a, b, Scalar(0,0,255),3,8);
+        line(houghMat, a, b, Scalar(0,0,col),3,8);
 
     }
 
@@ -276,13 +286,16 @@ int get_lane_statusv3(struct ImageData *img_data, VideoCapture *cap) {
     avgRightSize = calculateAvgLineSize(rightLines, camera_center_point);
 
     double avgSlope;
-    avgSlope = slope_tot/slope_count;
+    if (slope_count > 0) 
+        avgSlope = slope_tot/slope_count;
+    else 
+        avgSlope = 0;
 
+    printf("avgSlope = %f \n",avgSlope );
     
     
 
-    printf("Theta1: %f \tTheta2: %f\tTheta3: %f\t Slope: %f\n", theta1, theta2, theta3, avgSlope);
-
+    printf("%f %f\n", avgLeftSize, avgRightSize);
     img_data->avg_left_angle        = theta1;
     img_data->avg_right_angle       = theta2;
     img_data->trajectory_angle      = theta3;
@@ -293,7 +306,7 @@ int get_lane_statusv3(struct ImageData *img_data, VideoCapture *cap) {
     img_data->intersection_distance = estimatedIntersectionDistance;
     img_data->intersection_detected = intersectionDetected;
     img_data->obstacle_detected     = obstacleDetected;
-   imwrite("../../hough.png",houghMat);
+   // imwrite("../../hough.png",houghMat);
 
     return NO_ERROR;
 }
@@ -302,13 +315,20 @@ int get_lane_statusv3(struct ImageData *img_data, VideoCapture *cap) {
 
 
 double get_slope(Point2d a, Point2d b) {
-    double hor_dist = (b.x - a.x);
-    double ver_dist = (b.y - a.y);
-    if (ver_dist == 0 && hor_dist == 0) {
-        printf("HOLY MOLY!\n");
-        exit(0);
+    double hor_dist = (a.x - b.x);
+    double ver_dist = (a.y - b.y);
+
+    if (ver_dist <= 0.01 && hor_dist <= 0.01) {
+        return 1.23;
     }
-    return atan2(hor_dist/ver_dist); 
+    double temp = (ver_dist/hor_dist);
+    if (abs(temp) < 0.5) {
+        return 1.23;
+    }
+    return atan(hor_dist/ver_dist)*(-180.0/CV_PI); 
+    // return atan2(hor_dist,ver_dist)*(-180.0/CV_PI);
+    // return atan2(ver_dist,hor_dist)*(-180.0/CV_PI);
+
 }
 
 //get line length between two points
