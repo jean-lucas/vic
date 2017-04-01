@@ -187,17 +187,17 @@ class Communication (object):
             #print my_content
     
             # can map to characters to if need be
-            if (my_content[1] == 0):
-                direction_to = 4
-            elif (my_content[1] == 1):
-                direction_to = 5
-            elif (my_content[1] == 2):
-                direction_to = 6
-            else:
-                direction_to = 7
+            #if (my_content[1] == 1):
+             #   direction_to = "-"
+            #elif (my_content[1] == 2):
+            #    direction_to = "-"
+            #elif (my_content[1] == 3):
+            #    direction_to = 6
+            #else:
+            #    direction_to = 7
             
             # Car(self, car_ID, port, client_bluetooth_ID, direction_from, direction_to, time_stamp)
-            return Car(my_content[0], my_content[2], client_bluetooth_ID[0], my_content[1], direction_to, my_content[3])
+            return Car(my_content[0], my_content[2], client_bluetooth_ID[0], my_content[1], "-", my_content[3])
         except:
             pass
 
