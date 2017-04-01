@@ -24,11 +24,14 @@ double get_slope(Point2d a, Point2d b);
 double get_line_length(Point2d a, Point2d b);
 
 
+int detect_obstacles( Mat mat_in);
+
 
 /* Constants */
 
 //this percentage will be cutoff from the top of the image
 const double CUT_OFF_HEIGHT_FACTOR = 0.45;
+const double CUT_OFF_WIDTH_FACTOR = 0.12;
 const double MIN_LINE_LENGTH = 10;
 const double HORIZONTAL_SLOPE_VAL = 0.5;
 
@@ -122,7 +125,7 @@ int get_lane_statusv3(struct ImageData *img_data, VideoCapture *cap) {
     }
 
 
-    Mat capMat, croppedMat, cannyMat, houghMat;
+    Mat capMat, croppedMat, cannyMat, houghMat, contourMat, contourCanny;
 
     //retrieve the current frame
     cap->read(capMat);
@@ -137,14 +140,18 @@ int get_lane_statusv3(struct ImageData *img_data, VideoCapture *cap) {
     Rect cropRect = Rect(0, new_height, size_uncropped.width, size_uncropped.height-new_height);
     croppedMat = capMat(cropRect);
 
-
+    // int new_width = size_uncropped.width*CUT_OFF_WIDTH_FACTOR;
+    // cropRect = Rect(new_width , new_height, size_uncropped.width - new_width*2, size_uncropped.height-new_height);
+    // contourMat = capMat(cropRect);
 
 
     //finds edges in the capMatMath  via the Canny Edge detection algorithm, and puts
     //result in cannyMat
     //Canny(inputMay, outputMat, threshold_1, threshold_2, apertureSize, L2Gradient )
-    Canny(croppedMat, cannyMat, 50, 200, 3);
-//  Canny(capMat, cannyMat, 55, 110, 3);
+    Canny(croppedMat, cannyMat, 50, 240, 3);
+    // Canny(contourMat, contourCanny, 55, 240, 3);
+
+    // imwrite("../../contourCanny.png",contourCanny);
 
 
 
@@ -167,7 +174,7 @@ int get_lane_statusv3(struct ImageData *img_data, VideoCapture *cap) {
 
     int num_tries = 0;
     while (detected_left_point.y != detected_right_point.y && num_tries < 4) {
-        printf("num_tries = %d\n",num_tries );
+        // printf("num_tries = %d\n",num_tries );//
         height_check = height_check + imgHeight/6;
         detected_left_point  = get_left_intersection(height_check, imgWidth/2, 0, cannyMat);
         detected_right_point = get_right_intersection(height_check, imgWidth/2, imgWidth, cannyMat);
@@ -207,8 +214,8 @@ int get_lane_statusv3(struct ImageData *img_data, VideoCapture *cap) {
             // circle(houghMat,Point2d(detected_left_point.x+ distLeft + offset, height_check) ,10,Scalar(20,60,200));
         }
         
-        printf("left point (%f %f) \t rgiht point (%f  %f)\t width %f\n", detected_left_point.x, detected_left_point.y, detected_right_point.x, detected_right_point.y, lane_width );
-        printf("offset %f \t theta3 %f\ndistLeft %f \t distRight %f\n", offset, theta3, distLeft, distRight);
+        // printf("left point (%f %f) \t rgiht point (%f  %f)\t width %f\n", detected_left_point.x, detected_left_point.y, detected_right_point.x, detected_right_point.y, lane_width );
+        // printf("offset %f \t theta3 %f\ndistLeft %f \t distRight %f\n", offset, theta3, distLeft, distRight);
 
 
     }
@@ -238,7 +245,9 @@ int get_lane_statusv3(struct ImageData *img_data, VideoCapture *cap) {
     int slope_count = 0;
     double slope_ang = 0;
 
-    // int col = 255;
+    int inter_count = 0;
+
+    int col = 255;
     //draw detected lines
     for (size_t i = 0; i < lines.size(); i++) {
         a = Point2d(lines[i][0],lines[i][1]);
@@ -250,12 +259,13 @@ int get_lane_statusv3(struct ImageData *img_data, VideoCapture *cap) {
         line_length = get_line_length(a,b);
         if (line_length > MIN_LINE_LENGTH) {
             slope_ang = get_slope(a,b);
-            if (slope_ang != 1.23) {
-                printf("Point (%f %f) to Point (%f %f) gave slope degree of %f\n", a.x,a.y,b.x,b.y,slope_ang);
+            if (slope_ang != 1.23 && slope_ang != 1.24) {
+                // printf("Point (%f %f) to Point (%f %f) gave slope degree of %f\n", a.x,a.y,b.x,b.y,slope_ang);
                 slope_tot += slope_ang;
                 slope_count++;
             }
-            else {
+            else if (slope_ang == 1.23) {
+                inter_count++;
                 col = 150;
             }
         }
@@ -275,6 +285,9 @@ int get_lane_statusv3(struct ImageData *img_data, VideoCapture *cap) {
 
     }
 
+    //detect obstacles
+    // detect_obstacles(contourCanny);
+
 
 
     double theta1, theta2;
@@ -291,11 +304,18 @@ int get_lane_statusv3(struct ImageData *img_data, VideoCapture *cap) {
     else 
         avgSlope = 0;
 
-    printf("avgSlope = %f \n",avgSlope );
-    
-    
+    // printf("avgSlope = %f \n",avgSlope );
+    if (inter_count > 5) {
+        intersectionDetected = true;
+        printf("detected  %d\n", inter_count);
+    }
+    else {
+        intersectionDetected = false;
+    }
+    // else {
+        // intersectionDetected = false;
+    // }
 
-    printf("%f %f\n", avgLeftSize, avgRightSize);
     img_data->avg_left_angle        = theta1;
     img_data->avg_right_angle       = theta2;
     img_data->trajectory_angle      = theta3;
@@ -314,12 +334,32 @@ int get_lane_statusv3(struct ImageData *img_data, VideoCapture *cap) {
 
 
 
+
+int detect_obstacles(Mat mat_in) {
+
+    vector< vector <Point> > contours; // Vector for storing contour
+    vector< Vec4i > hierarchy;
+    findContours( mat_in, contours, hierarchy,CV_RETR_CCOMP, CV_CHAIN_APPROX_SIMPLE );
+    printf("cale\n");
+    for( int i = 0; i< contours.size(); i=hierarchy[i][0] ) {
+        Rect r= boundingRect(contours[i]);
+        if(!hierarchy[i][2]<0) {
+          rectangle(mat_in,Point(r.x-10,r.y-10), Point(r.x+r.width+10,r.y+r.height+10), Scalar(0,255,0),2,8,0); //closed contour
+            printf("success\n");
+        }
+    }
+    
+    imwrite("../../contours.png",mat_in);
+    return 0;
+}
+
+
 double get_slope(Point2d a, Point2d b) {
     double hor_dist = (a.x - b.x);
     double ver_dist = (a.y - b.y);
 
-    if (ver_dist <= 0.01 && hor_dist <= 0.01) {
-        return 1.23;
+    if (abs(ver_dist) <= 0.0001 || abs(hor_dist) <= 0.0001) {
+        return 1.24;
     }
     double temp = (ver_dist/hor_dist);
     if (abs(temp) < 0.5) {

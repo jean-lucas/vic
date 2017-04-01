@@ -18,7 +18,13 @@
 
 
 
-const char* IC_BT_ADDR = "AC:2B:6E:04:BF:27";
+// const char* IC_BT_ADDR = "AC:2B:6E:04:BF:27"; //Jean Laptop
+const char* IC_BT_ADDR = "34:E6:AD:8B:B2:20"; //Matt's
+
+const uint8_t SEND_PORT = 8;
+const uint8_t RECV_PORT = 1;
+
+
 /* 
     Send a message over Bluetooth to the Intersection Controller
     Input:  msg to send
@@ -28,13 +34,15 @@ int sendToIC(char* msg) {
 
     struct sockaddr_rc addr = { 0 };
     int s, status;
-
     // allocate a socket
     s = socket(AF_BLUETOOTH, SOCK_STREAM, BTPROTO_RFCOMM);
+    printf("s = %d\n", s);
 
     // set the connection parameters (who to connect to)
     addr.rc_family = AF_BLUETOOTH;
-    addr.rc_channel = (uint8_t) 1;
+    addr.rc_channel = SEND_PORT;
+
+
     str2ba( IC_BT_ADDR, &addr.rc_bdaddr );
 
     // connect to server
@@ -42,7 +50,7 @@ int sendToIC(char* msg) {
 
     // send a message
     if (status == 0) {
-        status = send(s, msg, sizeof(msg), MSG_DONTWAIT);
+        status = send(s, msg, sizeof(msg)*sizeof(int), MSG_DONTWAIT);
     }
 
     //error sending the message, try again next time.
@@ -50,6 +58,7 @@ int sendToIC(char* msg) {
         printf("oh nos\n");
     }
 
+    printf("SENT!!!!!!!!!!!\n");
     close(s);
     return status;
 }
@@ -77,7 +86,7 @@ void* recvFromIC(void* arg) {
     // local bluetooth adapter
     loc_addr.rc_family = AF_BLUETOOTH;
     //loc_addr.rc_bdaddr = (&(bdaddr_t) {{0, 0, 0, 0, 0, 0}});
-    loc_addr.rc_channel = (uint8_t) 1;
+    loc_addr.rc_channel = RECV_PORT;
     bind(s, (struct sockaddr *)&loc_addr, sizeof(loc_addr));
 
     //listen with a backlog of 1

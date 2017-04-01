@@ -26,6 +26,7 @@ struct ImageData {
 	double intersection_distance;
 	int intersection_detected;
 	int obstacle_detected;
+	bool should_stop;
 	
 };
 
