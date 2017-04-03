@@ -30,9 +30,9 @@ int detect_obstacles( Mat mat_in);
 /* Constants */
 
 //this percentage will be cutoff from the top of the image
-const double CUT_OFF_HEIGHT_FACTOR = 0.45;
+const double CUT_OFF_HEIGHT_FACTOR = 0.35;
 const double CUT_OFF_WIDTH_FACTOR = 0.12;
-const double MIN_LINE_LENGTH = 10;
+const double MIN_LINE_LENGTH = 5;
 const double HORIZONTAL_SLOPE_VAL = 0.5;
 
 
@@ -54,6 +54,17 @@ VideoCapture test_camera() {
     return cap;
 }
 
+
+void calibrate_camera(VideoCapture *cap) {
+    if (!(cap->isOpened())) {
+        printf("failed to open capture\n");
+        cap->release();
+        return;
+    }
+    Mat capMat;
+    cap->read(capMat);
+    imwrite("../../cap_mat.png",capMat);
+}
 
 
 /*
@@ -84,6 +95,26 @@ string type2str(int type) {
   return r;
 }
 
+
+
+int detect_red(int y0, int yf, int x0, int xf, Mat mat) {
+    Vec3b colour;
+    int x = 0, y = 0, vote = 0;
+    for (y = y0; y < yf; y+=5) {
+        for (x = x0; x < xf; x+=5) {
+            colour = mat.at<Vec3b>(Point(x,y));
+            if (colour[2] > 200 && (colour [0] + colour[1]) < 200) {
+                vote++;
+                // printf("(%d, %d) %d %d %d\n", x,y,colour[0], colour[1],colour[2]);
+            }
+            if (vote > 10) {
+                return 1;
+            }
+
+        }
+    }
+    return 0;
+}
 
 
 Point2d get_left_intersection(double height, int x0, int xf, Mat cannyMat) {
@@ -140,10 +171,57 @@ int get_lane_statusv3(struct ImageData *img_data, VideoCapture *cap) {
     Rect cropRect = Rect(0, new_height, size_uncropped.width, size_uncropped.height-new_height);
     croppedMat = capMat(cropRect);
 
+    // imwrite("../../cropped.png", croppedMat);   
+    Size cropped = croppedMat.size();
+    int detected_red =0;
+     
+    detected_red = detect_red(cropped.height/4, 3*cropped.height/4, cropped.width/3, 2*cropped.width/3, croppedMat);
+
+    if (detected_red) {
+        printf("detected red? %d\n",detected_red );
+        img_data->intersection_detected = detected_red;
+        return NO_ERROR;
+    }
+
+    // printf("detected red? %d\n",detected_red );
     // int new_width = size_uncropped.width*CUT_OFF_WIDTH_FACTOR;
     // cropRect = Rect(new_width , new_height, size_uncropped.width - new_width*2, size_uncropped.height-new_height);
     // contourMat = capMat(cropRect);
 
+
+    // Mat HSVMat;
+    // Mat maskMat;
+    // Scalar lowerRed = Scalar(0,100,100);
+    // Scalar upperRed = Scalar(10,255,255);
+    // cvtColor(capMat,HSVMat,CV_BGR2HSV);
+    // inRange(HSVMat,lowerRed,upperRed,maskMat);
+
+
+    // //lets remove all red from the image
+    // Mat hsv;
+    // cvtColor(croppedMat, hsv, CV_BGR2HSV);
+    // vector<Mat> channels;
+    // split(hsv, channels);
+
+    // Mat H = channels[0];
+    // Mat S = channels[1];
+    // Mat V = channels[2];
+
+    // imwrite("../../H.png", H);
+    // imwrite("../../S.png", S);
+    // imwrite("../../V.png", V);
+
+    // Mat shiftedH = H.clone();
+    // int shift = 50; // in openCV hue values go from 0 to 180 (so have to be doubled to get to 0 .. 360) because of byte range from 0 to 255
+    // for(int j=0; j<shiftedH.rows; ++j)
+    //     for(int i=0; i<shiftedH.cols; ++i)
+    //     {
+    //         shiftedH.at<unsigned char>(j,i) = (shiftedH.at<unsigned char>(j,i) + shift)%180;
+    //     }
+    
+    // imwrite("../../H_shift.png", shiftedH);
+    // Canny(shiftedH, cannyMat, 50, 240, 3);
+    // imwrite("../../H_shift_canny.png", cannyMat);
 
     //finds edges in the capMatMath  via the Canny Edge detection algorithm, and puts
     //result in cannyMat
@@ -152,6 +230,9 @@ int get_lane_statusv3(struct ImageData *img_data, VideoCapture *cap) {
     // Canny(contourMat, contourCanny, 55, 240, 3);
 
     // imwrite("../../contourCanny.png",contourCanny);
+
+
+
 
 
 
@@ -234,7 +315,7 @@ int get_lane_statusv3(struct ImageData *img_data, VideoCapture *cap) {
     // HoughLinesP(cannyMat, lines, 1, CV_PI/180,30,5,10);
 
     //TODO: calculate these values
-    bool intersectionDetected = false;
+    int intersectionDetected = 0;
     double estimatedIntersectionDistance = 0;
     bool  obstacleDetected = false;
 
@@ -254,7 +335,10 @@ int get_lane_statusv3(struct ImageData *img_data, VideoCapture *cap) {
         b = Point2d(lines[i][2],lines[i][3]);
         mid = get_midpoint(a,b);   
 
-        col = 255;
+        // if (abs(camera_center_point.x - mid.x) < 35) {
+            // continue;
+        // }
+        // col = 255;
 
         line_length = get_line_length(a,b);
         if (line_length > MIN_LINE_LENGTH) {
@@ -264,10 +348,13 @@ int get_lane_statusv3(struct ImageData *img_data, VideoCapture *cap) {
                 slope_tot += slope_ang;
                 slope_count++;
             }
-            else if (slope_ang == 1.23) {
-                inter_count++;
-                col = 150;
-            }
+            // else if (slope_ang == 1.23) {
+            //     inter_count++;
+            //     col = 150;
+            // }
+            // else if (slope_ang == 1.24) {
+            //     col = 80;
+            // }
         }
 
         //if an end-point of a line plus the midpoint are to one side of the img center,
@@ -276,12 +363,13 @@ int get_lane_statusv3(struct ImageData *img_data, VideoCapture *cap) {
             leftLines.push_back(mid);
         }
 
-        else if (mid.x >= camera_center_point.x && (a.x >= camera_center_point.x || b.x >= camera_center_point.x)) {
+        else {
             rightLines.push_back(mid);
         }
 
-        line(houghMat, mid, camera_center_point, Scalar(0,255,0),1,8);
-        line(houghMat, a, b, Scalar(0,0,col),3,8);
+
+        // line(houghMat, mid, camera_center_point, Scalar(0,255,0),1,8);
+        // line(houghMat, a, b, Scalar(0,0,col),3,8);
 
     }
 
@@ -299,22 +387,30 @@ int get_lane_statusv3(struct ImageData *img_data, VideoCapture *cap) {
     avgRightSize = calculateAvgLineSize(rightLines, camera_center_point);
 
     double avgSlope;
+
     if (slope_count > 0) 
         avgSlope = slope_tot/slope_count;
     else 
         avgSlope = 0;
 
     // printf("avgSlope = %f \n",avgSlope );
-    if (inter_count > 5) {
-        intersectionDetected = true;
-        printf("detected  %d\n", inter_count);
+    // printf(" %d\n", inter_count);
+    // if (inter_count > 10) {
+    //     intersectionDetected = 1;
+    //     printf("detected  %d\n", inter_count);
+    // }
+    // else {
+    //     intersectionDetected = 0;
+    // }
+
+
+    if (detected_red == 1) {
+        intersectionDetected = 1;
     }
     else {
-        intersectionDetected = false;
+        intersectionDetected = 0;
     }
-    // else {
-        // intersectionDetected = false;
-    // }
+
 
     img_data->avg_left_angle        = theta1;
     img_data->avg_right_angle       = theta2;
@@ -490,7 +586,7 @@ int capture_lane(VideoCapture *cap) {
 
     //to  detect an intersection, we can look for the horizontal lines across the lane.
     //for  this we can just compare the y values between two points of a line.
-    bool intersectionDetected = false;
+    int intersectionDetected = 0;
     double estimatedIntersectionDistance = 0;
 
     //to detect an obstacle, we can try to find a countour  within our image, find the area of the given contour

@@ -15,6 +15,7 @@ const float PIXEL_TO_METER_FACTOR = 0.5;
 
 int get_lane_status(struct ImageData *img_data,  cv::VideoCapture *cap);
 cv::VideoCapture test_camera();
+void calibrate_camera(cv::VideoCapture *cap)
 int capture_lane(cv::VideoCapture *cap);
 int get_lane_statusv2(struct ImageData *img_data, cv::VideoCapture *cap);
 int get_lane_statusv3(struct ImageData *img_data, cv::VideoCapture *cap);

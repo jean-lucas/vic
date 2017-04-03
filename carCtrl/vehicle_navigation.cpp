@@ -57,19 +57,21 @@ int update_navigation(struct ImageData *img,  struct CarStatus *car, double p1, 
 
 	
 	if (img->left_line_length < 150 && img->left_line_length > 10) {
-		ang1 = 45;
+		ang1 = 35;
 	}
 	else if  (img->right_line_length < 150 && img->right_line_length > 10) {
-		ang1 = -45;
+		ang1 = -35;
 	}
-	else if (img->left_line_length > 160 && img->right_line_length > 160	) {
+	
+	if (img->left_line_length > 160 && img->right_line_length > 160) {
+		// ang1 = img->trajectory_angle/dd;
 		// ang1 = angleExpert(img->avg_left_angle, img->avg_right_angle, img->trajectory_angle, current_angle);
 	}
 
 	ang2 = slopeExpert(img->old_slope, img->avg_slope);
-	ang3 = lengthExpert(img->left_line_length, img->right_line_length); 
+	// ang3 = lengthExpert(img->left_line_length, img->right_line_length); 
 
-	//printf("ang1: %f\t ang2: %f\t ang3: %f\n",ang1,ang2,ang3);
+	printf("ang1: %f\t ang2: %f\t ang3: %f\n",ang1,ang2,ang3);
 
 	double ang = (ang1 + ang2 + ang3)/3.0;
 
@@ -85,7 +87,7 @@ int update_navigation(struct ImageData *img,  struct CarStatus *car, double p1, 
 
 
 
-	//printf("setting angle= \t\t%f\n\n", ang);
+	printf("setting angle= \t\t%f\n\n", ang);
 	car->current_wheel_angle = ang;
 	vichw_set_angle(ang);
 
@@ -94,11 +96,11 @@ int update_navigation(struct ImageData *img,  struct CarStatus *car, double p1, 
 	double new_speed = 0;
 
 	if (reduce_speed) {
-		new_speed = 0.45;
+		new_speed = 0.42;
 		reduce_speed = 0;
 	}
 	else {
-		new_speed = 0.6;
+		new_speed = 0.45;
 	}
 	
 	if(new_speed > MAX_SPEED){
@@ -142,10 +144,10 @@ double lengthExpert(double avg_left, double avg_right) {
 	//printf("left-len: %f \t right-len: %f\n", avg_left, avg_right);
 	
 	if (avg_left < 150 && avg_left > 10) {
-		new_angle = 45;
+		new_angle = 35;
 	}
 	else if  (avg_right < 150 && avg_right > 10) {
-		new_angle = -45;
+		new_angle = -35;
 	}
 
 	else if (avg_left - avg_right < -1*LENGTH_THRESHOLD) {

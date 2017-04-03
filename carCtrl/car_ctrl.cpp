@@ -51,7 +51,7 @@ int main(int argc, char** argv) {
     //test lane detect only
     if (argval == 1) {
         cap = test_camera();
-        get_lane_statusv3(&img_data,&cap);
+        calibrate_camera(&cap);
 	    cap.release();
         return 0;
     }
@@ -87,7 +87,7 @@ int init(int quickstart_mode) {
 
     int status = 1;
 
-    car_stat.current_speed           = 0.6;
+    car_stat.current_speed           = 0.45;
     car_stat.current_wheel_angle     = 0;
     car_stat.car_id                  = CAR_ID;
     car_stat.intersection_stop       = 0;
@@ -103,7 +103,6 @@ int init(int quickstart_mode) {
     img_data.intersection_distance     = -1;
     img_data.intersection_detected     = 0;
     img_data.obstacle_detected         = 0;
-    img_data.should_stop               = false;
 
 
     sig_resp = (struct SignalResponse*) calloc(1, sizeof(*sig_resp));
@@ -128,9 +127,6 @@ int init(int quickstart_mode) {
     return status;
 }
 
-
-
-int le_count = 0;
 
 
 
@@ -161,22 +157,20 @@ int run() {
 
 
         //check if an intersection has been detected. If so, do the right thing
-        if (img_data.intersection_detected && time_diff > 5000) {
-            // img_data.intersection_detected = 0;
-            t1 = getMsTime();
-            time_diff = 0;
-            le_count = 1;
-            set_speed(0);
+        if (img_data.intersection_detected) {
+            img_data.intersection_detected = 0;
             stop_at_intersection();
-            printf("finihsed\n");
-            // break;
+            printf("finihsed\n\n");
+            status = get_lane_statusv3(&img_data, &cap);
         }
 
         if (status == CORRUPT_IMAGE) {
             continue;
         }
+
+        
         status = update_navigation(&img_data, &car_stat,p,d,q);
-        time_diff = getMsTime() - t1;
+
        
     }
 
@@ -188,15 +182,22 @@ int run() {
 
 //create message, stop the car from proceeding and enter pause state
 void stop_at_intersection() {
-    
+    set_speed(0);
+    sig_resp->val = STOP_RESP;
+
     //build msg
     char* msg = (char*) malloc(sizeof(int)*8);
     msg = "1_2_1_12345";
 
     int sent = sendToIC(msg);
     printf("sent a message with size %d\n",sent );
-    sig_resp->val = STOP_RESP;
-    pause_sys();
+    
+    while (sig_resp->val == STOP_RESP){};
+
+    printf("Leaving intersection\n");
+    car_stat.current_speed  = 0.45;
+
+
 }
 
 
@@ -210,7 +211,7 @@ void pause_sys() {
         exit(0);
     }
     printf("Leaving pause state\n");
-    car_stat.current_speed  = 0.50;
+    car_stat.current_speed  = 0.45;
     // run();
 }
 
