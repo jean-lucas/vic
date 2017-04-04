@@ -29,24 +29,9 @@ double angleExpert(double theta1, double theta2, double theta3, double current_a
 
 
 
-void init_navigation(double time_period) {
-	// pid_tune(&pid, 2, 10, 0, DEFAULT_PWM, time_period);
-	// pid_set_clipping(&pid, MAX_SERVO_PWN, MIN_SERVO_PWM);
-	// pid_set(&pid, 0);
 
-}
-
-
-
-
-
-
-
-
-
-
-int update_navigation(struct ImageData *img,  struct CarStatus *car, double p1, double d2, double q3){
-
+static int count = 0;
+int update_navigation(struct ImageData *img,  struct CarStatus *car, double p1, double d2, double q3) {
 	pp = p1;
 	dd = d2;
 	qq = q3;
@@ -54,55 +39,54 @@ int update_navigation(struct ImageData *img,  struct CarStatus *car, double p1, 
 	double ang1 = 0,  ang2 = 0, ang3 = 0;
 	double current_angle = car->current_wheel_angle;
 
+	if (count == 0) {
+		if (img->left_line_length < 160 && img->left_line_length > 10) {
+			ang1 = 35;
+			count = 3;
+		}
+		else if  (img->right_line_length < 160 && img->right_line_length > 10) {
+			ang1 = -35;
+			count = 3;
+		}
+		
+		ang2 = slopeExpert(img->old_slope, img->avg_slope);
 
-	
-	if (img->left_line_length < 150 && img->left_line_length > 10) {
-		ang1 = 35;
-	}
-	else if  (img->right_line_length < 150 && img->right_line_length > 10) {
-		ang1 = -35;
-	}
-	
-	if (img->left_line_length > 160 && img->right_line_length > 160) {
-		// ang1 = img->trajectory_angle/dd;
-		// ang1 = angleExpert(img->avg_left_angle, img->avg_right_angle, img->trajectory_angle, current_angle);
-	}
 
-	ang2 = slopeExpert(img->old_slope, img->avg_slope);
-	// ang3 = lengthExpert(img->left_line_length, img->right_line_length); 
+		ang = (ang1/dd + ang2 + ang3)/2.0;
 
-	printf("ang1: %f\t ang2: %f\t ang3: %f\n",ang1,ang2,ang3);
+		if (sign(ang) != sign(current_angle) && abs(ang - current_angle) > 20 && current_angle != 0  && large_delta_count != 1) {
+			ang = current_angle;
+			large_delta_count = 1;
+		}
+		else {
+			large_delta_count = 0;
+		}
 
-	double ang = (ang1 + ang2 + ang3)/2.0;
 
-	if (sign(ang) != sign(current_angle) && abs(ang - current_angle) > 20 && current_angle != 0  && large_delta_count != 1) {
-		//printf("before reduction %f\n", ang );
-		ang = current_angle;
-		//printf(" ===== angle  set previous =====\n");
-		large_delta_count = 1;
-	}
+		printf("ang1: %f\t ang2: %f\t ang3: %f\n",ang1,ang2,ang3);
+		printf("setting angle= \t\t%f\n\n", ang);
+		car->current_wheel_angle = ang;
+		vichw_set_angle(ang);
+
+
+		//TODO: Update vehicle speed
+		double new_speed = 0;
+
+		
+		
+		if(new_speed > MAX_SPEED){
+			new_speed = MAX_SPEED;
+		}
+
+		new_speed = car->current_speed;
+		vichw_set_speed(new_speed);
+	} 
+
 	else {
-		large_delta_count = 0;
+		count--;
 	}
-
-
-
-	printf("setting angle= \t\t%f\n\n", ang);
-	car->current_wheel_angle = ang;
-	vichw_set_angle(ang);
-
-
-	//TODO: Update vehicle speed
-	double new_speed = 0;
-
 	
 	
-	if(new_speed > MAX_SPEED){
-		new_speed = MAX_SPEED;
-	}
-
-	new_speed = car->current_speed;
-	vichw_set_speed(new_speed);
 
 	return 1;
 }

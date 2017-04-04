@@ -24,6 +24,7 @@ cv::VideoCapture cap;
 double p = 3;
 double d = 1.5;    
 double q = 2;
+double starting_speed = 0.49;
 
 
 void stop_at_intersection();
@@ -62,6 +63,7 @@ int main(int argc, char** argv) {
         quickstart_mode = 0;
     }
 
+    //start car as soon as it can
     if (argc > 2) {
         p = atof(argv[2]);
         d = atof(argv[3]);
@@ -82,7 +84,7 @@ int main(int argc, char** argv) {
     return 0;
 }
 
-double starting_speed = 0.45;
+
 /* Initialize necessary modules, and test their are working */
 int init(int quickstart_mode) {
 
@@ -134,9 +136,9 @@ int init(int quickstart_mode) {
 int run() {
 
 	int status = 1;
-
     double  t1 = 0;
     double time_diff = 0;
+
     while (status != HALT_SYSTEM) {
 
         
@@ -148,7 +150,6 @@ int run() {
                 break;                
             }
             else {
-                //otherwise a pause signal has been called
                 pause_sys();
             }
         } 
@@ -162,7 +163,6 @@ int run() {
             t1 = getMsTime();
             img_data.intersection_detected = 0;
             stop_at_intersection();
-            printf("finihsed\n\n");
             status = get_lane_statusv3(&img_data, &cap);
             time_diff = getMsTime() - t1;
         }
@@ -171,10 +171,9 @@ int run() {
             continue;
         }
 
-        
-        status = update_navigation(&img_data, &car_stat,p,d,q);
+        status = update_navigation(&img_data, &car_stat, p, d, q);
 
-       time_diff = getMsTime() - t1;
+        time_diff = getMsTime() - t1;
     }
 
     printf("ending with status %d\n", status);
@@ -182,6 +181,8 @@ int run() {
 }
 
 
+
+//TODO: PLEASE FIX ME :(
 
 //create message, stop the car from proceeding and enter pause state
 void stop_at_intersection() {
@@ -194,13 +195,10 @@ void stop_at_intersection() {
 
     int sent = sendToIC(msg);
     printf("sent a message with size %d\n",sent );
-    
+
     while (sig_resp->val == STOP_RESP){};
-
+    
     printf("Leaving intersection\n");
-    car_stat.current_speed  =starting_speed;
-
-
 }
 
 
@@ -214,9 +212,11 @@ void pause_sys() {
         exit(0);
     }
     printf("Leaving pause state\n");
-    car_stat.current_speed  = starting_speed;
-    // run();
 }
+
+
+
+
 
 void cleanup() {
     printf("Cleaning up services\n");
