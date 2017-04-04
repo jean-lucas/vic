@@ -18,8 +18,8 @@
 
 
 
-const char* IC_BT_ADDR = "AC:2B:6E:04:BF:27"; //Jean Laptop
-// const char* IC_BT_ADDR = "34:E6:AD:8B:B2:20"; //Matt's
+// const char* IC_BT_ADDR = "AC:2B:6E:04:BF:27"; //Jean Laptop
+const char* IC_BT_ADDR = "34:E6:AD:8B:B2:20"; //Matt's
 
 const uint8_t SEND_PORT = 8;
 const uint8_t RECV_PORT = 1;

@@ -51,7 +51,8 @@ int main(int argc, char** argv) {
     //test lane detect only
     if (argval == 1) {
         cap = test_camera();
-        calibrate_camera(&cap);
+        get_lane_statusv3(&img_data, &cap);
+        // calibrate_camera(&cap);
 	    cap.release();
         return 0;
     }
@@ -81,13 +82,13 @@ int main(int argc, char** argv) {
     return 0;
 }
 
-
+double starting_speed = 0.45;
 /* Initialize necessary modules, and test their are working */
 int init(int quickstart_mode) {
 
     int status = 1;
 
-    car_stat.current_speed           = 0.45;
+    car_stat.current_speed           = starting_speed;
     car_stat.current_wheel_angle     = 0;
     car_stat.car_id                  = CAR_ID;
     car_stat.intersection_stop       = 0;
@@ -133,9 +134,9 @@ int init(int quickstart_mode) {
 int run() {
 
 	int status = 1;
-    double time_diff = 0;
-    double t1 = 0;
 
+    double  t1 = 0;
+    double time_diff = 0;
     while (status != HALT_SYSTEM) {
 
         
@@ -157,11 +158,13 @@ int run() {
 
 
         //check if an intersection has been detected. If so, do the right thing
-        if (img_data.intersection_detected) {
+        if (img_data.intersection_detected && time_diff > 5000) {
+            t1 = getMsTime();
             img_data.intersection_detected = 0;
             stop_at_intersection();
             printf("finihsed\n\n");
             status = get_lane_statusv3(&img_data, &cap);
+            time_diff = getMsTime() - t1;
         }
 
         if (status == CORRUPT_IMAGE) {
@@ -171,7 +174,7 @@ int run() {
         
         status = update_navigation(&img_data, &car_stat,p,d,q);
 
-       
+       time_diff = getMsTime() - t1;
     }
 
     printf("ending with status %d\n", status);
@@ -195,7 +198,7 @@ void stop_at_intersection() {
     while (sig_resp->val == STOP_RESP){};
 
     printf("Leaving intersection\n");
-    car_stat.current_speed  = 0.45;
+    car_stat.current_speed  =starting_speed;
 
 
 }
@@ -211,7 +214,7 @@ void pause_sys() {
         exit(0);
     }
     printf("Leaving pause state\n");
-    car_stat.current_speed  = 0.45;
+    car_stat.current_speed  = starting_speed;
     // run();
 }
 

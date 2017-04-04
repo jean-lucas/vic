@@ -73,7 +73,7 @@ int update_navigation(struct ImageData *img,  struct CarStatus *car, double p1, 
 
 	printf("ang1: %f\t ang2: %f\t ang3: %f\n",ang1,ang2,ang3);
 
-	double ang = (ang1 + ang2 + ang3)/3.0;
+	double ang = (ang1 + ang2 + ang3)/2.0;
 
 	if (sign(ang) != sign(current_angle) && abs(ang - current_angle) > 20 && current_angle != 0  && large_delta_count != 1) {
 		//printf("before reduction %f\n", ang );
@@ -95,19 +95,13 @@ int update_navigation(struct ImageData *img,  struct CarStatus *car, double p1, 
 	//TODO: Update vehicle speed
 	double new_speed = 0;
 
-	if (reduce_speed) {
-		new_speed = 0.42;
-		reduce_speed = 0;
-	}
-	else {
-		new_speed = 0.45;
-	}
+	
 	
 	if(new_speed > MAX_SPEED){
 		new_speed = MAX_SPEED;
 	}
 
-	car->current_speed = new_speed;
+	new_speed = car->current_speed;
 	vichw_set_speed(new_speed);
 
 	return 1;
@@ -131,8 +125,9 @@ double slopeExpert(double prev_slope, double curr_slope) {
 	}
 	else {
 		//average out the slopes
-		// //printf("=========== TAKING AVERAGE (2) =========\n");
-		new_angle = (curr_slope + prev_slope)/(qq*2.0);
+		printf("=========== TAKING AVERAGE (2) =========\n");
+		new_angle = (curr_slope + (prev_slope*0.8))/(2.0);
+		new_angle = new_angle/qq;
 	}
 	return new_angle;
 }
@@ -143,14 +138,14 @@ double lengthExpert(double avg_left, double avg_right) {
 	double new_angle = 0;	
 	//printf("left-len: %f \t right-len: %f\n", avg_left, avg_right);
 	
-	if (avg_left < 150 && avg_left > 10) {
-		new_angle = 35;
-	}
-	else if  (avg_right < 150 && avg_right > 10) {
-		new_angle = -35;
-	}
+	// if (avg_left < 150 && avg_left > 10) {
+	// 	new_angle = 35;
+	// }
+	// else if  (avg_right < 150 && avg_right > 10) {
+	// 	new_angle = -35;
+	// }
 
-	else if (avg_left - avg_right < -1*LENGTH_THRESHOLD) {
+	if (avg_left - avg_right < -1*LENGTH_THRESHOLD) {
 		new_angle = CENTER_ADJUST_ANGLE;
 	}
 	else if (avg_left - avg_right > LENGTH_THRESHOLD) {
@@ -218,62 +213,3 @@ int sign(double val) {
 
 
 
-
-
-
-
-	// double ang = calculate_angle(img->avg_left_angle, img->avg_right_angle, img->trajectory_angle,  \
-	// 							car->current_wheel_angle, img->left_line_length, img->right_line_length, pp ,dd);
-
-
-// //given the angles and line lengths calculate a new desired angle to follow.
-// //under certain conditions, this method may advise the car should slow down.
-// double calculate_angle(double theta1, double theta2, double theta3, double current_angle, double left_len, double right_len, double pp, double dd) {
-
-// 	double new_angle = 0;
-// 	double angle_diff = theta1 - theta2;
-
-	
-
-// 	if (sign(angle_diff) == sign(theta3)) { 
-// 		new_angle = angle_diff/pp + theta3/dd;
-// 	}
-
-// 	else if (theta3 != 0 && theta1*theta2 == 0) {
-// 		new_angle = theta3/dd;
-// 	} 
-
-// 	else if (theta3 == 0 && theta1*theta2 != 0) {
-// 		if (angle_diff > ANGLE_THRESHOLD) {
-// 			new_angle = angle_diff/pp;
-// 		}
-// 		else {
-// 			new_angle = current_angle;
-// 		}
-// 	}
-
-// 	else {
-// 		new_angle = current_angle/3;
-// 		reduce_speed = 1;
-// 	}
-
-// 	//should we check for first offense?
-// 	if (sign(new_angle) != sign(current_angle) && abs(new_angle - current_angle) > 20 && current_angle != 0 ) {
-// 		//printf("before reduction %f\n", new_angle );
-// 		// new_angle = new_angle/5;
-// 		new_angle = current_angle;
-// 		//printf(" ===== angle  set previous =====\n");
-// 	}
-
-
-// 	//check clipping
-// 	if(new_angle > MAX_ANGLE){
-// 		new_angle = MAX_ANGLE;
-// 	}
-// 	else if(new_angle < -1*MAX_ANGLE){
-// 		new_angle = -1*MAX_ANGLE;
-// 	}
-
-
-// 	return new_angle;
-// }	

@@ -46,7 +46,8 @@ const double HORIZONTAL_SLOPE_VAL = 0.5;
 VideoCapture test_camera() {
 
     VideoCapture cap(DEFAULT_CAMERA_ID);
-
+    cap.set(CV_CAP_PROP_FRAME_WIDTH, 640);
+    cap.set(CV_CAP_PROP_FRAME_HEIGHT, 480);
     if (!cap.isOpened()) {
             printf("failed to open capture\n");
             return HALT_SYSTEM;
@@ -61,8 +62,12 @@ void calibrate_camera(VideoCapture *cap) {
         cap->release();
         return;
     }
+    //get latest capture
+    // int frame_count = cap->get(CAP_PROP_FRAME_COUNT);
+    // cap->set(CAP_PROP_POS_FRAMES, frame_count-1);
     Mat capMat;
     cap->read(capMat);
+    printf("calibrating\n");
     imwrite("../../cap_mat.png",capMat);
 }
 
@@ -155,6 +160,9 @@ int get_lane_statusv3(struct ImageData *img_data, VideoCapture *cap) {
         return HALT_SYSTEM;
     }
 
+    //get latest capture
+    // int frame_count = cap->get(CAP_PROP_FRAME_COUNT);
+    // cap->set(CAP_PROP_POS_FRAMES, frame_count-1);
 
     Mat capMat, croppedMat, cannyMat, houghMat, contourMat, contourCanny;
 
@@ -328,7 +336,7 @@ int get_lane_statusv3(struct ImageData *img_data, VideoCapture *cap) {
 
     int inter_count = 0;
 
-    int col = 255;
+    int col = 0;
     //draw detected lines
     for (size_t i = 0; i < lines.size(); i++) {
         a = Point2d(lines[i][0],lines[i][1]);
@@ -339,31 +347,43 @@ int get_lane_statusv3(struct ImageData *img_data, VideoCapture *cap) {
             // continue;
         // }
         // col = 255;
-
+        col += 10;
         line_length = get_line_length(a,b);
         if (line_length > MIN_LINE_LENGTH) {
             slope_ang = get_slope(a,b);
             if (slope_ang != 1.23 && slope_ang != 1.24) {
-                // printf("Point (%f %f) to Point (%f %f) gave slope degree of %f\n", a.x,a.y,b.x,b.y,slope_ang);
+                
                 slope_tot += slope_ang;
                 slope_count++;
+                // line(houghMat, a, b, Scalar(0,0,col),3,8);
+                // printf("pass: Point (%f %f) to Point (%f %f) gave slope degree of %f\n", a.x,a.y,b.x,b.y,slope_ang);
+
             }
-            // else if (slope_ang == 1.23) {
-            //     inter_count++;
-            //     col = 150;
-            // }
-            // else if (slope_ang == 1.24) {
-            //     col = 80;
-            // }
+            else if (slope_ang == 1.23) {
+                inter_count++;
+                col = 150;
+                // printf("ignoring: Point (%f %f) to Point (%f %f) gave slope degree of %f\n", a.x,a.y,b.x,b.y,slope_ang);
+
+                // line(houghMat, a, b, Scalar(col,0,0),3,8);
+
+            }
+            else if (slope_ang == 1.24) {
+                // printf("ignoring: Point (%f %f) to Point (%f %f) gave slope degree of %f\n", a.x,a.y,b.x,b.y,slope_ang);
+
+                // line(houghMat, a, b, Scalar(col,col,0),3,8);
+                // col = 80;
+            }
         }
 
         //if an end-point of a line plus the midpoint are to one side of the img center,
         // than consider which side it is on
         if (mid.x <= camera_center_point.x && (a.x <= camera_center_point.x || b.x <= camera_center_point.x)) {
+            // printf("LEFT: Point (%f %f) to Point (%f %f) gave slope degree of %f\n", a.x,a.y,b.x,b.y,slope_ang);
             leftLines.push_back(mid);
         }
 
         else {
+            // printf("RIGHT: Point (%f %f) to Point (%f %f) gave slope degree of %f\n", a.x,a.y,b.x,b.y,slope_ang);
             rightLines.push_back(mid);
         }
 
@@ -393,7 +413,7 @@ int get_lane_statusv3(struct ImageData *img_data, VideoCapture *cap) {
     else 
         avgSlope = 0;
 
-    // printf("avgSlope = %f \n",avgSlope );
+    printf("avgSlope = %f \n",avgSlope );
     // printf(" %d\n", inter_count);
     // if (inter_count > 10) {
     //     intersectionDetected = 1;
@@ -457,11 +477,17 @@ double get_slope(Point2d a, Point2d b) {
     if (abs(ver_dist) <= 0.0001 || abs(hor_dist) <= 0.0001) {
         return 1.24;
     }
-    double temp = (ver_dist/hor_dist);
-    if (abs(temp) < 0.5) {
+    // double temp = (ver_dist/hor_dist);
+    // // printf("temp = %f\n", temp);        
+    // if (abs(temp) < 0.6) {
+    //     return 1.23;
+    // }
+
+    double angle = atan(hor_dist/ver_dist)*(-180.0/CV_PI);
+    if (abs(angle) > 50) {
         return 1.23;
     }
-    return atan(hor_dist/ver_dist)*(-180.0/CV_PI); 
+    return   angle;
     // return atan2(hor_dist,ver_dist)*(-180.0/CV_PI);
     // return atan2(ver_dist,hor_dist)*(-180.0/CV_PI);
 
