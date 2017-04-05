@@ -42,11 +42,11 @@ int update_navigation(struct ImageData *img,  struct CarStatus *car, double p1, 
 	if (count == 0) {
 		if (img->left_line_length < 160 && img->left_line_length > 10) {
 			ang1 = 35;
-			count = 3;
+			count = 2;
 		}
 		else if  (img->right_line_length < 160 && img->right_line_length > 10) {
 			ang1 = -35;
-			count = 3;
+			count = 2;
 		}
 		
 		ang2 = slopeExpert(img->old_slope, img->avg_slope);
@@ -63,8 +63,8 @@ int update_navigation(struct ImageData *img,  struct CarStatus *car, double p1, 
 		}
 
 
-		printf("ang1: %f\t ang2: %f\t ang3: %f\n",ang1,ang2,ang3);
-		printf("setting angle= \t\t%f\n\n", ang);
+		// printf("ang1: %f\t ang2: %f\t ang3: %f\n",ang1,ang2,ang3);
+		// printf("setting angle= \t\t%f\n\n", ang);
 		car->current_wheel_angle = ang;
 		vichw_set_angle(ang);
 

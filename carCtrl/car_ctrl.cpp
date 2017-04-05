@@ -24,7 +24,7 @@ cv::VideoCapture cap;
 double p = 3;
 double d = 1.5;    
 double q = 2;
-double starting_speed = 0.52;
+double starting_speed = 0.48;
 
 
 void stop_at_intersection();
@@ -164,7 +164,7 @@ int run() {
 
 
         //check if an intersection has been detected. If so, do the right thing
-        if (img_data.intersection_detected && time_diff > 5000) {
+        if (img_data.intersection_detected && time_diff > 10000) {
             t1 = getMsTime();
             img_data.intersection_detected = 0;
             stop_at_intersection();
@@ -188,7 +188,7 @@ int run() {
 
     printf("ending with status %d\n", status);
 
-    printf("In %d iterations avg running time was %f\n", running_time/iterations);
+    printf("In %d iterations avg running time was %f\n", iterations,running_time/iterations);
 
 }
 
