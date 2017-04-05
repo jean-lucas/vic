@@ -148,7 +148,7 @@ int get_lane_statusv3(struct ImageData *img_data, VideoCapture *cap) {
 
     //Create binary image
     cvtColor(croppedMat, croppedMat,CV_BGR2GRAY);
-    threshold(croppedMat, croppedMat, 210, 255, THRESH_BINARY);
+    threshold(croppedMat, croppedMat, 220, 255, THRESH_BINARY);
     
     //imwrite("../../step3_binary.png",croppedMat);
 
@@ -241,12 +241,21 @@ int get_lane_statusv3(struct ImageData *img_data, VideoCapture *cap) {
     printf("avgSlope = %f \n",avgSlope );
 
 
+    int intersectionDetected = 0;
+    
+    if (detected_red == 1) {
+        intersectionDetected = 1;
+    }
+    else {
+        intersectionDetected = 0;
+    }
+
 
     img_data->old_slope             = img_data->avg_slope;
     img_data->avg_slope             = avgSlope;
     img_data->left_line_length      = avgLeftSize;
     img_data->right_line_length     = avgRightSize;
-    // img_data->intersection_detected = intersectionDetected;
+    img_data->intersection_detected = intersectionDetected;
 
    // //imwrite("../../hough.png",houghMat);
 
