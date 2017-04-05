@@ -69,7 +69,7 @@ void calibrate_camera(VideoCapture *cap) {
     Mat capMat;
     cap->read(capMat);
     printf("image printed to cap_mat.png\n");
-    imwrite("../../cap_mat.png",capMat);
+    //imwrite("../../cap_mat.png",capMat);
 }
 
 
@@ -122,6 +122,9 @@ int get_lane_statusv3(struct ImageData *img_data, VideoCapture *cap) {
         return CORRUPT_IMAGE;
     }
 
+
+    //imwrite("../../step1_bareCap.png",capMat);
+
     //cropping image
     Size size_uncropped = capMat.size();
     int new_height = size_uncropped.height*CUT_OFF_HEIGHT_FACTOR;
@@ -129,7 +132,7 @@ int get_lane_statusv3(struct ImageData *img_data, VideoCapture *cap) {
     croppedMat = capMat(cropRect);
     Size cropped = croppedMat.size();
 
-
+    //imwrite("../../step2_crop.png",croppedMat);
 
     // Try to detect an intersection, this should be moved later
     int detected_red =0;
@@ -145,18 +148,22 @@ int get_lane_statusv3(struct ImageData *img_data, VideoCapture *cap) {
 
     //Create binary image
     cvtColor(croppedMat, croppedMat,CV_BGR2GRAY);
-    threshold(croppedMat, croppedMat, 200, 255, THRESH_BINARY);
+    threshold(croppedMat, croppedMat, 210, 255, THRESH_BINARY);
     
+    //imwrite("../../step3_binary.png",croppedMat);
 
     //Canny(inputMay, outputMat, threshold_1, threshold_2, apertureSize, L2Gradient )
     Canny(croppedMat, cannyMat, 50, 255, 3);
 
+    //imwrite("../../step4_canny.png",cannyMat);
 
     //basic information of the image
     Size size = cannyMat.size();
     int imgHeight = size.height;
     int imgWidth  = size.width;
     Point2d camera_center_point = Point2d(imgWidth/2.0, imgHeight);
+
+    cvtColor(cannyMat, houghMat, CV_GRAY2BGR);
 
 
 
@@ -179,7 +186,7 @@ int get_lane_statusv3(struct ImageData *img_data, VideoCapture *cap) {
     double slope_ang = 0;
 
 
-    int col = 0;
+    int col = 255;
 
 
     //logic on the detected lines from hough transform
@@ -197,7 +204,7 @@ int get_lane_statusv3(struct ImageData *img_data, VideoCapture *cap) {
             if (slope_ang != INVALID_SLOPE) {
                 slope_tot   += slope_ang;
                 slope_count += 1;
-                // line(houghMat, a, b, Scalar(0,0,col),3,8);
+                line(houghMat, a, b, Scalar(0,0,col),3,8);
                 // printf("pass: Point (%f %f) to Point (%f %f) gave slope degree of %f\n", a.x,a.y,b.x,b.y,slope_ang);
             }
         }
@@ -213,12 +220,11 @@ int get_lane_statusv3(struct ImageData *img_data, VideoCapture *cap) {
         }
 
 
-        // line(houghMat, mid, camera_center_point, Scalar(0,255,0),1,8);
+        line(houghMat, mid, camera_center_point, Scalar(0,255,0),1,8);
         // line(houghMat, a, b, Scalar(0,0,col),3,8);
-
     }
 
-
+    //imwrite("../../step5_hough.png",houghMat);
 
 
     double avgLeftSize, avgRightSize;
@@ -240,13 +246,13 @@ int get_lane_statusv3(struct ImageData *img_data, VideoCapture *cap) {
     img_data->avg_slope             = avgSlope;
     img_data->left_line_length      = avgLeftSize;
     img_data->right_line_length     = avgRightSize;
-    img_data->intersection_detected = intersectionDetected;
+    // img_data->intersection_detected = intersectionDetected;
 
-   // imwrite("../../hough.png",houghMat);
+   // //imwrite("../../hough.png",houghMat);
 
     return NO_ERROR;
-}
 
+}
 
 
 
