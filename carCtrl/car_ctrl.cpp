@@ -24,7 +24,7 @@ cv::VideoCapture cap;
 double p = 3;
 double d = 1.5;    
 double q = 2;
-double starting_speed = 0.49;
+double starting_speed = 0.52;
 
 
 void stop_at_intersection();
@@ -139,9 +139,14 @@ int run() {
     double  t1 = 0;
     double time_diff = 0;
 
+
+    double running_time = 0;
+    int iterations = 0;
+    double time_start = 0, time_end = 0;
+
     while (status != HALT_SYSTEM) {
 
-        
+        time_start  = getMsTime();
         //check for IC response
         if (sig_resp->val != PROCEED_RESP) {
             if (sig_resp->val == EMERGENCY_STOP_RESP) {
@@ -174,9 +179,16 @@ int run() {
         status = update_navigation(&img_data, &car_stat, p, d, q);
 
         time_diff = getMsTime() - t1;
+        
+
+        time_end = getMsTime();
+        iterations += 1;
+        running_time += (time_end - time_start);
     }
 
     printf("ending with status %d\n", status);
+
+    printf("In %d iterations avg running time was %f\n", running_time/iterations);
 
 }
 

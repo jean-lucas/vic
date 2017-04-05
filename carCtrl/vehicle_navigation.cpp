@@ -36,7 +36,7 @@ int update_navigation(struct ImageData *img,  struct CarStatus *car, double p1, 
 	dd = d2;
 	qq = q3;
 
-	double ang1 = 0,  ang2 = 0, ang3 = 0;
+	double ang1 = 0,  ang2 = 0, ang3 = 0, ang = 0;
 	double current_angle = car->current_wheel_angle;
 
 	if (count == 0) {
