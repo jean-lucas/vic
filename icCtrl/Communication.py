@@ -83,9 +83,9 @@ class Communication (object):
             # particulars to help in the debugging ---------------------------------
             print "Connection recieved from: ", client_bluetooth_ID[0],": connection accepted @", time.ctime()
             client_message = client_socket.recv(1024)
-            #print client_message
 
             print "Message number %d" % counter
+            print " Client Message: ", client_message
             counter +=1
             print
             # ----------------------------------------------------------------------
@@ -197,7 +197,8 @@ class Communication (object):
             #    direction_to = 7
             
             # Car(self, car_ID, port, client_bluetooth_ID, direction_from, direction_to, time_stamp)
-            return Car(my_content[0], my_content[2], client_bluetooth_ID[0], my_content[1], "-", my_content[3])
+            print my_content[0],"_", my_content[3], "_", client_bluetooth_ID[0], "_", my_content[1], "_", my_content[2], "_", my_content[4]
+            return Car(my_content[0], my_content[3], client_bluetooth_ID[0], my_content[1], my_content[2], my_content[4])
         except:
             pass
 
