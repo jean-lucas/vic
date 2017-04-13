@@ -48,6 +48,8 @@
 \renewcommand{\arraystretch}{1.2}% Spread rows out evenly in table
 \setlength{\LTpre}{0.5pt} % Reduces white space around tables (top)
 %\setlength{\LTpost}{0pt} % Reduces white space around tables (bottom)
+\setlength\arrayrulewidth{1pt}
+
 
 
 
@@ -93,7 +95,7 @@ linkcolor=black,}  %choose some color if you want links to stand out
 % Header
 \lhead{Verification and Validation } 
 \rhead{Revision: 0}
-\fancyhead[LE,CO]{VIC - Group 6}
+\fancyhead[LE, CO]{VIC - Group 6}
 
 % Removes line under the header 
 \renewcommand{\headrulewidth}{0pt}
@@ -282,9 +284,9 @@ Zachary Bazen &-& 1200979
 
 \hline 
 \centering \textbf{Date} & 
-\multicolumn{1}{c}{\textbf {Revision Number}} &
-\multicolumn{1}{|c}{\textbf {Authors}} & 
-\multicolumn{1}{|c|}{\textbf {Comments}} \\ \hline
+\multicolumn{1}{c|}{\textbf {Revision Number}} &
+\multicolumn{1}{c|}{\textbf {Authors}} & 
+\multicolumn{1}{c|}{\textbf {Comments}} \\ \hline
 
 \multirow{4}{*}{\centering February 27, 2017}  & 
 \multirow{4}{*}{Revision 0}& 
@@ -537,12 +539,12 @@ The system consists of two main components: Vehicle Controller and Intersection 
 
     % Row 1
     \rowcolor{subsectionC}\centering \textbf{Test ID} 
-    &  \multicolumn{1}{|c|}{\textbf{Requirement ID} }
+    &  \multicolumn{1}{c|}{\textbf{Requirement ID} }
     & \multicolumn{1}{c|}{\textbf{Description} }
     & \multicolumn{1}{c|}{\textbf{Input} }
     & \textbf{Expected Behaviour} 
     & \multicolumn{1}{c|}{\textbf{Actual Behaviour} }
-    & \textbf{Pass/Fail} \\  
+    & \textbf{Pass/Fail} \\ 
     
     % Row 2
     \multicolumn{1}{|c|}{HC1.1} 
@@ -589,7 +591,7 @@ The system consists of two main components: Vehicle Controller and Intersection 
 
     % Row 1
     \rowcolor{subsectionC}\centering\textbf{Test ID} 
-    & \multicolumn{1}{|c|}{\textbf{Requirement ID} }
+    & \multicolumn{1}{c|}{\textbf{Requirement ID} }
     & \multicolumn{1}{c|}{\textbf{Description} }
     & \multicolumn{1}{c|}{\textbf{Input} }
     & \textbf{Expected Behaviour} 
@@ -1335,7 +1337,7 @@ Arrival Queue:
     & Single vehicle intersection request 
     & Car object containing the request information pushed into the arrival queue
     & N/A
-    & \multicolumn{1}{|c|}{N/A}\\ \hline
+    & \multicolumn{1}{c|}{N/A}\\ \hline
     % Row 2 
     \rowcolor{tableCell}\multicolumn{1}{|c|}{IC1.2} 
     & \multicolumn{1}{c|}{IC1, IC5}
@@ -1343,7 +1345,7 @@ Arrival Queue:
     & More than one vehicle intersection request 
     & Car objects containing the request information pushed to the arrival queue in the order that they were received 
     & N/A
-    & \multicolumn{1}{|c|}{N/A}\\ \hline
+    & \multicolumn{1}{c|}{N/A}\\ \hline
     
     % Row 3 (without color)
     \multicolumn{1}{|c|}{IC1.3} 
@@ -1352,7 +1354,7 @@ Arrival Queue:
     &  Vehicle intersection request that is terminated prior to receive completion
     & Timeout/ disconnected receive error is caught and system becomes available for subsequent requests
     & N/A
-    & \multicolumn{1}{|c|}{N/A}\\ \hline 
+    & \multicolumn{1}{c|}{N/A}\\ \hline 
     
     
     
@@ -1366,7 +1368,7 @@ Arrival Queue:
     & Many vehicle requests
     &  Car objects containing the request information pushed to the arrival queue in the order that they were received 
     & N/A
-    & \multicolumn{1}{|c|}{N/A}\\ \hline
+    & \multicolumn{1}{c|}{N/A}\\ \hline
     \newpage \hline
 
 
@@ -1378,7 +1380,7 @@ Arrival Queue:
     & Invalid message \newline request
     & Invalid/corrupt message detected and dropped
     & N/A
-    & \multicolumn{1}{|c|}{N/A}\\ \hline
+    & \multicolumn{1}{c|}{N/A}\\ \hline
      
     \end{longtable}
     
@@ -1413,7 +1415,7 @@ Arrival Queue:
     & Car object in the proceed queue
     & Remove vehicle from proceed queue and send proceed message to vehicle 
     & N/A
-    & \multicolumn{1}{|c|}{N/A}\\ \hline
+    & \multicolumn{1}{c|}{N/A}\\ \hline
     
     % Row 2 
   
@@ -1423,7 +1425,7 @@ Arrival Queue:
     & More than one car object in the proceed queue
     & Remove vehicles from departure queue and send proceed message to vehicles in FIFO order.  
     & N/A
-    & \multicolumn{1}{|c|}{N/A}\\ \hline
+    & \multicolumn{1}{c|}{N/A}\\ \hline
     
     
     % Row 3
@@ -1433,7 +1435,7 @@ Arrival Queue:
     & Many vehiles in the proceed queue
     & ``''
     & N/A
-    & \multicolumn{1}{|c|}{N/A}\\ \hline
+    & \multicolumn{1}{c|}{N/A}\\ \hline
     
     
    
@@ -1444,7 +1446,7 @@ Arrival Queue:
     & Car object in the proceed queue
     & Inactive connection error should be caught. The system should then attempt to send the message again (up to the maximum attempt limit)
     & N/A
-    & \multicolumn{1}{|c|}{N/A}\\  \hline
+    & \multicolumn{1}{c|}{N/A}\\  \hline
     
     \pagebreak \hline
    
@@ -1456,7 +1458,7 @@ Arrival Queue:
     & ``'' 
     &  Timeout/ disconnected send error should be caught.  The system should then attempt to send the message again (up to the maximum attempt limit)
     & N/A
-    & \multicolumn{1}{|c|}{N/A}\\ \hline
+    & \multicolumn{1}{c|}{N/A}\\ \hline
     
     \end{longtable}
     
@@ -1496,7 +1498,7 @@ Arrival Queue:
     & 2\_N\_N\_1\_timestamp
     & Incorrect Message contents error caught
     &  N/A
-    & \multicolumn{1}{c|}{N/A}\\ \hline
+    & \multicolumn{1}{c|}{N/A}\\\hline
     
     % Row 4
     \multicolumn{1}{|c|}{IC3.3} 
@@ -1660,7 +1662,10 @@ Arrival Queue:
     
      % Row 5
     \multicolumn{1}{|c|}{VIC.5} 
-    & \multicolumn{1}{c|}{V3, V4, V5, IC4, IC5}
+    &\begin{minipage}{.17\textwidth} \vspace{1 mm} \begin{center}
+    V3, V4, V5, IC4, IC5
+    \end{center}\end{minipage} 
+    %\multicolumn{1}{c|}{}
     & Vehicles with crossing directions must stop at the intersection, the vehicle that arrived first proceeds through the intersection first
     &  Vehicle A and Vehicle B, crossing directions, clear intersection, Vehicle A is first
     &Vehicles A proceeds directly through the intersection, Vehicle B stops at the intersection 
