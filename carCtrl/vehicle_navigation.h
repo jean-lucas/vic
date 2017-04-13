@@ -11,7 +11,7 @@ const double CENTER_ADJUST_ANGLE = 10;
 
 void init_navigation(double time_period);
 int update_navigation(struct ImageData *img, struct CarStatus *car, double p1, double d2, double q3);
-void set_speed(double speed);
+void stop_car();
 
 #endif
 

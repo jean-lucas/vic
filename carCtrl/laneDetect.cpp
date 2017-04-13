@@ -9,27 +9,37 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#include <raspicam/raspicam_cv.h>
+
 using namespace cv;
 using namespace std;
+using namespace raspicam;
 
 
 
-/* Function declarations */
-Point2d get_midpoint(Point2d a, Point2d b);
-double calculateAvgAngle(vector<Point2d> vec, Point2d center);
-double calculateAvgLineSize(vector<Point2d> vec, Point2d center);
-double lineLength(Point2d a, Point2d b);
-double getDistanceToLine(Point2d a, Point2d b);
-double get_slope(Point2d a, Point2d b);
-double get_line_length(Point2d a, Point2d b);
-
+/* private function declarations */
+static Point2d get_midpoint(Point2d a, Point2d b);
+static double calculateAvgAngle(vector<Point2d> vec, Point2d center);
+static double calculateAvgLineSize(vector<Point2d> vec, Point2d center);
+static double lineLength(Point2d a, Point2d b);
+static double getDistanceToLine(Point2d a, Point2d b);
+static double get_slope(Point2d a, Point2d b);
+static double get_line_length(Point2d a, Point2d b);
+static int get_intersection_type(Mat mat);
 
 
 /* Constants */
 //this percentage will be cutoff from the top of the image
-const double CUT_OFF_HEIGHT_FACTOR = 0.35;
+const double CUT_OFF_HEIGHT_FACTOR = 0.55;
 const double MIN_LINE_LENGTH = 5;
 const double INVALID_SLOPE = 200;
+const double MIN_INTERSECTION_DISTANCE = 100;
+
+static struct int_info {
+    int type     = 0;
+    int detected = 0;
+    double dist  = -1;
+} info;
 
 
 
@@ -37,39 +47,37 @@ const double INVALID_SLOPE = 200;
 
 /*
     Test if camera can capture images/videos
-    If successful return pointer to VideoCapture object
+    If successful return pointer to RaspiCam_Cv object
     Else return null pointer
 
-    The VideoCapture returned will be used for constant streaming.
+    The RaspiCam_Cv returned will be used for constant streaming.
 */
-VideoCapture test_camera() {
+void test_camera(raspicam::RaspiCam_Cv* cap) {
+    // RaspiCam_Cv *cap = (RaspiCam_Cv *) malloc(sizeof(RaspiCam_Cv));
+    cap->set( CV_CAP_PROP_FORMAT, CV_8UC3 );
+    cap->set( CV_CAP_PROP_FRAME_WIDTH, 640);
+    cap->set( CV_CAP_PROP_FRAME_HEIGHT, 480);
 
-    VideoCapture cap(DEFAULT_CAMERA_ID);
-    cap.set(CV_CAP_PROP_FRAME_WIDTH, 640);
-    cap.set(CV_CAP_PROP_FRAME_HEIGHT, 480);
-    if (!cap.isOpened()) {
-            printf("failed to open capture\n");
-            return HALT_SYSTEM;
+    cap->open();
+    if (cap->isOpened()) {
+        printf("open success\n");
     }
-    return cap;
+    else {
+        printf("open not success\n");
+    }
+    sleep(1);
+    
 }
 
+void calibrate_raspicam(RaspiCam_Cv *cap) {
 
-/*
-    This is for 'calibrating' the camera on the tower.
-    Allows us to quickly see if the camera should be turned up or down.  
-*/
-void calibrate_camera(VideoCapture *cap) {
-
-    if (!(cap->isOpened())) {
-        printf("failed to open capture\n");
-        cap->release();
-        return;
-    }
+    sleep(1);
     Mat capMat;
-    cap->read(capMat);
-    printf("image printed to cap_mat.png\n");
-    //imwrite("../../cap_mat.png",capMat);
+    cap->grab();
+    cap->retrieve(capMat);
+    imwrite("../../raspicam.png", capMat);
+    printf("image printed to raspicam.png\n");
+
 }
 
 
@@ -78,33 +86,45 @@ void calibrate_camera(VideoCapture *cap) {
 /** 
     This is a temporary function.
     Ideally we would want this to detect any arbitrary colour, 
-    as well as running a different thread
+    as well as running a different thread BGR
 */
-int detect_red(int y0, int yf, int x0, int xf, Mat mat) {
+int_info detect_intersection(int y0, int yf, int x0, int xf, Mat mat) {
 
     Vec3b colour;
     int x = 0, y = 0, vote = 0;
+    double detected_ypos = 0;
+
+    int_info inter_info;
+    inter_info.detected = 0;
+    inter_info.dist     = -1;
+
     for (y = y0; y < yf; y+=5) {
         for (x = x0; x < xf; x+=5) {
             colour = mat.at<Vec3b>(Point(x,y));
             if (colour[2] > 200 && (colour [0] + colour[1]) < 200) {
                 vote++;
-                // printf("(%d, %d) %d %d %d\n", x,y,colour[0], colour[1],colour[2]);
+                detected_ypos += y;
             }
-            if (vote > 10) {
-                return 1;
+            else if (colour[0] > 200 && (colour[1] + colour[2]) < 200) {
+                vote++;
+                detected_ypos += y;
+            }
+            if (vote > 5) {
+                inter_info.detected = 1;
+                inter_info.dist     = detected_ypos/vote;
+                return inter_info;
             }
 
         }
     }
-    return 0;
+
+    return inter_info;
 }
 
 
 
 
-
-int get_lane_statusv3(struct ImageData *img_data, VideoCapture *cap) {
+int get_lane_statusv3(struct ImageData *img_data, RaspiCam_Cv *cap) {
 
     if (!(cap->isOpened())) {
         printf("failed to open capture\n");
@@ -116,46 +136,61 @@ int get_lane_statusv3(struct ImageData *img_data, VideoCapture *cap) {
     Mat capMat, croppedMat, cannyMat, houghMat, contourMat, contourCanny;
 
     //retrieve the current frame from video stream
-    cap->read(capMat);
+
+
+    cap->grab();
+    cap->retrieve(capMat);
 
     if (capMat.data == NULL) {
         return CORRUPT_IMAGE;
     }
 
+    Size size_uncropped = capMat.size();
 
-    //imwrite("../../step1_bareCap.png",capMat);
+
+    // Try to detect an intersection
+    info = detect_intersection(size_uncropped.height/4, 3*size_uncropped.height/4, 
+                                size_uncropped.width/3, 2*size_uncropped.width/3, capMat);
+
+    // printf("\nDistance to intersection %f, and detected %d\n", info.dist, info.detected );
+
+    if (info.detected) {
+        img_data->intersection_detected = info.detected;
+        img_data->intersection_distance = info.dist;
+        img_data->intersection_type     = info.type;
+        if (info.dist < MIN_INTERSECTION_DISTANCE && info.dist >= 0) {
+            img_data->intersection_stop = 1;
+            printf("intersection found of type %d, stopping car.\n", info.type);
+            return NO_ERROR;
+        }
+        
+    }
+
+
+    // imwrite("../../step1_bareCap.png",capMat);
 
     //cropping image
-    Size size_uncropped = capMat.size();
     int new_height = size_uncropped.height*CUT_OFF_HEIGHT_FACTOR;
     Rect cropRect = Rect(0, new_height, size_uncropped.width, size_uncropped.height-new_height);
     croppedMat = capMat(cropRect);
     Size cropped = croppedMat.size();
 
-    //imwrite("../../step2_crop.png",croppedMat);
+    // imwrite("../../step2_crop.png",croppedMat);
 
-    // Try to detect an intersection, this should be moved later
-    int detected_red =0;
-    detected_red = detect_red(cropped.height/4, 3*cropped.height/4, cropped.width/3, 2*cropped.width/3, croppedMat);
-
-    if (detected_red) {
-        printf("intersection found, stopping car.\n");
-        img_data->intersection_detected = detected_red;
-        return NO_ERROR;
-    }
+    
 
     
 
     //Create binary image
-    cvtColor(croppedMat, croppedMat,CV_BGR2GRAY);
-    threshold(croppedMat, croppedMat, 220, 255, THRESH_BINARY);
+    cvtColor(croppedMat, croppedMat, CV_BGR2GRAY);
+    threshold(croppedMat, croppedMat, 180, 255, THRESH_BINARY);
     
-    //imwrite("../../step3_binary.png",croppedMat);
+    // imwrite("../../step3_binary.png",croppedMat);
 
     //Canny(inputMay, outputMat, threshold_1, threshold_2, apertureSize, L2Gradient )
     Canny(croppedMat, cannyMat, 50, 255, 3);
 
-    //imwrite("../../step4_canny.png",cannyMat);
+    // imwrite("../../lul.png",cannyMat);
 
     //basic information of the image
     Size size = cannyMat.size();
@@ -204,7 +239,7 @@ int get_lane_statusv3(struct ImageData *img_data, VideoCapture *cap) {
             if (slope_ang != INVALID_SLOPE) {
                 slope_tot   += slope_ang;
                 slope_count += 1;
-                line(houghMat, a, b, Scalar(0,0,col),3,8);
+                // line(houghMat, a, b, Scalar(0,0,col),3,8);
                 // printf("pass: Point (%f %f) to Point (%f %f) gave slope degree of %f\n", a.x,a.y,b.x,b.y,slope_ang);
             }
         }
@@ -220,7 +255,7 @@ int get_lane_statusv3(struct ImageData *img_data, VideoCapture *cap) {
         }
 
 
-        line(houghMat, mid, camera_center_point, Scalar(0,255,0),1,8);
+        // line(houghMat, mid, camera_center_point, Scalar(0,255,0),1,8);
         // line(houghMat, a, b, Scalar(0,0,col),3,8);
     }
 
@@ -239,25 +274,16 @@ int get_lane_statusv3(struct ImageData *img_data, VideoCapture *cap) {
         avgSlope = 0;
 
     printf("avgSlope = %f \n",avgSlope );
-
-
-    int intersectionDetected = 0;
-    
-    if (detected_red == 1) {
-        intersectionDetected = 1;
-    }
-    else {
-        intersectionDetected = 0;
-    }
+    printf("L = %f \t R = %f\n", avgLeftSize, avgRightSize );
 
 
     img_data->old_slope             = img_data->avg_slope;
     img_data->avg_slope             = avgSlope;
     img_data->left_line_length      = avgLeftSize;
     img_data->right_line_length     = avgRightSize;
-    img_data->intersection_detected = intersectionDetected;
+    img_data->intersection_detected = info.detected ;
+    img_data->intersection_type     = info.type;
 
-   // //imwrite("../../hough.png",houghMat);
 
     return NO_ERROR;
 
@@ -283,11 +309,21 @@ double get_slope(Point2d a, Point2d b) {
 
     double angle = atan(hor_dist/ver_dist)*(-180.0/CV_PI);
 
-    if (abs(angle) > 50) {
+    if (angle > 50) {
+        info.type = 1; 
+        return INVALID_SLOPE;
+    }
+    if (angle < -50) {
+        info.type = 2;
         return INVALID_SLOPE;
     }
 
     return angle;
+}
+
+
+double get_distance_to_intersection(Point start_point) {
+
 }
 
 

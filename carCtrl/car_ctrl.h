@@ -25,6 +25,8 @@ int run();
 void cleanup();
 void pause_sys();
 
+void stop_at_intersection();
+
 
 
 #endif

@@ -2,7 +2,7 @@
 #define LANEDETECT_H
 
 #include "vic_types.h"
-#include "opencv2/highgui/highgui.hpp"
+#include <raspicam/raspicam_cv.h>
 
 //constants
 const int DEFAULT_CAMERA_ID = 0;
@@ -13,12 +13,9 @@ const float STRAIGHT_LINE_THRESHOLD = 100;
 const float PIXEL_TO_METER_FACTOR = 0.5;
 
 
-int get_lane_status(struct ImageData *img_data,  cv::VideoCapture *cap);
-cv::VideoCapture test_camera();
-void calibrate_camera(cv::VideoCapture *cap);
-int capture_lane(cv::VideoCapture *cap);
-int get_lane_statusv2(struct ImageData *img_data, cv::VideoCapture *cap);
-int get_lane_statusv3(struct ImageData *img_data, cv::VideoCapture *cap);
+void test_camera(raspicam::RaspiCam_Cv* cap);
+void calibrate_raspicam(raspicam::RaspiCam_Cv *cap);
+int get_lane_statusv3(struct ImageData *img_data, raspicam::RaspiCam_Cv *cap);
 
 #endif
 

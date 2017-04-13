@@ -4,29 +4,36 @@
 /* Constants */ 
 
 //response signals from bluetooth
-const int PROCEED_RESP = 0;
-const int STOP_RESP = 1;
+const int PROCEED_RESP 		  = 0;
+const int STOP_RESP 		  = 1;
 const int EMERGENCY_STOP_RESP = 2;
 
-//constant error messages
-const int NO_ERROR = 1;
-const int HALT_SYSTEM = 0;
+//error messages
+const int NO_ERROR 		= 1;
+const int HALT_SYSTEM 	= 0;
 const int CORRUPT_IMAGE = -1;
 
+//vehicle speed values
+const double STOP_SPEED   = 0;
+const double NORMAL_SPEED = 0.47;
+const double LOW_SPEED 	  = 0.44;
+
+//vehicle travel direction
+const int STRAIGHT_PATH = 0;
+const int RIGHT_PATH 	= 1;
+const int LEFT_PATH		= -1;
 
 /* structs */
 struct ImageData {
-	double trajectory_angle;
-	double avg_left_angle;
-	double avg_right_angle;
 	double avg_slope;
 	double old_slope;
 	double left_line_length;
 	double right_line_length;
 	double intersection_distance;
 	int intersection_detected;
+	int intersection_stop;
 	int obstacle_detected;
-	
+	int intersection_type;	
 };
 
 struct CarStatus {
@@ -36,7 +43,9 @@ struct CarStatus {
 	int intersection_stop;
 	int obstacle_stop;
 	int current_lane;
+	int travel_direction; //0 straight, 1 right, -1 left
 };
+
 
 struct SignalRequest {
 	int port;
