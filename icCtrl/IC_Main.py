@@ -2,6 +2,8 @@
 from ColorDetection import ColorDetection
 from Car import Car
 from Communication import Communication
+from VehicleDetection import VehicleDetection
+from CDC import CDC 
 
 
 
@@ -13,8 +15,9 @@ import random
 class IC_Main(object):
 
     communication = Communication()
+    cdc = CDC()
 
-    intersection_cars = [0 for i in range(4)]
+    intersection_cars = [0 for i in range(3)]
     intersection_clear = False
     car = -1
 
@@ -36,7 +39,7 @@ class IC_Main(object):
             
             message_check = self.communication.arrival_check()
             
-            if ((message_check == 1)):
+            if (message_check==1):
                 
                 self.car = self.communication.arrival_deque()
 
@@ -65,7 +68,7 @@ class IC_Main(object):
                     else:
                         for i in range(len(self.intersection_cars)):
                             if(self.intersection_cars[i]!=0 and i!=current_car_index):
-                                if(getattr(self.intersection_cars[current_car_index], 'direction_from')==getattr(self.intersection_cars[i], 'direction_from')): #or getattr(self.intersection_cars[current_car_index], 'direction_from')==getattr(self.intersection_cars[i], 'direction_to')):
+                                if(getattr(self.intersection_cars[current_car_index], 'direction_from')==getattr(self.intersection_cars[i], 'direction_from') or getattr(self.intersection_cars[current_car_index], 'direction_from')==getattr(self.intersection_cars[i], 'direction_to')):
                                     setattr(self.intersection_cars[current_car_index],'proceed_now',True)
                                     #break   #this break only works if we have 2 cars on the track (more efficient)
                                 else:
@@ -89,8 +92,18 @@ class IC_Main(object):
 
 
     def check_intersection_state(self,current_car_index):
+        print "IC main get int state called"
         #update intersection_cars array from camera info for cars leaving
-
+        cars_leaving = self.cdc.get_intersection_state() #returns array of direction that cars have left since last call
+        for i in range(len(cars_leaving)):
+            for j in range(len(self.intersection_cars)):
+                if(self.intersection_cars[j]!=0):
+                    if(cars_leaving[i]==1):
+                        print "Car %d direction_to: %s with cars_leaving at index %d = %d" % (j,getattr(self.intersection_cars[j],'direction_to'),i,cars_leaving[i])
+                        if(getattr(self.intersection_cars[j],'direction_to') == i):
+                            self.intersection_cars[j] = 0;
+                            print "Car left intersection wooooo"
+                            
         #check if intersection is empty
         for i in range(len(self.intersection_cars)):
             if(i!=current_car_index and self.intersection_cars[i]!=0):
