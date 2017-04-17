@@ -15,8 +15,8 @@ const int CORRUPT_IMAGE = -1;
 
 //vehicle speed values
 const double STOP_SPEED   = 0;
-const double NORMAL_SPEED = 0.47;
-const double LOW_SPEED 	  = 0.44;
+const double NORMAL_SPEED = 0.48;
+const double LOW_SPEED 	  = 0.43;
 
 //vehicle travel direction
 const int STRAIGHT_PATH = 0;

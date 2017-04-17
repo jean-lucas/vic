@@ -27,7 +27,7 @@ double mild_left  = -30;
 int sign(double val);
 void make_left_turn(int type);
 void make_right_turn(int type);
-void follow_path(struct ImageData *img);
+void follow_path(double left_len, double right_len, double old_slope, double curr_slope, double curr_ang);
 double lengthExpert(double avg_left, double avg_right);
 double slopeExpert(double prev_slope, double curr_slope);
 
@@ -52,7 +52,11 @@ int update_navigation(struct ImageData *img,  struct CarStatus *car, double p1, 
 	}
 
 	else if (count == 0) {
-		follow_path(img);
+		follow_path(img->left_line_length, 
+					img->right_line_length, 
+					img->old_slope, 
+					img->avg_slope, 
+					car->current_wheel_angle);
 	} 
 
 	else {
@@ -68,16 +72,17 @@ int update_navigation(struct ImageData *img,  struct CarStatus *car, double p1, 
 
 
 	//slow down if approaching intersection
-	if (car->intersection_detected) 
+	if (img->intersection_detected) 
 		setting_speed = LOW_SPEED;
-	else if (car->intersection_stop)
+	else if (img->intersection_stop)
 		setting_speed = STOP_SPEED;
 	else
-		setting_speed NORMAL_SPEED;
+		setting_speed = NORMAL_SPEED;
 
 
 	car->current_speed 		 = setting_speed;
 	car->current_wheel_angle = setting_angle;
+	printf("setting_speed %f\n", setting_speed);
 
 	vichw_set_speed(setting_speed);
 	vichw_set_angle(setting_angle);
@@ -131,18 +136,17 @@ void make_left_turn(int type) {
 	The setting_angle is based on the contributions from the
 	slope expert and length expert
 */
-void follow_path(struct ImageData *img) {
+void follow_path(double left_len, double right_len, double old_slope, double curr_slope, double curr_ang) {
 	double ang1 = 0,  ang2 = 0, ang = 0;
-	double current_angle = car->current_wheel_angle;
 
-	ang1 = lengthExpert(img->left_line_length, img->right_line_length);
-	ang2 = slopeExpert(img->old_slope, img->avg_slope);
+	ang1 = lengthExpert(left_len, right_len);
+	ang2 = slopeExpert(old_slope, curr_slope);
 
 
 	ang = (ang1/dd + ang2 )/2.0;
 
-	if (sign(ang) != sign(current_angle) && abs(ang - current_angle) > 20 && current_angle != 0  && large_delta_count != 1) {
-		ang = current_angle;
+	if (sign(ang) != sign(curr_ang) && abs(ang - curr_ang) > 20 && curr_ang != 0  && large_delta_count != 1) {
+		ang = curr_ang;
 		large_delta_count = 1;
 	}
 	else {
@@ -178,12 +182,12 @@ double lengthExpert(double avg_left, double avg_right) {
 	double new_angle = 0;	
 	
 	if (avg_left < 170 && avg_left > 0) {
-		new_angle = 35;
+		new_angle = 40;
 		count = 3;
 	}
 	else if  (avg_right < 170 && avg_right > 0) {
 		new_angle = -35;
-		count = 3;
+		count = 2;
 	}
 
 	return new_angle;

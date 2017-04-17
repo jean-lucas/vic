@@ -222,7 +222,7 @@ void stop_at_intersection() {
 
     img_data.intersection_detected = 0;
     img_data.intersection_type     = 0;
-    img_data.intersection_distance = 0;
+    img_data.intersection_distance = -1;
     img_data.intersection_stop     = 0;
     
     printf("Leaving intersection\n");
