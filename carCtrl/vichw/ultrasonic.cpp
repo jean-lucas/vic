@@ -35,7 +35,7 @@ void obstacle_detect(void) {
 void signal_callback(int gpio, int level, uint32_t tick) {
 	uint32_t timediff;
 
-	if (level == 0) {
+	if (level == 1) {
 		last_tick = tick;
 	} else if (level == 0 || level == PI_TIMEOUT) {
 		timediff = tick - last_tick;
