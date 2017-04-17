@@ -23,7 +23,8 @@ const int STRAIGHT_PATH = 0;
 const int RIGHT_PATH 	= 1;
 const int LEFT_PATH		= -1;
 
-/* structs */
+
+
 struct ImageData {
 	double avg_slope;
 	double old_slope;

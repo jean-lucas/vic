@@ -1,7 +1,8 @@
 #include <pigpio.h>
 #include <unistd.h>
+#include <stdio.h>
 
-#include "servo_controller.h"
+#include "ultrasonic.h"
 #include "vic_hardware.h"
 
 #define TRIGGER_PIN			4
@@ -16,14 +17,21 @@
 #define DIST_MAX			15
 #define DIST_MIN			12
 
+
+
 static int obstacle = 1;
+static uint32_t last_tick;
+static uint32_t distance = 0;
+
+
 void obstacle_detect(void) {
 	if (distance > DIST_MAX && obstacle != 0) obstacle = 0;
 	if (distance <= DIST_MIN && obstacle == 0) obstacle = 1;
 }
 
-static uint32_t last_tick;
-static uint32_t distance = 0;
+
+
+
 void signal_callback(int gpio, int level, uint32_t tick) {
 	uint32_t timediff;
 
@@ -35,9 +43,12 @@ void signal_callback(int gpio, int level, uint32_t tick) {
 		obstacle_detect();
 		gpioTrigger(TRIGGER_PIN, TRIGGER_PULSE_US, 1);
 	} else {
+		printf("called?\n");
 		/* This should never happen. Put some code to catch this error? */
 	}
 }
+
+
 
 void vichw_init_ultrasonic(void) {
 	gpioSetMode(TRIGGER_PIN, PI_OUTPUT);
@@ -49,10 +60,14 @@ void vichw_init_ultrasonic(void) {
 	gpioTrigger(TRIGGER_PIN, TRIGGER_PULSE_US, 1);
 }
 
+
+
 /* Returns distance in cm */
 uint32_t vichw_distance(void) {
 	return distance; /* Probably should add some thread synchronization */
 }
+
+
 
 /* Nonzero if obstacle, 0 if no obstacle */
 int vichw_is_obstacle(void) {

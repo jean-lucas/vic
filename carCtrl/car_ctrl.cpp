@@ -12,8 +12,9 @@
 #include "vic_types.h"
 #include "vehicle_navigation.h"
 #include "vichw/vic_hardware.h"
+#include "vichw/ultrasonic.h"
 #include <raspicam/raspicam_cv.h>
-// #include "opencv2/highgui/highgui.hpp"
+
     
 
 CarStatus car_stat;
@@ -153,8 +154,18 @@ int run() {
     int iterations = 0;
     double time_start = 0, time_end = 0;
 
+    int obs = 0;
     while (status != HALT_SYSTEM) {
 
+        obs = vichw_is_obstacle();
+
+        if (obs) {
+            printf("Obstacle detected: %d \n", obs);
+            printf("Distance: %d \n\n",vichw_distance() );
+        }
+
+        sleep(2);
+        /*
         time_start  = getMsTime();
         //check for IC response
         if (sig_resp->val != PROCEED_RESP) {
@@ -193,6 +204,7 @@ int run() {
         time_end = getMsTime();
         iterations += 1;
         running_time += (time_end - time_start);
+        */
     }
 
     printf("ending with status %d\n", status);
