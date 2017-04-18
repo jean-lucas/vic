@@ -14,4 +14,4 @@ class Car(object):
         self.vehicle_command = 0 # various vehicle command codes
 
         self.proceed_now = False
-        self.retransmission_number = 0 
+        self.retransmission_number = 0

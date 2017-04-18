@@ -39,7 +39,7 @@ class IC_Main(object):
             
             message_check = self.communication.arrival_check()
             
-            if (message_check):
+            if (message_check==1):
                 
                 self.car = self.communication.arrival_deque()
 
@@ -59,21 +59,21 @@ class IC_Main(object):
                         current_car_index = i
                         break
 
-                while (getattr(self.intersection_cars[current_car_index], 'proceed_now') == False):
+                while (!self.intersection_cars[current_car_index].proceed_now):
                     self.check_intersection_state(current_car_index)
                    # print self.intersection_clear
 
                     if(self.intersection_clear):
-                        setattr(self.intersection_cars[current_car_index],'proceed_now',True)
+                        self.intersection_cars[current_car_index].proceed_now=True
                     else:
                         for i in range(len(self.intersection_cars)):
                             if(self.intersection_cars[i]!=0 and i!=current_car_index):
-                                if(getattr(self.intersection_cars[current_car_index], 'direction_from')==getattr(self.intersection_cars[i], 'direction_from')): #or getattr(self.intersection_cars[current_car_index], 'direction_from')==getattr(self.intersection_cars[i], 'direction_to')):
-                                    setattr(self.intersection_cars[current_car_index],'proceed_now',True)
+                                if(self.intersection_cars[current_car_index].direction_from==self.intersection_cars[i]direction_from or self.intersection_cars[current_car_index].direction_from==self.intersection_cars[i].direction_to):
+                                    self.intersection_cars[current_car_index].proceed_now=True
                                     #break   #this break only works if we have 2 cars on the track (more efficient)
                                 else:
-                                    setattr(self.intersection_cars[current_car_index],'proceed_now',False)
-                    if(getattr(self.intersection_cars[current_car_index],'proceed_now')):
+                                    self.intersection_cars[current_car_index].proceed_now=False
+                    if(self.intersection_cars[current_car_index].proceed_now):
                         print "Safe passage granted"
                     else:
                         print "Safe passage NOT granted"
@@ -96,9 +96,9 @@ class IC_Main(object):
         cars_leaving = self.cdc.get_intersection_state() #returns array of direction that cars have left since last call
         for i in range(len(cars_leaving)):
             for j in range(len(self.intersection_cars)):
-                if(i!=current_car_index and self.intersection_cars[j]!=0):
-                    if(cars_leaving[i]):
-                        if(getattr(self.intersection_cars[j],'direction_to') == i):
+                if(j!=current_car_index and self.intersection_cars[j]!=0):
+                    if(cars_leaving[i]==1):
+                        if(int(self.intersection_cars[j].direction_to) == i):
                             self.intersection_cars[j] = 0;
                             break
 
