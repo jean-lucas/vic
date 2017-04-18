@@ -6,6 +6,7 @@
 #include "vic_types.h"
 #include "vichw/servo_controller.h"
 #include "vichw/motor_speed_controller.h"
+#include "vichw/ultrasonic.h"
 #include "vichw/vic_hardware.h"
 #include "pid.h"
 
@@ -34,6 +35,10 @@ double slopeExpert(double prev_slope, double curr_slope);
 static int count = 0;
 static double setting_speed = 0;
 static double setting_angle = 0;
+
+
+static int obs_det = 0;
+static int obs_dist = 0;
 
 int update_navigation(struct ImageData *img,  struct CarStatus *car, double p1, double d2, double q3) {
 	pp = p1;
@@ -78,6 +83,18 @@ int update_navigation(struct ImageData *img,  struct CarStatus *car, double p1, 
 		setting_speed = STOP_SPEED;
 	else
 		setting_speed = NORMAL_SPEED;
+
+
+	//stop car if obstacle present
+	obs_det = vichw_is_obstacle();
+	if (obs_det) {
+		// printf("Obstacle detected: %d \n", obs_det);
+		// printf("Distance: %d \n\n",vichw_distance() );
+		setting_speed = STOP_SPEED;
+	}	
+	else {
+		setting_speed = NORMAL_SPEED;	
+	}
 
 
 	car->current_speed 		 = setting_speed;
