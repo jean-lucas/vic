@@ -31,7 +31,7 @@ void vichw_set_angle(double angle)
 {
 	int pwm = DEFAULT_PWM;
 	if (angle < 0.0) {
-		pwm = DEFAULT_PWM + 250.0/45.0 * (-angle);
+		pwm = DEFAULT_PWM + 300.0/45.0 * (-angle);
 	} else if (angle > 0.0) {
 		pwm = DEFAULT_PWM - 300.0/45.0 * angle; //should be 400
 	} else {

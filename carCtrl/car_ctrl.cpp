@@ -171,8 +171,12 @@ int run() {
         } 
 
 
+        status = get_lane_statusv3(&img_data, &cap);
+
         //check if an intersection has been detected. If so, do the right thing
-        if (img_data.intersection_stop && time_diff > 10000) {
+        // printf("time_diff = %f\n", time_diff);
+        // if (img_data.intersection_stop == 1 && time_diff > 5000) {
+        if (img_data.intersection_stop == 1) {
             t1 = getMsTime();            
             stop_at_intersection();
             status = get_lane_statusv3(&img_data, &cap);
@@ -208,6 +212,7 @@ int run() {
 
 //create message, stop the car from proceeding and enter pause state
 void stop_at_intersection() {
+    printf("CALLED STOP AT intersection\n");
     stop_car();
     sig_resp->val = STOP_RESP;
 

@@ -15,6 +15,12 @@ using namespace cv;
 using namespace std;
 using namespace raspicam;
 
+#define GREEN  0;
+#define BLUE   1;
+#define ORANGE 2;
+#define PINK   3;
+
+
 
 
 /* private function declarations */
@@ -33,17 +39,13 @@ const double CUT_OFF_HEIGHT_FACTOR = 0.45;
 const double CUT_OFF_WIDTH_FACTOR  = 0.08; // from both sides
 const double MIN_LINE_LENGTH = 5;
 const double INVALID_SLOPE = 200;
-const double MIN_INTERSECTION_DISTANCE = 120;
+const double MIN_INTERSECTION_DISTANCE = 200;
 
-// const int UNCROPPED_HEIGHT = 480;
-// const int UNCROPPED_WIDTH  = 640;
-// const int CROP_X =  
-// const int CROP_Y = 
-// const int CROP_HEIGHT = 
-// const int CROP_WIDHT  = 
+
 static struct int_info {
     int type     = 0;
     int detected = 0;
+    int colour   = -1;   
     double dist  = -1;
 } info;
 
@@ -81,21 +83,45 @@ int_info detect_intersection(int y0, int yf, int x0, int xf, Mat mat) {
     int_info inter_info;
     inter_info.detected = 0;
     inter_info.dist     = -1;
+    inter_info.colour   = -1;
 
-    int step = 5;
+    int step = 10;
 
-
+    //bgr
     for (y = y0; y < yf; y += step) {
         for (x = x0; x < xf; x += step) {
             colour = mat.at<Vec3b>(Point(x,y));
-            if (colour[2] > 200 && (colour [0] + colour[1]) < 200) {
+            // printf("%d %d %d\n", colour[0],colour[1],colour[2]);
+
+            if (colour[2] > 150 && (colour[0] + colour[1]) < 200) {         //detect red
+                // printf("red detected\n");
                 vote++;
                 detected_ypos += y;
             }
-            else if (colour[0] > 200 && (colour[1] + colour[2]) < 200) {
-                vote++;
-                detected_ypos += y;
-            }
+            // else if (colour[0] > 150 && colour[1] > 100 && colour[2] < 50) {    //detect blue
+            //     printf("blue detected\n");
+            //     vote++;
+            //     detected_ypos += y;
+            // }
+            // else if (colour[0] < 100 && colour[1] > 100 && colour[2] > 200) {    //detect orange
+            //     printf("orange detected\n");
+            //     vote++;
+            //     detected_ypos += y;
+            // }
+            // else if (colour[0] > 120 && colour[1] > 120 && colour[2] > 150) {    //detect pink
+            //     printf("%d %d %d\n", colour[0],colour[1],colour[2]);
+            //     printf("pink detected\n");
+            //     vote++;
+            //     detected_ypos += y;
+            // }
+
+            // else if (colour[0] + colour[1] + colour[2] > 350) {    //detect green
+            //     printf("%d %d %d\n", colour[0],colour[1],colour[2]);
+            //     printf("green detected\n");
+            //     vote++;
+            //     detected_ypos += y;
+            // }
+            
             if (vote > 5) {
                 inter_info.detected = 1;
                 inter_info.dist     = detected_ypos/vote;
@@ -113,20 +139,13 @@ void draw_grid(int y0, int yf, int x0, int xf, Mat mat) {
 
 
     int x,y;
-    int step =  15;
+    int step =  10;
     for (y = y0; y < yf; y+=step) {
         line(mat, Point(x0,y), Point(xf,y), Scalar(0,255,255),1,8);
     }
     for (x = x0; x < xf; x+=step) {
         line(mat, Point(x,y0), Point(x,yf), Scalar(0,255,255),1,8);
     }
-
-    // imwrite("../../grid.png", mat);
-        // for (x = x0; x < xf; x+=5) {
-        //     line(mat, Point(), Point(), Scalar(0,0,col),3,8);
-
-        // }
-    // }
 }
 
 int get_lane_statusv3(struct ImageData *img_data, RaspiCam_Cv *cap) {
@@ -141,8 +160,6 @@ int get_lane_statusv3(struct ImageData *img_data, RaspiCam_Cv *cap) {
     Mat capMat, croppedMat, cannyMat, houghMat, contourMat, contourCanny;
 
     //retrieve the current frame from video stream
-
-
     cap->grab();
     cap->retrieve(capMat);
 
@@ -173,8 +190,7 @@ int get_lane_statusv3(struct ImageData *img_data, RaspiCam_Cv *cap) {
         printf("\nDistance to intersection %f, and detected %d\n", info.dist, info.detected );
         img_data->intersection_detected = info.detected;
         img_data->intersection_distance = info.dist;
-        img_data->intersection_type     = info.type;
-        if (abs(info.dist < MIN_INTERSECTION_DISTANCE)) {
+        if (info.dist < MIN_INTERSECTION_DISTANCE) {
             img_data->intersection_stop = 1;
             printf("intersection found of type %d, stopping car.\n", info.type);
             return NO_ERROR;
@@ -182,14 +198,13 @@ int get_lane_statusv3(struct ImageData *img_data, RaspiCam_Cv *cap) {
         
     }
 
-    // if (!info.detected && abs(img_data->intersection_distance) <  MIN_INTERSECTION_DISTANCE) {
-    //     img_data->intersection_detected = 1;
-    //     img_data->intersection_distance = 0;
-    //     img_data->intersection_type     = info.type;
-    //     img_data->intersection_stop = 1;
-    //     printf("intersection found of type %d, stopping car (2).\n", info.type);
-    //     return NO_ERROR;
-    // }
+    if (!info.detected && img_data->intersection_distance > 0) {
+        img_data->intersection_detected = 1;
+        img_data->intersection_distance = 0;
+        img_data->intersection_stop = 1;
+        printf("intersection found of type %d, stopping car (2).\n", info.type);
+        return NO_ERROR;
+    }
 
 
     // imwrite("../../step1_bareCap.png",capMat);
@@ -306,7 +321,7 @@ int get_lane_statusv3(struct ImageData *img_data, RaspiCam_Cv *cap) {
     else 
         avgSlope = 0;
 
-    printf("avgSlope = %f \nL = %f \t R = %f\n",avgSlope, avgLeftSize, avgRightSize );
+    // printf("avgSlope = %f \nL = %f \t R = %f\n",avgSlope, avgLeftSize, avgRightSize );
 
 
     img_data->old_slope             = img_data->avg_slope;
