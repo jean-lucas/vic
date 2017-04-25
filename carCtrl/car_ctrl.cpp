@@ -176,7 +176,7 @@ int run() {
 
         //check if an intersection has been detected. If so, do the right thing
         printf("time_diff = %llu\n", time_diff);
-        if (img_data.intersection_stop == 1 && time_diff > 10000) {
+        if (img_data.intersection_stop == 2 && time_diff > 10000) {
         // if (img_data.intersection_stop == 1) {
             t1 = getMsTime();            
             car_stat.travel_direction = 0;

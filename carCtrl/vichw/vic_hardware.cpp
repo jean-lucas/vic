@@ -11,7 +11,8 @@
 using namespace std;
 
 /*  constants */
-int DEFAULT_PWM = 1500;
+int DEFAULT_PWM_SPDC = 1500;
+int DEFAULT_PWM_SRVO = 1500;
 
 
 /* speed controller  constants */
@@ -30,7 +31,7 @@ static void config()
 		f >> offset;
 	}
 	printf("offset = %d\n", offset);
-	DEFAULT_PWM += offset;
+	DEFAULT_PWM_SRVO += offset;
 }
 
 int vichw_init()

@@ -14,13 +14,13 @@ void vichw_init_speed(void)
 
 void vichw_set_speed(double speed)
 {
-	int pwm = DEFAULT_PWM;
+	int pwm = DEFAULT_PWM_SPDC;
 	if (speed < 0.0) {
 		pwm = 1000;
 	} else if (speed > 0.0) {
-		pwm = DEFAULT_PWM + 500.0/3 * speed;
+		pwm = DEFAULT_PWM_SPDC + 500.0/3 * speed;
 	} else {
-		pwm = DEFAULT_PWM;
+		pwm = DEFAULT_PWM_SPDC;
 	}
 
 	if (pwm > MAX_SPEED_PWN) pwm = MAX_SPEED_PWN;
