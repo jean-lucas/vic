@@ -6,6 +6,7 @@ project(car_ctrl)
 
 
 SET("OpenCV_DIR" "/home/pi/homescripts/opencv/build")
+SET("raspicam_DIR" "/usr/local/lib/cmake/")
 
 # Find OpenCV, you may need to set OpenCV_DIR variable
 # to the absolute path to the directory containing OpenCVConfig.cmake file
@@ -20,6 +21,8 @@ message(STATUS "OpenCV library status:")
 message(STATUS "    version: ${OpenCV_VERSION}")
 message(STATUS "    libraries: ${OpenCV_LIBS}")
 message(STATUS "    include path: ${OpenCV_INCLUDE_DIRS}")
+
+find_package(raspicam REQUIRED)
 
 if(CMAKE_VERSION VERSION_LESS "2.8.11")
   # Add OpenCV headers location to your include paths
@@ -40,12 +43,14 @@ file(GLOB car_ctrl_SRC
 
 # Declare the executable target built from your sources
 
-set(CMAKE_CXX_FLAGS "-Wall -I/usr/local/include -L/usr/local/lib -lpigpio -lrt -lpthread")
+set(CMAKE_CXX_FLAGS "-I/usr/local/include -L/usr/local/lib -lpigpio -lrt -lpthread")
 add_executable(car_ctrl ${car_ctrl_SRC})
 
 # Link your application with OpenCV libraries
+#target_link_libraries(car_ctrl ${OpenCV_LIBS})
+
+target_link_libraries(car_ctrl ${raspicam_CV_LIBS})
+target_link_libraries(car_ctrl ${raspicam_LIBS})
 target_link_libraries(car_ctrl ${OpenCV_LIBS})
-target_link_libraries(car_ctrl ${OpenCV_LIBS})
-#target_link_libraries(car_ctrl wiringPi)
 target_link_libraries(car_ctrl bluetooth )
 

@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include "servo_controller.h"
 #include "motor_speed_controller.h"
+#include "ultrasonic.h"
 
 /*  constants */
 const int DEFAULT_PWM = 1500;
@@ -22,6 +23,7 @@ int vichw_init()
 	gpioInitialise();
     vichw_init_speed();
     vichw_init_servo();
+	vichw_init_ultrasonic();
 	return 1;
 }
 

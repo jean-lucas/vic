@@ -59,7 +59,7 @@ class IC_Main(object):
                         current_car_index = i
                         break
 
-                while (!self.intersection_cars[current_car_index].proceed_now):
+                while (self.intersection_cars[current_car_index].proceed_now == False):
                     self.check_intersection_state(current_car_index)
                    # print self.intersection_clear
 
@@ -68,7 +68,7 @@ class IC_Main(object):
                     else:
                         for i in range(len(self.intersection_cars)):
                             if(self.intersection_cars[i]!=0 and i!=current_car_index):
-                                if(self.intersection_cars[current_car_index].direction_from==self.intersection_cars[i]direction_from or self.intersection_cars[current_car_index].direction_from==self.intersection_cars[i].direction_to):
+                                if(self.intersection_cars[current_car_index].direction_from==self.intersection_cars[i].direction_from or self.intersection_cars[current_car_index].direction_from==self.intersection_cars[i].direction_to):
                                     self.intersection_cars[current_car_index].proceed_now=True
                                     #break   #this break only works if we have 2 cars on the track (more efficient)
                                 else:
@@ -92,6 +92,7 @@ class IC_Main(object):
 
 
     def check_intersection_state(self,current_car_index):
+        print "IC main get int state called"
         #update intersection_cars array from camera info for cars leaving
         cars_leaving = self.cdc.get_intersection_state() #returns array of direction that cars have left since last call
         for i in range(len(cars_leaving)):
@@ -100,8 +101,8 @@ class IC_Main(object):
                     if(cars_leaving[i]==1):
                         if(int(self.intersection_cars[j].direction_to) == i):
                             self.intersection_cars[j] = 0;
-                            break
-
+                            print "Car left intersection"
+                            
         #check if intersection is empty
         for i in range(len(self.intersection_cars)):
             if(i!=current_car_index and self.intersection_cars[i]!=0):

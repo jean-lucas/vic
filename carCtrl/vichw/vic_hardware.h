@@ -14,15 +14,10 @@ extern const int MIN_SERVO_PWM;
 
 /* Must call before using any hardware functions */
 
-//#ifdef __cplusplus
-//extern "C" {
-//#endif
+
 int vichw_init();
 void vichw_deinit(void);
-//#ifdef __cplusplus
 
-//}
-//#endif
 
 
 #endif

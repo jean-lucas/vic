@@ -12,22 +12,22 @@
 #include "vic_types.h"
 #include "vehicle_navigation.h"
 #include "vichw/vic_hardware.h"
-#include "opencv2/highgui/highgui.hpp"
+#include "vichw/ultrasonic.h"
+#include <raspicam/raspicam_cv.h>
 
+    
 
 CarStatus car_stat;
 ImageData img_data;
 SignalResponse *sig_resp;
-cv::VideoCapture cap;
+raspicam::RaspiCam_Cv cap;
 
 
 double p = 3;
 double d = 1.5;    
 double q = 2;
-double starting_speed = 0.48;
 
 
-void stop_at_intersection();
 
 
 double getMsTime() {
@@ -39,8 +39,10 @@ double getMsTime() {
 
 
 int main(int argc, char** argv) {
-    int quickstart_mode = 1;  
 
+
+
+    int quickstart_mode = 1;  
 
     if (argc < 1) {
         printf("invalid arg\n");
@@ -51,9 +53,15 @@ int main(int argc, char** argv) {
 
     //test lane detect only
     if (argval == 1) {
-        cap = test_camera();
+        cap.set( CV_CAP_PROP_FORMAT, CV_8UC3 );
+        cap.set( CV_CAP_PROP_FRAME_WIDTH, 640);
+        cap.set( CV_CAP_PROP_FRAME_HEIGHT, 480);
+        cap.open();
+
+        calibrate_raspicam(&cap);
+
         get_lane_statusv3(&img_data, &cap);
-        // calibrate_camera(&cap);
+
 	    cap.release();
         return 0;
     }
@@ -90,42 +98,44 @@ int init(int quickstart_mode) {
 
     int status = 1;
 
-    car_stat.current_speed           = starting_speed;
+    /* init car */
+    car_stat.current_speed           = NORMAL_SPEED;
     car_stat.current_wheel_angle     = 0;
     car_stat.car_id                  = CAR_ID;
     car_stat.intersection_stop       = 0;
     car_stat.obstacle_stop           = 0;
+    car_stat.travel_direction        = 0;
 
-    img_data.trajectory_angle          = 0;
-    img_data.avg_left_angle            = 0;
-    img_data.avg_right_angle           = 0; 
+    /* init image data */
     img_data.avg_slope                 = 0;
     img_data.old_slope                 = 0;
     img_data.left_line_length          = 0;
     img_data.right_line_length         = 0;
     img_data.intersection_distance     = -1;
     img_data.intersection_detected     = 0;
+    img_data.intersection_stop         = 0;
     img_data.obstacle_detected         = 0;
+    img_data.intersection_type         = 0;
 
+    /* init video capture */
+    cap.set( CV_CAP_PROP_FORMAT, CV_8UC3 );
+    cap.set( CV_CAP_PROP_FRAME_WIDTH, 640);
+    cap.set( CV_CAP_PROP_FRAME_HEIGHT, 480);
+    cap.open();
 
+    /* init bluetooth server */
     sig_resp = (struct SignalResponse*) calloc(1, sizeof(*sig_resp));
-
-    //make sure car does not start driving until we want it to
-    if (quickstart_mode) {
+    if (quickstart_mode) 
         sig_resp->val = PROCEED_RESP;
-    }
-    else {
+    else
         sig_resp->val = STOP_RESP;
 
-    }
-    
-     
-
-    cap = test_camera();
-    status &= vichw_init();
-
-    pthread_t  server_thread;
+    pthread_t server_thread;
     pthread_create(&server_thread, NULL, recvFromIC, (void*) sig_resp);
+
+
+    /* init hardware */
+    status &= vichw_init();
 
     return status;
 }
@@ -144,8 +154,18 @@ int run() {
     int iterations = 0;
     double time_start = 0, time_end = 0;
 
+    int obs = 0;
     while (status != HALT_SYSTEM) {
 
+        obs = vichw_is_obstacle();
+
+        if (obs) {
+            printf("Obstacle detected: %d \n", obs);
+            printf("Distance: %d \n\n",vichw_distance() );
+        }
+
+        sleep(2);
+        /*
         time_start  = getMsTime();
         //check for IC response
         if (sig_resp->val != PROCEED_RESP) {
@@ -164,12 +184,12 @@ int run() {
 
 
         //check if an intersection has been detected. If so, do the right thing
-        if (img_data.intersection_detected && time_diff > 10000) {
-            t1 = getMsTime();
-            img_data.intersection_detected = 0;
+        if (img_data.intersection_stop && time_diff > 10000) {
+            t1 = getMsTime();            
             stop_at_intersection();
             status = get_lane_statusv3(&img_data, &cap);
             time_diff = getMsTime() - t1;
+            car_stat.travel_direction = 0;
         }
 
         if (status == CORRUPT_IMAGE) {
@@ -184,12 +204,14 @@ int run() {
         time_end = getMsTime();
         iterations += 1;
         running_time += (time_end - time_start);
+        */
     }
 
     printf("ending with status %d\n", status);
 
     printf("In %d iterations avg running time was %f\n", iterations,running_time/iterations);
 
+    return 1;
 }
 
 
@@ -198,7 +220,7 @@ int run() {
 
 //create message, stop the car from proceeding and enter pause state
 void stop_at_intersection() {
-    set_speed(0);
+    stop_car();
     sig_resp->val = STOP_RESP;
 
     //build msg
@@ -209,6 +231,11 @@ void stop_at_intersection() {
     printf("sent a message with size %d\n",sent );
 
     while (sig_resp->val == STOP_RESP){};
+
+    img_data.intersection_detected = 0;
+    img_data.intersection_type     = 0;
+    img_data.intersection_distance = -1;
+    img_data.intersection_stop     = 0;
     
     printf("Leaving intersection\n");
 }
@@ -216,9 +243,12 @@ void stop_at_intersection() {
 
 //when called, program will remain paused until necessary BT responses are received
 void pause_sys() {
+
     printf("Entering pause state\n");
-    set_speed(0);
+    stop_car();
+
     while (sig_resp->val == STOP_RESP);
+
     if (sig_resp->val == EMERGENCY_STOP_RESP) {
         cleanup();
         exit(0);
