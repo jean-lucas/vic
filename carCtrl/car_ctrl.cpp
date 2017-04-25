@@ -101,7 +101,6 @@ int init(int quickstart_mode) {
     car_stat.current_speed           = NORMAL_SPEED;
     car_stat.current_wheel_angle     = 0;
     car_stat.car_id                  = CAR_ID;
-    car_stat.intersection_stop       = 0;
     car_stat.obstacle_stop           = 0;
     car_stat.travel_direction        = 0;
 

@@ -36,7 +36,7 @@ static void config()
 int vichw_init()
 {
 	gpioInitialise();
-	config();
+	// config();
     vichw_init_speed();
     vichw_init_servo();
 	vichw_init_ultrasonic();

@@ -116,7 +116,7 @@ int_info detect_intersection(int y0, int yf, int x0, int xf, Mat mat) {
     inter_info.dist     = -1;
     inter_info.colour   = -1;
 
-    for (y = y0; y < yf; y += step) {
+    for (y = yf; y >= y0; y -= step) {
         for (x = x0; x < xf; x += step) {
             colour = mat.at<Vec3b>(Point(x,y));
             red =   (float) colour[2] / 255;
