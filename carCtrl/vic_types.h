@@ -15,8 +15,8 @@ const int CORRUPT_IMAGE = -1;
 
 //vehicle speed values
 const double STOP_SPEED   = 0;
-const double NORMAL_SPEED = 0.48;
-const double LOW_SPEED 	  = 0.43;
+const double NORMAL_SPEED = 0.49;
+const double LOW_SPEED 	  = 0.45;
 
 //vehicle travel direction
 const int STRAIGHT_PATH = 0;
@@ -33,6 +33,7 @@ struct ImageData {
 	double intersection_distance;
 	int intersection_detected;
 	int intersection_stop;
+	int intersection_colour;
 	int obstacle_detected;
 	int intersection_type;	
 };
@@ -41,7 +42,6 @@ struct CarStatus {
 	double current_speed;
 	double current_wheel_angle;
 	int car_id;
-	int intersection_stop;
 	int obstacle_stop;
 	int current_lane;
 	int travel_direction; //0 straight, 1 right, -1 left

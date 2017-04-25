@@ -5,9 +5,14 @@
 #include "servo_controller.h"
 #include "motor_speed_controller.h"
 #include "ultrasonic.h"
+#include <iostream>
+#include <fstream>
+
+using namespace std;
 
 /*  constants */
-const int DEFAULT_PWM = 1500;
+int DEFAULT_PWM_SPDC = 1500;
+int DEFAULT_PWM_SRVO = 1500;
 
 
 /* speed controller  constants */
@@ -18,9 +23,21 @@ const int MIN_SPEED_PWM = 1000;
 const int MAX_SERVO_PWN = 1800;
 const int MIN_SERVO_PWM = 1100;
 
+static void config()
+{
+	int offset = 0;
+	ifstream f("/etc/vic.conf");
+	if (f.is_open()) {
+		f >> offset;
+	}
+	printf("offset = %d\n", offset);
+	DEFAULT_PWM_SRVO += offset;
+}
+
 int vichw_init()
 {
 	gpioInitialise();
+	// config();
     vichw_init_speed();
     vichw_init_servo();
 	vichw_init_ultrasonic();

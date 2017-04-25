@@ -2,7 +2,8 @@
 #define VIC_HARDWARE_H
 
 /* extern constants */
-extern const int DEFAULT_PWM;
+extern int DEFAULT_PWM_SPDC;
+extern int DEFAULT_PWM_SRVO;
 
 /* speed controller extern constants */
 extern const int MAX_SPEED_PWN;

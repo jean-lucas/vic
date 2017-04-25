@@ -8,7 +8,7 @@
 
 // void vichw_init_servo(void) {
 // 	gpioSetMode(SERVO_PIN, PI_OUTPUT);
-// 	vichw_set_angle(DEFAULT_PWM);
+// 	vichw_set_angle(DEFAULT_PWM_SRVO);
 // }
 
 
@@ -29,13 +29,13 @@ void vichw_init_servo(void)
 
 void vichw_set_angle(double angle)
 {
-	int pwm = DEFAULT_PWM;
+	int pwm = DEFAULT_PWM_SRVO;
 	if (angle < 0.0) {
-		pwm = DEFAULT_PWM + 250.0/45.0 * (-angle);
+		pwm = DEFAULT_PWM_SRVO + 300.0/45.0 * (-angle);
 	} else if (angle > 0.0) {
-		pwm = DEFAULT_PWM - 300.0/45.0 * angle; //should be 400
+		pwm = DEFAULT_PWM_SRVO - 300.0/45.0 * angle; //should be 400
 	} else {
-		pwm = DEFAULT_PWM;
+		pwm = DEFAULT_PWM_SRVO;
 	}
 
 	if (pwm > MAX_SERVO_PWN) pwm = MAX_SERVO_PWN;

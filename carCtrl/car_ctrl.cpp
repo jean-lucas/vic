@@ -12,7 +12,6 @@
 #include "vic_types.h"
 #include "vehicle_navigation.h"
 #include "vichw/vic_hardware.h"
-#include "vichw/ultrasonic.h"
 #include <raspicam/raspicam_cv.h>
 
     
@@ -30,10 +29,10 @@ double q = 2;
 
 
 
-double getMsTime() {
+unsigned long long getMsTime() {
     struct timeval t;
     gettimeofday(&t, NULL);
-    double ms = (t.tv_sec)*1000 + (t.tv_usec)/1000;
+         long  ms = (t.tv_sec)*1000 + (t.tv_usec)/1000;
     return ms;
 }
 
@@ -57,7 +56,7 @@ int main(int argc, char** argv) {
         cap.set( CV_CAP_PROP_FRAME_WIDTH, 640);
         cap.set( CV_CAP_PROP_FRAME_HEIGHT, 480);
         cap.open();
-
+        printf("%llu\n", getMsTime());
         calibrate_raspicam(&cap);
 
         get_lane_statusv3(&img_data, &cap);
@@ -102,7 +101,6 @@ int init(int quickstart_mode) {
     car_stat.current_speed           = NORMAL_SPEED;
     car_stat.current_wheel_angle     = 0;
     car_stat.car_id                  = CAR_ID;
-    car_stat.intersection_stop       = 0;
     car_stat.obstacle_stop           = 0;
     car_stat.travel_direction        = 0;
 
@@ -114,6 +112,7 @@ int init(int quickstart_mode) {
     img_data.intersection_distance     = -1;
     img_data.intersection_detected     = 0;
     img_data.intersection_stop         = 0;
+    img_data.intersection_colour       = -1;
     img_data.obstacle_detected         = 0;
     img_data.intersection_type         = 0;
 
@@ -146,27 +145,19 @@ int init(int quickstart_mode) {
 int run() {
 
 	int status = 1;
-    double  t1 = 0;
-    double time_diff = 0;
+    unsigned long long  t1 = 0;
+    unsigned long long time_diff = 0;
 
 
-    double running_time = 0;
+    unsigned long long running_time = 0;
     int iterations = 0;
-    double time_start = 0, time_end = 0;
+    unsigned long long time_start = 0, time_end = 0;
 
-    int obs = 0;
     while (status != HALT_SYSTEM) {
-
-        obs = vichw_is_obstacle();
-
-        if (obs) {
-            printf("Obstacle detected: %d \n", obs);
-            printf("Distance: %d \n\n",vichw_distance() );
-        }
-
-        sleep(2);
-        /*
+       
         time_start  = getMsTime();
+
+
         //check for IC response
         if (sig_resp->val != PROCEED_RESP) {
             if (sig_resp->val == EMERGENCY_STOP_RESP) {
@@ -182,14 +173,16 @@ int run() {
 
         status = get_lane_statusv3(&img_data, &cap);
 
-
         //check if an intersection has been detected. If so, do the right thing
-        if (img_data.intersection_stop && time_diff > 10000) {
+        printf("time_diff = %llu\n", time_diff);
+        if (img_data.intersection_stop == 2 && time_diff > 10000) {
+        // if (img_data.intersection_stop == 1) {
             t1 = getMsTime();            
+            car_stat.travel_direction = 0;
             stop_at_intersection();
             status = get_lane_statusv3(&img_data, &cap);
             time_diff = getMsTime() - t1;
-            car_stat.travel_direction = 0;
+            
         }
 
         if (status == CORRUPT_IMAGE) {
@@ -204,7 +197,7 @@ int run() {
         time_end = getMsTime();
         iterations += 1;
         running_time += (time_end - time_start);
-        */
+        
     }
 
     printf("ending with status %d\n", status);
@@ -220,24 +213,26 @@ int run() {
 
 //create message, stop the car from proceeding and enter pause state
 void stop_at_intersection() {
+
     stop_car();
     sig_resp->val = STOP_RESP;
 
-    //build msg
-    char* msg = (char*) malloc(sizeof(int)*8);
-    msg = "1_2_1_12345";
+    //build msg "ID_ComingFrom_GoingTo_Time"
+    char* msg = (char*) malloc(sizeof(char)*50);
+    sprintf(msg, "%d_%d_%d_%d_%d", car_stat.car_id, img_data.intersection_colour,  car_stat.travel_direction,1, 0);
 
     int sent = sendToIC(msg);
-    printf("sent a message with size %d\n",sent );
+    printf("\x1b[36m sent msg: (%s) with size of %d\x1b[0m \n ", msg, sent );
 
     while (sig_resp->val == STOP_RESP){};
 
     img_data.intersection_detected = 0;
     img_data.intersection_type     = 0;
-    img_data.intersection_distance = -1;
     img_data.intersection_stop     = 0;
+    img_data.intersection_distance = -1;
+    img_data.intersection_colour   = -1;
+    free(msg);
     
-    printf("Leaving intersection\n");
 }
 
 
