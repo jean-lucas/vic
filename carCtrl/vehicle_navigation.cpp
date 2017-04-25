@@ -106,7 +106,6 @@ int update_navigation(struct ImageData *img,  struct CarStatus *car, double p1, 
 
 	vichw_set_speed(setting_speed);
 	vichw_set_angle(setting_angle);
-	
 
 	return 1;
 }
