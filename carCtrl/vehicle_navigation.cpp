@@ -77,11 +77,10 @@ int update_navigation(struct ImageData *img,  struct CarStatus *car, double p1, 
 
 
 	//slow down if approaching intersection
-	if (img->intersection_detected) {
+	if (img->intersection_detected && !car->drive_thru) {
 		setting_speed = LOW_SPEED;
 	}
 	else if (img->intersection_stop) {
-		printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
 		setting_speed = STOP_SPEED;
 	}
 	else {
@@ -114,6 +113,10 @@ int update_navigation(struct ImageData *img,  struct CarStatus *car, double p1, 
 void stop_car() {
 	setting_speed = STOP_SPEED;
 	vichw_set_speed(setting_speed);
+}
+void reset_wheel() {
+	setting_angle = 0;
+	vichw_set_angle(setting_angle);
 }
 
 
@@ -187,8 +190,6 @@ double slopeExpert(double prev_slope, double curr_slope) {
 		new_angle = curr_slope/qq;
 	}
 	else {
-		//average out the slopes
-		// printf("=========== TAKING AVERAGE (2) =========\n");
 		new_angle = (curr_slope + (prev_slope*0.6))/(2.0);
 		new_angle = new_angle/qq;
 	}
@@ -201,8 +202,8 @@ double lengthExpert(double avg_left, double avg_right) {
 	double new_angle = 0;	
 	
 	if (avg_left < 170 && avg_left > 0) {
-		new_angle = 40;
-		count = 3;
+		new_angle = 35;
+		count = 2;
 	}
 	else if  (avg_right < 170 && avg_right > 0) {
 		new_angle = -35;

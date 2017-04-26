@@ -27,6 +27,8 @@ void pause_sys();
 
 void stop_at_intersection();
 
+void* threaded_send(void* arg);
+
 
 
 #endif

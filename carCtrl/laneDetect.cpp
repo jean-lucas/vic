@@ -39,7 +39,7 @@ const double CUT_OFF_HEIGHT_FACTOR = 0.45;
 const double CUT_OFF_WIDTH_FACTOR  = 0.08; // from both sides
 const double MIN_LINE_LENGTH = 5;
 const double INVALID_SLOPE = 200;
-const double MIN_INTERSECTION_DISTANCE = 140;
+const double MIN_INTERSECTION_DISTANCE = 150;
 
 
 static struct int_info {
@@ -161,9 +161,6 @@ int_info detect_intersection(int y0, int yf, int x0, int xf, Mat mat) {
                 inter_info.colour   = max_vote_colour;
                 return inter_info;
             }
-
-
-
         }
     }
 
@@ -213,12 +210,6 @@ int get_lane_statusv3(struct ImageData *img_data, RaspiCam_Cv *cap) {
                                 2*size_uncropped.width/3, 
                                 capMat);
 
-    // info = detect_intersection( size_uncropped.height/5, 
-    //                             size_uncropped.height, 
-    //                             size_uncropped.width/3, 
-    //                             2*size_uncropped.width/3, 
-    //                             capMat);
-
     // draw_grid(  size_uncropped.height/5, 
     //             size_uncropped.height, 
     //             size_uncropped.width/3, 
@@ -229,26 +220,26 @@ int get_lane_statusv3(struct ImageData *img_data, RaspiCam_Cv *cap) {
     if (info.detected) {
         info.dist = size_uncropped.height - info.dist;
     
-        printf("\nDistance to intersection %f, and detected %d\n", info.dist, info.detected );
+        // printf("\nDistance to intersection %f, and detected %d\n", info.dist, info.detected );
         img_data->intersection_detected = info.detected;
         img_data->intersection_distance = info.dist;
         img_data->intersection_colour   = info.colour;
         if (info.dist < MIN_INTERSECTION_DISTANCE) {
             img_data->intersection_stop = 1;
-            printf("intersection found of type %d, stopping car.\n", info.type);
+            // printf("intersection found of type %d, stopping car.\n", info.type);
             return NO_ERROR;
         }
         
     }
 
-    if (!info.detected && img_data->intersection_distance > 0) {
-        img_data->intersection_detected = 1;
-        img_data->intersection_distance = 0;
-        img_data->intersection_stop     = 1;
-        img_data->intersection_colour   = info.colour;
-        printf("intersection found of type %d, stopping car (2).\n", info.type);
-        return NO_ERROR;
-    }
+    // if (!info.detected && img_data->intersection_distance > 0) {
+    //     img_data->intersection_detected = 1;
+    //     img_data->intersection_distance = 0;
+    //     img_data->intersection_stop     = 1;
+    //     img_data->intersection_colour   = info.colour;
+    //     printf("intersection found of type %d, stopping car (2).\n", info.type);
+    //     return NO_ERROR;
+    // }
 
 
 
