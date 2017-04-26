@@ -113,10 +113,10 @@ int init(int quickstart_mode) {
         f >> pwm_offset;
     }
     else {
-        status = 0;
+        status = 0; //failed to open config
     }
 
-    printf("car id = %d  offset = %d\n", car_id, pwm_offset);
+
     /* init car */
     car_stat.current_speed           = NORMAL_SPEED;
     car_stat.current_wheel_angle     = 0;
@@ -191,6 +191,7 @@ int run() {
 
         status = get_lane_statusv3(&img_data, &cap);
 
+        //send a  DEPARTURE message 
         if (img_data.intersection_stop == 1  && car_stat.drive_thru == 1 && time_diff > 5000 && !car_stat.obstacle_stop) {
             t1 = getMsTime();
             car_stat.drive_thru = 0;
@@ -206,6 +207,7 @@ int run() {
 
         }
 
+        //send an ARRIVAL message
         if (img_data.intersection_stop == 1 && car_stat.drive_thru == 0 && time_diff > 6000 && !car_stat.obstacle_stop) {
             t1 = getMsTime();            
             car_stat.travel_direction = 0;
@@ -224,6 +226,7 @@ int run() {
         time_diff = getMsTime() - t1;
         
 
+        //for getting the program's FPS
         time_end = getMsTime();
         ++iterations;
         running_time += (time_end - time_start);
@@ -250,8 +253,9 @@ void* threaded_send(void* arg) {
             pthread_cond_wait(&cond, &mutex);
         }
 
+        //all that matters in this msg is the first and last values.
         char msg[1024];
-        sprintf(msg, "%d_%d_%d_%d_%d", 1, 0, 0, 0, 2);
+        sprintf(msg, "%d_%d_%d_%d_%d", 1, 0, 0, 0, car_stat.car_id);
 
         int sent = sendToIC(msg);
         printf("\x1b[33m DEPARTURE msg: (%s) with size of %d\x1b[0m \n ", msg, sent );
@@ -277,7 +281,7 @@ void stop_at_intersection() {
     reset_wheel();
     sig_resp->val = STOP_RESP;
 
-    //build msg "ID_ComingFrom_GoingTo_Time"
+
     char msg[1024];
     sprintf(msg, "%d_%d_%d_%d_%d", 0, img_data.intersection_colour,  car_stat.travel_direction, 1, 2);
 

@@ -34,9 +34,9 @@ static double get_line_length(Point2d a, Point2d b);
 //this percentage will be cutoff from the top of the image
 const double CUT_OFF_HEIGHT_FACTOR = 0.45;
 const double CUT_OFF_WIDTH_FACTOR  = 0.08; // from both sides
-const double MIN2_LINE_LENGTH = 5;
+const double MIN_LINE_LENGTH = 5;
 const double INVALID_SLOPE = 200;
-const double MIN2_INTERSECTION_DISTANCE = 120;
+const double MIN_INTERSECTION_DISTANCE = 120;
 
 
 static struct int_info {
@@ -178,6 +178,9 @@ void draw_grid(int y0, int yf, int x0, int xf, Mat mat) {
     }
 }
 
+
+
+
 int get_lane_statusv3(struct ImageData *img_data, RaspiCam_Cv *cap) {
 
     if (!(cap->isOpened())) {
@@ -221,22 +224,13 @@ int get_lane_statusv3(struct ImageData *img_data, RaspiCam_Cv *cap) {
         img_data->intersection_detected = info.detected;
         img_data->intersection_distance = info.dist;
         img_data->intersection_colour   = info.colour;
-        if (info.dist < MIN2_INTERSECTION_DISTANCE) {
+        if (info.dist < MIN_INTERSECTION_DISTANCE) {
             img_data->intersection_stop = 1;
             // printf("intersection found of type %d, stopping car.\n", info.type);
             return NO_ERROR;
         }
         
     }
-
-    // if (!info.detected && img_data->intersection_distance > 0) {
-    //     img_data->intersection_detected = 1;
-    //     img_data->intersection_distance = 0;
-    //     img_data->intersection_stop     = 1;
-    //     img_data->intersection_colour   = info.colour;
-    //     printf("intersection found of type %d, stopping car (2).\n", info.type);
-    //     return NO_ERROR;
-    // }
 
 
 
@@ -307,7 +301,7 @@ int get_lane_statusv3(struct ImageData *img_data, RaspiCam_Cv *cap) {
 
 
         line_length = get_line_length(a,b);
-        if (line_length > MIN2_LINE_LENGTH) {
+        if (line_length > MIN_LINE_LENGTH) {
 
             slope_ang = get_slope(a,b);
 

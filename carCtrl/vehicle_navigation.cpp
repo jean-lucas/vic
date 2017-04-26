@@ -92,22 +92,22 @@ int update_navigation(struct ImageData *img,  struct CarStatus *car, double p1, 
 
 
 	//stop car if obstacle present
-	obs_det = vichw_is_obstacle();
-	obs_dist = vichw_distance();
-	if (obs_det && obs_dist > 7) {
-		car->obstacle_stop = 1;
-		printf("Distance: %d \n\n",vichw_distance() );
-		setting_speed = STOP_SPEED;
-		init_time = get_ms();
-		setting_angle = 0;
-	}	
-	else if (get_ms() - init_time > 2000) {
-		car->obstacle_stop = 0;
-	}
-	else if (get_ms() - init_time <= 2000) {
-		setting_speed = STOP_SPEED;
-		setting_angle = 0;
-	}
+	// obs_det = vichw_is_obstacle();
+	// obs_dist = vichw_distance();
+	// if (obs_det && obs_dist > 7) {
+	// 	car->obstacle_stop = 1;
+	// 	printf("Distance: %d \n\n",vichw_distance() );
+	// 	setting_speed = STOP_SPEED;
+	// 	init_time = get_ms();
+	// 	setting_angle = 0;
+	// }	
+	// else if (get_ms() - init_time > 2000) {
+	// 	car->obstacle_stop = 0;
+	// }
+	// else if (get_ms() - init_time <= 2000) {
+	// 	setting_speed = STOP_SPEED;
+	// 	setting_angle = 0;
+	// }
 
 
 
