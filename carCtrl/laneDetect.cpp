@@ -25,10 +25,7 @@ using namespace raspicam;
 
 /* private function declarations */
 static Point2d get_midpoint(Point2d a, Point2d b);
-static double calculateAvgAngle(vector<Point2d> vec, Point2d center);
 static double calculateAvgLineSize(vector<Point2d> vec, Point2d center);
-static double lineLength(Point2d a, Point2d b);
-static double getDistanceToLine(Point2d a, Point2d b);
 static double get_slope(Point2d a, Point2d b);
 static double get_line_length(Point2d a, Point2d b);
 
@@ -37,9 +34,9 @@ static double get_line_length(Point2d a, Point2d b);
 //this percentage will be cutoff from the top of the image
 const double CUT_OFF_HEIGHT_FACTOR = 0.45;
 const double CUT_OFF_WIDTH_FACTOR  = 0.08; // from both sides
-const double MIN_LINE_LENGTH = 5;
+const double MIN2_LINE_LENGTH = 5;
 const double INVALID_SLOPE = 200;
-const double MIN_INTERSECTION_DISTANCE = 150;
+const double MIN2_INTERSECTION_DISTANCE = 120;
 
 
 static struct int_info {
@@ -49,8 +46,8 @@ static struct int_info {
     double dist  = -1;
 } info;
 
-#define MAX(x, y) (((x) > (y)) ? (x) : (y))
-#define MIN(x, y) (((x) < (y)) ? (x) : (y))
+#define MAX2(x, y) (((x) > (y)) ? (x) : (y))
+#define MIN2(x, y) (((x) < (y)) ? (x) : (y))
 
 
 
@@ -73,8 +70,8 @@ void calibrate_raspicam(RaspiCam_Cv *cap) {
 // if s == 0, then h = -1 (undefined)
 void RGBtoHSV( float r, float g, float b, float *h, float *s, float *v ) {
     float min, max, delta;
-    min = MIN(MIN( r, g), b );
-    max = MAX(MAX( r, g), b );
+    min = MIN2(MIN2( r, g), b );
+    max = MAX2(MAX2( r, g), b );
     *v = max; // v
     delta = max - min;
     if( max != 0 )
@@ -224,7 +221,7 @@ int get_lane_statusv3(struct ImageData *img_data, RaspiCam_Cv *cap) {
         img_data->intersection_detected = info.detected;
         img_data->intersection_distance = info.dist;
         img_data->intersection_colour   = info.colour;
-        if (info.dist < MIN_INTERSECTION_DISTANCE) {
+        if (info.dist < MIN2_INTERSECTION_DISTANCE) {
             img_data->intersection_stop = 1;
             // printf("intersection found of type %d, stopping car.\n", info.type);
             return NO_ERROR;
@@ -252,7 +249,6 @@ int get_lane_statusv3(struct ImageData *img_data, RaspiCam_Cv *cap) {
     Rect cropRect = Rect(top_x, top_y, new_width, new_height);
     croppedMat = capMat(cropRect);
     
-    Size cropped = croppedMat.size();
 
 
     
@@ -301,7 +297,6 @@ int get_lane_statusv3(struct ImageData *img_data, RaspiCam_Cv *cap) {
     double slope_ang = 0;
 
 
-    int col = 255;
 
 
     //logic on the detected lines from hough transform
@@ -312,7 +307,7 @@ int get_lane_statusv3(struct ImageData *img_data, RaspiCam_Cv *cap) {
 
 
         line_length = get_line_length(a,b);
-        if (line_length > MIN_LINE_LENGTH) {
+        if (line_length > MIN2_LINE_LENGTH) {
 
             slope_ang = get_slope(a,b);
 
@@ -423,6 +418,31 @@ double calculateAvgLineSize(vector<Point2d> vec, Point2d center) {
 
 
 
+
+
+
+Point2d get_midpoint(Point2d a, Point2d b) {
+    double midX = (a.x + b.x)/2.0;
+    double midY = (a.y + b.y)/2.0;
+    return Point2d(midX, midY); 
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+
 double calculateAvgAngle(vector<Point2d> vec, Point2d center) {
     double currAngle = 0, top = 0, bot = 0, frac = 0, temp = 0;
     int n = vec.size();
@@ -443,40 +463,13 @@ double calculateAvgAngle(vector<Point2d> vec, Point2d center) {
         if (temp <= 3.2) {
             currAngle = currAngle + temp;
         }
-}
+    }
     return currAngle/((double) n);
 
 }
 
 
 
-Point2d get_midpoint(Point2d a, Point2d b) {
-    double midX = (a.x + b.x)/2.0;
-    double midY = (a.y + b.y)/2.0;
-    return Point2d(midX, midY); 
-}
-
-
-//find the Euclidean distance from point a to point b 
-double getDistanceToLine(Point2d a, Point2d b) {
-    double distance = sqrt(pow(  a.x - b.x, 2) + pow(  a.y - b.y, 2));
-    return distance;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
 usage:
 string ty =  type2str( cannyMat.type() );
 printf("Matrix: %s %dx%d \n", ty.c_str(), cannyMat.cols, cannyMat.rows );       

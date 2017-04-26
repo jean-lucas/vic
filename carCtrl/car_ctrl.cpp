@@ -105,9 +105,9 @@ int init(int quickstart_mode) {
     int status = 1;
 
     /* get config values */
-    int pwm_offset = 0;
     int car_id     = 0;
-    ifstream f("/etc/vic.conf");
+    int pwm_offset = 0;
+    std::ifstream f("/etc/vic.conf");
     if (f.is_open()) {
         f >> car_id;
         f >> pwm_offset;
@@ -116,6 +116,7 @@ int init(int quickstart_mode) {
         status = 0;
     }
 
+    printf("car id = %d  offset = %d\n", car_id, pwm_offset);
     /* init car */
     car_stat.current_speed           = NORMAL_SPEED;
     car_stat.current_wheel_angle     = 0;
@@ -190,7 +191,7 @@ int run() {
 
         status = get_lane_statusv3(&img_data, &cap);
 
-        if (img_data.intersection_stop == 1  && car_stat.drive_thru == 1 && time_diff > 5000) {
+        if (img_data.intersection_stop == 1  && car_stat.drive_thru == 1 && time_diff > 5000 && !car_stat.obstacle_stop) {
             t1 = getMsTime();
             car_stat.drive_thru = 0;
             img_data.intersection_stop = 0;
@@ -205,7 +206,7 @@ int run() {
 
         }
 
-        if (img_data.intersection_stop == 1 && car_stat.drive_thru == 0 && time_diff > 6000) {
+        if (img_data.intersection_stop == 1 && car_stat.drive_thru == 0 && time_diff > 6000 && !car_stat.obstacle_stop) {
             t1 = getMsTime();            
             car_stat.travel_direction = 0;
             stop_at_intersection();
@@ -224,7 +225,7 @@ int run() {
         
 
         time_end = getMsTime();
-        ++iterations
+        ++iterations;
         running_time += (time_end - time_start);
         
     }

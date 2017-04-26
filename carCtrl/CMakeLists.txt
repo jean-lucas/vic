@@ -43,7 +43,7 @@ file(GLOB car_ctrl_SRC
 
 # Declare the executable target built from your sources
 
-set(CMAKE_CXX_FLAGS "-I/usr/local/include -L/usr/local/lib -lpigpio -lrt -lpthread")
+set(CMAKE_CXX_FLAGS "-I/usr/local/include -L/usr/local/lib -lpigpio -lrt -lpthread -Wall -std=c++11")
 add_executable(car_ctrl ${car_ctrl_SRC})
 
 # Link your application with OpenCV libraries

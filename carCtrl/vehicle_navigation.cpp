@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <algorithm>
 #include <math.h>
+#include <time.h>
+#include <sys/time.h>
 
 #include "vehicle_navigation.h"
 #include "vic_types.h"
@@ -31,13 +33,15 @@ void make_right_turn(int type);
 void follow_path(double left_len, double right_len, double old_slope, double curr_slope, double curr_ang);
 double lengthExpert(double avg_left, double avg_right);
 double slopeExpert(double prev_slope, double curr_slope);
+static unsigned long long get_ms();
 
 static int count = 0;
 static double setting_speed = 0;
 static double setting_angle = 0;
 
-
 static int obs_det = 0;
+
+static unsigned long long init_time = 0;
 static int obs_dist = 0;
 
 int update_navigation(struct ImageData *img,  struct CarStatus *car, double p1, double d2, double q3) {
@@ -75,7 +79,8 @@ int update_navigation(struct ImageData *img,  struct CarStatus *car, double p1, 
 	}
 	
 
-
+	setting_speed = NORMAL_SPEED;
+	
 	//slow down if approaching intersection
 	if (img->intersection_detected && !car->drive_thru) {
 		setting_speed = LOW_SPEED;
@@ -83,21 +88,27 @@ int update_navigation(struct ImageData *img,  struct CarStatus *car, double p1, 
 	else if (img->intersection_stop) {
 		setting_speed = STOP_SPEED;
 	}
-	else {
-		setting_speed = NORMAL_SPEED;
-	}
+
 
 
 	//stop car if obstacle present
-	// obs_det = vichw_is_obstacle();
-	// if (obs_det) {
-	// 	// printf("Obstacle detected: %d \n", obs_det);
-	// 	printf("Distance: %d \n\n",vichw_distance() );
-	// 	setting_speed = STOP_SPEED;
-	// }	
-	// else {
-	// 	setting_speed = NORMAL_SPEED;	
-	// }
+	obs_det = vichw_is_obstacle();
+	obs_dist = vichw_distance();
+	if (obs_det && obs_dist > 7) {
+		car->obstacle_stop = 1;
+		printf("Distance: %d \n\n",vichw_distance() );
+		setting_speed = STOP_SPEED;
+		init_time = get_ms();
+		setting_angle = 0;
+	}	
+	else if (get_ms() - init_time > 2000) {
+		car->obstacle_stop = 0;
+	}
+	else if (get_ms() - init_time <= 2000) {
+		setting_speed = STOP_SPEED;
+		setting_angle = 0;
+	}
+
 
 
 	car->current_speed 		 = setting_speed;
@@ -215,6 +226,12 @@ double lengthExpert(double avg_left, double avg_right) {
 
 
 
+static unsigned long long get_ms() {
+    struct timeval t;
+    gettimeofday(&t, NULL);
+    long  ms = (t.tv_sec)*1000 + (t.tv_usec)/1000;
+    return ms;
+}
 
 int sign(double val) {
 	if (val > 0) return 1;

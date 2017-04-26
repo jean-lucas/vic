@@ -7,7 +7,6 @@
 #include "ultrasonic.h"
 
 
-using namespace std;
 
 /*  constants */
 int DEFAULT_PWM_SPDC = 1500;

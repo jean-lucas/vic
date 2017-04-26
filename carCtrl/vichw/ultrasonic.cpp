@@ -14,8 +14,8 @@
 #define SPEED_CONSTANT		59
 
 /* If obstacle further than max, it is not detected, closer than min and it is detected */
-#define DIST_MAX			15
-#define DIST_MIN			12
+#define DIST_MAX			25
+#define DIST_MIN			18
 
 
 
@@ -37,9 +37,13 @@ void signal_callback(int gpio, int level, uint32_t tick) {
 
 	if (level == 1) {
 		last_tick = tick;
-	} else if (level == 0 || level == PI_TIMEOUT) {
+	} else if (level == 0) {
 		timediff = tick - last_tick;
 		distance = (timediff / SPEED_CONSTANT);
+		obstacle_detect();
+		gpioTrigger(TRIGGER_PIN, TRIGGER_PULSE_US, 1);
+	} else if (level == PI_TIMEOUT) {
+		distance = 500;
 		obstacle_detect();
 		gpioTrigger(TRIGGER_PIN, TRIGGER_PULSE_US, 1);
 	} else {
