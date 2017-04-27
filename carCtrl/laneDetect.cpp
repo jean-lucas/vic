@@ -36,7 +36,8 @@ const double CUT_OFF_HEIGHT_FACTOR = 0.45;
 const double CUT_OFF_WIDTH_FACTOR  = 0.08; // from both sides
 const double MIN_LINE_LENGTH = 5;
 const double INVALID_SLOPE = 200;
-const double MIN_INTERSECTION_DISTANCE = 120;
+const double MIN_INTERSECTION_DISTANCE = 110;
+// const double MIN_INTERSECTION_DISTANCE = 180;
 
 
 static struct int_info {
@@ -152,7 +153,7 @@ int_info detect_intersection(int y0, int yf, int x0, int xf, Mat mat) {
                     if (max_vote_colour < colour_votes[i])
                         max_vote_colour = i;
                 }
-                printf("COLOR DETECTED %d\n", max_vote_colour );
+                // printf("COLOR DETECTED %d\n", max_vote_colour );
                 inter_info.detected = 1;
                 inter_info.dist     = detected_ypos/tot_vote;
                 inter_info.colour   = max_vote_colour;

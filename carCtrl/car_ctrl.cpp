@@ -43,7 +43,7 @@ int kill_send_thread = 0;
 unsigned long long getMsTime() {
     struct timeval t;
     gettimeofday(&t, NULL);
-         long  ms = (t.tv_sec)*1000 + (t.tv_usec)/1000;
+    unsigned long long  ms = (t.tv_sec)*1000 + (t.tv_usec)/1000;
     return ms;
 }
 
@@ -201,7 +201,7 @@ int run() {
             wake_thread = 1;
             pthread_cond_signal(&cond);
             pthread_mutex_unlock(&mutex);
-
+            printf("%llu\n", time_diff);
 
             time_diff = getMsTime() - t1;
 
@@ -213,7 +213,8 @@ int run() {
             car_stat.travel_direction = 0;
             stop_at_intersection();
             status = get_lane_statusv3(&img_data, &cap);
-            time_diff = getMsTime() - t1;
+            printf("drive_thru\n");
+            time_diff = getMsTime() - t1;   
             
         }
 
@@ -224,7 +225,7 @@ int run() {
         status = update_navigation(&img_data, &car_stat, p, d, q);
 
         time_diff = getMsTime() - t1;
-        
+        // printf("time_diff = %llu\n",time_diff );
 
         //for getting the program's FPS
         time_end = getMsTime();
@@ -283,7 +284,7 @@ void stop_at_intersection() {
 
 
     char msg[1024];
-    sprintf(msg, "%d_%d_%d_%d_%d", 0, img_data.intersection_colour,  car_stat.travel_direction, 1, 2);
+    sprintf(msg, "%d_%d_%d_%d_%d", 0, img_data.intersection_colour,  car_stat.travel_direction, 1, car_stat.car_id);
 
     int sent = sendToIC(msg);
     printf("\x1b[36m ARRIVAL msg: (%s) with size of %d\x1b[0m \n ", msg, sent );

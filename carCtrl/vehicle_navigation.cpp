@@ -72,42 +72,44 @@ int update_navigation(struct ImageData *img,  struct CarStatus *car, double p1, 
 		count--;
 		setting_speed = LOW_SPEED;
 		if  (count == 0) {
-			printf("reset straight\n");
 			car->travel_direction = STRAIGHT_PATH;
 			setting_speed = NORMAL_SPEED;
 		}
 	}
 	
 
-	setting_speed = NORMAL_SPEED;
+	// setting_speed = NORMAL_SPEED;
 	
 	//slow down if approaching intersection
 	if (img->intersection_detected && !car->drive_thru) {
 		setting_speed = LOW_SPEED;
 	}
 	else if (img->intersection_stop) {
-		setting_speed = STOP_SPEED;
+		setting_speed = NORMAL_SPEED; //stoP?
+	}
+	else {
+		setting_speed = NORMAL_SPEED;
 	}
 
-
+	// printf("Stting speed = %f\n", setting_speed);
 
 	//stop car if obstacle present
-	// obs_det = vichw_is_obstacle();
-	// obs_dist = vichw_distance();
-	// if (obs_det && obs_dist > 7) {
-	// 	car->obstacle_stop = 1;
-	// 	printf("Distance: %d \n\n",vichw_distance() );
-	// 	setting_speed = STOP_SPEED;
-	// 	init_time = get_ms();
-	// 	setting_angle = 0;
-	// }	
-	// else if (get_ms() - init_time > 2000) {
-	// 	car->obstacle_stop = 0;
-	// }
-	// else if (get_ms() - init_time <= 2000) {
-	// 	setting_speed = STOP_SPEED;
-	// 	setting_angle = 0;
-	// }
+	obs_det = vichw_is_obstacle();
+	obs_dist = vichw_distance();
+	if (obs_det && obs_dist > 7) {
+		car->obstacle_stop = 1;
+		printf("Distance: %d \n\n",vichw_distance() );
+		setting_speed = STOP_SPEED;
+		init_time = get_ms();
+		setting_angle = 0;
+	}	
+	else if (get_ms() - init_time > 2000) {
+		car->obstacle_stop = 0;
+	}
+	else if (get_ms() - init_time <= 2000) {
+		setting_speed = STOP_SPEED;
+		setting_angle = 0;
+	}
 
 
 
@@ -229,7 +231,7 @@ double lengthExpert(double avg_left, double avg_right) {
 static unsigned long long get_ms() {
     struct timeval t;
     gettimeofday(&t, NULL);
-    long  ms = (t.tv_sec)*1000 + (t.tv_usec)/1000;
+    unsigned long long  ms = (t.tv_sec)*1000 + (t.tv_usec)/1000;
     return ms;
 }
 

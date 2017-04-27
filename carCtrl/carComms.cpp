@@ -108,9 +108,9 @@ void* recvFromIC(void* arg) {
 
         // read data from the client
         bytes_read = read(client, buf, sizeof(buf));
-        if( bytes_read > 0 ) {
-            printf("received [%s]\n", buf);
-        }
+        // if( bytes_read > 0 ) {
+        //     printf("received [%s]\n", buf);
+        // }
 
         //response from client
         resp->val = (int) buf[0] - '0';
