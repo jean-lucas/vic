@@ -1,9 +1,9 @@
 # external class dependencies
-from ColorDetection import ColorDetection
+#from ColorDetection import ColorDetection
 from Car import Car
 from Communication import Communication
 from VehicleDetection import VehicleDetection
-from CDC import CDC 
+#from CDC import CDC 
 
 
 
@@ -15,19 +15,23 @@ import random
 class IC_Main(object):
 
     communication = Communication()
-    cdc = CDC()
+    #cdc = CDC()
 
-    intersection_cars = [0 for i in range(3)]
+    intersection_cars = [0 for i in range(2)]
     intersection_clear = False
     car = -1
 
     # for testing purposes
     test = 0
+
+    count = 0
     
     # method to 
     def run(self):
 
         print "Welcome! VIC system has started."
+
+        leflag = 0
 
         # main while loop in the IC controller
 
@@ -36,9 +40,8 @@ class IC_Main(object):
             #self.update_intersection_state()
             #self.traffic.test()
             
-            
             message_check = self.communication.arrival_check()
-            
+            #print "message check %d" % (message_check)
             if (message_check==1):
                 
                 self.car = self.communication.arrival_deque()
@@ -52,7 +55,6 @@ class IC_Main(object):
                 #time.sleep(0.3)
                 #start = 0
                 #current_car_index = -1
-
                 for i in range(len(self.intersection_cars)):
                     if(self.intersection_cars[i]==0):
                         self.intersection_cars[i] = self.car
@@ -68,22 +70,38 @@ class IC_Main(object):
                     else:
                         for i in range(len(self.intersection_cars)):
                             if(self.intersection_cars[i]!=0 and i!=current_car_index):
-                                if(self.intersection_cars[current_car_index].direction_from==self.intersection_cars[i].direction_from or self.intersection_cars[current_car_index].direction_from==self.intersection_cars[i].direction_to):
+                                if(self.intersection_cars[current_car_index].direction_from==self.intersection_cars[i].direction_from or self.intersection_cars[current_car_index].direction_from==self.intersection_cars[i].direction_to or self.intersection_cars[current_car_index].direction_to==self.intersection_cars[i].direction_from):
                                     self.intersection_cars[current_car_index].proceed_now=True
-                                    #break   #this break only works if we have 2 cars on the track (more efficient)
+                                    #break
                                 else:
                                     self.intersection_cars[current_car_index].proceed_now=False
                     if(self.intersection_cars[current_car_index].proceed_now):
                         print "Safe passage granted"
+                        leflag = 0
                     else:
-                        print "Safe passage NOT granted"
+                        if(leflag == 0):
+                            print "Safe passage NOT granted"
+                            leflag = 1
+
 
 
                 #current car's proceed_now is true, then add car to communication's proceed queue
 
                 self.communication.proceed_enqueue(self.car)
                 print "New car added"
-                
+            #print "---------------"
+            #print "About to call cars leave method"
+            #print "---------------"
+            self.check_intersection_state(-1)
+
+            #time.sleep(1.5)
+            # if(cars_leaving[1] != 0):
+            #     print "shouldnt be here"
+            #     for i in range(len(self.intersection_cars)):
+            #         if(self.intersection_cars[i]!=0):
+            #             if(cars_leaving[1] == self.intersection_cars[i].car_id):
+            #                 self.intersection_cars[i] = 0;
+            #                 print "Car left intersection"        
         
 
     #def arrival_enqueue(self,car):
@@ -92,24 +110,33 @@ class IC_Main(object):
 
 
     def check_intersection_state(self,current_car_index):
-        print "IC main get int state called"
-        #update intersection_cars array from camera info for cars leaving
-        cars_leaving = self.cdc.get_intersection_state() #returns array of direction that cars have left since last call
-        for i in range(len(cars_leaving)):
-            for j in range(len(self.intersection_cars)):
-                if(j!=current_car_index and self.intersection_cars[j]!=0):
-                    if(cars_leaving[i]==1):
-                        if(int(self.intersection_cars[j].direction_to) == i):
-                            self.intersection_cars[j] = 0;
-                            print "Car left intersection"
+        cars_leaving = self.communication.get_cars_leaving()
+        #print "car leaving: %d" % (cars_leaving)
+        
+        if(cars_leaving != 0):
+            #print "car leaving 0 %d and 1 %d" % (cars_leaving[0],cars_leaving[1])
+            #print "Car leaving: %d" % (cars_leaving)
+            print "in cars_leaving block"
+            print cars_leaving
+            for i in range(len(self.intersection_cars)):
+                if(self.intersection_cars[i]!=0):
+                    print "-------------------------------"
+                    print self.intersection_cars[i].car_id
+                    if(cars_leaving == self.intersection_cars[i].car_id):
+                        self.intersection_cars[i] = 0;
+                        cars_leaving = 0
+                        print "Car left intersection"
+
+
                             
         #check if intersection is empty
-        for i in range(len(self.intersection_cars)):
-            if(i!=current_car_index and self.intersection_cars[i]!=0):
-                self.intersection_clear = False
-                break
-            else:
-                self.intersection_clear = True
+        if(current_car_index != -1):
+            for i in range(len(self.intersection_cars)):
+                if(i!=current_car_index and self.intersection_cars[i]!=0):
+                    self.intersection_clear = False
+                    break
+                else:
+                    self.intersection_clear = True
         #print self.detect.update_intersection()
         #this function will retrieve state of intersection and update intersection_cars array for any cars leaving intersection
         
