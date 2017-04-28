@@ -16,7 +16,7 @@ extern const int MIN_SERVO_PWM;
 /* Must call before using any hardware functions */
 
 
-int vichw_init();
+int vichw_init(int offset);
 void vichw_deinit(void);
 
 

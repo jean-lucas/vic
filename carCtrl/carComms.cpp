@@ -7,6 +7,7 @@
 #include <sys/socket.h>
 #include <bluetooth/bluetooth.h>
 #include <bluetooth/rfcomm.h>
+#include <cstring>
 
 #include "carComms.h"
 #include "vic_types.h"
@@ -19,8 +20,11 @@
 
 
 // const char* IC_BT_ADDR = "AC:2B:6E:04:BF:27"; //Jean Laptop
-// const char* IC_BT_ADDR = "34:E6:AD:8B:B2:20"; //Matt's
-const char* IC_BT_ADDR  = "E8:B1:FC:F7:5D:9F"; //Radhikas
+const char* IC_BT_ADDR = "34:E6:AD:8B:B2:20"; //Matt's
+// const char* IC_BT_ADDR  = "E8:B1:FC:F7:5D:9F"; //Radhikas
+
+
+
 const uint8_t SEND_PORT = 8;
 const uint8_t RECV_PORT = 1;
 
@@ -36,7 +40,7 @@ int sendToIC(char* msg) {
     int s, status;
     // allocate a socket
     s = socket(AF_BLUETOOTH, SOCK_STREAM, BTPROTO_RFCOMM);
-    printf("s = %d\n", s);
+    printf("\x1b[31mstarting to send \x1b[0m \n");
 
     // set the connection parameters (who to connect to)
     addr.rc_family = AF_BLUETOOTH;
@@ -50,7 +54,8 @@ int sendToIC(char* msg) {
 
     // send a message
     if (status == 0) {
-        status = send(s, msg, sizeof(msg)*sizeof(int), MSG_DONTWAIT);
+        size_t len = strlen(msg);
+        status = send(s, msg, len, MSG_DONTWAIT);
     }
 
     //error sending the message, try again next time.
@@ -63,13 +68,15 @@ int sendToIC(char* msg) {
     return status;
 }
 
+
+
+
+
 /*
     Try to receive a message from the Intersection Controller via Bluetooth
     Input: ??
     Output: result from IC (2 for error, 1 for stop @ intersection, 0 to proceed)
 */
-
-
 void* recvFromIC(void* arg) {
     struct SignalResponse *resp = (struct SignalResponse *) arg;
 
@@ -85,7 +92,7 @@ void* recvFromIC(void* arg) {
     // bind socket to port 1 of the first available 
     // local bluetooth adapter
     loc_addr.rc_family = AF_BLUETOOTH;
-    //loc_addr.rc_bdaddr = (&(bdaddr_t) {{0, 0, 0, 0, 0, 0}});
+    //loc_addr.rc_bdaddr = (&(bdaddr_t) {{0, 0, 0, 0, 0, 0}});  //do not uncomment !
     loc_addr.rc_channel = RECV_PORT;
     bind(s, (struct sockaddr *)&loc_addr, sizeof(loc_addr));
 
@@ -93,7 +100,6 @@ void* recvFromIC(void* arg) {
     listen(s, 1);
 	
     while (1) {
-        // accept one connection
         client = accept(s, (struct sockaddr *)&rem_addr, &opt);
 
         ba2str( &rem_addr.rc_bdaddr, buf );
@@ -102,9 +108,9 @@ void* recvFromIC(void* arg) {
 
         // read data from the client
         bytes_read = read(client, buf, sizeof(buf));
-        if( bytes_read > 0 ) {
-            printf("received [%s]\n", buf);
-        }
+        // if( bytes_read > 0 ) {
+        //     printf("received [%s]\n", buf);
+        // }
 
         //response from client
         resp->val = (int) buf[0] - '0';

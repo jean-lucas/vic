@@ -15,8 +15,8 @@ const int CORRUPT_IMAGE = -1;
 
 //vehicle speed values
 const double STOP_SPEED   = 0;
-const double NORMAL_SPEED = 0.49;
-const double LOW_SPEED 	  = 0.45;
+const double NORMAL_SPEED = 0.50;
+const double LOW_SPEED 	  = NORMAL_SPEED - 0.02;
 
 //vehicle travel direction
 const int STRAIGHT_PATH = 0;
@@ -45,6 +45,7 @@ struct CarStatus {
 	int obstacle_stop;
 	int current_lane;
 	int travel_direction; //0 straight, 1 right, -1 left
+	int drive_thru;	//0 no, 1 yes
 };
 
 

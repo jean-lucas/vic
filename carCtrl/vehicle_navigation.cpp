@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <algorithm>
 #include <math.h>
+#include <time.h>
+#include <sys/time.h>
 
 #include "vehicle_navigation.h"
 #include "vic_types.h"
@@ -31,13 +33,15 @@ void make_right_turn(int type);
 void follow_path(double left_len, double right_len, double old_slope, double curr_slope, double curr_ang);
 double lengthExpert(double avg_left, double avg_right);
 double slopeExpert(double prev_slope, double curr_slope);
+static unsigned long long get_ms();
 
 static int count = 0;
 static double setting_speed = 0;
 static double setting_angle = 0;
 
-
 static int obs_det = 0;
+
+static unsigned long long init_time = 0;
 static int obs_dist = 0;
 
 int update_navigation(struct ImageData *img,  struct CarStatus *car, double p1, double d2, double q3) {
@@ -68,37 +72,45 @@ int update_navigation(struct ImageData *img,  struct CarStatus *car, double p1, 
 		count--;
 		setting_speed = LOW_SPEED;
 		if  (count == 0) {
-			printf("reset straight\n");
 			car->travel_direction = STRAIGHT_PATH;
 			setting_speed = NORMAL_SPEED;
 		}
 	}
 	
 
-
+	// setting_speed = NORMAL_SPEED;
+	
 	//slow down if approaching intersection
-	if (img->intersection_detected) {
+	if (img->intersection_detected && !car->drive_thru) {
 		setting_speed = LOW_SPEED;
 	}
 	else if (img->intersection_stop) {
-		printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
-		setting_speed = STOP_SPEED;
+		setting_speed = NORMAL_SPEED; //stoP?
 	}
 	else {
 		setting_speed = NORMAL_SPEED;
 	}
 
+	// printf("Stting speed = %f\n", setting_speed);
 
 	//stop car if obstacle present
-	// obs_det = vichw_is_obstacle();
-	// if (obs_det) {
-	// 	// printf("Obstacle detected: %d \n", obs_det);
-	// 	printf("Distance: %d \n\n",vichw_distance() );
-	// 	setting_speed = STOP_SPEED;
-	// }	
-	// else {
-	// 	setting_speed = NORMAL_SPEED;	
-	// }
+	obs_det = vichw_is_obstacle();
+	obs_dist = vichw_distance();
+	if (obs_det && obs_dist > 7) {
+		car->obstacle_stop = 1;
+		printf("Distance: %d \n\n",vichw_distance() );
+		setting_speed = STOP_SPEED;
+		init_time = get_ms();
+		setting_angle = 0;
+	}	
+	else if (get_ms() - init_time > 2000) {
+		car->obstacle_stop = 0;
+	}
+	else if (get_ms() - init_time <= 2000) {
+		setting_speed = STOP_SPEED;
+		setting_angle = 0;
+	}
+
 
 
 	car->current_speed 		 = setting_speed;
@@ -114,6 +126,10 @@ int update_navigation(struct ImageData *img,  struct CarStatus *car, double p1, 
 void stop_car() {
 	setting_speed = STOP_SPEED;
 	vichw_set_speed(setting_speed);
+}
+void reset_wheel() {
+	setting_angle = 0;
+	vichw_set_angle(setting_angle);
 }
 
 
@@ -187,8 +203,6 @@ double slopeExpert(double prev_slope, double curr_slope) {
 		new_angle = curr_slope/qq;
 	}
 	else {
-		//average out the slopes
-		// printf("=========== TAKING AVERAGE (2) =========\n");
 		new_angle = (curr_slope + (prev_slope*0.6))/(2.0);
 		new_angle = new_angle/qq;
 	}
@@ -201,8 +215,8 @@ double lengthExpert(double avg_left, double avg_right) {
 	double new_angle = 0;	
 	
 	if (avg_left < 170 && avg_left > 0) {
-		new_angle = 40;
-		count = 3;
+		new_angle = 35;
+		count = 2;
 	}
 	else if  (avg_right < 170 && avg_right > 0) {
 		new_angle = -35;
@@ -214,6 +228,12 @@ double lengthExpert(double avg_left, double avg_right) {
 
 
 
+static unsigned long long get_ms() {
+    struct timeval t;
+    gettimeofday(&t, NULL);
+    unsigned long long  ms = (t.tv_sec)*1000 + (t.tv_usec)/1000;
+    return ms;
+}
 
 int sign(double val) {
 	if (val > 0) return 1;
