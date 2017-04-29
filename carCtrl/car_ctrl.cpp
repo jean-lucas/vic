@@ -223,16 +223,12 @@ int run() {
         status = update_navigation(&img_data, &car_stat, p, d, q);
 
         time_diff = getMsTime() - t1;
-        // printf("time_diff = %llu\n",time_diff );
-
-        //for getting the program's FPS
         
     }
 
 
     kill_send_thread = 1;
     printf("ending with status %d\n", status);
-    printf("In %d iterations avg running time was %f\n", iterations,running_time/iterations);
 
 
 
@@ -256,10 +252,6 @@ void* threaded_send(void* arg) {
 
         int sent = sendToIC(msg);
         printf("\x1b[33m DEPARTURE msg: (%s) with size of %d\x1b[0m \n ", msg, sent );
-        // if (sent < 0) {
-        //     sendToIC(msg);
-        // }
-        // printf("\x1b[33m DEPARTURE(resent) msg: (%s) with size of %d\x1b[0m \n ", msg, sent );
 
         wake_thread = 0;
 

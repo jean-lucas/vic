@@ -48,11 +48,6 @@ struct CarStatus {
 	int drive_thru;	//0 no, 1 yes
 };
 
-
-struct SignalRequest {
-	int port;
-};
-
 struct SignalResponse {
 	int val;
 };

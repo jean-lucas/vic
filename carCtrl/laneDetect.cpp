@@ -38,7 +38,6 @@ const double CUT_OFF_WIDTH_FACTOR  = 0.08; // from both sides
 const double MIN_LINE_LENGTH = 5;
 const double INVALID_SLOPE = 200;
 const double MIN_INTERSECTION_DISTANCE = 120;
-// const double MIN_INTERSECTION_DISTANCE = 180;
 
 
 static struct int_info {

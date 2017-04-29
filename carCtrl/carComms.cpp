@@ -19,9 +19,7 @@
 
 
 
-// const char* IC_BT_ADDR = "AC:2B:6E:04:BF:27"; //Jean Laptop
-const char* IC_BT_ADDR = "34:E6:AD:8B:B2:20"; //Matt's
-// const char* IC_BT_ADDR  = "E8:B1:FC:F7:5D:9F"; //Radhikas
+const char* IC_BT_ADDR = "AC:2B:6E:04:BF:27"; 
 
 
 
@@ -92,7 +90,6 @@ void* recvFromIC(void* arg) {
     // bind socket to port 1 of the first available 
     // local bluetooth adapter
     loc_addr.rc_family = AF_BLUETOOTH;
-    //loc_addr.rc_bdaddr = (&(bdaddr_t) {{0, 0, 0, 0, 0, 0}});  //do not uncomment !
     loc_addr.rc_channel = RECV_PORT;
     bind(s, (struct sockaddr *)&loc_addr, sizeof(loc_addr));
 
