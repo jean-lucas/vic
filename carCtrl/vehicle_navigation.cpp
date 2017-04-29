@@ -40,9 +40,10 @@ static double setting_speed = 0;
 static double setting_angle = 0;
 
 static int obs_det = 0;
-
-static unsigned long long init_time = 0;
 static int obs_dist = 0;
+static int obs_det_prev = 0;
+static unsigned long long init_time = 0;
+
 
 int update_navigation(struct ImageData *img,  struct CarStatus *car, double p1, double d2, double q3) {
 	pp = p1;
@@ -94,22 +95,22 @@ int update_navigation(struct ImageData *img,  struct CarStatus *car, double p1, 
 	// printf("Stting speed = %f\n", setting_speed);
 
 	//stop car if obstacle present
-	obs_det = vichw_is_obstacle();
-	obs_dist = vichw_distance();
-	if (obs_det && obs_dist > 7) {
-		car->obstacle_stop = 1;
-		printf("Distance: %d \n\n",vichw_distance() );
-		setting_speed = STOP_SPEED;
-		init_time = get_ms();
-		setting_angle = 0;
-	}	
-	else if (get_ms() - init_time > 2000) {
-		car->obstacle_stop = 0;
-	}
-	else if (get_ms() - init_time <= 2000) {
-		setting_speed = STOP_SPEED;
-		setting_angle = 0;
-	}
+	// obs_det = vichw_is_obstacle();
+	// obs_dist = vichw_distance();
+	// if (obs_det &&  obs_dist > 8 ) {
+	// 	car->obstacle_stop = 1;
+	// 	printf("Distance: %d \n\n",vichw_distance() );
+	// 	setting_speed = 0;
+	// 	init_time = get_ms();
+	// 	setting_angle = 0;
+	// }	
+	// else if (get_ms() - init_time > 2000) {
+	// 	car->obstacle_stop = 0;
+	// }	
+	// else if (get_ms() - init_time <= 2000) {
+	// 	setting_speed = STOP_SPEED;
+	// 	setting_angle = 0;
+	// }
 
 
 

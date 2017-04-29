@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+
 #include <raspicam/raspicam_cv.h>
 
 using namespace cv;
@@ -36,7 +37,7 @@ const double CUT_OFF_HEIGHT_FACTOR = 0.45;
 const double CUT_OFF_WIDTH_FACTOR  = 0.08; // from both sides
 const double MIN_LINE_LENGTH = 5;
 const double INVALID_SLOPE = 200;
-const double MIN_INTERSECTION_DISTANCE = 110;
+const double MIN_INTERSECTION_DISTANCE = 120;
 // const double MIN_INTERSECTION_DISTANCE = 180;
 
 
@@ -205,11 +206,15 @@ int get_lane_statusv3(struct ImageData *img_data, RaspiCam_Cv *cap) {
 
 
     // Try to detect an intersection (y0, yf, x0, xf, mat)
+
+
+
     info = detect_intersection( size_uncropped.height/5, 
                                 size_uncropped.height, 
                                 size_uncropped.width/3, 
                                 2*size_uncropped.width/3, 
                                 capMat);
+
 
     // draw_grid(  size_uncropped.height/5, 
     //             size_uncropped.height, 
@@ -280,7 +285,9 @@ int get_lane_statusv3(struct ImageData *img_data, RaspiCam_Cv *cap) {
 
 
     //(inputMat, output vector N x 4, distance resolution of accumulator, angle of accumulator, threshold, minLineLength, maxLineGap )
+
     HoughLinesP(cannyMat, lines, 1, CV_PI/180,38,10,1);
+
 
 
 

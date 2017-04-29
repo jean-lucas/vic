@@ -164,6 +164,7 @@ int init(int quickstart_mode) {
 
 
 
+
 int run() {
 
 	int status = 1;
@@ -171,9 +172,9 @@ int run() {
     unsigned long long t1 = 0, time_diff = 0;
     unsigned long long running_time = 0, time_start = 0, time_end = 0;
 
+
     while (status != HALT_SYSTEM) {
        
-        time_start  = getMsTime();
 
         //check for IC response
         if (sig_resp->val != PROCEED_RESP) {
@@ -187,10 +188,7 @@ int run() {
                 pause_sys();
             }
         } 
-
-
         status = get_lane_statusv3(&img_data, &cap);
-
         //send a  DEPARTURE message 
         if (img_data.intersection_stop == 1  && car_stat.drive_thru == 1 && time_diff > 5000 && !car_stat.obstacle_stop) {
             t1 = getMsTime();
@@ -228,17 +226,15 @@ int run() {
         // printf("time_diff = %llu\n",time_diff );
 
         //for getting the program's FPS
-        time_end = getMsTime();
-        ++iterations;
-        running_time += (time_end - time_start);
         
     }
 
 
     kill_send_thread = 1;
     printf("ending with status %d\n", status);
-
     printf("In %d iterations avg running time was %f\n", iterations,running_time/iterations);
+
+
 
     return 1;
 }
@@ -260,6 +256,10 @@ void* threaded_send(void* arg) {
 
         int sent = sendToIC(msg);
         printf("\x1b[33m DEPARTURE msg: (%s) with size of %d\x1b[0m \n ", msg, sent );
+        // if (sent < 0) {
+        //     sendToIC(msg);
+        // }
+        // printf("\x1b[33m DEPARTURE(resent) msg: (%s) with size of %d\x1b[0m \n ", msg, sent );
 
         wake_thread = 0;
 
