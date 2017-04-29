@@ -38,6 +38,8 @@ class Communication (object):
 
     arrivals = deque() # arrival message queue
     proceeds = deque() # proceed message queue
+
+    car_to_remove = 0
    
     '''
     Send and receive are run on separate threads. This allows sending and 
@@ -96,16 +98,11 @@ class Communication (object):
             #print "The client message: " + client_message
 
             # extract vehicle request contents (by calling extract method)
-            current_car = self.message_extraction(client_message, client_bluetooth_ID)
+            self.message_extraction(client_message, client_bluetooth_ID)
                 
             # enqueue arrival buffer    
             # vehicle_arrivals.arrival_enqueue(current_car)
             # --------------------------------------------------------------------------------------
-
-            # add vehicles to the arrival buffer
-            self.arrivals.appendleft(current_car)
-            
-
 
             client_socket.close()
             
@@ -149,6 +146,9 @@ class Communication (object):
 
                     send_socket.send(str(vehicle_command))
                     send_socket.close()
+                    print "---------------------"
+                    print "Proceed signal sent!"
+                    print "---------------------"
 
                 except IOError:
                     if (getattr(car, 'retransmission_number') < 3):
@@ -184,22 +184,55 @@ class Communication (object):
         # "carID_comingFrom_listenPort_timestamp"
         try:
             my_content = client_message.split('_')
+            my_content[4] = int(my_content[4])
             #print my_content
-    
-            # can map to characters to if need be
-            #if (my_content[1] == 1):
-             #   direction_to = "-"
-            #elif (my_content[1] == 2):
-            #    direction_to = "-"
-            #elif (my_content[1] == 3):
-            #    direction_to = 6
-            #else:
-            #    direction_to = 7
-            
-            # Car(self, car_ID, port, client_bluetooth_ID, direction_from, direction_to, time_stamp)
-            print my_content[0],"_", my_content[3], "_", client_bluetooth_ID[0], "_", my_content[1], "_", my_content[2], "_", my_content[4]
-            return Car(my_content[0], my_content[3], client_bluetooth_ID[0], my_content[1], my_content[2], my_content[4])
-        except:
+            #my_content[0] is the message type: 0 for entering intersection, 0 for exiting
+            if(int(my_content[0]) == 0):
+
+                my_content[1] = int(my_content[1])
+                my_content[2] = int(my_content[2])
+                
+                direction_to = -1
+
+                if (my_content[1] == 0):
+                    if (my_content[2] == 0):
+                        direction_to = 3
+                    else:
+                        direction_to = 1
+                elif (my_content[1] == 1):
+                    if (my_content[2] == 0):
+                        direction_to = 2
+                    else:
+                        direction_to = 0
+                elif (my_content[1] == 2):
+                    if (my_content[2] == 0):
+                        direction_to = 1
+                    else:
+                        direction_to = 3
+                elif (my_content[1] == 3):
+                    if (my_content[2] == 0):
+                        direction_to = 0
+                    else:
+                        direction_to = 1
+                
+                # Car(self, msg_type, port, client_bluetooth_ID, direction_from, direction_to, car_id)
+                print my_content[0],"_", my_content[3], "_", client_bluetooth_ID[0], "_", my_content[1], "_", direction_to, "_", my_content[4]
+                new_car = Car(my_content[0], my_content[3], client_bluetooth_ID[0], my_content[1], direction_to, my_content[4])
+                # add vehicles to the arrival buffer
+                self.arrivals.appendleft(new_car)
+                print len(self.arrivals)
+            else:
+                print "car leaving"
+                print my_content[4]
+                #update car to remove from ic array
+               # if (self.car_to_remove[0] == 0):
+                self.car_to_remove = my_content[4]
+                print self.car_to_remove
+                #else:
+                 #   self.car_to_remove[1] = my_content[4]
+                  #  print self.car_to_remove
+        except Exception as e: 
+            print(e)
             pass
 
 
@@ -216,6 +249,14 @@ class Communication (object):
             return self.arrivals.pop()
         else:
             return -1
+
+    def get_cars_leaving(self):
+        cars_leaving = self.car_to_remove
+        self.car_to_remove = 0
+        if(cars_leaving!=0):
+            print "cars_leaving isnt 0"
+        #self.car_to_remove[1] = 0
+        return cars_leaving
 
 
     # called from IC_Main (appends car proceed response)
